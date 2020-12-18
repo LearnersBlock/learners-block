@@ -1,0 +1,20 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node:build AS buildstep
+
+COPY ./backend /build-context
+
+WORKDIR /build-context
+
+RUN npm install
+
+RUN npm run build
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node
+
+## INSERT PACKAGES
+
+COPY --from=buildstep build/ /app/backend/
+
+# SET APPLICATION DIRECTORY
+WORKDIR /app/backend
+
+CMD ["npm", "start"]
