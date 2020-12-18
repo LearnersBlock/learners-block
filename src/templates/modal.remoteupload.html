@@ -1,0 +1,16 @@
+<form id="formRemoteUpload">
+<div class="modal-body">
+	<fieldset>
+		<div class="form-group">
+			<label for="url">{{i18n.upload_remote_url}}</label>
+			<input class="form-control" type="url" id="url" name="url" required>
+		</div>
+               <input type="hidden" name="method" value="curl">
+               <input type="hidden" name="filename" value="">
+	</fieldset>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" id="buttonUpload">{{i18n.upload}}</button>
+	<button type="button" class="btn btn-danger" id="buttonCancel">{{i18n.cancel}}</button>
+</div>
+</form>

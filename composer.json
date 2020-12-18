@@ -1,0 +1,26 @@
+{
+    "name": "learnersblock/ifm",
+    "description": "Filemanager for the Learner's Block project, based on misterunknown/ifm",
+    "type": "project",
+    "license": "MIT License (MIT)",
+    "authors": [
+        {
+            "name": "Arran Magee",
+            "email": "arran.magee@icloud.com"
+        },
+        {
+            "name": "Maximilian Oertel",
+            "email": "info@maximilianoertel.de"
+        }
+    ],
+    "scripts": {
+        "build": "./scripts/build.sh"
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.2",
+        "vlucas/phpdotenv": "^5.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.4"
+    }
+}

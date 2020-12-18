@@ -1,0 +1,10 @@
+.*.swp
+*.zip
+misc
+src/includes/ace/*
+sftp-config.json
+dist/*
+vendor/*
+.env
+!.env.example
+.DS_Store
