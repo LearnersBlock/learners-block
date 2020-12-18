@@ -1,0 +1,49 @@
+{{#items}}
+<tr class="clickable-row {{rowclasses}}" {{{dragdrop}}} data-id="{{guid}}" data-filename="{{name}}" data-eaction="{{eaction}}">
+	{{#fixtop}}
+	<td data-order="{{fixtop}}"></td>
+	{{/fixtop}}
+	{{^fixtop}}
+	<td data-order="0"></td>
+	{{/fixtop}}
+	<td>
+		<a href="{{{link}}}" tabindex="0" id="{{guid}}" class="ifmitem" {{{popover}}} data-type="{{type}}">
+			<span class="{{icon}}"></span>
+			{{linkname}}
+		</a>
+	</td>
+	{{#config.download}}
+	<td>
+		<a href="{{download.link}}"><span class="{{download.icon}}"></span></a>
+	</td>
+	{{/config.download}}
+	{{#config.showlastmodified}}
+	<td data-order="{{lastmodified}}">{{lastmodified_hr}}</td>
+	{{/config.showlastmodified}}
+	{{#config.showfilesize}}
+	<td data-order="{{size_raw}}">{{size}}</td>
+	{{/config.showfilesize}}
+	{{#config.showpermissions}}
+	<td class="d-none d-md-table-cell">
+		<input type="text" size="11" name="newpermissions" class="form-control {{filepermmode}}" value="{{fileperms}}" data-filename="{{name}}" {{readonly}}>
+	</td>
+	{{/config.showpermissions}}
+	{{#config.showowner}}
+	<td class="d-none d-lg-table-cell">
+		{{owner}}
+	</td>
+	{{/config.showowner}}
+	{{#config.showgroup}}
+	<td class="d-none d-xl-table-cell">
+		{{group}}
+	</td>
+	{{/config.showgroup}}
+	<td>
+		{{#button}}
+		<a tabindex="0" name="do-{{action}}" data-id="{{guid}}">
+			<span class="{{icon}}" title="{{title}}"</span>
+		</a>
+		{{/button}}
+	</td>
+</tr>
+{{/items}}
