@@ -18,17 +18,17 @@ services:
         environment:
             DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
 
-    interface-backend:       
+    backend:       
         build:
-            context: ./interface-backend
+            context: ./backend
             dockerfile: Dockerfile.template
         restart: always
         labels:
             portainer: hidden
 
-    interface-frontend:       
+    frontend:       
         build:
-            context: ./interface-frontend
+            context: ./frontend
             dockerfile: Dockerfile.template
         restart: always
         ports:
@@ -39,7 +39,7 @@ services:
             portainer: hidden
         depends_on:
         - "controller"
-        - "interface-backend"
+        - "backend"
         privileged: true
 
     portainer:

@@ -18,19 +18,19 @@ services:
         environment:
             DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
 
-    interface-backend:       
+    backend:       
         build:
-            context: ./interface-backend
+            context: ./backend
             dockerfile: Dockerfile.dev
         volumes:
-            - ./interface-backend/backend/server:/app/backend
+            - ./backend/backend/server:/app/backend
         restart: always
         labels:
             portainer: hidden
 
-    interface-frontend:       
+    frontend:       
         build:
-            context: ./interface-frontend
+            context: ./frontend
             dockerfile: Dockerfile.dev
         restart: always
         ports:
@@ -39,12 +39,12 @@ services:
             portainer: hidden
         depends_on:
         - "controller"
-        - "interface-backend"
+        - "backend"
         privileged: true
 
         volumes:
-            - ./interface-frontend/apps/frontend/public:/app/web/public/frontend
-            - ./interface-frontend/apps/file-manager/dist:/app/web/public/files
+            - ./frontend/apps/frontend/public:/app/web/public/frontend
+            - ./frontend/apps/file-manager/dist:/app/web/public/files
 
     portainer:
         image: portainer/portainer-ce

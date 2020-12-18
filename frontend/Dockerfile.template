@@ -8,7 +8,7 @@ RUN php compiler.php --languages=all
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node:build AS node-buildstep
 
-COPY ./apps/frontend /build-context
+COPY ./apps/interface /build-context
 
 WORKDIR /build-context
 
