@@ -1,0 +1,64 @@
+.el-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__status {
+        opacity: .5;
+    }
+
+    &__left {}
+
+    &__center {
+        font-size: $--font-size-small;
+    }
+
+    &__right {
+        display: flex;
+
+        .el-button + .el-button {
+            margin-left: 0;
+        }
+    }
+
+    &__lang {
+        font-weight: 400;
+        margin-right: 1rem !important;
+        // text-transform: uppercase;
+
+        > span {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__settings {
+        > span {
+            font-size: 0;
+        }
+    }
+
+    &__logout {
+        > span {
+            font-size: 0;
+        }
+    }
+
+    .el-icon-more {
+        transform: rotate(90deg);
+    }
+}
+
+.el-nav {
+    &--light {
+        * {
+            color: $--color-white;
+        }
+
+        .el-icon--svg svg {
+            path {
+                stroke: $--color-white;
+            }
+        }
+    }
+}

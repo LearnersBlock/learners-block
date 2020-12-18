@@ -1,0 +1,19 @@
+@import "~element-ui/packages/theme-chalk/src/alert.scss";
+
+.el-alert {
+    z-index: $--index-top;
+
+    &--boxed {
+        max-width: 15rem;
+    }
+
+    &__title {}
+
+    &__description {
+        margin: 0 0 !important;
+    }
+
+    .el-container {
+        align-items: center;
+    }
+}

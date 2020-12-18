@@ -1,0 +1,114 @@
+.el-header {
+    position: relative;
+    border-radius: $--border-radius-base;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background-color: $--color-green;
+
+    &__nav {
+        padding: 1rem 1rem 0;
+    }
+
+    &__inner {
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        padding: 2rem 1rem 4rem;
+        width: calc(100% - 2rem);
+    }
+
+    &__back {
+        height: 1.5rem; // set fixed height to keep header dimensions even if invisible
+        
+        a {
+            color: $--color-white;
+        }
+
+        i {
+            margin: 0 .5rem 0 0;
+        }
+
+        &--hidden {
+            pointer-events: none;
+            visibility: hidden;
+        }
+    }
+
+    &__content {
+        width: 100%;
+        z-index: 250;
+    }
+
+    &__title {
+        h1 {
+            color: $--color-white;
+            margin: 0 0 .5rem;
+        }
+    }
+
+    &__image {
+        z-index: 250;
+    }
+
+    &__background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+
+        pointer-events: none;
+
+        svg {
+            position: absolute;
+            opacity: .125;
+
+            &:nth-child(1) {
+                top: -10rem;
+                right: -5rem;
+            }
+
+            &:nth-child(2) {
+                left: -10rem;
+                bottom: -10rem;
+                transform: rotate(-25deg);
+            }
+        }
+    }
+}
+
+.el-header {
+    &--compact {
+        .el-header__inner {
+            padding: 2rem 1rem 4rem;
+        }
+    }
+
+    &--secondary {
+        background-color: $--color-orange;
+
+        .el-header__background {
+            img {
+                &:nth-child(1) {
+                    top: -10rem;
+                    right: -5rem;
+                }
+
+                &:nth-child(2) {
+                    left: -10rem;
+                    bottom: -10rem;
+                    transform: rotate(-25deg);
+                }
+            }
+        }
+    }
+
+    &--light {
+        background-color: transparent;
+    }
+}

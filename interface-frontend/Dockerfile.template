@@ -8,15 +8,17 @@ RUN php compiler.php --languages=all
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node:build AS node-buildstep
 
-COPY ./apps/interface-frontend /build-context
+COPY ./apps/frontend /build-context
 
 WORKDIR /build-context
+
+RUN apk add python2
 
 RUN npm install
 
 RUN npm run build
 
-FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python:3.8.6
 
 ## INSTALL PACKAGES
 
@@ -66,11 +68,11 @@ COPY config/nginx/ /etc/nginx/
 
 # INSERT FILE-MANAGER
 
-COPY --from=php-buildstep --chown=nginx dist/ifm.php /app/web/public/files/index.php
+COPY --from=php-buildstep --chown=nginx build-context/dist/ifm.php /app/web/public/files/index.php
 
 # INSERT NGINX WEB CONTENT
 
-COPY --from=node-buildstep --chown=nginx build/ /app/web/public/frontend
+COPY --from=node-buildstep --chown=nginx build-context/build/public/ /app/web/public/frontend
 
 # SET PERMISSIONS
 RUN chown -R nginx.nginx /run && \
@@ -81,6 +83,6 @@ RUN chown -R nginx.nginx /run && \
 ## WRAP-UP
 EXPOSE 8081
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
 HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8081/fpm-ping

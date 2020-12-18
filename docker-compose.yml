@@ -1,14 +1,10 @@
 version: '2.1'
 
 services:
-    interface-backend:       
-        build: ./interface-backend 
-        restart: always
-        labels:
-            portainer: hidden
-
     controller:
-        build: ./controller
+        build:
+            context: ./controller
+            dockerfile: Dockerfile.template
         restart: always
         network_mode: "host"
         volumes:
@@ -22,8 +18,18 @@ services:
         environment:
             DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
 
-    nginx:       
-        build: ./nginx-php
+    interface-backend:       
+        build:
+            context: ./interface-backend
+            dockerfile: Dockerfile.template
+        restart: always
+        labels:
+            portainer: hidden
+
+    interface-frontend:       
+        build:
+            context: ./interface-frontend
+            dockerfile: Dockerfile.template
         restart: always
         ports:
             - "80:8081"

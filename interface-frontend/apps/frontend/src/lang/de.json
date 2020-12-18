@@ -1,0 +1,31 @@
+{
+  "lang": {
+    "name": "Deutsch",
+    "selector": {
+      "title": "Select your preferred language"
+    }
+  },
+  "auth-screen": {
+    "login": {
+      "title": "Login",
+      "description": "Bitte verwenden Sie die bereitgestellten Zugangsdaten, um sich einzuloggen und auf eingeschränkte Inhalte zuzugreifen.",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "submit": "Login"
+    }
+  },
+  "home-screen": {
+    "title": "Willkommen",
+    "quicknav": {
+      "files": {
+        "title": "Dateien"
+      },
+      "website": {
+        "title": "Webseite"
+      }
+    }
+  },
+  "settings-screen": {
+    "title": "Einstellungen"
+  }
+}

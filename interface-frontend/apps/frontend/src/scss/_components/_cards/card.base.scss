@@ -1,0 +1,56 @@
+.el-card {
+    height: 100%;
+    position: relative;
+    padding: 1.25rem;
+    border-radius: $--border-radius-base;
+    background-color: $--color-white;
+
+    transition: all .2s ease;
+
+    @include hover {
+        transform: translateY(-.125rem)
+    }
+
+    &__header h4 {
+        margin: 0 0 .5rem;
+    }
+
+    &__content {
+        p:last-child {
+            margin: 0;
+        }
+    }
+
+    &__footer {
+        margin: 1.5rem 0 0;
+    }
+
+    &__image {
+        padding: .75rem 1.25rem;
+        margin: 0 0 1rem;
+        transition: box-shadow .2s ease;
+    }
+
+    &__link {
+        a::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: auto;
+            content: "";
+            background-color: rgba(0,0,0,0);
+        }
+    }
+}
+
+
+.el-card {
+    &.is-linked {
+        &:active {
+            transform: scale(.975);
+        }
+    }
+}

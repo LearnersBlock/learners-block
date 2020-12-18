@@ -4,6 +4,8 @@ COPY ./backend /build-context
 
 WORKDIR /build-context
 
+RUN apk add python2
+
 RUN npm install
 
 RUN npm run build
@@ -12,7 +14,7 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node
 
 ## INSERT PACKAGES
 
-COPY --from=buildstep build/ /app/backend/
+COPY --from=buildstep build-context/ /app/backend/
 
 # SET APPLICATION DIRECTORY
 WORKDIR /app/backend

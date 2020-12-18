@@ -1,0 +1,10 @@
+.el-button.el-button--icon {
+    border: none;
+    padding: .75rem;
+    background-color: transparent;
+
+    &:hover,
+    &:focus {
+        background: transparent;
+    }
+}

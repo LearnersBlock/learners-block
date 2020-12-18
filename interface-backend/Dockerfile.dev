@@ -1,0 +1,10 @@
+FROM balenalib/amd64-alpine-node
+
+## INSERT PACKAGES
+
+#COPY --from=buildstep build-context/ /app/backend
+
+# SET APPLICATION DIRECTORY
+WORKDIR /app/backend
+
+CMD ["npm", "start"]

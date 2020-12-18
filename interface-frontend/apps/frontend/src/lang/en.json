@@ -1,0 +1,146 @@
+{
+    "lang": {
+        "name": "English",
+        "selector": {
+            "title": "Select your preferred language"
+        }
+    },
+    "auth-screen": {
+        "login": {
+            "title": "Login",
+            "description": "Please use the provided credentials to login in order to access restricted content",
+            "username": "Username",
+            "password": "Password",
+            "submit": "Login"
+        }
+    },
+    "home-screen": {
+        "title": "Welcome",
+        "quicknav": {
+            "files": {
+                "title": "Files"
+            },
+            "website": {
+                "title": "Website"
+            }
+        }
+    },
+    "settings-screen": {
+        "back": "Back",
+        "title": "Settings",
+        "components": {
+            "title": "Components",
+            "fileviewer": {
+                "label": "Enable file viewer"
+            },
+            "website": {
+                "label": "Enable website"
+            }
+        },
+        "language": {
+            "title": "Language",
+            "default": {
+                "label": "Default language"
+            }
+        },
+        "filemanager": {
+            "title": "File Manager"
+        },
+        "network": {
+            "title": "Wifi",
+            "connect": {
+                "label": "Connect to wifi"
+            },
+            "reset": {
+                "label": "Reset wifi connection",
+                "warning": {
+                    "title": "Are you certain you want to reset the connection?",
+                    "content": "If you proceed, the wifi connection will be reset and you will need to re-configure it.",
+                    "cancel": "Cancel",
+                    "submit": "Reset now"
+                },
+                "success": {
+                    "title": "Reset successful",
+                    "content": "Please connect to the <b>lb.wifi</b> network to re-configure the network connection.",
+                    "close": "Close"
+                },
+                "error": {
+                    "title": "Reset failed",
+                    "content": "The wifi connection could not be reset. Please try again.",
+                    "close": "Close"
+                }
+            }
+        },
+        "auth": {
+            "title": "Users",
+            "disabled": {
+                "title": "Authentication disabled",
+                "description": "You haven't created a user yet and anyone can currently access the settings pages. Please create account now."
+            },
+            "account": {
+                "title": "Account"
+            }
+        },
+        "system": {
+            "title": "System",
+            "versions": {
+                "title": "Versions",
+                "components": {
+                    "lb": "Learners Block",
+                    "frontend": "Frontend",
+                    "backend": "Backend",
+                    "controller": "Controller",
+                    "ifm": "Filemanager",
+                    "wificonnect_ui": "WiFi Connect"
+                }
+            },
+            "hostname": {
+                "title": "Hostname",
+                "update": {
+                    "label": "Update hostname",
+                    "success": {
+                        "title": "Hostname updated",
+                        "content": "The hostname was successfully updated to <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. The wifi network SSID has been updated to <b>%ssid%</b> and you will need to reconnect to this new network.",
+                        "close": "Close"
+                    },
+                    "error": {
+                        "title": "Request failed",
+                        "content": "An error occured and the hostname could not be changed.",
+                        "close": "Close"
+                    }
+                }
+            },
+            "database": {
+                "title": "Database",
+                "reset": {
+                    "label": "Reset database",
+                    "success": {
+                        "title": "Reset successful",
+                        "content": "The database was reset succesfully. Please reload the app for changes to take effect.",
+                        "close": "Close"
+                    },
+                    "error": {
+                        "title": "Reset failed",
+                        "content": "An error occured and the database state could not be reset.",
+                        "close": "Close"
+                    }
+                }
+            }
+        }
+    },
+    "error-screen": {
+        "404": {
+            "title": "Well, this is awkward",
+            "description": "The page you tried to reach doesn't exist.",
+            "button": "Go home"
+        },
+        "500": {
+            "title": "Houston, we have a problem",
+            "description": "The backend of the application is currently unreachable.",
+            "button": "Try again"
+        }
+    },
+    "general": {
+        "save": "Save"
+    }
+}

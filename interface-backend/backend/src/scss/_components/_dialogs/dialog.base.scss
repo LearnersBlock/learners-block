@@ -1,0 +1,44 @@
+@import "~element-ui/packages/theme-chalk/src/dialog.scss";
+
+.el-dialog {
+    width: calc(100% - 2rem);
+
+    @include res('sm-and-up', $--breakpoints-spec) {
+        width: 50%
+    }
+
+    @include res('md-and-up', $--breakpoints-spec) {
+        width: 30%;
+    }
+
+    &__headerbtn {
+        top: 1rem;
+        right: 1.5rem;
+        padding: .5rem;
+        font-size: $--font-size-large;
+    }
+
+    &__title {
+        color: $--color-black;
+        line-height: 1.5;
+        font-weight: $--font-weight-medium;
+    }
+
+    &__body {
+        line-height: 1.5;
+        word-break: break-word;
+        padding: 0 2rem 2rem 2rem; // only when no footer
+
+        p {
+            font-size: $--dialog-font-size;
+        }
+
+        &:not(:last-child) {
+            padding-bottom: 1rem;
+        }
+    }
+
+    &__footer {
+        padding: 0 2rem 2rem 2rem;
+    }
+}

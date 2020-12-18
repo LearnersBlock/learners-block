@@ -1,0 +1,14 @@
+@import "~element-ui/packages/theme-chalk/src/loading.scss";
+
+.el-loading-parent--relative .el-section__group {
+    opacity: .25
+}
+
+.el-loading-mask {
+    background: rgba($--color-white, .75);
+    // background: transparent
+}
+
+#app.el-loading-parent--relative {
+    min-height: 100vh;
+}
