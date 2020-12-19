@@ -21,7 +21,8 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile.dev --tag controller
-        docker run -i controller sh
+        docker run controller
+        docker exec -it controller sh
         sudo apt-get update
         sudo apt-get install libdbus-glib-1-dev libgirepository1.0-dev
         python -m pip install --upgrade pip
