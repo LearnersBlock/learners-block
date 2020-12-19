@@ -21,7 +21,7 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile.dev --tag controller
-        docker run -it controller sh
+        docker run -i controller sh
     - name: Install dependencies
       run: |
         sudo apt-get update
