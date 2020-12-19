@@ -22,7 +22,6 @@ jobs:
     container: balenalib/orange-pi-zero-python:3.8.6
 
     steps:
-    - uses: actions/checkout@v2.1.0
     - name: Install dependencies
       run: |
         sudo apt-get update
