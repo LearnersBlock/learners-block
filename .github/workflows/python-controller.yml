@@ -5,9 +5,11 @@ name: Python application
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+      - '**'
   pull_request:
-    branches: [ master ]
+    branches: 
+      - '**'
 
 defaults:
     run:
@@ -17,13 +19,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    container: balenalib/orange-pi-zero-python:3.8.6
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
+    - uses: actions/checkout@v2.1.0
     - name: Install dependencies
       run: |
         sudo apt-get update
