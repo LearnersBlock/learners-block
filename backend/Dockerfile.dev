@@ -1,10 +1,28 @@
 FROM balenalib/amd64-alpine-node
 
-## INSERT PACKAGES
-
-#COPY --from=buildstep build-context/ /app/backend
-
-# SET APPLICATION DIRECTORY
+# Set application directory
 WORKDIR /app/backend
 
+# Set node env
+ENV NODE_ENV=development
+
+# Create node modules folder
+RUN mkdir -p node_modules
+
+# Create databse folder
+RUN mkdir -p db
+
+# Copy both package.json and package-lock.json to container
+COPY package*.json ./
+
+# Install app dependencies
+RUN npm install
+
+# Bundle app source
+COPY . ./
+
+# Expose port 
+EXPOSE 3001
+
+# Start backend server
 CMD ["npm", "start"]
