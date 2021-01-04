@@ -23,7 +23,6 @@ yarn-error.log*
 *.sw?
 
 # Data
-/public/data
-/server/static
-/server/data
-/server/db
+static
+db
+data

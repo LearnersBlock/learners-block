@@ -22,44 +22,52 @@ services:
         build:
             context: ./backend
             dockerfile: Dockerfile.dev
-        volumes:
-            - ./backend/backend/server:/app/backend
+        image: learnersblock-backend
         restart: always
-        labels:
-            portainer: hidden
-
-    frontend:       
-        build:
-            context: ./frontend
-            dockerfile: Dockerfile.dev
-        restart: always
-        ports:
-            - "80:8081"
-        labels:
-            portainer: hidden
-        depends_on:
-        - "controller"
-        - "backend"
-        privileged: true
-
+        command: npm run dev
+        ports: 
+            - "3001:3001"
         volumes:
-            - ./frontend/apps/frontend/public:/app/web/public/frontend
-            - ./frontend/apps/file-manager/dist:/app/web/public/files
-
-    portainer:
-        image: portainer/portainer-ce
-        restart: on-failure
-        ports:
-            - '9000:9000'
+            - ./backend:/app/backend
+            - backend_database:/app/backend/db
+            - backend_nodemodules:/app/backend/node_modules
         labels:
             portainer: hidden
-            io.balena.features.balena-socket: '1'
-        depends_on:
-        - "controller"
-        volumes:
-            - 'portainer_data:/data'
-            - '/var/run/docker.sock:/var/run/docker.sock'
-        command: "--admin-password=$$2y$$05$$j4Gnyhud5p8W81VI7MCbJep1w/.ToYPn3KQEZerJNLqUaV2qKnvT."
+
+    # frontend:       
+    #     build:
+    #         context: ./frontend
+    #         dockerfile: Dockerfile.dev
+    #     restart: always
+    #     ports:
+    #         - "80:8081"
+    #     labels:
+    #         portainer: hidden
+    #     depends_on:
+    #     - "controller"
+    #     - "backend"
+    #     privileged: true
+
+    #     volumes:
+    #         - ./frontend/apps/frontend/public:/app/web/public/frontend
+    #         - ./frontend/apps/file-manager/dist:/app/web/public/files
+
+    # portainer:
+    #     image: portainer/portainer-ce
+    #     restart: on-failure
+    #     ports:
+    #         - '9000:9000'
+    #     labels:
+    #         portainer: hidden
+    #         io.balena.features.balena-socket: '1'
+    #     depends_on:
+    #     - "controller"
+    #     volumes:
+    #         - 'portainer_data:/data'
+    #         - '/var/run/docker.sock:/var/run/docker.sock'
+    #     command: "--admin-password=$$2y$$05$$j4Gnyhud5p8W81VI7MCbJep1w/.ToYPn3KQEZerJNLqUaV2qKnvT."
 
 volumes:
+    backend_database:
+    backend_nodemodules:
     portainer_data:
