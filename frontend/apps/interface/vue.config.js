@@ -30,7 +30,7 @@ module.exports = {
             locale: 'en',
             fallbackLocale: 'en',
             localeDir: 'lang',
-            enableInSFC: true
+            enableInSFC: false
         }
     }
 }
