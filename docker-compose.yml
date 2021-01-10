@@ -39,20 +39,20 @@ services:
         build:
             context: ./frontend
             dockerfile: Dockerfile.dev
-        # restart: always
+        restart: always
         command: bash -c "cd /app/web/public/interface && npm run serve"
         ports: 
+            - "8081:8081"
             - "3000:3000"
         # labels:
         #     portainer: hidden
         depends_on:
-        - "backend"
+            - "backend"
         # - "controller"
         privileged: true
         volumes:
             - ./frontend/apps/interface:/app/web/public/interface
             - frontend_nodemodules:/app/web/public/interface/node_modules
-            # - ./frontend/apps/frontend/public:/app/web/public/frontend
             # - ./frontend/apps/file-manager/dist:/app/web/public/files
 
     # portainer:
