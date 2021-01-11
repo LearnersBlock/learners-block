@@ -44,10 +44,7 @@ RUN install_packages php7 php7-fpm php7-opcache php7-mysqli php7-json \
 
 # Install Node.js and npm
 # Note: only required in the dev environment to work on the interface
-# RUN install_packages nodejs-npm=12.18.4-r0
-# RUN apk add --update nodejs
 RUN apk add nodejs-current npm
-RUN node -v && npm -v
 
 # Install IFM Filemanager dependencies
 RUN install_packages libbz2 libzip libcap openldap-dev php7-zip php7-ldap \ 
@@ -106,8 +103,6 @@ RUN npm install -g @vue/cli @vue/cli-service-global
 RUN mkdir -p ./public/interface/node_modules
 
 # Copy frontend interface source code to container
-# This is needed as the npm dev build requires a bunch of files such as the 
-# package-lock.json but also the vue config, etc.
 COPY ./apps/interface/ ./public/interface/
 
 # Install app dependencies
@@ -145,8 +140,7 @@ RUN chown -R nginx.nginx /run && \
 EXPOSE 8081 3000
 
 # Start services
-CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-
+CMD bash -c "supervisord -c /etc/supervisor/conf.d/supervisord.conf"
 
 
 # Healthcheck

@@ -25,4 +25,4 @@ COPY . ./
 EXPOSE 3001
 
 # Start backend dev server
-CMD ["npm", "run", "dev"]
+CMD bash -c "npm run dev"
