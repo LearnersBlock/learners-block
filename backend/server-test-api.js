@@ -166,6 +166,21 @@ app.patch(`${apiBase}/hostconfig/:hostname`, (req, res) => {
     }
 })
 
+/**
+ * GET /api/v1/versions
+ */
+
+app.get(`${apiBase}/versions`, (req, res) => {
+    return res.status(200).json({
+        lb: '0.0.1',
+        frontend: '0.0.1',
+        backend: '0.0.1',
+        controller: '0.0.1',
+        ifm: '0.0.1',
+        wificonnect_ui: '0.0.1'
+    })
+})
+
 
 /**
  * Server Application

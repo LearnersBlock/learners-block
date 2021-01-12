@@ -370,6 +370,41 @@ const AuthController = () => {
     }
 
     /**
+     * validateToken
+     *
+     * @since 1.0.0
+     */
+
+    const validateToken = (req, res) => {
+        // check that a token has been passed for verification
+        if (!req.body.token) {
+            // otherwise, server 400 error
+            return res.status(400).json({
+                success: false,
+                status: 400,
+                data: 'Token is missing'
+            })
+        }
+
+        // proceed with the token verification
+        jwt.verify(req.body.token, process.env.APP_JWT_SECRET, (err, user) => {
+            if (err) {
+                return res.status(401).json({
+                    success: false,
+                    status: 401,
+                    data: 'Token missing or invalid. Please re-authenticate and try again.'
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                status: 200,
+                data: user
+            })
+        })
+    }
+
+    /**
      * reset
      *
      * @since 1.0.0
@@ -405,6 +440,7 @@ const AuthController = () => {
         login,
         createUser,
         updateUser,
+        validateToken,
         reset
     }
 }
