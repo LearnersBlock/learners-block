@@ -29,7 +29,7 @@ export default () => {
 
     // get the backend API url based on the current hostname
     // this is needed as the production environment hostname can be changed any time
-    const backendUrl = process.env.NODE_ENV === 'development' ? process.env.VUE_APP_API_BASE : location.hostname
+    const backendUrl = process.env.VUE_APP_API_BASE || location.origin
 
     // initiate the axios instance
     const Api = axios.create({
