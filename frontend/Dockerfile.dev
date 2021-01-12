@@ -96,9 +96,6 @@ COPY config/nginx/ /etc/nginx/
 # Set node env
 ENV NODE_ENV=development
 
-# Install Vue-CLI for dev
-RUN npm install -g @vue/cli @vue/cli-service-global
-
 # Create node modules folder
 RUN mkdir -p ./public/interface/node_modules
 
@@ -107,6 +104,9 @@ COPY ./apps/interface/ ./public/interface/
 
 # Install app dependencies
 RUN cd ./public/interface && npm install
+
+# Run static production build
+RUN cd ./public/interface && npm run build
 
 
 
