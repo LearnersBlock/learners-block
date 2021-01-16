@@ -17,12 +17,22 @@ const SystemController = () => {
         // query the wifi container status
         await axios.get(`${process.env.DEVICE_API_BASE}/system/info`)
             .then(function (response) {
+
+                // prepare object
+                const versions = []
+                const storage = response.data.storage || null
+
+                // modify the versions response format as needed by the frontend
+                versions.push({
+                    id: 'lb',
+                    version: response.data.versions.lb
+                })
+
                 // handle success
                 return res.json({
                     success: true,
-                    data: {
-                        ...response.data
-                    }
+                    versions,
+                    storage
                 })
             })
             .catch(function (error) {

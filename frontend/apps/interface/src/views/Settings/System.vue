@@ -2,30 +2,6 @@
     <div>
         <div class="el-section__group">
             <div class="el-section__header">
-                <h5>{{ $t('settings-screen.system.versions.title') }}</h5>
-            </div>
-
-            <div class="el-section__content">
-                <el-table
-                    :data="versions"
-                    :show-header="false"
-                    style="width: 100%">
-                    <el-table-column
-                        prop="id"
-                        name="Component"
-                        :formatter="getComponentName">
-                    </el-table-column>
-                    <el-table-column
-                        prop="version"
-                        name="Version"
-                        align="right">
-                    </el-table-column>
-                </el-table>
-            </div>
-        </div>
-
-        <div class="el-section__group">
-            <div class="el-section__header">
                 <h5>{{ $t('settings-screen.system.hostname.title') }}</h5>
             </div>
 
@@ -64,6 +40,30 @@
                     plain>
                     {{ $t('settings-screen.system.database.reset.label') }}
                 </el-button>
+            </div>
+        </div>
+
+        <div class="el-section__group">
+            <div class="el-section__header">
+                <h5>{{ $t('settings-screen.system.versions.title') }}</h5>
+            </div>
+
+            <div class="el-section__content">
+                <el-table
+                    :data="this.versions"
+                    :show-header="false"
+                    style="width: 100%">
+                    <el-table-column
+                        prop="id"
+                        name="Component"
+                        :formatter="getComponentName">
+                    </el-table-column>
+                    <el-table-column
+                        prop="version"
+                        name="Version"
+                        align="right">
+                    </el-table-column>
+                </el-table>
             </div>
         </div>
 
@@ -218,10 +218,10 @@ export default {
     mounted () {
         // get the component versions
         Api()
-            .get('/system/versions')
+            .get('/system/info')
             .then((response) => {
-                if (response.data && response.data.versions) {
-                    this.versions = response.data.versions
+                if (response.data && response.data) {
+                    this.versions = response.data.versions || null
                 }
             })
             .catch((err) => {
