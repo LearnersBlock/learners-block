@@ -22,7 +22,7 @@ class IFM {
 		"auth" => 0,
 		"auth_source" => 'inline;admin:$2y$10$0Bnm5L4wKFHRxJgNq.oZv.v7yXhkJZQvinJYR2p6X1zPvzyDRUVRC',
 		"root_dir" => "/app/web/public/storage/fileshare/",
-		"root_public_url" => "/storage/fileshare/",
+		"root_public_url" => "/fileshare/",
 		"tmp_dir" => "",
 		"timezone" => "",
 		"forbiddenChars" => array(),

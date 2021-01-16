@@ -6,6 +6,57 @@ const SystemController = () => {
 
 
     /**
+     * /api/v1/versions
+     *
+     * GET Endpoint to fetch all component versions
+     *
+     * @since 1.0.0
+     */
+
+    const getComponentVersions = async (req, res) => {
+        // query the wifi container status
+        await axios.get(`${process.env.DEVICE_API_BASE}/versions`)
+            .then(function (response) {
+                // prepare version object
+                const versions = []
+
+                // and loop over response to new format
+                Object.keys(response.data).forEach(function (key) {
+                    versions.push({
+                        id: key,
+                        version: response.data[key]
+                    })
+                })
+
+                // handle success
+                return res.json({
+                    success: true,
+                    versions
+                })
+            })
+            .catch(function (error) {
+                // handle error
+                if (error.response && error.response.data) {
+                    // server responded with a status outside the 2xx but
+                    // contains specific data to be passed to the frontend
+                    return res.status(error.response.status).json({
+                        success: false,
+                        ...error.response.data
+                    })
+                } else {
+                    // something else, most likely unknown, happened
+                    return res.status(error.response.status).json({
+                        success: false,
+                        status: error.response.status,
+                        message: error.response.statusText
+                    })
+                }
+            })
+    }
+
+
+
+    /**
      * /api/v1/system/wifi/status
      *
      * GET Endpoint to fetch the device's wifi status (i.e. connected or disconnected)
@@ -192,6 +243,7 @@ const SystemController = () => {
      */
 
     return {
+        getComponentVersions,
         getWifiStatus,
         resetWifiConnection,
         updateHostname,

@@ -70,6 +70,7 @@ const SystemController = require('./routes/system')()
 // auth
 app.get(`${apiBase}/auth/check`, AuthController.check)
 app.post(`${apiBase}/auth/login`, AuthController.login)
+app.post(`${apiBase}/auth/validate`, AuthController.validateToken)
 
 // users
 app.post(`${apiBase}/users`, AuthController.createUser)
@@ -80,6 +81,7 @@ app.get(`${apiBase}/settings`, SettingsController.getAll)
 app.patch(`${apiBase}/settings`, AuthMiddleware.verifyJWT, SettingsController.updateSetting)
 
 // system
+app.get(`${apiBase}/system/versions`, SystemController.getComponentVersions)
 app.get(`${apiBase}/system/wifi/status`, AuthMiddleware.verifyJWT, SystemController.getWifiStatus)
 app.post(`${apiBase}/system/wifi/reset`, AuthMiddleware.verifyJWT, SystemController.resetWifiConnection)
 app.post(`${apiBase}/system/database/reset`, AuthMiddleware.verifyJWT, SystemController.resetDatabase)

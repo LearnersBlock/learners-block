@@ -1,21 +1,22 @@
 {
   "name": "learnersblock-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 3000",
-    "build": "vue-cli-service build --report",
+    "build": "NODE_ENV=production vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
+    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/lang/**/*.json'"
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "core-js": "^3.8.2",
     "element-ui": "^2.13.0",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "reset-css": "^5.0.1",
     "vue": "^2.6.11",
-    "vue-i18n": "^8.21.1",
+    "vue-i18n": "^8.17.3",
     "vue-password-strength-meter": "^1.7.2",
     "vue-router": "^3.1.5",
     "vuex": "^3.1.2",
