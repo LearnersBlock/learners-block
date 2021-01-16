@@ -163,8 +163,10 @@ export default {
         Api()
             .get('/system/wifi/status')
             .then((response) => {
-                if (response.data && response.data.connection) {
-                    this.wifi = response.data.connection
+                // ensure that we have the response we're looking for
+                if (response.data && response.data.message) {
+                    // store response
+                    this.wifi = response.data.message
                 }
             })
             .catch((err) => {
