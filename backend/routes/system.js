@@ -6,32 +6,33 @@ const SystemController = () => {
 
 
     /**
-     * /api/v1/versions
+     * /api/v1/system/info
      *
-     * GET Endpoint to fetch all component versions
+     * GET Endpoint to fetch system infos
      *
      * @since 1.0.0
      */
 
-    const getComponentVersions = async (req, res) => {
+    const getSystemInfo = async (req, res) => {
         // query the wifi container status
-        await axios.get(`${process.env.DEVICE_API_BASE}/versions`)
+        await axios.get(`${process.env.DEVICE_API_BASE}/system/info`)
             .then(function (response) {
-                // prepare version object
-                const versions = []
 
-                // and loop over response to new format
-                Object.keys(response.data).forEach(function (key) {
-                    versions.push({
-                        id: key,
-                        version: response.data[key]
-                    })
+                // prepare object
+                const versions = []
+                const storage = response.data.storage || null
+
+                // modify the versions response format as needed by the frontend
+                versions.push({
+                    id: 'lb',
+                    version: response.data.versions.lb
                 })
 
                 // handle success
                 return res.json({
                     success: true,
-                    versions
+                    versions,
+                    storage
                 })
             })
             .catch(function (error) {
@@ -66,7 +67,7 @@ const SystemController = () => {
 
     const getWifiStatus = async (req, res) => {
         // query the wifi container status
-        await axios.get(`${process.env.DEVICE_API_BASE}/wificonnectionstatus`)
+        await axios.get(`${process.env.DEVICE_API_BASE}/wifi/connectionstatus`)
             .then(function (response) {
                 // handle success
                 return res.json({
@@ -106,7 +107,7 @@ const SystemController = () => {
 
     const resetWifiConnection = async (req, res) => {
         // query the wifi container status
-        await axios.post(`${process.env.DEVICE_API_BASE}/wififorget`)
+        await axios.post(`${process.env.DEVICE_API_BASE}/wifi/forget`)
             .then(function (response) {
                 // handle success
                 return res.json({
@@ -243,7 +244,7 @@ const SystemController = () => {
      */
 
     return {
-        getComponentVersions,
+        getSystemInfo,
         getWifiStatus,
         resetWifiConnection,
         updateHostname,

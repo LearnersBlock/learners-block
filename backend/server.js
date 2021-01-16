@@ -81,7 +81,7 @@ app.get(`${apiBase}/settings`, SettingsController.getAll)
 app.patch(`${apiBase}/settings`, AuthMiddleware.verifyJWT, SettingsController.updateSetting)
 
 // system
-app.get(`${apiBase}/system/versions`, SystemController.getComponentVersions)
+app.get(`${apiBase}/system/info`, SystemController.getSystemInfo)
 app.get(`${apiBase}/system/wifi/status`, AuthMiddleware.verifyJWT, SystemController.getWifiStatus)
 app.post(`${apiBase}/system/wifi/reset`, AuthMiddleware.verifyJWT, SystemController.resetWifiConnection)
 app.post(`${apiBase}/system/database/reset`, AuthMiddleware.verifyJWT, SystemController.resetDatabase)

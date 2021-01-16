@@ -86,7 +86,7 @@
             "versions": {
                 "title": "Versions",
                 "components": {
-                    "lb": "Learners Block",
+                    "lb": "Learner's Block",
                     "frontend": "Frontend",
                     "backend": "Backend",
                     "controller": "Controller",
