@@ -1,22 +1,23 @@
 version: '2.1'
 
 services:
-    # controller:
-    #     build:
-    #         context: ./controller
-    #         dockerfile: Dockerfile.dev
-    #     restart: always
-    #     network_mode: "host"
-    #     volumes:
-    #         - 'portainer_data:/app/portainer'
-    #     labels:
-    #         io.balena.features.dbus: '1'
-    #         io.balena.features.supervisor-api: '1'
-    #         portainer: hidden
-    #     cap_add:
-    #         - NET_ADMIN
-    #     environment:
-    #         DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+    controller:
+        container_name: lb_controller
+        build:
+            context: ./controller
+            dockerfile: Dockerfile.dev
+        restart: always
+        network_mode: "host"
+        volumes:
+            - 'portainer_data:/app/portainer'
+        labels:
+            io.balena.features.dbus: '1'
+            io.balena.features.supervisor-api: '1'
+            portainer: hidden
+        cap_add:
+            - NET_ADMIN
+        environment:
+            DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
 
     backend:
         container_name: lb_backend 
@@ -26,6 +27,8 @@ services:
         restart: always
         ports: 
             - "3001:3001"
+        depends_on:
+            - "controller"
         volumes:
             - ./backend:/app/backend
             - backend_database:/app/backend/db
@@ -46,7 +49,6 @@ services:
         #     portainer: hidden
         depends_on:
             - "backend"
-        # - "controller"
         privileged: true
         volumes:
             - ./frontend/apps/interface:/app/web/public/interface
