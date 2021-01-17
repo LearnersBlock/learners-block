@@ -1,6 +1,5 @@
 .el-header {
     position: relative;
-    border-radius: $--border-radius-base;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     background-color: $--color-green;
@@ -18,13 +17,13 @@
         flex-direction: column;
         justify-content: space-between;
 
-        padding: 2rem 1rem 4rem;
+        padding: 2rem 1rem 0;
         width: calc(100% - 2rem);
     }
 
     &__back {
         height: 1.5rem; // set fixed height to keep header dimensions even if invisible
-        
+
         a {
             color: $--color-white;
         }
@@ -80,35 +79,15 @@
             }
         }
     }
-}
 
-.el-header {
-    &--compact {
-        .el-header__inner {
-            padding: 2rem 1rem 4rem;
-        }
-    }
+    &__footer {
+        position: relative;
+        // z-index: 250;
+        height: 2rem;
+        margin: 1rem 0 0;
 
-    &--secondary {
-        background-color: $--color-orange;
-
-        .el-header__background {
-            img {
-                &:nth-child(1) {
-                    top: -10rem;
-                    right: -5rem;
-                }
-
-                &:nth-child(2) {
-                    left: -10rem;
-                    bottom: -10rem;
-                    transform: rotate(-25deg);
-                }
-            }
-        }
-    }
-
-    &--light {
-        background-color: transparent;
+        border-top-left-radius: $--border-radius-large;
+        border-top-right-radius: $--border-radius-large;
+        background-color: $--color-gray-lightest;
     }
 }

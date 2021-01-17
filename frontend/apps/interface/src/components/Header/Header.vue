@@ -1,6 +1,6 @@
 <template>
-    <div class="el-header" v-bind:class="this.classes">
-        <div class="el-header is-vertical">
+    <div class="el-header is-vertical" v-bind:class="this.classes">
+        <div class="el-header__content">
             <div class="el-container is-vertical">
                 <div class="el-header__nav">
                     <el-nav type="light"></el-nav>
@@ -29,6 +29,8 @@
             <ShapeOne />
             <ShapeTwo />
         </div>
+
+        <div class="el-header__footer"></div>
     </div>
 </template>
 
@@ -77,7 +79,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/scss/_components/_header/header.base';
+@import 'header.scss';
+
 @import '@/scss/_components/_buttons/button.base';
 @import '@/scss/_components/_buttons/button.link';
 </style>
