@@ -5,12 +5,10 @@ module.exports = {
         },
         components: {
             fileviewer: {
-                active: true,
-                path: '/files'
+                active: true
             },
             website: {
-                active: true,
-                path: '/website'
+                active: true
             }
         },
         system: {

@@ -50,15 +50,14 @@
 <script>
 import store from '@/store'
 
-import CommonsMixin from '@/mixins/commons'
-import ComponentsMixin from '@/mixins/components'
+import LinksMixin from '@/mixins/links'
 
 import ElAlert from '@/components/Alerts/Alert'
 import ElIcon from '@/components/Icons/Icon'
 
 export default {
     name: 'SettingsHome',
-    mixins: [CommonsMixin, ComponentsMixin],
+    mixins: [LinksMixin],
     components: {
         ElAlert,
         ElIcon
@@ -82,7 +81,7 @@ export default {
                     internal: false,
                     icon: 'heroicons-collection',
                     label: this.$t('settings-screen.filemanager.title'),
-                    url: this.getFileviewerLink(true)
+                    url: this.getExternalLink(this.$constants.FILEMANAGER, 'lang', true)
                 },
                 {
                     internal: true,

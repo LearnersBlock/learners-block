@@ -27,6 +27,8 @@ import {
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 
+import Constants from './plugins/Constants'
+
 Vue.use(Container)
 Vue.use(Header)
 Vue.use(Main)
@@ -44,6 +46,8 @@ Vue.use(Alert)
 Vue.use(Loading)
 Vue.use(Table)
 Vue.use(TableColumn)
+
+Vue.use(Constants)
 
 locale.use(lang)
 
