@@ -16,15 +16,14 @@
 import { mapState } from 'vuex'
 import store from '@/store'
 
-import CommonsMixin from '@/mixins/commons'
-import ComponentsMixin from '@/mixins/components'
+import LinksMixin from '@/mixins/links'
 
 import ElHeader from '@/components/Header/Header.vue'
 import ElSectionQuicknav from '@/components/Sections/Quicknav.vue'
 
 export default {
     name: 'Home',
-    mixins: [CommonsMixin, ComponentsMixin],
+    mixins: [LinksMixin],
     components: {
         ElHeader,
         ElSectionQuicknav
@@ -47,7 +46,7 @@ export default {
                     color: 'orange',
                     link: {
                         internal: false,
-                        path: this.getFileviewerLink()
+                        path: this.getExternalLink(this.$constants.FILEMANAGER, 'lang')
                     },
                     enabled: this.settingsData.components.fileviewer.active
                 },
@@ -57,7 +56,7 @@ export default {
                     color: 'yellow',
                     link: {
                         internal: false,
-                        path: this.settingsData.components.website.path
+                        path: this.$constants.WEBSITE
                     },
                     enabled: this.settingsData.components.website.active
                 }

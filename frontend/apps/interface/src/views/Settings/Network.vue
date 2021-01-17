@@ -7,7 +7,7 @@
 
             <div class="el-section__content" v-loading="this.wifi ? false : true">
                 <a
-                    href="/wifi/connect"
+                    :href="this.getExternalLink(this.$constants.WIFICONNECT, 'language')"
                     target="_blank"
                     class="el-button el-button--settings el-button--block"
                     :class="(isConnectButtonDisabled) ? 'is-disabled' : ''">
@@ -70,14 +70,16 @@
 <script>
 import Api from '@/api/Api'
 
+import LinksMixin from '@/mixins/links'
+
 import ElIcon from '@/components/Icons/Icon'
 
 export default {
     name: 'SettingsNetwork',
+    mixins: [LinksMixin],
     components: {
         ElIcon
     },
-    mixins: [],
     data () {
         return {
             error: null,
