@@ -25,6 +25,9 @@
             }
         }
     },
+    "wifiportal-screen": {
+        "title": "Welcome to the Learner's Block"
+    },
     "settings-screen": {
         "back": "Back",
         "title": "Settings",

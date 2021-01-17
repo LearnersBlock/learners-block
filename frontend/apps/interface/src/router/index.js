@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 // components
 import Home from '../views/Home.vue'
+import WifiPortal from '../views/WifiPortal.vue'
 import Settings from '../views/Settings.vue'
 import SettingsHome from '../views/Settings/Home.vue'
 import SettingsComponents from '../views/Settings/Components.vue'
@@ -59,6 +60,10 @@ const routes = [
                 meta: { transitionName: 'slide' }
             }
         ]
+    },
+    {
+        path: '/captive-portal',
+        component: WifiPortal
     },
     {
         path: '/login',
