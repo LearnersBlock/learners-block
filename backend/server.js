@@ -34,7 +34,14 @@ const apiBase = '/api/v1'
  * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', process.env.APP_URL)
+    // Determine the frontend URL for the CORS headers
+    // Note: This is needed as in production, the hostname can be changed freely.
+    // Therefore, make sure to only provide an APP_URL env var in development
+    // when running a Vue.js dev server on localhost:3000
+    const frontendUrl = process.env.APP_URL || req.protocol + '://' + req.get('host')
+    
+    // Set headers
+    res.setHeader('Access-Control-Allow-Origin', frontendUrl)
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,OPTIONS')
     res.setHeader('Access-Control-Allow-Credentials', true)
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
