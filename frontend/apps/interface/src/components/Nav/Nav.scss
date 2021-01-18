@@ -61,4 +61,11 @@
             }
         }
     }
+
+    &--restricted {
+        .el-button.el-nav__settings,
+        .el-button.el-nav__logout {
+            display: none;
+        }
+    }
 }

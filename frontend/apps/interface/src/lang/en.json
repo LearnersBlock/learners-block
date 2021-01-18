@@ -25,6 +25,10 @@
             }
         }
     },
+    "wifiportal-screen": {
+        "title": "Welcome to the Learner's Block",
+        "content": "Visit <b>%hostname%</b> in your browser to start using your device."
+    },
     "settings-screen": {
         "back": "Back",
         "title": "Settings",

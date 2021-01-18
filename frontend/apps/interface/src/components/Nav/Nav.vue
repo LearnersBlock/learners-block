@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div :class="'el-nav ' + this.navType">
+        <div class="el-nav" v-bind:class="this.classes">
             <div class="el-nav__left">
             </div>
 
@@ -49,15 +49,28 @@ export default {
         }
     },
     props: {
-        type: String
+        type: String,
+        mode: String
     },
     components: {
         ElIcon,
         ElLangSwitcherDialog
     },
     computed: {
-        navType: function () {
-            return this.type ? 'el-nav--' + this.type : ''
+        classes: function () {
+            let classes = ''
+
+            // handle type
+            if (this.type) {
+                classes += 'el-nav--' + this.type
+            }
+
+            // handle mode
+            if (this.mode) {
+                classes += ' el-nav--' + this.mode
+            }
+
+            return classes
         },
 
         ...mapGetters('auth', [
@@ -84,7 +97,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/scss/_components/_nav/nav.base';
+@import 'Nav.scss';
+
 @import '@/scss/_components/_buttons/button.base';
 @import '@/scss/_components/_buttons/button.icon';
 @import '@/scss/_components/_buttons/button.seamless';
