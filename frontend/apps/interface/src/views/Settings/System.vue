@@ -376,5 +376,5 @@ export default {
 <style lang="scss">
 @import '@/scss/_components/_tables/table.base';
 @import '@/scss/_components/_forms/form.base';
-@import '@/scss/_components/_dialogs/dialog.base';
+// @import '@/scss/_components/_dialogs/dialog.base';
 </style>

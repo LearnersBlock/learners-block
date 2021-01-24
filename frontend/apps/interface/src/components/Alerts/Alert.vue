@@ -30,9 +30,6 @@ export default {
     components: {
         Icon
     },
-    data () {
-        return {}
-    },
     props: {
         type: {
             type: String,
@@ -52,6 +49,9 @@ export default {
             type: String,
             required: true
         }
+    },
+    data () {
+        return {}
     },
     computed: {
         classes: function () {

@@ -27,7 +27,10 @@ import ElIcon from '@/components/Icons/Icon'
 export default {
     name: 'Message',
     props: {
-        icon: String
+        icon: {
+            type: String,
+            required: false
+        }
     },
     components: {
         ElIcon

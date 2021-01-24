@@ -36,11 +36,16 @@ export default {
             settingsData: 'settings'
         }),
 
+        /**
+         * Quicknav Items
+         *
+         * @returns {Array} An array of quick nav items to render
+         */
         quickNavItems () {
             return [
                 {
                     label: this.$t('home-screen.quicknav.files.title'),
-                    icon: 'collection',
+                    icon: 'heroicons-collection',
                     color: 'orange',
                     link: {
                         internal: false,
@@ -50,7 +55,7 @@ export default {
                 },
                 {
                     label: this.$t('home-screen.quicknav.website.title'),
-                    icon: 'globe',
+                    icon: 'heroicons-globe',
                     color: 'yellow',
                     link: {
                         internal: false,
@@ -76,5 +81,4 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/scss/_components/_main/main.base';
 </style>

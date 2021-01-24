@@ -34,6 +34,7 @@ export default {
          * Filters the message content to inject the frontend URL
          *
          * @param {String} content The content string to be filtered
+         * @returns {String} The filtered content string with the correct hostname
          */
         filteredMessageContent: function (content) {
             // Build the frontend URL

@@ -8,37 +8,37 @@
                 <el-button
                     @click="languageSwitchVisible = true"
                     class="el-button--seamless el-nav__lang">
-                    <el-icon name="heroicons-translate"></el-icon>
+                    <Icon name="heroicons-translate"></Icon>
                     <span> {{ $t('lang.name') }} </span>
                 </el-button>
 
                 <el-button
                     @click="$router.push('/settings')"
                     class="el-button--seamless el-nav__settings">
-                    <el-icon name="heroicons-cog"></el-icon>
+                    <Icon name="heroicons-cog"></Icon>
                 </el-button>
 
                 <el-button
                     v-if="isAuthenticated"
                     @click="$router.push('/logout')"
                     class="el-button--seamless el-nav__logout">
-                    <el-icon name="heroicons-logout"></el-icon>
+                    <Icon name="heroicons-logout"></Icon>
                 </el-button>
             </div>
         </div>
 
-        <el-lang-switcher-dialog
+        <LangSelectorDialog
             :visible.sync="languageSwitchVisible"
             @hide-dialog="languageSwitchVisible = false">
-        </el-lang-switcher-dialog>
+        </LangSelectorDialog>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
-import ElIcon from '@/components/Icons/Icon'
-import ElLangSwitcherDialog from '@/components/Dialogs/LanguageSwitcher.vue'
+import Icon from '@/components/Icons/Icon'
+import LangSelectorDialog from '@/components/Dialogs/LangSelectorDialog.vue'
 
 export default {
     name: 'Nav',
@@ -49,14 +49,29 @@ export default {
         }
     },
     props: {
-        type: String,
-        mode: String
+        type: {
+            type: String,
+            required: false
+        },
+        mode: {
+            type: String,
+            required: false
+        }
     },
     components: {
-        ElIcon,
-        ElLangSwitcherDialog
+        Icon,
+        LangSelectorDialog
     },
     computed: {
+        ...mapGetters('auth', [
+            'isAuthenticated'
+        ]),
+
+        /**
+         * Compute modifier classes
+         *
+         * @returns {String} The string of modifier classnames
+         */
         classes: function () {
             let classes = ''
 
@@ -71,14 +86,12 @@ export default {
             }
 
             return classes
-        },
-
-        ...mapGetters('auth', [
-            'isAuthenticated'
-        ])
+        }
     },
-    mounted () {},
     methods: {
+        /**
+         * Bind dropdown actions to router
+         */
         handleDropdownActions: function (command) {
             if (command === 'teacher-login') {
                 this.$router.push({ path: '/login' })
@@ -87,10 +100,6 @@ export default {
             } else if (command === 'settings') {
                 this.$router.push({ path: '/login' })
             }
-        },
-
-        handleConnectivityChange: function (status) {
-            this.online = status
         }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <AuthLogout title="Logging you out…" />
+    <AuthLogout :title="$t('auth-screen.logout.title')" />
 </template>
 
 <script>

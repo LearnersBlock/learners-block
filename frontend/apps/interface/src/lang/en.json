@@ -12,6 +12,9 @@
             "username": "Username",
             "password": "Password",
             "submit": "Login"
+        },
+        "logout": {
+            "title": "Logging you out…"
         }
     },
     "home-screen": {

@@ -114,7 +114,7 @@ export default {
          * Login Form Submit
          *
          * @param {String} formName The ref form name to be submitted
-         * @return void
+         * @returns void
          */
         submitForm: function (formName) {
             // validate the form
@@ -130,7 +130,7 @@ export default {
         /**
          * Login Action
          *
-         * @return void
+         * @returns void
          */
         login: async function () {
             // dispatch login action

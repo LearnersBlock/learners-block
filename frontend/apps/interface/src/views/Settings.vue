@@ -21,18 +21,28 @@ export default {
         Header,
         SettingsContainer
     },
-    computed: {
-        showBackButton: function () {
-            if (this.$route.path === '/settings') {
-                return false
-            }
-
-            return true
-        }
-    },
     data () {
         return {
             error: null
+        }
+    },
+    computed: {
+        /**
+         * Back button
+         *
+         * Only show the back button if we're on settings sub-pages
+         *
+         * @returns void
+         */
+        showBackButton: function () {
+            // if we're on the root settings page
+            if (this.$route.path === '/settings') {
+                // hide button
+                return false
+            }
+
+            // otherwise, show the back button
+            return true
         }
     }
 }
