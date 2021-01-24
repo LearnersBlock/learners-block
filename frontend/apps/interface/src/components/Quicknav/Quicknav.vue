@@ -1,7 +1,7 @@
 <template>
-    <div class="el-section el-section--quicknav">
+    <div class="el-quicknav">
         <div class="el-container is-vertical">
-            <div class="el-section__inner">
+            <div class="el-quicknav__inner">
                 <template v-for="(card, index) in this.items">
                     <el-card-link
                         v-if="card.enabled"
@@ -40,6 +40,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/scss/_components/_sections/section.base';
-@import '@/scss/_components/_sections/section.quicknav';
+@import 'Quicknav.scss';
 </style>

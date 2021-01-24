@@ -1,14 +1,10 @@
 <template>
     <div>
-        <el-header
-            :title="$t('home-screen.title')">
-        </el-header>
+        <Header :title="$t('home-screen.title')" />
 
-        <div class="el-main">
-            <el-section-quicknav
-                :items="this.quickNavItems">
-            </el-section-quicknav>
-        </div>
+        <Main>
+            <Quicknav :items="this.quickNavItems" />
+        </Main>
     </div>
 </template>
 
@@ -18,15 +14,17 @@ import store from '@/store'
 
 import LinksMixin from '@/mixins/links'
 
-import ElHeader from '@/components/Header/Header.vue'
-import ElSectionQuicknav from '@/components/Sections/Quicknav.vue'
+import Header from '@/components/Header/Header.vue'
+import Main from '@/components/Containers/Main.vue'
+import Quicknav from '@/components/Quicknav/Quicknav.vue'
 
 export default {
     name: 'Home',
     mixins: [LinksMixin],
     components: {
-        ElHeader,
-        ElSectionQuicknav
+        Header,
+        Main,
+        Quicknav
     },
     data () {
         return {

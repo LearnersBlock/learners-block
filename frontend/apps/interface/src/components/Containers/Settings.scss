@@ -1,5 +1,5 @@
-.el-section.el-section--settings {
-    .el-section__inner {
+.el-settings {
+    &__inner {
         margin: 0 1rem;
 
         @include res('md-and-up', $--breakpoints-spec) {
@@ -8,7 +8,7 @@
         }
     }
 
-    .el-section__header {
+    &__header {
         padding: 0 0 .5rem;
         margin: 0;
 
@@ -17,18 +17,18 @@
         }
     }
 
-    .el-section__content {
+    &__content {
         h5 {
             margin: 0 0 .25rem;
         }
     }
 
-    .el-section__group {
-        + .el-section__group {
+    &__group {
+        + .el-settings__group {
             margin-top: 2.5rem;
         }
 
-        .el-section__content {
+        .el-settings__content {
             padding: 1rem 2rem;
             border-radius: $--border-radius-small;
             background-color: $--color-white;
@@ -40,7 +40,7 @@
         }
     }
 
-    .el-section__footer {
+    &__footer {
         padding: 2.5rem 0;
         margin: 0 1rem;
 

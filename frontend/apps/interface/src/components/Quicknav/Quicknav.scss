@@ -1,5 +1,7 @@
-.el-section.el-section--quicknav {
-    .el-section__inner {
+.el-quicknav {
+    padding: 1.25rem 0 2.5rem;
+
+    &__inner {
         margin: 0 1rem;
         display: flex;
         flex-direction: column;

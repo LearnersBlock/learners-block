@@ -29,7 +29,7 @@
         }
     }
 
-    &--danger {
+    &--error {
         &.el-icon--svg svg path {
             stroke: $--color-danger;
         }

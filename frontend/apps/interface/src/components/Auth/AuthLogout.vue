@@ -44,6 +44,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/scss/_components/_auth/auth.base';
+@import 'Auth';
 @import '@/scss/_components/_loading/loading.base';
 </style>
