@@ -85,7 +85,12 @@
                 "description": "You haven't created a user yet and anyone can currently access the settings pages. Please create account now."
             },
             "account": {
-                "title": "Account"
+                "existing": {
+                    "title": "Update account"
+                },
+                "new": {
+                    "title": "Create account"
+                }
             }
         },
         "system": {

@@ -1,49 +1,56 @@
 <template>
-    <div>
-        <div class="el-section__group">
-            <div class="el-section__header">
-                <h5>{{ $t('settings-screen.components.title') }}</h5>
-            </div>
+    <SettingsGroupContainer>
+        <template v-slot:title>
+            <h5>{{ $t('settings-screen.components.title') }}</h5>
+        </template>
 
-            <div class="el-section__content el-section__content--has-form">
-                <el-form label-width="">
-                    <el-form-item
-                        :label="$t('settings-screen.components.fileviewer.label')"
-                        class="el-form-item--bordered"
-                        align="right">
-                        <el-switch
-                            v-model="fileviewerEnabled">
-                        </el-switch>
-                    </el-form-item>
+        <template v-slot:content>
+            <el-form label-width="">
+                <el-form-item
+                    :label="$t('settings-screen.components.fileviewer.label')"
+                    class="el-form-item--bordered"
+                    align="right">
+                    <el-switch
+                        v-model="fileviewerEnabled">
+                    </el-switch>
+                </el-form-item>
 
-                    <el-form-item
-                        :label="$t('settings-screen.components.website.label')"
-                        class="el-form-item--bordered"
-                        align="right">
-                        <el-switch
-                            v-model="websiteEnabled">
-                        </el-switch>
-                    </el-form-item>
-                </el-form>
-            </div>
-        </div>
-    </div>
+                <el-form-item
+                    :label="$t('settings-screen.components.website.label')"
+                    class="el-form-item--bordered"
+                    align="right">
+                    <el-switch
+                        v-model="websiteEnabled">
+                    </el-switch>
+                </el-form-item>
+            </el-form>
+        </template>
+    </SettingsGroupContainer>
 </template>
 
 <script>
 import settingsMixin from '@/mixins/settings'
 import store from '@/store'
 
+import SettingsGroupContainer from '@/components/Containers/SettingsGroup'
+
 export default {
-    name: 'SettingsComponents',
-    components: {},
+    name: 'ComponentSettings',
     mixins: [settingsMixin],
+    components: {
+        SettingsGroupContainer
+    },
     data () {
         return {
             error: null
         }
     },
     computed: {
+        /**
+         * Check if fileviewer component is enabled
+         *
+         * @returns {Boolean} Return true or false depending on component setting
+         */
         fileviewerEnabled: {
             get () {
                 return this.$store.state.settings.settings.components.fileviewer.active
@@ -53,6 +60,11 @@ export default {
             }
         },
 
+        /**
+         * Check if website component is enabled
+         *
+         * @returns {Boolean} Return true or false depending on component setting
+         */
         websiteEnabled: {
             get () {
                 return this.$store.state.settings.settings.components.website.active

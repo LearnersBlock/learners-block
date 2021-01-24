@@ -39,7 +39,7 @@ export default {
         icon: {
             type: String,
             required: false,
-            default: ''
+            default: 'heroicons-exclamation'
         },
         title: {
             type: String,

@@ -1,42 +1,49 @@
 <template>
-    <div>
-        <div class="el-section__group">
-            <div class="el-section__header">
-                <h5>{{ $t('settings-screen.language.title') }}</h5>
-            </div>
+    <SettingsGroupContainer>
+        <template v-slot:title>
+            <h5>{{ $t('settings-screen.language.title') }}</h5>
+        </template>
 
-            <div class="el-section__content el-section__content--has-form">
-                <el-form label-width="">
-                    <el-form-item label="Default language" align="right">
-                        <el-select v-model="defaultLanguage" placeholder="Select">
-                            <el-option
-                            v-for="lang in this.$i18n.availableLocales"
+        <template v-slot:content>
+            <el-form label-width="">
+                <el-form-item label="Default language" align="right">
+                    <el-select v-model="defaultLanguage" placeholder="Select">
+                        <el-option
+                            v-for="lang in $i18n.availableLocales"
                             :key="lang"
                             :label="$t('lang.name', lang)"
                             :value="lang">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
-            </div>
-        </div>
-    </div>
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+        </template>
+    </SettingsGroupContainer>
 </template>
 
 <script>
 import settingsMixin from '@/mixins/settings'
 import store from '@/store'
 
+import SettingsGroupContainer from '@/components/Containers/SettingsGroup'
+
 export default {
     name: 'SettingsLanguage',
-    components: {},
     mixins: [settingsMixin],
+    components: {
+        SettingsGroupContainer
+    },
     data () {
         return {
             error: null
         }
     },
     computed: {
+        /**
+         * Get the default language from the settings
+         *
+         * @returns {String} The stored default language code, falls back to current
+         */
         defaultLanguage: {
             get () {
                 return this.$store.state.settings.settings.lang.default || this.$i18n.locale

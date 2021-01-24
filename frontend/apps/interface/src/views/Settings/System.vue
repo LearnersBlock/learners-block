@@ -1,56 +1,56 @@
 <template>
     <div>
-        <div class="el-section__group">
-            <div class="el-section__header">
-                <h5>{{ $t('settings-screen.system.hostname.title') }}</h5>
-            </div>
+        <SettingsGroupContainer>
+                <template v-slot:title>
+                    <h5>{{ $t('settings-screen.system.hostname.title') }}</h5>
+                </template>
 
-            <div class="el-section__content">
-                <el-form ref="hostnameSettings" :model="hostnameSettings"
-                :rules="hostnameSettingsRules" label-width="" :status-icon="true">
-                    <el-form-item label="" align="right" prop="hostname">
-                        <el-input v-model="hostnameSettings.hostname">
-                            <template slot="prepend">http://</template>
-                            <template slot="append">
-                                {{ this.$store.state.settings.settings.system.tld || '.local' }}
-                            </template>
-                        </el-input>
-                    </el-form-item>
+                <template v-slot:content>
+                    <el-form ref="hostnameSettings" :model="hostnameSettings"
+                    :rules="hostnameSettingsRules" label-width="" :status-icon="true">
+                        <el-form-item label="" align="right" prop="hostname">
+                            <el-input v-model="hostnameSettings.hostname">
+                                <template slot="prepend">http://</template>
+                                <template slot="append">
+                                    {{ $store.state.settings.settings.system.tld || '.local' }}
+                                </template>
+                            </el-input>
+                        </el-form-item>
 
-                    <el-button
-                        @click="updateHostname()"
-                        type=" el-button--block"
-                        :disabled="hostnameSubmitDisabled"
-                        plain>
-                        {{ $t('settings-screen.system.hostname.update.label') }}
-                    </el-button>
-                </el-form>
-            </div>
-        </div>
+                        <el-button
+                            @click="updateHostname()"
+                            type="el-button--block"
+                            :disabled="hostnameSubmitDisabled"
+                            plain>
+                            {{ $t('settings-screen.system.hostname.update.label') }}
+                        </el-button>
+                    </el-form>
+                </template>
+        </SettingsGroupContainer>
 
-        <div class="el-section__group">
-            <div class="el-section__header">
+        <SettingsGroupContainer>
+            <template v-slot:title>
                 <h5>{{ $t('settings-screen.system.database.title') }}</h5>
-            </div>
+            </template>
 
-            <div class="el-section__content">
+            <template v-slot:content>
                 <el-button
                     @click="resetDatabase()"
                     type="danger el-button--block"
                     plain>
                     {{ $t('settings-screen.system.database.reset.label') }}
                 </el-button>
-            </div>
-        </div>
+            </template>
+        </SettingsGroupContainer>
 
-        <div class="el-section__group">
-            <div class="el-section__header">
+        <SettingsGroupContainer>
+            <template v-slot:title>
                 <h5>{{ $t('settings-screen.system.versions.title') }}</h5>
-            </div>
+            </template>
 
-            <div class="el-section__content">
+            <template v-slot:content>
                 <el-table
-                    :data="this.versions"
+                    :data="versions"
                     :show-header="false"
                     style="width: 100%">
                     <el-table-column
@@ -64,17 +64,17 @@
                         align="right">
                     </el-table-column>
                 </el-table>
-            </div>
-        </div>
+            </template>
+        </SettingsGroupContainer>
 
-        <el-dialog
+        <Dialog
             :title="dialogContent.title"
             :visible.sync="dialogVisible">
-            <p v-html="dialogContent.content"></p>
-            <span
-                v-if="dialogContent.buttons.length"
-                class="dialog-footer"
-                slot="footer">
+            <template v-slot:content>
+                <p v-html="dialogContent.content"></p>
+            </template>
+
+            <template v-slot:footer v-if="dialogContent.buttons.length">
                 <template v-for="(button, index) in dialogContent.buttons">
                     <el-button
                         v-if="button.action === 'close'"
@@ -94,8 +94,8 @@
                         {{ button.label }}
                     </el-button>
                 </template>
-            </span>
-        </el-dialog>
+            </template>
+        </Dialog>
     </div>
 </template>
 
@@ -107,27 +107,38 @@ import store from '@/store'
 
 import debounce from 'lodash/debounce'
 
+import SettingsGroupContainer from '@/components/Containers/SettingsGroup'
+import Dialog from '@/components/Dialogs/Dialog'
+
 export default {
-    name: 'SettingsNetwork',
-    components: {},
+    name: 'NetworkSettings',
     mixins: [settingsMixin],
+    components: {
+        SettingsGroupContainer,
+        Dialog
+    },
     data () {
+        /**
+         * Hostname validation
+         *
+         * @returns {Function} Validation callback
+         */
         const validateHostname = (rule, value, callback) => {  // eslint-disable-line
-            // make sure we have a value to check
+            // Make sure we have a value to check
             if (!value) {
-                // if not, return error
+                // If not, return error
                 return callback(new Error('Please input a hostname'))
             }
 
-            // prepare regex for allowed chars
+            // Prepare regex for allowed chars
             const specialCharsRegex = new RegExp(/^[a-zA-Z0-9-_]*$/)
 
-            // run the regex test
+            // Run the regex test
             if (specialCharsRegex.test(value)) {
-                // if it passes, approve the hostname
+                // If it passes, approve the hostname
                 callback()
             } else {
-                // otherwise, throw an error
+                // Otherwise, throw an error
                 callback(new Error('Hostname contains invalid characters.'))
             }
         }
@@ -215,146 +226,182 @@ export default {
             }
         }
     },
-    mounted () {
-        // get the component versions
-        Api()
-            .get('/system/info')
-            .then((response) => {
-                if (response.data && response.data) {
-                    this.versions = response.data.versions || null
-                }
-            })
-            .catch((err) => {
-                // if the backend returned a proper error response
-                if (err.response && err.response.data && err.response.data.connection) {
-                    // update wifi status
-                    this.wifi = err.response.data.connection
-                } else {
-                    // otherwise, force error state
-                    this.wifi = 'error'
-                }
-            })
-    },
-    computed: {},
     methods: {
+        /**
+         * Get the human-readable component name for the version list
+         *
+         * @param   {Object} row    The row data from a table
+         * @param   {String} row.id The component ID to retrieve the name for
+         * @returns {String} The component name
+         */
         getComponentName: function (row, column) {
             return this.$t('settings-screen.system.versions.components.' + row.id) || row.id
         },
 
+        /**
+         * Update the device hostname
+         *
+         * @returns void
+         */
         updateHostname: function () {
-            // loading state
+            // Set loading state
             this.$store.commit('app/SET_LOADING', true)
 
-            // revalidate the form
+            // Revalidate the form
             this.$refs.hostnameSettings.validate((valid) => {
-                // if the hostname is valid
+                // If the hostname is valid
                 if (valid) {
+                    // Trigger API call
                     Api()
                         .patch('/system/hostname', { ...this.hostnameSettings })
                         .then((response) => {
-                            // loading state
+                            // Set loading state
                             this.$store.commit('app/SET_LOADING', false)
 
-                            // copy dialog data in case the user re-changes the
+                            // Copy dialog data in case the user re-changes the
                             // hostname without reloading the page
                             const dialogData = { ...this.dialogData.hostname.success }
 
-                            // update dialog content with hostname and SSID
+                            // Ipdate dialog content with hostname and SSID
                             dialogData.content = dialogData.content.replaceAll('%hostname%', response.data.hostname)
                             dialogData.content = dialogData.content.replaceAll('%ssid%', response.data.ssid)
 
-                            // update the database
+                            // Update the database
                             this.updateSetting('system', 'hostname', response.data.hostname)
 
-                            // reset request was successful
+                            // Reset request was successful
                             this.openDialog(dialogData)
                         })
                         .catch((err) => {
-                            // reset request returned an error
+                            // Reset request returned an error
                             console.error(err) // eslint-disable-line
 
-                            // change hostname back to original
+                            // Change hostname back to original
                             this.hostnameSettings.hostname = store.state.settings.settings.system.hostname
 
-                            // loading state
+                            // Set loading state
                             this.$store.commit('app/SET_LOADING', false)
 
-                            // reset request was successful
+                            // Reset request was successful
                             this.openDialog(this.dialogData.hostname.error)
                         })
                 } else {
-                    // loading state
+                    // If hostname is invalid, yet passed validation
+                    // Set loading state
                     this.$store.commit('app/SET_LOADING', false)
 
+                    // And abort
                     return false
                 }
             })
         },
 
+        /**
+         * Check the hostname validity
+         *
+         * @returns {Boolean} Whether the hostname is valid or not
+         */
         checkHostnameValidity: debounce(function () {
-            // remove spaces at the end of the string
+            // Remove spaces at the end of the string
             this.hostnameSettings.hostname = this.hostnameSettings.hostname.trim()
 
-            // run validator
+            // Run validator
             this.$refs.hostnameSettings.validate((valid) => {
                 if (valid) {
-                    // if the hostname is valid, check that it's the same as the
+                    // If the hostname is valid, check that it's the same as the
                     // current one to prevent triggering uneccessary updates
                     if (this.hostnameSettings.hostname === store.state.settings.settings.system.hostname) {
-                        // if they are identical, keep the button disabled
+                        // If they are identical, keep the button disabled
                         this.hostnameSubmitDisabled = true
                     } else {
-                        // otherwise, enable it
+                        // Otherwise, enable it
                         this.hostnameSubmitDisabled = false
                     }
                 } else {
-                    // otherwise, if the hostname is not valid, keep the button disabled
+                    // Otherwise, if the hostname is not valid, keep the button disabled
                     this.hostnameSubmitDisabled = true
                     return false
                 }
             })
         }, 400),
 
+        /**
+         * Opens a dialog
+         *
+         * @returns void
+         */
         openDialog: function (data) {
             setTimeout(() => {
-                // update dialog content
+                // Set the dialog content
                 this.dialogContent = data
 
-                // show dialog
+                // Show the dialog
                 this.dialogVisible = true
             }, 450)
         },
 
+        /**
+         * Reset database
+         *
+         * @returns void
+         */
         resetDatabase: function () {
-            // close warning modal
+            // Close warning modal
             this.dialogVisible = false
 
-            // loading state
+            // Set loading state
             this.$store.commit('app/SET_LOADING', true)
 
-            // trigger API request
+            // Trigger API request
             Api()
                 .post('/system/database/reset')
                 .then((response) => {
-                    // loading state
+                    // Set loading state
                     this.$store.commit('app/SET_LOADING', false)
 
-                    // reset request was successful
+                    // Reset request was successful
                     this.openDialog(this.dialogData.database.success)
                 })
                 .catch((err) => {
-                    // reset request returned an error
+                    // Reset request returned an error
                     console.error(err) // eslint-disable-line
 
-                    // loading state
+                    // Set loading state
                     this.$store.commit('app/SET_LOADING', false)
 
-                    // reset request was successful
+                    // Reset request was successful
                     this.openDialog(this.dialogData.database.error)
                 })
         }
     },
+    mounted () {
+        /**
+         * Fetch system info from API
+         */
+        Api()
+            .get('/system/info')
+            .then((response) => {
+                if (response.data && response.data) {
+                    // Set versions
+                    this.versions = response.data.versions || null
+
+                    // Set storage
+                    // @TODO
+                }
+            })
+            .catch((err) => {
+                // If the backend returned a proper error response
+                if (err.response && err.response.data && err.response.data.connection) {
+                    // Update wifi status
+                    this.wifi = err.response.data.connection
+                } else {
+                    // Otherwise, force error state
+                    this.wifi = 'error'
+                }
+            })
+    },
     watch: {
+        // Automatically re-validate hostname on change
         'hostnameSettings.hostname': function (newVal, oldVal) {
             this.checkHostnameValidity()
         }

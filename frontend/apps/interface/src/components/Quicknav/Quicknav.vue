@@ -29,7 +29,6 @@
 
 <script>
 import Icon from '@/components/Icons/Icon'
-// import LinkCard from '@/components/cards/LinkCard.vue'
 
 export default {
     name: 'LinkCard',

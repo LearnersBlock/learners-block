@@ -40,10 +40,6 @@
                 </template>
             </div>
         </div>
-
-        <div class="el-settings__footer">
-            v{{ appVersion }}
-        </div>
     </div>
 </template>
 
@@ -102,11 +98,6 @@ export default {
                     path: '/settings/system'
                 }
             ]
-        }
-    },
-    computed: {
-        appVersion: function () {
-            return process.env.VUE_APP_VERSION
         }
     },
     beforeRouteEnter: async function (to, from, next) {
