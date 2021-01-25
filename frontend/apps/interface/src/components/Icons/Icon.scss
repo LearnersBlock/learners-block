@@ -29,12 +29,6 @@
         }
     }
 
-    &--danger {
-        &.el-icon--svg svg path {
-            stroke: $--color-danger;
-        }
-    }
-
     &--md {
         svg {
             height: 1.75rem;
@@ -46,6 +40,18 @@
         svg {
             height: 2.5rem;
             width: 2.5rem;
+        }
+    }
+
+    &--error {
+        &.el-icon--svg svg path {
+            stroke: $--color-danger;
+        }
+    }
+
+    &--warning {
+        &.el-icon--svg svg path {
+            stroke: $--color-warning;
         }
     }
 }

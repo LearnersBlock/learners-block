@@ -3,10 +3,10 @@
         <div class="el-container is-vertical">
             <div class="el-message__inner">
                 <div class="el-message__icon" v-if="this.icon">
-                    <el-icon
+                    <Icon
                         :name="this.icon"
                         size="lg">
-                    </el-icon>
+                    </Icon>
                 </div>
 
                 <div class="el-message__title">
@@ -22,19 +22,22 @@
 </template>
 
 <script>
-import ElIcon from '@/components/Icons/Icon'
+import Icon from '@/components/Icons/Icon'
 
 export default {
     name: 'Message',
     props: {
-        icon: String
+        icon: {
+            type: String,
+            required: false
+        }
     },
     components: {
-        ElIcon
+        Icon
     }
 }
 </script>
 
 <style scoped lang="scss">
-@import 'Message.scss';
+@import 'Message';
 </style>

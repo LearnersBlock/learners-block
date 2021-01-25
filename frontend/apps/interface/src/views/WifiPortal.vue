@@ -1,8 +1,8 @@
 <template>
     <div>
-        <el-header navMode="restricted" />
+        <Header navMode="restricted" />
 
-        <el-message icon="streamline-icon-confetti">
+        <Message icon="streamline-icon-confetti">
             <template v-slot:title>
                 <h3>{{ $t('wifiportal-screen.title') }}</h3>
             </template>
@@ -10,19 +10,19 @@
             <template v-slot:content>
                 <p v-html="filteredMessageContent($t('wifiportal-screen.content'))"></p>
             </template>
-        </el-message>
+        </Message>
     </div>
 </template>
 
 <script>
-import ElHeader from '@/components/Header/Header.vue'
-import ElMessage from '@/components/Message/Message.vue'
+import Header from '@/components/Header/Header.vue'
+import Message from '@/components/Message/Message.vue'
 
 export default {
     name: 'WifiPortal',
     components: {
-        ElHeader,
-        ElMessage
+        Header,
+        Message
     },
     data () {
         return {
@@ -34,6 +34,7 @@ export default {
          * Filters the message content to inject the frontend URL
          *
          * @param {String} content The content string to be filtered
+         * @returns {String} The filtered content string with the correct hostname
          */
         filteredMessageContent: function (content) {
             // Build the frontend URL

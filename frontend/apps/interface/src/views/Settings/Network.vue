@@ -1,70 +1,69 @@
 <template>
     <div>
-        <div class="el-section__group">
-            <div class="el-section__header">
-                <h5>{{ $t('settings-screen.network.title')}}</h5>
-            </div>
+        <SettingsGroupContainer :loading="this.wifi ? false : true">
+                <template v-slot:title>
+                    <h5>{{ $t('settings-screen.network.title') }}</h5>
+                </template>
 
-            <div class="el-section__content" v-loading="this.wifi ? false : true">
-                <a
-                    :href="this.getExternalLink(this.$constants.WIFICONNECT, 'language')"
-                    target="_blank"
-                    class="el-button el-button--settings el-button--block"
-                    :class="(isConnectButtonDisabled) ? 'is-disabled' : ''">
-                    <span>
-                        <span class="el-button__label">
-                            <el-icon name="heroicons-wifi"></el-icon>
+                <template v-slot:content>
+                    <Button
+                        type="settings"
+                        size="block"
+                        :href="getExternalLink($constants.WIFICONNECT, 'language')"
+                        :disabled="isConnectButtonDisabled">
+                        <span>
+                            <Icon name="heroicons-wifi" />
                             {{ $t('settings-screen.network.connect.label') }}
                         </span>
 
-                        <el-icon name="heroicons-external-link"></el-icon>
-                    </span>
-                </a>
+                        <Icon name="heroicons-external-link" />
+                    </Button>
 
-                <el-button
-                    @click="openDialog(dialogData.warning)"
-                    type="settings el-button--block"
-                    :disabled="isResetButtonDisabled">
-                    <span class="el-button__label">
-                        <el-icon name="heroicons-refresh"></el-icon>
-                        {{ $t('settings-screen.network.reset.label') }}
-                    </span>
+                    <Button
+                        type="settings"
+                        size="block"
+                        @clicked="openDialog(dialogData.warning)"
+                        :disabled="isResetButtonDisabled">
+                        <span>
+                            <Icon name="heroicons-refresh" />
+                            {{ $t('settings-screen.network.reset.label') }}
+                        </span>
 
-                    <el-icon name="heroicons-chevron-right"></el-icon>
-                </el-button>
-            </div>
-        </div>
-
-        <el-dialog
-            :title="dialogContent.title"
-            :visible.sync="dialogVisible">
-            <p v-html="dialogContent.content"></p>
-            <span
-                v-if="dialogContent.buttons.length"
-                class="dialog-footer"
-                slot="footer">
-                <template v-for="(button, index) in dialogContent.buttons">
-                    <el-button
-                        v-if="button.action === 'close'"
-                        :type="button.type"
-                        :class="button.class"
-                        @click="dialogVisible = false"
-                        :key="index">
-                        {{ button.label }}
-                    </el-button>
-
-                    <el-button
-                        v-if="button.action === 'proceed'"
-                        :type="button.type"
-                        :class="button.class"
-                        @click="resetWifiConnection()"
-                        :key="index">
-                        {{ button.label }}
-                    </el-button>
+                        <Icon name="heroicons-chevron-right" />
+                    </Button>
                 </template>
-            </span>
-        </el-dialog>
-    </div>
+            </SettingsGroupContainer>
+
+            <Dialog
+                :title="dialogContent.title"
+                :visible.sync="dialogVisible">
+                <template v-slot:content>
+                    <p v-html="dialogContent.content"></p>
+                </template>
+
+                <template v-slot:footer>
+                    <template v-for="(button, index) in dialogContent.buttons">
+                        <Button
+                            v-if="button.action === 'close'"
+                            :key="index"
+                            :type="button.type"
+                            :size="button.size"
+                            @clicked="dialogVisible = false">
+                            {{ button.label }}
+                        </Button>
+
+                        <Button
+                            v-if="button.action === 'proceed'"
+                            :key="index"
+                            :type="button.type"
+                            :size="button.size"
+                            @clicked="resetWifiConnection()">
+                            {{ button.label }}
+                        </Button>
+                    </template>
+                </template>
+            </Dialog>
+        </div>
 </template>
 
 <script>
@@ -72,13 +71,19 @@ import Api from '@/api/Api'
 
 import LinksMixin from '@/mixins/links'
 
-import ElIcon from '@/components/Icons/Icon'
+import SettingsGroupContainer from '@/components/Containers/SettingsGroup'
+import Dialog from '@/components/Dialogs/Dialog'
+import Button from '@/components/Button/Button'
+import Icon from '@/components/Icons/Icon'
 
 export default {
     name: 'SettingsNetwork',
     mixins: [LinksMixin],
     components: {
-        ElIcon
+        Icon,
+        Dialog,
+        Button,
+        SettingsGroupContainer
     },
     data () {
         return {
@@ -105,13 +110,13 @@ export default {
                         {
                             action: 'close',
                             type: '',
-                            class: 'el-button--half',
+                            size: 'half',
                             label: this.$t('settings-screen.network.reset.warning.cancel')
                         },
                         {
                             action: 'proceed',
                             type: 'danger',
-                            class: 'el-button--half',
+                            size: 'half',
                             label: this.$t('settings-screen.network.reset.warning.submit')
                         }
                     ]
@@ -123,7 +128,7 @@ export default {
                         {
                             action: 'close',
                             type: '',
-                            class: 'el-button--block',
+                            size: 'block',
                             label: this.$t('settings-screen.network.reset.success.close')
                         }
                     ]
@@ -135,7 +140,7 @@ export default {
                         {
                             action: 'close',
                             type: '',
-                            class: 'el-button--block',
+                            size: 'block',
                             label: this.$t('settings-screen.network.reset.error.close')
                         }
                     ]
@@ -144,6 +149,11 @@ export default {
         }
     },
     computed: {
+        /**
+         * Check if Wifi Connect button should be disabled
+         *
+         * @returns {Boolean} Whether or not the button should be disabled
+         */
         isConnectButtonDisabled: function () {
             if (this.wifi && (this.wifi === 'connected' || this.wifi === 'error')) {
                 return true
@@ -152,6 +162,11 @@ export default {
             return false
         },
 
+        /**
+         * Check if Wifi Reset button should be disabled
+         *
+         * @returns {Boolean} Whether or not the button should be disabled
+         */
         isResetButtonDisabled: function () {
             if (this.wifi && (this.wifi === 'disconnected' || this.wifi === 'error')) {
                 return true
@@ -160,77 +175,87 @@ export default {
             return false
         }
     },
-    mounted () {
-        // get the wifi connection status to toggle the button logic
-        Api()
-            .get('/system/wifi/status')
-            .then((response) => {
-                // ensure that we have the response we're looking for
-                if (response.data && response.data.message) {
-                    // store response
-                    this.wifi = response.data.message
-                }
-            })
-            .catch((err) => {
-                // if the backend returned a proper error response
-                if (err.response && err.response.data && err.response.data.connection) {
-                    // update wifi status
-                    this.wifi = err.response.data.connection
-                } else {
-                    // otherwise, force error state
-                    this.wifi = 'error'
-                }
-            })
-    },
     methods: {
+        /**
+         * Open a dialog
+         *
+         * @param   {Object} data The dialog data to be rendered
+         * @returns void
+         */
         openDialog: function (data) {
             setTimeout(() => {
-                // update dialog content
+                // Set the dialog content
                 this.dialogContent = data
 
-                // show dialog
+                // Show the dialog
                 this.dialogVisible = true
             }, 450)
         },
 
+        /**
+         * Reset the Wifi connection
+         *
+         * @returns void
+         */
         resetWifiConnection: function () {
-            // close warning modal
+            // Close warning modal
             this.dialogVisible = false
 
-            // loading state
+            // Loading state
             this.$store.commit('app/SET_LOADING', true)
 
-            // trigger API request
+            // Trigger API request
             Api()
                 .post('/system/wifi/reset')
                 .then((response) => {
-                    // loading state
+                    console.log(response)
+                    // Set loading state
                     this.$store.commit('app/SET_LOADING', false)
 
-                    // since the reset was successfull, invert the button active
+                    // Cince the reset was successfull, invert the button active
                     // state manually
                     this.wifi = 'disconnected'
 
-                    // reset request was successful
+                    // Reset request was successful
                     this.openDialog(this.dialogData.success)
                 })
                 .catch((err) => {
-                    // reset request returned an error
+                    // Reset request returned an error
                     console.error(err)  // eslint-disable-line
 
-                    // loading state
+                    // Set loading state
                     this.$store.commit('app/SET_LOADING', false)
 
-                    // reset request was successful
+                    // Reset request was unsuccessful
                     this.openDialog(this.dialogData.error)
                 })
         }
+    },
+    mounted () {
+        /**
+         * Get WiFi connection status
+         */
+        Api()
+            .get('/system/wifi/status')
+            .then((response) => {
+                // Ensure that we have the response we're looking for
+                if (response.data && response.data.message) {
+                    // Store response
+                    this.wifi = response.data.message
+                }
+            })
+            .catch((err) => {
+                // If the backend returned a proper error response
+                if (err.response && err.response.data && err.response.data.connection) {
+                    // Update wifi status
+                    this.wifi = err.response.data.connection
+                } else {
+                    // Otherwise, force error state
+                    this.wifi = 'error'
+                }
+            })
     }
 }
 </script>
 
-<style lang="scss">
-@import '@/scss/_components/_dialogs/dialog.base';
-@import '@/scss/_components/_buttons/button.base';
-@import '@/scss/_components/_buttons/button.secondary';
-</style>
+<style lang="scss"></style>

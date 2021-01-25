@@ -7,11 +7,7 @@
         pointer-events: none !important;
     }
 
-    &--primary {
-        border-radius: $--border-radius-small;
-    }
-
-    &--block {
+    &.el-button--block {
         display: block;
         width: 100%;
 
@@ -20,14 +16,12 @@
         }
     }
 
-    &--half {
+    &.el-button--half {
         width: calc(50% - .5rem);
     }
 
-    &.is-circle {
-        padding: .75rem;
-        border: none;
-        box-shadow: $--box-shadow-md;
+    &.el-button--light {
+        color: $--color-white;
     }
 
     &.is-disabled,

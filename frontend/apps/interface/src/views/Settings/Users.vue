@@ -1,24 +1,20 @@
 <template>
     <div>
-        <div v-if="!this.$store.state.auth.required" class="el-section__group">
-            <el-alert
-                :title="$t('settings-screen.auth.disabled.title')"
-                :description="$t('settings-screen.auth.disabled.description')">
-            </el-alert>
-        </div>
+        <SettingsGroupContainer :loading="this.loading">
+            <template v-slot:title>
+                <h5>{{ accountGroupTitle }}</h5>
+            </template>
 
-        <div class="el-section__group">
-            <div class="el-section__header">
-                <h5>{{ $t('settings-screen.auth.account.title') }}</h5>
-            </div>
-
-            <div class="el-section__content" v-loading="this.loading">
-                <el-form ref="authSettings" :model="authSettings"
-                :rules="authSettingsRules" label-width="">
+            <template v-slot:content>
+                <el-form
+                    ref="authSettings"
+                    :model="authSettings"
+                    :rules="authSettingsRules"
+                    label-width="">
                     <el-form-item label="" align="left" prop="username">
                         <el-input v-model="authSettings.username" placeholder="Username">
                             <i slot="prefix">
-                                <el-icon name="heroicons-user" type="light" classes="el-input__icon"></el-icon>
+                                <Icon name="heroicons-user" type="light" classes="el-input__icon"></Icon>
                             </i>
                         </el-input>
                     </el-form-item>
@@ -28,7 +24,7 @@
                             v-model="authSettings.password"
                             placeholder="Password" required>
                             <i slot="prefix">
-                                <el-icon name="heroicons-key" type="light" classes="el-input__icon"></el-icon>
+                                <Icon name="heroicons-key" type="light" classes="el-input__icon"></Icon>
                             </i>
                         </el-input>
                     </el-form-item>
@@ -41,17 +37,17 @@
                         </password>
                     </el-form-item>
 
-                    <el-button
-                        @click="submitAccountForm()"
-                        type=" el-button--block"
-                        :class="!submitDisabled ? 'el-button--success' : ''"
+                    <Button
+                        :type="!submitDisabled ? 'success' : ''"
+                        size="block"
+                        :plain="true"
                         :disabled="submitDisabled"
-                        plain>
+                        @clicked="submitAccountForm()">
                         {{ $t('general.save') }}
-                    </el-button>
+                    </Button>
                 </el-form>
-            </div>
-        </div>
+            </template>
+        </SettingsGroupContainer>
     </div>
 </template>
 
@@ -61,14 +57,16 @@ import store from '@/store'
 
 import Password from 'vue-password-strength-meter'
 
-import ElAlert from '@/components/Alerts/Alert'
-import ElIcon from '@/components/Icons/Icon'
+import SettingsGroupContainer from '@/components/Containers/SettingsGroup'
+import Button from '@/components/Button/Button'
+import Icon from '@/components/Icons/Icon'
 
 export default {
     name: 'SettingsUsers',
     components: {
-        ElIcon,
-        ElAlert,
+        SettingsGroupContainer,
+        Icon,
+        Button,
         Password
     },
     mixins: [],
@@ -84,83 +82,125 @@ export default {
             authSettingsRules: {}
         }
     },
-    computed: {},
+    computed: {
+        /**
+         * Computes the account title based on current auth status
+         */
+        accountGroupTitle: function () {
+            // Check if we have a username stored in the settings
+            if (this.authSettings.username) {
+                // If so, assume we're editing the account
+                return this.$t('settings-screen.auth.account.existing.title')
+            }
+
+            // Otherwise, assume this is a new account
+            return this.$t('settings-screen.auth.account.new.title')
+        }
+    },
     methods: {
+        /**
+         * Set submit button disabled state based on password strength
+         *
+         * @param   {Integer} score The password strength score
+         * @returns void
+         */
         updateSubmitState: function (score) {
+            // If password score is above 3/5
             if (score >= 3) {
+                // Enable button
                 this.submitDisabled = false
             } else {
+                // Otherwise, disable it
                 this.submitDisabled = true
             }
         },
 
+        /**
+         * Submit the account form
+         *
+         * @returns void
+         */
         submitAccountForm: function () {
-            // check if the auth requirement is set
+            // Check if the auth requirement is set
             const accountExists = store.getters['auth/isAuthRequired']
 
-            // if the account exists
+            // If the account exists
             if (accountExists) {
-                // run it as an update
+                // Run it as an update
                 this.updateUserAccount()
             } else {
-                // or, create the account
+                // Otherwise, create the account
                 this.createUserAccount()
             }
         },
 
+        /**
+         * Create user account
+         *
+         * @returns void
+         */
         createUserAccount: function () {
-            // loading state
+            // Set the loading state
             this.loading = true
 
-            // trigger API request
+            // Trigger the API request
             Api()
                 .post('/users', {
                     ...this.authSettings
                 })
                 .then((response) => {
-                    // reset request was successful
-                    // force logout
+                    // Account creation request was successful
+                    // Force logout
                     this.$store.dispatch('auth/logout')
                         .then((result) => {
                             setTimeout(() => {
+                                // Redirect to login
                                 this.$router.go('/login')
                             }, 300)
                         })
                 })
                 .catch((err) => {
-                    // reset request returned an error
+                    // Account creation request returned an error
+                    // @TODO improve error handling
                     console.error(err) // eslint-disable-line
 
-                    // loading state
+                    // Set loading state
                     this.loading = false
                 })
         },
 
+        /**
+         * Update user account
+         *
+         * @returns void
+         */
         updateUserAccount: function () {
-            // loading state
+            // Set loading state
             this.loading = true
 
-            // trigger API request
+            // Trigger the API request
             Api()
                 .patch('/users', {
                     id: this.$store.state.auth.username,
                     ...this.authSettings
                 })
                 .then((response) => {
-                    // reset request was successful
-                    // force logout
+                    // Update request was successful
+                    // Force logout
                     this.$store.dispatch('auth/logout')
                         .then((result) => {
                             setTimeout(() => {
+                                // Redirect to login
                                 this.$router.go('/login')
                             }, 300)
                         })
                 })
                 .catch((err) => {
-                    // reset request returned an error
+                    // Update request returned an error
+                    // @TODO improve error handling
                     console.error(err) // eslint-disable-line
 
-                    // loading state
+                    // Set loading state
                     this.loading = false
                 })
         }

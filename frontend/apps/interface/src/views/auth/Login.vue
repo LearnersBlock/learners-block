@@ -1,17 +1,17 @@
 <template>
-    <el-auth-login
+    <AuthLogin
         :title="$t('auth-screen.login.title')"
         :description="$t('auth-screen.login.description')">
-    </el-auth-login>
+    </AuthLogin>
 </template>
 
 <script>
-import ElAuthLogin from '@/components/Auth/AuthLogin'
+import AuthLogin from '@/components/Auth/AuthLogin'
 
 export default {
     name: 'Login',
     components: {
-        ElAuthLogin
+        AuthLogin
     }
 }
 </script>

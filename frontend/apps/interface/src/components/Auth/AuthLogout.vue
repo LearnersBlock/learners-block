@@ -4,8 +4,7 @@
             <div class="el-auth__title">
                 <p>{{ this.title }}</p>
             </div>
-            <div class="el-auth__loader" v-loading="this.isAuthLoading">
-            </div>
+            <div class="el-auth__loader" v-loading="this.isAuthLoading"></div>
         </div>
     </div>
 </template>
@@ -28,6 +27,11 @@ export default {
     },
     methods: {},
     mounted: function () {
+        /**
+         * Mounted: Logout
+         *
+         * @returns void
+         */
         this.$store.dispatch('auth/logout')
             .then((result) => {
                 // check if we have a redirect param
@@ -44,6 +48,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/scss/_components/_auth/auth.base';
-@import '@/scss/_components/_loading/loading.base';
+@import 'Auth';
 </style>

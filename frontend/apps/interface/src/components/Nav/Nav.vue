@@ -5,58 +5,78 @@
             </div>
 
             <div class="el-nav__right">
-                <el-button
-                    @click="languageSwitchVisible = true"
-                    class="el-button--seamless el-nav__lang">
-                    <el-icon name="heroicons-translate"></el-icon>
-                    <span> {{ $t('lang.name') }} </span>
-                </el-button>
+                <Button
+                    type="transparent"
+                    classes="el-nav__lang"
+                    @clicked="languageSwitchVisible = true">
+                    <Icon name="heroicons-translate"></Icon>
+                    <span>{{ $t('lang.name') }}</span>
+                </Button>
 
-                <el-button
-                    @click="$router.push('/settings')"
-                    class="el-button--seamless el-nav__settings">
-                    <el-icon name="heroicons-cog"></el-icon>
-                </el-button>
+                <Button
+                    type="transparent"
+                    classes="el-nav__settings"
+                    @clicked="$router.push('/settings')">
+                    <Icon name="heroicons-cog"></Icon>
+                </Button>
 
-                <el-button
+                <Button
                     v-if="isAuthenticated"
-                    @click="$router.push('/logout')"
-                    class="el-button--seamless el-nav__logout">
-                    <el-icon name="heroicons-logout"></el-icon>
-                </el-button>
+                    type="transparent"
+                    classes="el-nav__logout"
+                    @clicked="$router.push('/logout')">
+                    <Icon name="heroicons-logout"></Icon>
+                </Button>
             </div>
         </div>
 
-        <el-lang-switcher-dialog
+        <LangSelectorDialog
             :visible.sync="languageSwitchVisible"
             @hide-dialog="languageSwitchVisible = false">
-        </el-lang-switcher-dialog>
+        </LangSelectorDialog>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
-import ElIcon from '@/components/Icons/Icon'
-import ElLangSwitcherDialog from '@/components/Dialogs/LanguageSwitcher.vue'
+import Button from '@/components/Button/Button'
+import Icon from '@/components/Icons/Icon'
+import LangSelectorDialog from '@/components/Dialogs/LangSelectorDialog.vue'
 
 export default {
     name: 'Nav',
+    props: {
+        type: {
+            type: String,
+            required: false
+        },
+        mode: {
+            type: String,
+            required: false
+        }
+    },
+    components: {
+        Icon,
+        Button,
+        LangSelectorDialog
+    },
     data () {
         return {
             online: null,
             languageSwitchVisible: false
         }
     },
-    props: {
-        type: String,
-        mode: String
-    },
-    components: {
-        ElIcon,
-        ElLangSwitcherDialog
-    },
     computed: {
+        ...mapGetters('auth', [
+            'isAuthenticated'
+        ]),
+
+        /**
+         * Compute modifier classes
+         *
+         * @returns {String} The string of modifier classnames
+         */
         classes: function () {
             let classes = ''
 
@@ -71,14 +91,12 @@ export default {
             }
 
             return classes
-        },
-
-        ...mapGetters('auth', [
-            'isAuthenticated'
-        ])
+        }
     },
-    mounted () {},
     methods: {
+        /**
+         * Bind dropdown actions to router
+         */
         handleDropdownActions: function (command) {
             if (command === 'teacher-login') {
                 this.$router.push({ path: '/login' })
@@ -87,19 +105,11 @@ export default {
             } else if (command === 'settings') {
                 this.$router.push({ path: '/login' })
             }
-        },
-
-        handleConnectivityChange: function (status) {
-            this.online = status
         }
     }
 }
 </script>
 
 <style lang="scss">
-@import 'Nav.scss';
-
-@import '@/scss/_components/_buttons/button.base';
-@import '@/scss/_components/_buttons/button.icon';
-@import '@/scss/_components/_buttons/button.seamless';
+@import 'Nav';
 </style>

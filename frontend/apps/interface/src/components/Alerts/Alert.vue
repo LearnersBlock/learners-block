@@ -1,28 +1,73 @@
 <template>
-    <el-alert
-        type="warning"
-        :title="this.title"
-        :description="this.description"
-        :closable="false">
-    </el-alert>
+    <div
+        role="alert"
+        class="el-alert is-light"
+        :class="this.classes">
+
+        <Icon
+            v-if="this.icon"
+            :name="this.icon"
+            :type="this.type">
+        </Icon>
+
+        <div class="el-alert__content">
+            <span class="el-alert__title is-bold">
+                {{ this.title }}
+            </span>
+
+            <p class="el-alert__description">
+                {{ this.description }}
+            </p>
+        </div>
+    </div>
 </template>
-2
+
 <script>
+import Icon from '@/components/Icons/Icon'
+
 export default {
     name: 'Alert',
-    components: {},
+    components: {
+        Icon
+    },
+    props: {
+        type: {
+            type: String,
+            required: false,
+            default: 'warning'
+        },
+        icon: {
+            type: String,
+            required: false,
+            default: 'heroicons-exclamation'
+        },
+        title: {
+            type: String,
+            required: true
+        },
+        description: {
+            type: String,
+            required: true
+        }
+    },
     data () {
         return {}
     },
-    props: {
-        title: String,
-        description: String
+    computed: {
+        classes: function () {
+            // check if a type was passed as prop
+            if (this.type) {
+                // if so, return the alert type modifier
+                return 'el-alert--' + this.type
+            }
+
+            return false
+        }
     },
-    computed: {},
     methods: {}
 }
 </script>
 
-<style lang="scss">
-@import '@/scss/_components/_alerts/alert.base';
+<style lang="scss" scoped>
+@import 'Alert';
 </style>

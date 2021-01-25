@@ -12,14 +12,14 @@
 
         &--bordered {
             padding: .875rem 0;
-            
+
             + .el-form-item.el-form-item--bordered {
                 border-top: $--border-width-base $--border-style-base $--border-color-base;
             }
         }
     }
 
-    .el-button.el-button--secondary {
+    .el-button {
         margin: 1rem 0 0;
     }
 }

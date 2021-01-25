@@ -1,14 +1,10 @@
 <template>
     <div>
-        <el-header
-            :title="$t('home-screen.title')">
-        </el-header>
+        <Header :title="$t('home-screen.title')" />
 
-        <div class="el-main">
-            <el-section-quicknav
-                :items="this.quickNavItems">
-            </el-section-quicknav>
-        </div>
+        <Main>
+            <Quicknav :items="this.quickNavItems" />
+        </Main>
     </div>
 </template>
 
@@ -18,15 +14,17 @@ import store from '@/store'
 
 import LinksMixin from '@/mixins/links'
 
-import ElHeader from '@/components/Header/Header.vue'
-import ElSectionQuicknav from '@/components/Sections/Quicknav.vue'
+import Header from '@/components/Header/Header.vue'
+import Main from '@/components/Containers/Main.vue'
+import Quicknav from '@/components/Quicknav/Quicknav.vue'
 
 export default {
     name: 'Home',
     mixins: [LinksMixin],
     components: {
-        ElHeader,
-        ElSectionQuicknav
+        Header,
+        Main,
+        Quicknav
     },
     data () {
         return {
@@ -38,11 +36,16 @@ export default {
             settingsData: 'settings'
         }),
 
+        /**
+         * Quicknav Items
+         *
+         * @returns {Array} An array of quick nav items to render
+         */
         quickNavItems () {
             return [
                 {
                     label: this.$t('home-screen.quicknav.files.title'),
-                    icon: 'collection',
+                    icon: 'heroicons-collection',
                     color: 'orange',
                     link: {
                         internal: false,
@@ -52,7 +55,7 @@ export default {
                 },
                 {
                     label: this.$t('home-screen.quicknav.website.title'),
-                    icon: 'globe',
+                    icon: 'heroicons-globe',
                     color: 'yellow',
                     link: {
                         internal: false,
@@ -78,5 +81,4 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/scss/_components/_main/main.base';
 </style>

@@ -15,29 +15,27 @@ export default {
         permissions: storage ? storage.permissions : ''
     },
 
-    /*
+    /**
      * Mutations
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     mutations: {
-        /*
-         * SET_LOGIN
+        /**
+         * Set logged-in state by storing auth parameters
          */
         AUTH_LOGIN (state, response) {
             if (response.data.success) {
-                // get token
+                // Get token
                 const token = response.data.data.token
                 const permissions = response.data.data.permissions
                 const username = response.data.data.username
 
-                // update store status
+                // Update store status
                 state.username = username
                 state.token = token
                 state.permissions = permissions
 
-                // store in cookie
+                // Store in cookie
                 Cookies.set(authCookieName, JSON.stringify({
                     token,
                     permissions,
@@ -46,37 +44,46 @@ export default {
             }
         },
 
-        /*
-         * SET_LOGOUT
+        /**
+         * Set logged-out state by removing all stored auth parameters
          */
         AUTH_LOGOUT (state, response) {
-            // update store
+            // Update store
             state.token = null
             state.permissions = null
             state.username = null
 
-            // update session cookie
+            // Update session cookie
             Cookies.remove(authCookieName)
         },
 
+        /**
+         * Update the auth requirements
+         */
         AUTH_REQUIRED (state, response) {
-            // update store
+            // Update store
             state.required = response
         },
 
+        /**
+         * Update the loading state
+         */
         AUTH_REQUEST (state, status) {
+            // Update store
             state.loading = status
         },
 
+        /**
+         * Store an auth error
+         */
         AUTH_ERROR (state) {
+            // Update store
             state.status = 'error'
         }
     },
 
-    /*
+    /**
      * Getters
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     getters: {
@@ -87,93 +94,107 @@ export default {
         isAuthRequired: state => state.required
     },
 
-    /*
+    /**
      * Actions
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     actions: {
-        /*
-         * getAuthRequirements
+        /**
+         * Get the auth requirements (whether auth is enabled or not)
+         *
+         * @param {Object}      context The vuex context
+         * @param {Object}      params The auth request params
+         * @returns {Object}    The API response
          */
+
         getAuthRequirements (context, params) {
-            // enable loading state
+            // Enable loading state
             context.commit('AUTH_REQUEST', true)
 
+            // Run API request
             return new Promise((resolve, reject) => {
                 Api().get('/auth/check', params)
                     .then((response) => {
-                        // run commit
+                        // Run commit
                         context.commit('AUTH_REQUIRED', response.data.data.enabled)
 
-                        // disable loading state
+                        // Disable loading state
                         context.commit('AUTH_REQUEST', false)
 
-                        // resolve promise
+                        // Resolve promise with the request response
                         resolve(response)
                     })
                     .catch(err => {
                         setTimeout(() => {
+                            // Set error
                             context.commit('AUTH_ERROR', err)
 
-                            // disable loading state
+                            // Disable loading state
                             context.commit('AUTH_REQUEST', false)
 
-                            // reject promise
+                            // Reject promise with error
                             reject(err)
                         }, 600)
                     })
             })
         },
 
-        /*
-         * login
+        /**
+         * Login
+         *
+         * @param {Object}      context The vuex context
+         * @param {Object}      params The login request params
+         * @returns {Object}    The API response
          */
         login (context, params) {
-            // enable loading state
+            // Enable loading state
             context.commit('AUTH_REQUEST', true)
 
+            // Run API request
             return new Promise((resolve, reject) => {
                 Api().post('/auth/login', params)
                     .then((response) => {
                         setTimeout(() => {
-                            // run login commit
+                            // Run login commit
                             context.commit('AUTH_LOGIN', response)
 
-                            // disable loading state
+                            // Disable loading state
                             context.commit('AUTH_REQUEST', false)
 
-                            // add access token to axios
-                            // axios.defaults.headers.common.Authorization = token
-
-                            // resolve promise
+                            // Resolve promise with API response
                             resolve(response)
                         }, 1400)
                     })
                     .catch(err => {
                         setTimeout(() => {
+                            // Set error
                             context.commit('AUTH_ERROR', err)
 
-                            // if the request fails, remove any possible auth token
+                            // Since the request failed, remove any possible auth token
                             Cookies.remove(authCookieName)
 
-                            // disable loading state
+                            // Disable loading state
                             context.commit('AUTH_REQUEST', false)
 
-                            // reject promise
+                            // Reject promise with API response
                             reject(err)
                         }, 600)
                     })
             })
         },
 
-        /*
-         * login
+        /**
+         * Logout
+         *
+         * @param {Object}      context The vuex context
+         * @param {Object}      params The logout request params
+         * @returns {Object}    The API response
          */
         logout (context, params) {
+            // Enable loading state
             context.commit('AUTH_REQUEST', true)
 
+            // Logout
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     context.commit('AUTH_LOGOUT')

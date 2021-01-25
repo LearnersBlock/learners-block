@@ -7,13 +7,13 @@
         max-width: 15rem;
     }
 
+    .el-icon {
+        padding: 0 .5rem 0 0;
+    }
+
     &__title {}
 
     &__description {
         margin: 0 0 !important;
-    }
-
-    .el-container {
-        align-items: center;
     }
 }

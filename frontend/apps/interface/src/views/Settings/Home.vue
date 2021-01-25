@@ -1,48 +1,37 @@
 <template>
     <div>
-        <el-alert
-            v-if="!this.$store.state.auth.required"
-            :title="$t('settings-screen.auth.disabled.title')"
-            :description="$t('settings-screen.auth.disabled.description')">
-        </el-alert>
-
-        <div class="el-section__group">
-            <div class="el-section__content">
+        <div class="el-settings__group">
+            <div class="el-settings__content">
                 <template v-for="(link, index) in this.links">
-                    <el-button
+                    <Button
                         v-if="link.internal"
-                        :key="'settings-link-' + index"
-                        @click="$router.push(link.path)"
-                        type="settings el-button--block">
-                        <span class="el-button__label">
-                            <el-icon :name="link.icon"></el-icon>
+                        :key="index"
+                        type="settings"
+                        size="block"
+                        @clicked="$router.push(link.path)">
+                        <span>
+                            <Icon :name="link.icon" />
                             {{ link.label }}
                         </span>
 
-                        <el-icon name="heroicons-chevron-right"></el-icon>
-                    </el-button>
+                        <Icon name="heroicons-chevron-right" />
+                    </Button>
 
-                    <a
+                    <Button
                         v-else
-                        :key="'settings-link-' + index"
-                        :href="link.url"
-                        class="el-button el-button--settings el-button--block"
-                        target="_blank" >
+                        :key="index"
+                        type="settings"
+                        size="block"
+                        :href="link.url">
                         <span>
-                            <span class="el-button__label">
-                                <el-icon :name="link.icon"></el-icon>
-                                {{ link.label }}
-                            </span>
-
-                            <el-icon name="heroicons-external-link"></el-icon>
+                            <Icon :name="link.icon" />
+                            {{ link.label }}
                         </span>
-                    </a>
+
+                        <Icon name="heroicons-external-link" />
+                    </Button>
                 </template>
             </div>
-        </div>
-
-        <div class="el-section__footer">
-            v{{ appVersion }}
         </div>
     </div>
 </template>
@@ -52,15 +41,15 @@ import store from '@/store'
 
 import LinksMixin from '@/mixins/links'
 
-import ElAlert from '@/components/Alerts/Alert'
-import ElIcon from '@/components/Icons/Icon'
+import Icon from '@/components/Icons/Icon'
+import Button from '@/components/Button/Button'
 
 export default {
     name: 'SettingsHome',
     mixins: [LinksMixin],
     components: {
-        ElAlert,
-        ElIcon
+        Icon,
+        Button
     },
     data () {
         return {
@@ -102,11 +91,6 @@ export default {
                     path: '/settings/system'
                 }
             ]
-        }
-    },
-    computed: {
-        appVersion: function () {
-            return process.env.VUE_APP_VERSION
         }
     },
     beforeRouteEnter: async function (to, from, next) {

@@ -12,6 +12,9 @@
             "username": "Username",
             "password": "Password",
             "submit": "Login"
+        },
+        "logout": {
+            "title": "Logging you out…"
         }
     },
     "home-screen": {
@@ -82,7 +85,12 @@
                 "description": "You haven't created a user yet and anyone can currently access the settings pages. Please create account now."
             },
             "account": {
-                "title": "Account"
+                "existing": {
+                    "title": "Update account"
+                },
+                "new": {
+                    "title": "Create account"
+                }
             }
         },
         "system": {
@@ -118,6 +126,12 @@
                 "title": "Database",
                 "reset": {
                     "label": "Reset database",
+                    "warning": {
+                        "title": "Are you certain you want to reset the database?",
+                        "content": "If you proceed, the database will reset and all settings will be lost.",
+                        "cancel": "Cancel",
+                        "submit": "Reset now"
+                    },
                     "success": {
                         "title": "Reset successful",
                         "content": "The database was reset succesfully. Please reload the app for changes to take effect.",
@@ -145,6 +159,7 @@
         }
     },
     "general": {
-        "save": "Save"
+        "save": "Save",
+        "close": "Close"
     }
 }

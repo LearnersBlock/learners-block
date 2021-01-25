@@ -29,10 +29,21 @@ export default {
         }
     },
     computed: {
+        /**
+         * Load the icon SVG dynamically
+         *
+         * @param   {String} name The icon name to load
+         * @returns {Element} The icon's SVG to render
+         */
         dynamicComponent: function () {
             return () => import(`@/assets/icons/${this.name}.svg`)
         },
 
+        /**
+         * Computed modifier classes based on the passed props
+         *
+         * @returns {String} The string of modifier classes for the icon
+         */
         componentClasses: function () {
             let classes = ''
 
@@ -54,4 +65,6 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@import 'Icon';
+</style>

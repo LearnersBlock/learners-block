@@ -9,20 +9,12 @@
 
             <transition name="fade">
                 <div v-show="authError.status" class="el-auth__error">
-                    <div
-                        role="alert"
-                        class="el-alert el-alert--error is-light">
-                        <el-icon name="heroicons-exclamation" type="danger"></el-icon>
-
-                        <div class="el-alert__content">
-                            <span class="el-alert__title is-bold">
-                                {{ this.authError.title }}
-                            </span>
-                            <p class="el-alert__description">
-                                {{ this.authError.message }}
-                            </p>
-                        </div>
-                    </div>
+                    <Alert
+                        type="error"
+                        icon="heroicons-exclamation"
+                        :title="this.authError.title"
+                        :description="this.authError.message">
+                    </Alert>
                 </div>
             </transition>
 
@@ -37,7 +29,7 @@
                             v-model="authForm.username"
                             :placeholder="$t('auth-screen.login.username')">
                             <i slot="prefix">
-                                <el-icon name="heroicons-user" type="light" classes="el-input__icon"></el-icon>
+                                <Icon name="heroicons-user" type="light" classes="el-input__icon" />
                             </i>
                         </el-input>
                     </el-form-item>
@@ -48,17 +40,17 @@
                             v-model="authForm.password"
                             :placeholder="$t('auth-screen.login.password')">
                             <i slot="prefix">
-                                <el-icon name="heroicons-key" type="light" classes="el-input__icon"></el-icon>
+                                <Icon name="heroicons-key" type="light" classes="el-input__icon" />
                             </i>
                         </el-input>
                     </el-form-item>
 
-                    <el-button
-                        type="secondary"
-                        @click="submitForm('authForm')"
-                        class="el-button--block">
+                    <Button
+                        type=""
+                        size="block"
+                        @clicked="submitForm('authForm')">
                         {{ $t('auth-screen.login.submit') }}
-                    </el-button>
+                    </Button>
                 </el-form>
             </div>
         </div>
@@ -68,12 +60,16 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import ElIcon from '@/components/Icons/Icon'
+import Alert from '@/components/Alerts/Alert'
+import Button from '@/components/Button/Button'
+import Icon from '@/components/Icons/Icon'
 
 export default {
     name: 'AuthLogin',
     components: {
-        ElIcon
+        Alert,
+        Button,
+        Icon
     },
     data () {
         return {
@@ -116,7 +112,14 @@ export default {
         ])
     },
     methods: {
+        /**
+         * Login Form Submit
+         *
+         * @param {String} formName The ref form name to be submitted
+         * @returns void
+         */
         submitForm: function (formName) {
+            // validate the form
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.login()
@@ -126,7 +129,13 @@ export default {
             })
         },
 
+        /**
+         * Login Action
+         *
+         * @returns void
+         */
         login: async function () {
+            // dispatch login action
             this.$store.dispatch('auth/login', this.authForm)
                 .then((result) => {
                     // check if we have a redirect param
@@ -139,6 +148,7 @@ export default {
                     }
                 })
                 .catch((error) => {
+                    // render error message
                     this.authError.title = error.response.statusText
                     this.authError.status = error.response.status
                     this.authError.message = error.response.data.data
@@ -149,11 +159,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'Auth';
 @import '@/scss/_components/_forms/form.base';
 @import '@/scss/_components/_forms/_inputs/input.base';
-@import '@/scss/_components/_buttons/button.base';
-@import '@/scss/_components/_buttons/button.secondary';
-@import '@/scss/_components/_alerts/alert.base';
-@import '@/scss/_components/_auth/auth.base';
-@import '@/scss/_components/_loading/loading.base';
 </style>

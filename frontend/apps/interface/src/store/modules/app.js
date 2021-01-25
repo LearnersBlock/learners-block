@@ -4,35 +4,32 @@ export default {
         loading: false
     },
 
-    /*
+    /**
      * Mutations
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     mutations: {
-        /*
-         * SET_LOADING
+        /***
+         * Update loading state
          */
         SET_LOADING (state, response) {
             state.loading = response
         }
     },
 
-    /*
+    /**
      * Getters
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     getters: {
+        /**
+         * Get loading state
+         */
         isLoading: state => state.loading
     },
 
-    /*
+    /**
      * Actions
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     actions: {}

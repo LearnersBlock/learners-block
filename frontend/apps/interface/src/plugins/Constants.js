@@ -1,6 +1,11 @@
-// Plugin: Constants.js
+/**
+ * Constants
+ *
+ * Vue.js plugin to provide various constant variables to the app
+ *
+ * @returns {Object} Object of constant variables used in the app
+ */
 const Constants = {
-    // Install the Vue.js plugin
     install (Vue, options) {
         // Get the container/frontend url
         const frontendUrl = process.env.VUE_APP_API_BASE || location.protocol + '//' + location.hostname
