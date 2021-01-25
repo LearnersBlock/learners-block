@@ -57,6 +57,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_components/_buttons/button.base';
 @import '@/scss/_components/_errors/error.base';
 </style>

@@ -45,12 +45,12 @@
                         </el-input>
                     </el-form-item>
 
-                    <el-button
-                        type="secondary"
-                        @click="submitForm('authForm')"
-                        class="el-button--block">
+                    <Button
+                        type=""
+                        size="block"
+                        @clicked="submitForm('authForm')">
                         {{ $t('auth-screen.login.submit') }}
-                    </el-button>
+                    </Button>
                 </el-form>
             </div>
         </div>
@@ -61,12 +61,14 @@
 import { mapGetters } from 'vuex'
 
 import Alert from '@/components/Alerts/Alert'
+import Button from '@/components/Button/Button'
 import Icon from '@/components/Icons/Icon'
 
 export default {
     name: 'AuthLogin',
     components: {
         Alert,
+        Button,
         Icon
     },
     data () {
@@ -160,7 +162,5 @@ export default {
 @import 'Auth';
 @import '@/scss/_components/_forms/form.base';
 @import '@/scss/_components/_forms/_inputs/input.base';
-@import '@/scss/_components/_buttons/button.base';
-@import '@/scss/_components/_buttons/button.secondary';
 @import '@/scss/_components/_loading/loading.base';
 </style>

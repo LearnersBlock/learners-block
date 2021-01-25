@@ -72,7 +72,5 @@ export default {
 
 <style lang="scss">
 @import 'Dialog';
-@import '@/scss/_components/_buttons/button.base';
-@import '@/scss/_components/_buttons/button.secondary';
 @import '@/scss/_components/_forms/_inputs/radio.base';
 </style>

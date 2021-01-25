@@ -6,32 +6,31 @@
                 </template>
 
                 <template v-slot:content>
-                    <a
+                    <Button
+                        type="settings"
+                        size="block"
                         :href="getExternalLink($constants.WIFICONNECT, 'language')"
-                        target="_blank"
-                        class="el-button el-button--settings el-button--block"
-                        :class="(isConnectButtonDisabled) ? 'is-disabled' : ''">
+                        :disabled="isConnectButtonDisabled">
                         <span>
-                            <span class="el-button__label">
-                                <Icon name="heroicons-wifi"></Icon>
-                                {{ $t('settings-screen.network.connect.label') }}
-                            </span>
-
-                            <Icon name="heroicons-external-link"></Icon>
+                            <Icon name="heroicons-wifi" />
+                            {{ $t('settings-screen.network.connect.label') }}
                         </span>
-                    </a>
 
-                    <el-button
-                        @click="openDialog(dialogData.warning)"
-                        type="settings el-button--block"
+                        <Icon name="heroicons-external-link" />
+                    </Button>
+
+                    <Button
+                        type="settings"
+                        size="block"
+                        @clicked="openDialog(dialogData.warning)"
                         :disabled="isResetButtonDisabled">
-                        <span class="el-button__label">
-                            <Icon name="heroicons-refresh"></Icon>
+                        <span>
+                            <Icon name="heroicons-refresh" />
                             {{ $t('settings-screen.network.reset.label') }}
                         </span>
 
-                        <Icon name="heroicons-chevron-right"></Icon>
-                    </el-button>
+                        <Icon name="heroicons-chevron-right" />
+                    </Button>
                 </template>
             </SettingsGroupContainer>
 
@@ -44,23 +43,23 @@
 
                 <template v-slot:footer>
                     <template v-for="(button, index) in dialogContent.buttons">
-                        <el-button
+                        <Button
                             v-if="button.action === 'close'"
+                            :key="index"
                             :type="button.type"
-                            :class="button.class"
-                            @click="dialogVisible = false"
-                            :key="index">
+                            :size="button.size"
+                            @clicked="dialogVisible = false">
                             {{ button.label }}
-                        </el-button>
+                        </Button>
 
-                        <el-button
+                        <Button
                             v-if="button.action === 'proceed'"
+                            :key="index"
                             :type="button.type"
-                            :class="button.class"
-                            @click="resetWifiConnection()"
-                            :key="index">
+                            :size="button.size"
+                            @clicked="resetWifiConnection()">
                             {{ button.label }}
-                        </el-button>
+                        </Button>
                     </template>
                 </template>
             </Dialog>
@@ -74,6 +73,7 @@ import LinksMixin from '@/mixins/links'
 
 import SettingsGroupContainer from '@/components/Containers/SettingsGroup'
 import Dialog from '@/components/Dialogs/Dialog'
+import Button from '@/components/Button/Button'
 import Icon from '@/components/Icons/Icon'
 
 export default {
@@ -82,6 +82,7 @@ export default {
     components: {
         Icon,
         Dialog,
+        Button,
         SettingsGroupContainer
     },
     data () {
@@ -109,13 +110,13 @@ export default {
                         {
                             action: 'close',
                             type: '',
-                            class: 'el-button--half',
+                            size: 'half',
                             label: this.$t('settings-screen.network.reset.warning.cancel')
                         },
                         {
                             action: 'proceed',
                             type: 'danger',
-                            class: 'el-button--half',
+                            size: 'half',
                             label: this.$t('settings-screen.network.reset.warning.submit')
                         }
                     ]
@@ -127,7 +128,7 @@ export default {
                         {
                             action: 'close',
                             type: '',
-                            class: 'el-button--block',
+                            size: 'block',
                             label: this.$t('settings-screen.network.reset.success.close')
                         }
                     ]
@@ -139,7 +140,7 @@ export default {
                         {
                             action: 'close',
                             type: '',
-                            class: 'el-button--block',
+                            size: 'block',
                             label: this.$t('settings-screen.network.reset.error.close')
                         }
                     ]
@@ -168,7 +169,7 @@ export default {
          */
         isResetButtonDisabled: function () {
             if (this.wifi && (this.wifi === 'disconnected' || this.wifi === 'error')) {
-                return false
+                return true
             }
 
             return false
@@ -257,7 +258,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-@import '@/scss/_components/_buttons/button.base';
-@import '@/scss/_components/_buttons/button.secondary';
-</style>
+<style lang="scss"></style>

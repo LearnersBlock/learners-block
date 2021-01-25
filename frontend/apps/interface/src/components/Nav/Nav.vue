@@ -5,25 +5,28 @@
             </div>
 
             <div class="el-nav__right">
-                <el-button
-                    @click="languageSwitchVisible = true"
-                    class="el-button--seamless el-nav__lang">
+                <Button
+                    type="transparent"
+                    classes="el-nav__lang"
+                    @clicked="languageSwitchVisible = true">
                     <Icon name="heroicons-translate"></Icon>
-                    <span> {{ $t('lang.name') }} </span>
-                </el-button>
+                    <span>{{ $t('lang.name') }}</span>
+                </Button>
 
-                <el-button
-                    @click="$router.push('/settings')"
-                    class="el-button--seamless el-nav__settings">
+                <Button
+                    type="transparent"
+                    classes="el-nav__settings"
+                    @clicked="$router.push('/settings')">
                     <Icon name="heroicons-cog"></Icon>
-                </el-button>
+                </Button>
 
-                <el-button
+                <Button
                     v-if="isAuthenticated"
-                    @click="$router.push('/logout')"
-                    class="el-button--seamless el-nav__logout">
+                    type="transparent"
+                    classes="el-nav__logout"
+                    @clicked="$router.push('/logout')">
                     <Icon name="heroicons-logout"></Icon>
-                </el-button>
+                </Button>
             </div>
         </div>
 
@@ -37,17 +40,12 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import Button from '@/components/Button/Button'
 import Icon from '@/components/Icons/Icon'
 import LangSelectorDialog from '@/components/Dialogs/LangSelectorDialog.vue'
 
 export default {
     name: 'Nav',
-    data () {
-        return {
-            online: null,
-            languageSwitchVisible: false
-        }
-    },
     props: {
         type: {
             type: String,
@@ -60,7 +58,14 @@ export default {
     },
     components: {
         Icon,
+        Button,
         LangSelectorDialog
+    },
+    data () {
+        return {
+            online: null,
+            languageSwitchVisible: false
+        }
     },
     computed: {
         ...mapGetters('auth', [
@@ -107,8 +112,4 @@ export default {
 
 <style lang="scss">
 @import 'Nav.scss';
-
-@import '@/scss/_components/_buttons/button.base';
-@import '@/scss/_components/_buttons/button.icon';
-@import '@/scss/_components/_buttons/button.seamless';
 </style>

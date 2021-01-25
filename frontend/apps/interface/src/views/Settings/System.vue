@@ -17,13 +17,14 @@
                             </el-input>
                         </el-form-item>
 
-                        <el-button
-                            @click="updateHostname()"
-                            type="el-button--block"
-                            :disabled="hostnameSubmitDisabled"
-                            plain>
+                        <Button
+                            type="primary"
+                            size="block"
+                            :plain="true"
+                            @clicked="updateHostname()"
+                            :disabled="hostnameSubmitDisabled">
                             {{ $t('settings-screen.system.hostname.update.label') }}
-                        </el-button>
+                        </Button>
                     </el-form>
                 </template>
         </SettingsGroupContainer>
@@ -34,12 +35,13 @@
             </template>
 
             <template v-slot:content>
-                <el-button
-                    @click="resetDatabase()"
-                    type="danger el-button--block"
-                    plain>
+                <Button
+                    type="danger"
+                    size="block"
+                    :plain="true"
+                    @clicked="resetDatabase()">
                     {{ $t('settings-screen.system.database.reset.label') }}
-                </el-button>
+                </Button>
             </template>
         </SettingsGroupContainer>
 
@@ -76,23 +78,23 @@
 
             <template v-slot:footer v-if="dialogContent.buttons.length">
                 <template v-for="(button, index) in dialogContent.buttons">
-                    <el-button
+                    <Button
                         v-if="button.action === 'close'"
+                        :key="index"
                         :type="button.type"
-                        :class="button.class"
-                        @click="dialogVisible = false"
-                        :key="index">
+                        :size="button.size"
+                        @clicked="dialogVisible = false">
                         {{ button.label }}
-                    </el-button>
+                    </Button>
 
-                    <el-button
+                    <Button
                         v-if="button.action === 'proceed'"
+                        :key="index"
                         :type="button.type"
-                        :class="button.class"
-                        @click="resetDatabase()"
-                        :key="index">
+                        :size="button.size"
+                        @clicked="resetDatabase()">
                         {{ button.label }}
-                    </el-button>
+                    </Button>
                 </template>
             </template>
         </Dialog>
@@ -109,13 +111,15 @@ import debounce from 'lodash/debounce'
 
 import SettingsGroupContainer from '@/components/Containers/SettingsGroup'
 import Dialog from '@/components/Dialogs/Dialog'
+import Button from '@/components/Button/Button'
 
 export default {
     name: 'NetworkSettings',
     mixins: [settingsMixin],
     components: {
         SettingsGroupContainer,
-        Dialog
+        Dialog,
+        Button
     },
     data () {
         /**
@@ -179,7 +183,7 @@ export default {
                             {
                                 action: 'close',
                                 type: '',
-                                class: 'el-button--block',
+                                size: 'block',
                                 label: this.$t('settings-screen.system.hostname.update.success.close')
                             }
                         ]
@@ -191,7 +195,7 @@ export default {
                             {
                                 action: 'close',
                                 type: '',
-                                class: 'el-button--block',
+                                size: 'block',
                                 label: this.$t('settings-screen.system.hostname.update.error.close')
                             }
                         ]
@@ -205,7 +209,7 @@ export default {
                             {
                                 action: 'close',
                                 type: '',
-                                class: 'el-button--block',
+                                size: 'block',
                                 label: this.$t('settings-screen.system.database.reset.success.close')
                             }
                         ]
@@ -217,7 +221,7 @@ export default {
                             {
                                 action: 'close',
                                 type: '',
-                                class: 'el-button--block',
+                                size: 'block',
                                 label: this.$t('settings-screen.system.database.reset.error.close')
                             }
                         ]
@@ -423,5 +427,4 @@ export default {
 <style lang="scss">
 @import '@/scss/_components/_tables/table.base';
 @import '@/scss/_components/_forms/form.base';
-// @import '@/scss/_components/_dialogs/dialog.base';
 </style>

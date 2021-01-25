@@ -1,7 +1,7 @@
 .el-button.el-button--settings {
     border: none;
     border-radius: 0;
-    
+
     padding: 1rem 0;
     background-color: transparent;
 
@@ -10,20 +10,18 @@
         background: transparent;
     }
 
-    span { 
+    span {
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
 
-    .el-button__label {
-        i {
-            font-size: 0;
-            padding: .5rem;
-            margin: 0 1rem 0 0;
-            border-radius: $--border-radius-small;
-            background-color: $--color-gray-lightest;
-        }
+    span > span > i {
+        font-size: 0;
+        padding: .5rem;
+        margin: 0 1rem 0 0;
+        border-radius: $--border-radius-small;
+        background-color: $--color-gray-lightest;
     }
 
     + .el-button--settings {

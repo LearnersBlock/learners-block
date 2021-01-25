@@ -49,6 +49,4 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/scss/_components/_buttons/button.base';
-@import '@/scss/_components/_buttons/button.settings';
 </style>

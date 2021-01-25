@@ -9,34 +9,33 @@
         <div class="el-settings__group">
             <div class="el-settings__content">
                 <template v-for="(link, index) in this.links">
-                    <el-button
+                    <Button
                         v-if="link.internal"
                         :key="index"
-                        @click="$router.push(link.path)"
-                        class="el-button--settings el-button--block">
-                        <span class="el-button__label">
+                        type="settings"
+                        size="block"
+                        @clicked="$router.push(link.path)">
+                        <span>
                             <Icon :name="link.icon" />
                             {{ link.label }}
                         </span>
 
                         <Icon name="heroicons-chevron-right" />
-                    </el-button>
+                    </Button>
 
-                    <a
+                    <Button
                         v-else
                         :key="index"
-                        :href="link.url"
-                        class="el-button el-button--settings el-button--block"
-                        target="_blank" >
+                        type="settings"
+                        size="block"
+                        :href="link.url">
                         <span>
-                            <span class="el-button__label">
-                                <Icon :name="link.icon" />
-                                {{ link.label }}
-                            </span>
-
-                            <Icon name="heroicons-external-link" />
+                            <Icon :name="link.icon" />
+                            {{ link.label }}
                         </span>
-                    </a>
+
+                        <Icon name="heroicons-external-link" />
+                    </Button>
                 </template>
             </div>
         </div>
@@ -50,13 +49,15 @@ import LinksMixin from '@/mixins/links'
 
 import Alert from '@/components/Alerts/Alert'
 import Icon from '@/components/Icons/Icon'
+import Button from '@/components/Button/Button'
 
 export default {
     name: 'SettingsHome',
     mixins: [LinksMixin],
     components: {
         Alert,
-        Icon
+        Icon,
+        Button
     },
     data () {
         return {

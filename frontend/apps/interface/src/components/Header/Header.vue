@@ -14,14 +14,17 @@
                         class="el-header__back"
                         :class="this.showBack ? '' : 'el-header__back--hidden'">
 
-                        <button class="el-button el-button--link el-button--light" @click="$router.go(-1)">
+                        <Button
+                            type="link"
+                            :inverted="true"
+                            @clicked="$router.go(-1)">
                             <Icon
                                 name="heroicons-arrow-narrow-left"
                                 type="light">
                             </Icon>
 
                             <span>{{ this.back }}</span>
-                        </button>
+                        </Button>
                     </div>
 
                     <div class="el-header__content">
@@ -45,6 +48,7 @@
 <script>
 import Nav from '@/components/Nav/Nav'
 import Icon from '@/components/Icons/Icon'
+import Button from '@/components/Button/Button'
 
 import ShapeOne from '@/assets/shapes/blob-shape-01.svg'
 import ShapeTwo from '@/assets/shapes/blob-shape-02.svg'
@@ -54,6 +58,7 @@ export default {
     components: {
         Nav,
         Icon,
+        Button,
         ShapeOne,
         ShapeTwo
     },
@@ -117,7 +122,4 @@ export default {
 
 <style scoped lang="scss">
 @import 'header.scss';
-
-@import '@/scss/_components/_buttons/button.base';
-@import '@/scss/_components/_buttons/button.link';
 </style>

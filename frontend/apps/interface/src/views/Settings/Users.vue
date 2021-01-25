@@ -43,14 +43,14 @@
                         </password>
                     </el-form-item>
 
-                    <el-button
-                        @click="submitAccountForm()"
-                        type=" el-button--block"
-                        :class="!submitDisabled ? 'el-button--success' : ''"
+                    <Button
+                        :type="!submitDisabled ? 'success' : ''"
+                        size="block"
+                        :plain="true"
                         :disabled="submitDisabled"
-                        plain>
+                        @clicked="submitAccountForm()">
                         {{ $t('general.save') }}
-                    </el-button>
+                    </Button>
                 </el-form>
             </template>
         </SettingsGroupContainer>
@@ -65,6 +65,7 @@ import Password from 'vue-password-strength-meter'
 
 import SettingsGroupContainer from '@/components/Containers/SettingsGroup'
 import Alert from '@/components/Alerts/Alert'
+import Button from '@/components/Button/Button'
 import Icon from '@/components/Icons/Icon'
 
 export default {
@@ -73,6 +74,7 @@ export default {
         SettingsGroupContainer,
         Icon,
         Alert,
+        Button,
         Password
     },
     mixins: [],
