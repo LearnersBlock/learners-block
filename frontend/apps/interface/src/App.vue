@@ -20,7 +20,6 @@ export default {
 
 <style lang="scss">
 @import '@/scss/main';
-@import '@/scss/_components/_loading/loading.base';
 
 .slide-left-enter-active,
 .slide-left-leave-active,

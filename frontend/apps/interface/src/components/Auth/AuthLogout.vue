@@ -49,5 +49,4 @@ export default {
 
 <style lang="scss">
 @import 'Auth';
-@import '@/scss/_components/_loading/loading.base';
 </style>

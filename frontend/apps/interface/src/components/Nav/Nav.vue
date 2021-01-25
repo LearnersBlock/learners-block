@@ -111,5 +111,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'Nav.scss';
+@import 'Nav';
 </style>

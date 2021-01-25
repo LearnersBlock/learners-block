@@ -64,5 +64,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'Quicknav.scss';
+@import 'Quicknav';
 </style>

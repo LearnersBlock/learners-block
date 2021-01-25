@@ -68,6 +68,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
-@import 'Alert.scss';
+<style lang="scss" scoped>
+@import 'Alert';
 </style>

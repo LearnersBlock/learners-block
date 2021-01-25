@@ -1,11 +1,5 @@
 <template>
     <div>
-        <Alert
-            v-if="!this.$store.state.auth.required"
-            :title="$t('settings-screen.auth.disabled.title')"
-            :description="$t('settings-screen.auth.disabled.description')">
-        </Alert>
-
         <div class="el-settings__group">
             <div class="el-settings__content">
                 <template v-for="(link, index) in this.links">
@@ -47,7 +41,6 @@ import store from '@/store'
 
 import LinksMixin from '@/mixins/links'
 
-import Alert from '@/components/Alerts/Alert'
 import Icon from '@/components/Icons/Icon'
 import Button from '@/components/Button/Button'
 
@@ -55,7 +48,6 @@ export default {
     name: 'SettingsHome',
     mixins: [LinksMixin],
     components: {
-        Alert,
         Icon,
         Button
     },

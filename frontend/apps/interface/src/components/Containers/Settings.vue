@@ -2,6 +2,12 @@
     <main class="el-settings">
         <div class="el-container is-vertical">
             <div class="el-settings__inner">
+                <Alert
+                    v-if="!this.$store.state.auth.required"
+                    :title="$t('settings-screen.auth.disabled.title')"
+                    :description="$t('settings-screen.auth.disabled.description')">
+                </Alert>
+
                 <transition :name="transitionName" mode="out-in">
                     <router-view></router-view>
                 </transition>
@@ -11,18 +17,21 @@
 </template>
 
 <script>
+import Alert from '@/components/Alerts/Alert'
+
 const DEFAULT_TRANSITION = 'fade'
 
 export default {
     name: 'SettingsContainer',
+    components: {
+        Alert
+    },
     data () {
         return {
             error: null,
             transitionName: DEFAULT_TRANSITION
         }
     },
-    props: {},
-    computed: {},
     created: function () {
         this.$router.beforeEach((to, from, next) => {
             let transitionName = to.meta.transitionName || from.meta.transitionName
@@ -55,5 +64,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'Settings.scss';
+@import 'Settings';
 </style>

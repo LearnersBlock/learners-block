@@ -121,5 +121,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import 'header.scss';
+@import 'Header';
 </style>

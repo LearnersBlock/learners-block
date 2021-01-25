@@ -162,5 +162,4 @@ export default {
 @import 'Auth';
 @import '@/scss/_components/_forms/form.base';
 @import '@/scss/_components/_forms/_inputs/input.base';
-@import '@/scss/_components/_loading/loading.base';
 </style>

@@ -1,11 +1,5 @@
 <template>
     <div>
-        <Alert
-            v-if="!this.$store.state.auth.required"
-            :title="$t('settings-screen.auth.disabled.title')"
-            :description="$t('settings-screen.auth.disabled.description')">
-        </Alert>
-
         <SettingsGroupContainer :loading="this.loading">
             <template v-slot:title>
                 <h5>{{ accountGroupTitle }}</h5>
@@ -64,7 +58,6 @@ import store from '@/store'
 import Password from 'vue-password-strength-meter'
 
 import SettingsGroupContainer from '@/components/Containers/SettingsGroup'
-import Alert from '@/components/Alerts/Alert'
 import Button from '@/components/Button/Button'
 import Icon from '@/components/Icons/Icon'
 
@@ -73,7 +66,6 @@ export default {
     components: {
         SettingsGroupContainer,
         Icon,
-        Alert,
         Button,
         Password
     },
