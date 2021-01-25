@@ -9,44 +9,52 @@ export default {
         settings: null
     },
 
-    /*
+    /**
      * Mutations
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     mutations: {
-        /*
-         * SET_SETTINGS
+        /**
+         * Set the settings data
+         *
+         * @param   {Object} state The vuex state
+         * @param   {Object} data Settings to set
+         * @returns void
          */
         SET_SETTINGS (state, data) {
             state.settings = data.data
         },
 
-        /*
-         * UPDATE_SETTINGS
+        /**
+         * Update a setting
+         *
+         * @param   {Object} state The vuex state
+         * @param   {Object} data Set of settings data to update
+         * @returns void
          */
         UPDATE_SETTING (state, data) {
             set(state.settings, `${data.group}.${data.key}`, data.value)
         },
 
-        /*
-         * SET_LOADING_STATE
+        /**
+         * Update loading state
+         *
+         * @param   {Object} state The vuex state
+         * @param   {Boolean} status Whether or not we're loading
+         * @returns void
          */
         SET_LOADING_STATE (state, status) {
             state.loading = status
         }
     },
 
-    /*
+    /**
      * Getters
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     getters: {
         /*
-         * getSettings
+         * Get the complete set of settings
          */
 
         getSettings: (state) => {
@@ -64,18 +72,21 @@ export default {
         }
     },
 
-    /*
+    /**
      * Actions
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     actions: {
-        /*
-         * fetchSettings
+        /**
+         * Fetch the settings
+         *
+         * @param   {Object}    context The vuex context
+         * @returns {Object}    void
          */
-        fetchSettings (context, params) {
+        fetchSettings (context) {
+            // Check if settings have already been fetched
             if (!context.state.settings) {
+                // If not, trigger API request
                 return Api().get('/settings')
                     .then(r => r.data)
                     .then(response => {
@@ -85,44 +96,48 @@ export default {
             }
         },
 
-        /*
-         * update
+        /**
+         * Update setting
+         *
+         * @param   {Object}    context The vuex context
+         * @param   {Object}    params The update request params
+         * @returns {Object}    void
          */
         update (context, params) {
-            // enable loading state
+            // Enable loading state
             context.commit('SET_LOADING_STATE', true)
 
-            // get current state as backup (see expl. below)
+            // Get current state as backup (see expl. below)
             const originalState = context.getters.getSettingFromPath(`${params.group}.${params.key}`)
 
-            // commit new value
-            // this is being done here for improved UX – if the commit would
+            // Commit new value
+            // This is being done here for improved UX – if the commit would
             // only be triggered after successful API call, the toggle switch
             // would be delayed
             context.commit('UPDATE_SETTING', params)
 
-            // trigger the API call
+            // Trigger the API call
             return new Promise((resolve, reject) => {
                 Api().patch('/settings', params)
                     .then((response) => {
                         setTimeout(() => {
-                            // disable loading state
+                            // Disable loading state
                             context.commit('SET_LOADING_STATE', false)
 
-                            // resolve promise
+                            // Resolve promise
                             resolve(response)
                         }, 1400)
                     })
                     .catch(err => {
                         setTimeout(() => {
-                            // reset state to original state
+                            // Reset state to original state
                             params.value = originalState
                             context.commit('UPDATE_SETTING', params)
 
-                            // disable loading state
+                            // Disable loading state
                             context.commit('SET_LOADING_STATE', false)
 
-                            // reject promise
+                            // Reject promise
                             reject(err)
                         }, 600)
                     })

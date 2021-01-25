@@ -1,4 +1,3 @@
-// import Api from '@/api/Api'
 import i18n from '../../i18n'
 import Cookies from 'js-cookie'
 
@@ -11,74 +10,78 @@ export default {
         current: null
     },
 
-    /*
+    /**
      * Mutations
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     mutations: {
-        /*
-         * SET_CURRENT_LANG
+        /**
+         * Set the current locale
+         *
+         * @param   {Object} state The vuex state
+         * @param   {String} lang The locale to store
+         * @returns void
          */
         SET_CURRENT_LANG (state, lang) {
             state.current = lang
         }
     },
 
-    /*
+    /**
      * Getters
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     getters: {
-        /*
-         * availableLocales
+        /**
+         * Get the list of available locales
+         *
+         * @param   {Object} state The vuex state
+         * @returns void
          */
-
         availableLocales: (state) => {
             return i18n.availableLocales
         }
     },
 
-    /*
+    /**
      * Actions
-     *
-     * @since           0.0.1
      * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
     actions: {
-        /*
-         * updateLang
+        /**
+         * Update the prefered locale
+         *
+         * @param   {Object}    context The vuex context
+         * @param   {Object}    params The update request params
+         * @returns {Object}    void
          */
         updateLang (context, params) {
-            // get the list of available locales
+            // Get the list of available locales
             const availableLocales = context.getters.availableLocales
 
-            // if we have available locales and the value stored in the cookies is
-            // present in that list
+            // If we have available locales and the value stored in the cookies
+            // is present in that list
             if (availableLocales && availableLocales.includes(params.lang)) {
-                // set the lang to the user preferences stored in the cookie
+                // Set the lang to the user preferences stored in the cookie
                 i18n.locale = params.lang
 
-                // update store
+                // Update store
                 context.commit('SET_CURRENT_LANG', params.lang)
 
-                // check if the new lang locale is to be stored
+                // Check if the new lang locale is to be stored
                 if (params.store) {
-                    // store that preference
+                    // Store that preference
                     Cookies.set(langCookieName, params.lang)
                 }
             } else {
-                // otherwise, remove the cookie as the stored language is not an
+                // Otherwise, remove the cookie as the stored language is not an
                 // acceptable parameter
                 Cookies.remove(langCookieName)
 
-                // update store
+                // Update store
                 context.commit('SET_CURRENT_LANG', i18n.locale)
 
-                // emit error
+                // Emit error
                 // console.error('[store/lang/updateLang]', `The passed language parameter "${params.lang}" is not available`)
             }
         }
