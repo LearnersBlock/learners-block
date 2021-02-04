@@ -101,7 +101,7 @@
     "upload": "رفع",
     "upload_drop": "قم بإسقاط الملف / الملفات للرفع",
     "upload_file": "رفع ملف",
-    "upload_overwrite_hint": "سيتم استبدال الملف / الملفات التالية -",
+    "upload_overwrite_hint": "- سيتم استبدال الملف / الملفات التالية",
     "upload_overwrite_confirm": "هل تريد الرفع على أية حال؟",
     "upload_remote": "الرفع عن بعد",
     "upload_remote_url": "عنوان الرفع عن بعد",
