@@ -1,12 +1,12 @@
 {
     "network_fetch_fail": "Failed to fetch available networks.",
     "network_connect_fail": "Failed to connect to the network.",
-    "wifi": "WiFi",
+    "wifi": "Wi-Fi",
     "user": "User",
     "password": "Password",
-    "select_ssid": "Select WiFi Network",
+    "select_ssid": "Select Wi-Fi Network",
     "connect": "Connect",
     "applying_changes": "Applying changes…",
-    "connection_reset_request": "Your Learner's Block will now attempt to connect. It will be availabe to you by connecting your device to the same WiFi network. If after a minute your device is still not connected to your chosen WiFi network, reconnect to your Learner's Block, check your password and try again.",
-    "no_networks": "No wifi networks available. Please ensure there is a network within range and reboot the device."
+    "connection_reset_request": "Your Learner's Block will try to connect to a Wi-Fi network, and you can connect to the same network to use it.\nIf you still aren't connected after a minute, reconnect to your Learner's Block, check your password and try again.",
+    "no_networks": "No available Wi-Fi networks within range. Please ensure there is and reboot the device."
 }

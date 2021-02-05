@@ -1,0 +1,12 @@
+{
+    "select_ssid": "Velg Wi-Fi-nettverk",
+    "wifi": "Wi-Fi",
+    "no_networks": "Ingen tilgjengelige Wi-Fi-nettverk i rekkevidde. Sjekk at et slikt finnes og start enheten på ny.",
+    "applying_changes": "Iverksetter endringer¸…",
+    "connect": "Kobler til",
+    "password": "Passord",
+    "user": "Bruker",
+    "network_connect_fail": "Klarte ikke å koble til nettverket.",
+    "network_fetch_fail": "Klarte ikke å hente inn liste over tilgjengelige nettverk.",
+    "connection_reset_request": "Din Learner's Block vil nå prøve å koble til et Wi-Fi nettverk, og du kan koble til samme nettverk for å bruke den.\nHvis du fremdeles ikke er tilkoblet etter ett minutt, kan du koble til din Learner's Block, sjekke passordet og prøve igjen."
+}
