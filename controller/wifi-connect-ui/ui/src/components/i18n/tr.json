@@ -1,1 +1,12 @@
-{}
+{
+    "connection_reset_request": "Learner's Block'unuz şimdi bağlanmayı deneyecek. Aygıtınızı aynı kablosuz ağa bağlayarak sizin için kullanılabilir olacaktır. Bir dakika sonra aygıtınız hala seçtiğiniz kablosuz ağa bağlı değilse, Learner's Block'unuza yeniden bağlanın, parolanızı gözden geçirin ve tekrar deneyin.",
+    "select_ssid": "Kablosuz Ağ Seç",
+    "no_networks": "Kullanılabilir kablosuz ağ yok. Lütfen kapsama alanında bir ağ olduğundan emin olun ve aygıtı yeniden başlatın.",
+    "applying_changes": "Değişiklikler uygulanıyor…",
+    "connect": "Bağlan",
+    "password": "Parola",
+    "user": "Kullanıcı",
+    "wifi": "Wi-Fi",
+    "network_connect_fail": "Ağa bağlanılamadı.",
+    "network_fetch_fail": "Kullanılabilir ağlar alınamadı."
+}
