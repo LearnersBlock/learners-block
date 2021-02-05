@@ -8,7 +8,7 @@
     "auth-screen": {
         "login": {
             "title": "Log in",
-            "description": "Please use the provided credentials to login in order to access restricted content",
+            "description": "Please use the provided credentials to login",
             "username": "Username",
             "password": "Password",
             "submit": "Log in"
@@ -54,15 +54,15 @@
             "title": "File Manager"
         },
         "network": {
-            "title": "Wifi",
+            "title": "Wi-Fi",
             "connect": {
-                "label": "Connect to wifi"
+                "label": "Connect to Wi-Fi"
             },
             "reset": {
-                "label": "Reset wifi connection",
+                "label": "Reset Wi-Fi connection",
                 "warning": {
-                    "title": "Are you certain you want to reset the connection?",
-                    "content": "If you proceed, the wifi connection will be reset and you will need to re-configure it.",
+                    "title": "Are you sure you want to reset the connection?",
+                    "content": "If you proceed, the Wi-Fi connection will be reset.",
                     "cancel": "Cancel",
                     "submit": "Reset now"
                 },
@@ -73,7 +73,7 @@
                 },
                 "error": {
                     "title": "Reset failed",
-                    "content": "The wifi connection could not be reset. Please try again.",
+                    "content": "The Wi-Fi connection could not be reset.",
                     "close": "Close"
                 }
             }
@@ -82,7 +82,7 @@
             "title": "Users",
             "disabled": {
                 "title": "Authentication disabled",
-                "description": "You haven't created a user yet and anyone can currently access the settings pages. Please create account now."
+                "description": "You have not set a password. Anyone can access the settings pages."
             },
             "account": {
                 "existing": {
@@ -103,7 +103,7 @@
                     "backend": "Backend",
                     "controller": "Controller",
                     "ifm": "Filemanager",
-                    "wificonnect_ui": "WiFi Connect"
+                    "wificonnect_ui": "W-iFi Connect"
                 }
             },
             "hostname": {
@@ -112,12 +112,12 @@
                     "label": "Update hostname",
                     "success": {
                         "title": "Hostname updated",
-                        "content": "The hostname was successfully updated to <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. The wifi network SSID has been updated to <b>%ssid%</b> and you will need to reconnect to this new network.",
+                        "content": "The hostname was successfully updated to <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. The Wi-Fi network SSID has been updated to <b>%ssid%</b>. Connect to <b>%ssid%</b> to continue using your device.",
                         "close": "Close"
                     },
                     "error": {
                         "title": "Request failed",
-                        "content": "An error occured and the hostname could not be changed.",
+                        "content": "An error occurred, the hostname could not be changed.",
                         "close": "Close"
                     }
                 }
@@ -127,19 +127,19 @@
                 "reset": {
                     "label": "Reset database",
                     "warning": {
-                        "title": "Are you certain you want to reset the database?",
+                        "title": "Are you sure you want to reset the database?",
                         "content": "If you proceed, the database will reset and all settings will be lost.",
                         "cancel": "Cancel",
                         "submit": "Reset now"
                     },
                     "success": {
                         "title": "Reset successful",
-                        "content": "The database was reset succesfully. Please reload the app for changes to take effect.",
+                        "content": "The database was reset. Please refresh the page for changes to take effect.",
                         "close": "Close"
                     },
                     "error": {
                         "title": "Reset failed",
-                        "content": "An error occured and the database state could not be reset.",
+                        "content": "An error occured and the database could not be reset.",
                         "close": "Close"
                     }
                 }
@@ -154,7 +154,7 @@
         },
         "500": {
             "title": "Houston, we have a problem",
-            "description": "The backend of the application is currently unreachable.",
+            "description": "The backend is unreachable.",
             "button": "Try again"
         }
     },
