@@ -1,7 +1,7 @@
 {
-    "connection_reset_request": "Learner's Block'unuz şimdi bağlanmayı deneyecek. Aygıtınızı aynı kablosuz ağa bağlayarak sizin için kullanılabilir olacaktır. Bir dakika sonra aygıtınız hala seçtiğiniz kablosuz ağa bağlı değilse, Learner's Block'unuza yeniden bağlanın, parolanızı gözden geçirin ve tekrar deneyin.",
+    "connection_reset_request": "Learner's Block'unuz bir kablosu ağa bağlanmayı deneyecek ve onu kullanmak için aynı ağa bağlanabilirsiniz.\nBir dakika sonra hala bağlı değilseniz, Learner's Block'unuza yeniden bağlanın, parolanızı gözden geçirin ve tekrar deneyin.",
     "select_ssid": "Kablosuz Ağ Seç",
-    "no_networks": "Kullanılabilir kablosuz ağ yok. Lütfen kapsama alanında bir ağ olduğundan emin olun ve aygıtı yeniden başlatın.",
+    "no_networks": "Kapsama alanı içinde kullanılabilir kablosuz ağ yok. Lütfen olduğundan emin olun ve aygıtı yeniden başlatın.",
     "applying_changes": "Değişiklikler uygulanıyor…",
     "connect": "Bağlan",
     "password": "Parola",
