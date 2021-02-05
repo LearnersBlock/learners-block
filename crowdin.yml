@@ -1,3 +1,0 @@
-files:
-  - source: /frontend/apps/file-manager/src/i18n_master/en_master.json
-    translation: /frontend/apps/file-manager/src/i18n/%two_letters_code%.json
