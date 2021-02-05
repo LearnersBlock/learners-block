@@ -1,1 +1,11 @@
-{}
+{
+    "select_ssid": "Velg Wi-Fi-nettverk",
+    "wifi": "Wi-Fi",
+    "no_networks": "Ingen tilgjengelige Wi-Fi-nettverk. Forsikre at det er et nettverk innen rekkevidde og utfør omstart av enheten.",
+    "applying_changes": "Iverksetter endringer¸…",
+    "connect": "Kobler til",
+    "password": "Passord",
+    "user": "Bruker",
+    "network_connect_fail": "Klarte ikke å koble til nettverket.",
+    "network_fetch_fail": "Klarte ikke å hente inn liste over tilgjengelige nettverk."
+}
