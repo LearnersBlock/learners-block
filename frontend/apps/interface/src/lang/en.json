@@ -8,7 +8,7 @@
     "auth-screen": {
         "login": {
             "title": "Log in",
-            "description": "Please use the provided credentials to log in",
+            "description": "Log in to continue",
             "username": "Username",
             "password": "Password",
             "submit": "Log in"
