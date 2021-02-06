@@ -36,15 +36,11 @@ You may deploy the code to a device locally. We recommend the Balena documentati
 
 As open source software, you can deploy to your own [Balena](https://www.balena.io) instance and serve your own automatic updates. We cannot however support installation and use via this method. 
 
-[Balena Server Based Deployments](https://www.balena.io/docs/learn/deploy/deployment/). 
+[Balena Server Based Deployments](https://www.balena.io/docs/learn/deploy/deployment/)
 
 ## Translation of the interface
 
 We encourage translations and adjustments to current translations on all our components. These can be contributed via [Weblate](https://hosted.weblate.org/projects/learners-block/).  
-
-## License
-
-Learner’s Block is released under the [GPL-3.0 License](https://github.com/LearnersBlock/learners-block/blob/master/LICENSE)
 
 ## Contributing
 
@@ -53,6 +49,10 @@ We welcome contributions, they are what keep the Block alive! For pull requests 
 ## Bug report or pull request
 
 For bug reports, please search existing issues before posting a ticket. 
+
+## License
+
+Learner’s Block is released under the [GPL-3.0 License](https://github.com/LearnersBlock/learners-block/blob/master/LICENSE)
 
 ## Attribution
 
