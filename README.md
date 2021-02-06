@@ -24,7 +24,7 @@ All development changes however, will require testing through the Balena OS and 
 
 #### Pre-built
 
-Learner’s Block software is provided as an entire package, including an operating system with pre-defined keys that allow for automatic updates. To benefit from these, [download the image files](https://downloads.learnersblock.org)
+Learner’s Block software is provided as an entire package, including an operating system with pre-defined keys that allow for automatic updates. To benefit from these, [download the image files](https://downloads.learnersblock.org).
 
 #### Deploy locally
 
