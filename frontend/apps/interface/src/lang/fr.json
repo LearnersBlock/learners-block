@@ -1,1 +1,116 @@
-{}
+{
+    "error-screen": {
+        "500": {
+            "button": "Essayer à nouveau"
+        },
+        "404": {
+            "button": "Aller à l'accueil"
+        }
+    },
+    "settings-screen": {
+        "system": {
+            "database": {
+                "title": "Base de données",
+                "reset": {
+                    "warning": {
+                        "cancel": "Annuler"
+                    },
+                    "success": {
+                        "close": "Fermer"
+                    },
+                    "error": {
+                        "close": "Fermer"
+                    }
+                }
+            },
+            "hostname": {
+                "update": {
+                    "error": {
+                        "title": "La requête a échoué.",
+                        "close": "Fermer"
+                    },
+                    "success": {
+                        "close": "Fermer"
+                    }
+                },
+                "title": "Nom d’hôte"
+            },
+            "versions": {
+                "components": {
+                    "ifm": "Gestionnaire de fichiers",
+                    "controller": "Contrôle"
+                },
+                "title": "Versions"
+            },
+            "title": "Système"
+        },
+        "auth": {
+            "account": {
+                "new": {
+                    "title": "Créer un compte"
+                },
+                "existing": {
+                    "title": "Mettre à jour le compte"
+                }
+            },
+            "title": "Utilisateurs"
+        },
+        "network": {
+            "reset": {
+                "success": {
+                    "title": "Réinitialiser",
+                    "close": "Fermer"
+                },
+                "warning": {
+                    "cancel": "Annuler"
+                },
+                "error": {
+                    "close": "Fermer"
+                }
+            },
+            "title": "Wi-Fi"
+        },
+        "filemanager": {
+            "title": "Gestionnaire de fichiers"
+        },
+        "language": {
+            "default": {
+                "label": "Langue par défaut"
+            },
+            "title": "Langue"
+        },
+        "components": {
+            "title": "Composants"
+        },
+        "title": "Paramètres",
+        "back": "Retour"
+    },
+    "home-screen": {
+        "quicknav": {
+            "website": {
+                "title": "Site web"
+            },
+            "files": {
+                "title": "Fichiers"
+            }
+        },
+        "title": "Bienvenue"
+    },
+    "auth-screen": {
+        "logout": {
+            "title": "Déconnexion"
+        },
+        "login": {
+            "title": "Connexion",
+            "username": "Nom d'utilisateur",
+            "password": "Mot de passe"
+        }
+    },
+    "lang": {
+        "name": "Anglais"
+    },
+    "general": {
+        "save": "Enregistrer",
+        "close": "Fermer"
+    }
+}
