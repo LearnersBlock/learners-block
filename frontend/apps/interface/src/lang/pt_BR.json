@@ -1,1 +1,53 @@
-{}
+{
+    "auth-screen": {
+        "login": {
+            "username": "Nome de usuário",
+            "password": "Senha"
+        }
+    },
+    "settings-screen": {
+        "network": {
+            "reset": {
+                "warning": {
+                    "cancel": "Cancelar"
+                },
+                "success": {
+                    "close": "Fechar"
+                },
+                "error": {
+                    "close": "Fechar"
+                }
+            },
+            "title": "Wi-Fi"
+        },
+        "system": {
+            "hostname": {
+                "update": {
+                    "success": {
+                        "close": "Fechar"
+                    },
+                    "error": {
+                        "close": "Fechar"
+                    }
+                }
+            },
+            "database": {
+                "reset": {
+                    "warning": {
+                        "cancel": "Cancelar"
+                    },
+                    "success": {
+                        "close": "Fechar"
+                    },
+                    "error": {
+                        "close": "Fechar"
+                    }
+                }
+            }
+        }
+    },
+    "general": {
+        "save": "Salvar",
+        "close": "Fechar"
+    }
+}
