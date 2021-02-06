@@ -7,14 +7,14 @@
     },
     "auth-screen": {
         "login": {
-            "title": "Login",
+            "title": "Log in",
             "description": "Please use the provided credentials to login in order to access restricted content",
             "username": "Username",
             "password": "Password",
-            "submit": "Login"
+            "submit": "Log in"
         },
         "logout": {
-            "title": "Logging you out…"
+            "title": "Logging out…"
         }
     },
     "home-screen": {
