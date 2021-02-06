@@ -8,7 +8,7 @@
     "auth-screen": {
         "login": {
             "title": "Log in",
-            "description": "Please use the provided credentials to login",
+            "description": "Please use the provided credentials to log in",
             "username": "Username",
             "password": "Password",
             "submit": "Log in"
@@ -67,7 +67,7 @@
                     "submit": "Reset now"
                 },
                 "success": {
-                    "title": "Reset successful",
+                    "title": "Reset",
                     "content": "Please connect to the <b>lb.wifi</b> network to re-configure the network connection.",
                     "close": "Close"
                 },
@@ -99,11 +99,11 @@
                 "title": "Versions",
                 "components": {
                     "lb": "Learner's Block",
-                    "frontend": "Frontend",
-                    "backend": "Backend",
+                    "frontend": "Front-end",
+                    "backend": "Back-end",
                     "controller": "Controller",
-                    "ifm": "Filemanager",
-                    "wificonnect_ui": "W-iFi Connect"
+                    "ifm": "File manager",
+                    "wificonnect_ui": "Wi-Fi Connect"
                 }
             },
             "hostname": {
@@ -112,7 +112,7 @@
                     "label": "Update hostname",
                     "success": {
                         "title": "Hostname updated",
-                        "content": "The hostname was successfully updated to <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. The Wi-Fi network SSID has been updated to <b>%ssid%</b>. Connect to <b>%ssid%</b> to continue using your device.",
+                        "content": "The hostname was updated to <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. The Wi-Fi network SSID has been updated to <b>%ssid%</b>. Connect to <b>%ssid%</b> to continue using your device.",
                         "close": "Close"
                     },
                     "error": {
@@ -128,12 +128,12 @@
                     "label": "Reset database",
                     "warning": {
                         "title": "Are you sure you want to reset the database?",
-                        "content": "If you proceed, the database will reset and all settings will be lost.",
+                        "content": "If you proceed, the database will be reset and all settings lost.",
                         "cancel": "Cancel",
                         "submit": "Reset now"
                     },
                     "success": {
-                        "title": "Reset successful",
+                        "title": "Reset",
                         "content": "The database was reset. Please refresh the page for changes to take effect.",
                         "close": "Close"
                     },
@@ -154,7 +154,7 @@
         },
         "500": {
             "title": "Houston, we have a problem",
-            "description": "The backend is unreachable.",
+            "description": "The back-end is unreachable.",
             "button": "Try again"
         }
     },
