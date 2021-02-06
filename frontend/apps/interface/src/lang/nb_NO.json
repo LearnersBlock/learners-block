@@ -133,7 +133,8 @@
             "title": "Logg inn",
             "submit": "Logg inn",
             "password": "Passord",
-            "username": "Brukernavn"
+            "username": "Brukernavn",
+            "description": "Logg inn"
         }
     },
     "wifiportal-screen": {
