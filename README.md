@@ -44,7 +44,7 @@ We encourage translations and adjustments to current translations on all our com
 
 ## Contributing
 
-We welcome contributions, they are what keep the Block alive! For pull requests we suggest discussing the changes through a ticket first, for your own sake in case there are already changes ongoing that will affect your contribution. 
+We welcome contributions, they are what keep the Block alive! For pull requests we suggest discussing the changes through a ticket first. This is for your own sake in case there are already changes ongoing that will affect your contribution. If you are looking to contribute without a specific feature or goal in mind, please check the list of [Good First Issues](https://github.com/LearnersBlock/learners-block/contribute).
 
 ## Bug report or pull request
 
