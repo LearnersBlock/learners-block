@@ -59,6 +59,7 @@ Learner’s Block is released under the [GPL-3.0 License](https://github.com/Lea
 Many great open source projects provide the foundation to make this possible, and we would like to thank and recognise them all:
 
 * [Open Balena](https://www.balena.io/open/)
+* [IFM](https://github.com/misterunknown/ifm/)
 * [Book Stack](https://www.bookstackapp.com/)
 * [GitBook](http://gitbook.com)
 * [Weblate](https://weblate.org)
