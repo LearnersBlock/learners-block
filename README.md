@@ -40,7 +40,7 @@ As open source software, you can deploy to your own [Balena](https://www.balena.
 
 ## Translation of the interface
 
-We encourage translations and adjustments to current translations on all our components. These can be contributed via [Weblate](https://hosted.weblate.org/projects/learners-block/).  
+We encourage translations and adjustments to current translations on all our components. These can be contributed via [Weblate](https://translate.learnersblock.org).  
 
 ## Contributing
 
