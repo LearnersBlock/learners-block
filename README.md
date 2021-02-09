@@ -1,16 +1,15 @@
 # Learner’s Block
-
-Learner’s Block is still under development and not yet ready for stable production. Check back here for updates on progress or follow our [pre-deployment project list](https://github.com/LearnersBlock/learners-block/projects/3). 
-
 https://learnersblock.org
 
-## Documentation
-
-All of our documentation is stored and maintained [here](https://docs.learnersblock.org). 
+Learner’s Block is still under development and not yet ready for stable production. Check back here for updates on progress or follow our [pre-deployment project list](https://github.com/LearnersBlock/learners-block/projects/3). 
 
 ## Description
 
 An open-source project that lets individuals and organisations provide their educational resources, websites and apps to users offline.
+
+## Documentation
+
+All of our documentation is stored and maintained [here](https://docs.learnersblock.org). 
 
 ## Technical Details
 
@@ -49,7 +48,7 @@ We thrive to ensure the features developed are those most in line with the commu
 ## Contributing
 
 ### Development/pull requests
-We welcome contributions, they are what keep the Block alive! For pull requests we suggest discussing the changes through a ticket first. This is for your own sake in case there are already changes ongoing that will affect your contribution. If you are looking to contribute without a specific feature or goal in mind, please check the list of [Good First Issues](https://github.com/LearnersBlock/learners-block/contribute).
+We welcome contributions, they are what keep the Block alive! For pull requests we suggest discussing the changes through a ticket first. This is for your own sake in case there are already changes ongoing that will affect your contribution. If you are looking to contribute without a specific feature or goal in mind, please check the list of [Good First Issues](https://github.com/LearnersBlock/learners-block/contribute) and our [voting platform](https://vote.learnersblock.org) which contains a list of features prioritised by the community.
 
 ### Bug reports
 
