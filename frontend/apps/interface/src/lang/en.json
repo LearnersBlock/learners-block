@@ -7,14 +7,14 @@
     },
     "auth-screen": {
         "login": {
-            "title": "Log in",
-            "description": "Log in to continue",
+            "title": "Login",
+            "description": "Please use the provided credentials to login in order to access restricted content",
             "username": "Username",
             "password": "Password",
-            "submit": "Log in"
+            "submit": "Login"
         },
         "logout": {
-            "title": "Logging out…"
+            "title": "Logging you out…"
         }
     },
     "home-screen": {
@@ -54,26 +54,26 @@
             "title": "File Manager"
         },
         "network": {
-            "title": "Wi-Fi",
+            "title": "Wifi",
             "connect": {
-                "label": "Connect to Wi-Fi"
+                "label": "Connect to wifi"
             },
             "reset": {
-                "label": "Reset Wi-Fi connection",
+                "label": "Reset wifi connection",
                 "warning": {
-                    "title": "Are you sure you want to reset the connection?",
-                    "content": "If you proceed, the Wi-Fi connection will be reset.",
+                    "title": "Are you certain you want to reset the connection?",
+                    "content": "If you proceed, the wifi connection will be reset and you will need to re-configure it.",
                     "cancel": "Cancel",
                     "submit": "Reset now"
                 },
                 "success": {
-                    "title": "Reset",
+                    "title": "Reset successful",
                     "content": "Please connect to the <b>lb.wifi</b> network to re-configure the network connection.",
                     "close": "Close"
                 },
                 "error": {
                     "title": "Reset failed",
-                    "content": "The Wi-Fi connection could not be reset.",
+                    "content": "The wifi connection could not be reset. Please try again.",
                     "close": "Close"
                 }
             }
@@ -82,7 +82,7 @@
             "title": "Users",
             "disabled": {
                 "title": "Authentication disabled",
-                "description": "You have not set a password. Anyone can access the settings pages."
+                "description": "You haven't created a user yet and anyone can currently access the settings pages. Please create account now."
             },
             "account": {
                 "existing": {
@@ -99,11 +99,11 @@
                 "title": "Versions",
                 "components": {
                     "lb": "Learner's Block",
-                    "frontend": "Front-end",
-                    "backend": "Back-end",
+                    "frontend": "Frontend",
+                    "backend": "Backend",
                     "controller": "Controller",
-                    "ifm": "File manager",
-                    "wificonnect_ui": "Wi-Fi Connect"
+                    "ifm": "Filemanager",
+                    "wificonnect_ui": "WiFi Connect"
                 }
             },
             "hostname": {
@@ -112,12 +112,12 @@
                     "label": "Update hostname",
                     "success": {
                         "title": "Hostname updated",
-                        "content": "The hostname was updated to <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. The Wi-Fi network SSID has been updated to <b>%ssid%</b>. Connect to <b>%ssid%</b> to continue using your device.",
+                        "content": "The hostname was successfully updated to <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. The wifi network SSID has been updated to <b>%ssid%</b> and you will need to reconnect to this new network.",
                         "close": "Close"
                     },
                     "error": {
                         "title": "Request failed",
-                        "content": "An error occurred, the hostname could not be changed.",
+                        "content": "An error occured and the hostname could not be changed.",
                         "close": "Close"
                     }
                 }
@@ -127,19 +127,19 @@
                 "reset": {
                     "label": "Reset database",
                     "warning": {
-                        "title": "Are you sure you want to reset the database?",
-                        "content": "If you proceed, the database will be reset and all settings lost.",
+                        "title": "Are you certain you want to reset the database?",
+                        "content": "If you proceed, the database will reset and all settings will be lost.",
                         "cancel": "Cancel",
                         "submit": "Reset now"
                     },
                     "success": {
-                        "title": "Reset",
-                        "content": "The database was reset. Please refresh the page for changes to take effect.",
+                        "title": "Reset successful",
+                        "content": "The database was reset succesfully. Please reload the app for changes to take effect.",
                         "close": "Close"
                     },
                     "error": {
                         "title": "Reset failed",
-                        "content": "An error occured and the database could not be reset.",
+                        "content": "An error occured and the database state could not be reset.",
                         "close": "Close"
                     }
                 }
@@ -154,7 +154,7 @@
         },
         "500": {
             "title": "Houston, we have a problem",
-            "description": "The back-end is unreachable.",
+            "description": "The backend of the application is currently unreachable.",
             "button": "Try again"
         }
     },
