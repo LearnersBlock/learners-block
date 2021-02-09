@@ -14,4 +14,4 @@ For pull requests we suggest discussing the changes through a ticket first. This
 
 ## Non-code related issues
 
-If you would like to discuss other component of the Learner's Block community, or contributing in other ways, please reach out to us throught the contact from on http://learnersblock.org. 
+If you would like to discuss other component of the Learner's Block community, or contributing in other ways, please reach out to us throught the contact from on http://learnersblock.org/contact. 
