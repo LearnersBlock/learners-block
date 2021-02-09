@@ -1,0 +1,55 @@
+{
+    "auth-screen": {
+        "login": {
+            "username": "Kullanıcı adı",
+            "password": "Parola",
+            "title": "Oturum aç",
+            "submit": "Oturum aç"
+        }
+    },
+    "settings-screen": {
+        "network": {
+            "reset": {
+                "warning": {
+                    "cancel": "İptal"
+                },
+                "success": {
+                    "close": "Kapatma"
+                },
+                "error": {
+                    "close": "Kapatma"
+                }
+            },
+            "title": "Wi-Fi"
+        },
+        "system": {
+            "hostname": {
+                "update": {
+                    "success": {
+                        "close": "Kapatma"
+                    },
+                    "error": {
+                        "close": "Kapatma"
+                    }
+                }
+            },
+            "database": {
+                "reset": {
+                    "warning": {
+                        "cancel": "İptal"
+                    },
+                    "success": {
+                        "close": "Kapatma"
+                    },
+                    "error": {
+                        "close": "Kapatma"
+                    }
+                }
+            }
+        }
+    },
+    "general": {
+        "save": "Kaydet",
+        "close": "Kapatma"
+    }
+}
