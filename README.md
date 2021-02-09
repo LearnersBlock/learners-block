@@ -1,6 +1,6 @@
 # Learner’s Block
 
-Learner’s Block is still under development and not yet ready for stable production. Check back here for updates on progress or follow our ‘Pre-Deployment’ project list. 
+Learner’s Block is still under development and not yet ready for stable production. Check back here for updates on progress or follow our [pre-deployment project list](https://github.com/LearnersBlock/learners-block/projects/3). 
 
 https://learnersblock.org
 
