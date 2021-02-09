@@ -1,5 +1,5 @@
 {
-    "permission_change_error": "Tilganger kunne ikke endres:",
+    "permission_change_error": "Tilganger kunne ikke endres.",
     "permission_parse_error": "Kunne ikke tolke tilganger.",
     "pattern_error_slashes": "Mønster kan ikke inneholde skråstreker.",
     "word_wrap": "Ordbryting",
