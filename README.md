@@ -76,3 +76,4 @@ Many great open-source projects provide the foundation to make this possible, an
 * [GitBook](http://gitbook.com)
 * [Weblate](https://weblate.org)
 * [Feature UpVote](https://featureupvote.com/lp/powered_by_feature_upvote/?product=Learner%27s%20Block&utm_source=live_button&utm_medium=powered-link)
+* [Strapi](https://strapi.io)
