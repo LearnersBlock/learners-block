@@ -1,1 +1,165 @@
-{}
+{
+    "general": {
+        "close": "Lukk",
+        "save": "Lagre"
+    },
+    "error-screen": {
+        "500": {
+            "button": "Prøv igjen",
+            "description": "Bakenden kan ikke nås.",
+            "title": "Huston, vi har et problem"
+        },
+        "404": {
+            "button": "Gå hjem",
+            "description": "Siden du prøver å nå finnes ikke.",
+            "title": "Oida, dette var kleint"
+        }
+    },
+    "settings-screen": {
+        "system": {
+            "database": {
+                "reset": {
+                    "error": {
+                        "close": "Lukk",
+                        "content": "Kunne ikke tilbakestille databasen.",
+                        "title": "Tilbakestilling mislyktes"
+                    },
+                    "success": {
+                        "close": "Lukk",
+                        "content": "Databasen ble tilbakestilt. Gjenoppfrisk siden for å bruke endringer.",
+                        "title": "Tilbakestilt"
+                    },
+                    "warning": {
+                        "submit": "Tilbakestill nå",
+                        "cancel": "Avbryt",
+                        "content": "Hvis du fortsetter vil databasen bli tilbakestilt og alle innstillinger gå tapt.",
+                        "title": "Er du sikker på at du vil tilbakestille databasen?"
+                    },
+                    "label": "Tilbakestill database"
+                },
+                "title": "Database"
+            },
+            "hostname": {
+                "update": {
+                    "error": {
+                        "close": "Lukk",
+                        "content": "Kunne ikke endre vertsnavnet.",
+                        "title": "Forespørsel mislyktes"
+                    },
+                    "success": {
+                        "close": "Lukk",
+                        "content": "Vertsnavnet ble oppdatert til <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. Wi-Fi-nettverkets SSID har blitt oppdatert til <b>%ssid%</b>. Koble til <b>%ssid%</b> for å fortsette å bruke enheten din.",
+                        "title": "Vertsnavn oppdatert"
+                    },
+                    "label": "Oppdater vertsnavn"
+                },
+                "title": "Vertsnavn"
+            },
+            "versions": {
+                "components": {
+                    "wificonnect_ui": "Wi-Fi Connect",
+                    "ifm": "Filbehandler",
+                    "controller": "Kontrollør",
+                    "backend": "Bakende",
+                    "frontend": "Grenseflate",
+                    "lb": "Learner's Block"
+                },
+                "title": "Versjoner"
+            },
+            "title": "System"
+        },
+        "auth": {
+            "account": {
+                "new": {
+                    "title": "Opprett konto"
+                },
+                "existing": {
+                    "title": "Oppdater konto"
+                }
+            },
+            "disabled": {
+                "description": "Du har ikke satt ett passord. Alle har tilgang til innstillingssidene.",
+                "title": "Identitetsbekreftelse avskrudd"
+            },
+            "title": "Brukere"
+        },
+        "network": {
+            "reset": {
+                "error": {
+                    "close": "Lukk",
+                    "content": "Kunne ikke tilbakestille Wi-Fi-tilkoblingen.",
+                    "title": "Tilbakestilling mislyktes"
+                },
+                "success": {
+                    "close": "Lukk",
+                    "content": "Koble til <b>lb.wifi</b>-nettverket for å sette opp igjen nettverkstilkoblingen.",
+                    "title": "Tilbakestilt"
+                },
+                "warning": {
+                    "submit": "Tilbakestill nå",
+                    "cancel": "Avbryt",
+                    "content": "Hvis du fortsetter vil Wi-Fi-tilkoblingen bli tilbakestilt.",
+                    "title": "Er du sikker på at du vil tilbakestille tilkoblingen?"
+                },
+                "label": "Tilbakestill Wi-Fi-tilkobling"
+            },
+            "connect": {
+                "label": "Koble til Wi-Fi"
+            },
+            "title": "Wi-Fi"
+        },
+        "filemanager": {
+            "title": "Filbehandler"
+        },
+        "language": {
+            "default": {
+                "label": "Forvalgt språk"
+            },
+            "title": "Språk"
+        },
+        "components": {
+            "website": {
+                "label": "Skru på nettside"
+            },
+            "fileviewer": {
+                "label": "Skru på filviser"
+            },
+            "title": "Komponenter"
+        },
+        "title": "Innstillinger",
+        "back": "Tilbake"
+    },
+    "wifiportal-screen": {
+        "content": "Besøk <b>%hostname%</b> I din nettleser for å begynne å bruke enheten din.",
+        "title": "Velkommen til Learner's Block"
+    },
+    "home-screen": {
+        "quicknav": {
+            "website": {
+                "title": "Nettside"
+            },
+            "files": {
+                "title": "Filer"
+            }
+        },
+        "title": "Velkommen"
+    },
+    "auth-screen": {
+        "logout": {
+            "title": "Logger ut …"
+        },
+        "login": {
+            "submit": "Logg inn",
+            "password": "Passord",
+            "username": "Brukernavn",
+            "description": "Logg inn",
+            "title": "Logg inn"
+        }
+    },
+    "lang": {
+        "selector": {
+            "title": "Velg ditt foretrukne språk"
+        },
+        "name": "Norsk bokmål"
+    }
+}
