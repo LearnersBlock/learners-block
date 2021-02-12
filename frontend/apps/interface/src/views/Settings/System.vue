@@ -184,7 +184,7 @@ export default {
                                 action: 'close',
                                 type: '',
                                 size: 'block',
-                                label: this.$t('settings-screen.system.hostname.update.success.close')
+                                label: this.$t('general.close')
                             }
                         ]
                     },
@@ -196,7 +196,7 @@ export default {
                                 action: 'close',
                                 type: '',
                                 size: 'block',
-                                label: this.$t('settings-screen.system.hostname.update.error.close')
+                                label: this.$t('general.close')
                             }
                         ]
                     }
@@ -210,7 +210,7 @@ export default {
                                 action: 'close',
                                 type: '',
                                 size: 'block',
-                                label: this.$t('settings-screen.system.database.reset.success.close')
+                                label: this.$t('general.close')
                             }
                         ]
                     },
@@ -222,7 +222,7 @@ export default {
                                 action: 'close',
                                 type: '',
                                 size: 'block',
-                                label: this.$t('settings-screen.system.database.reset.error.close')
+                                label: this.$t('general.close')
                             }
                         ]
                     }

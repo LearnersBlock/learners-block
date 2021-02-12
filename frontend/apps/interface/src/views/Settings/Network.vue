@@ -111,7 +111,7 @@ export default {
                             action: 'close',
                             type: '',
                             size: 'half',
-                            label: this.$t('settings-screen.network.reset.warning.cancel')
+                            label: this.$t('general.cancel')
                         },
                         {
                             action: 'proceed',
@@ -129,7 +129,7 @@ export default {
                             action: 'close',
                             type: '',
                             size: 'block',
-                            label: this.$t('settings-screen.network.reset.success.close')
+                            label: this.$t('general.close')
                         }
                     ]
                 },
@@ -141,7 +141,7 @@ export default {
                             action: 'close',
                             type: '',
                             size: 'block',
-                            label: this.$t('settings-screen.network.reset.error.close')
+                            label: this.$t('general.close')
                         }
                     ]
                 }
