@@ -7,23 +7,14 @@
         "system": {
             "database": {
                 "reset": {
-                    "error": {
-                        "close": "Kapatma"
-                    },
                     "success": {
                         "close": "Kapatma"
-                    },
-                    "warning": {
-                        "cancel": "İptal"
                     }
                 }
             },
             "hostname": {
                 "update": {
                     "error": {
-                        "close": "Kapatma"
-                    },
-                    "success": {
                         "close": "Kapatma"
                     }
                 }
@@ -32,9 +23,6 @@
         "network": {
             "reset": {
                 "error": {
-                    "close": "Kapatma"
-                },
-                "success": {
                     "close": "Kapatma"
                 },
                 "warning": {

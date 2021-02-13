@@ -15,14 +15,8 @@
         "system": {
             "database": {
                 "reset": {
-                    "error": {
-                        "close": "Fermer"
-                    },
                     "success": {
                         "close": "Fermer"
-                    },
-                    "warning": {
-                        "cancel": "Annuler"
                     }
                 },
                 "title": "Base de données"
@@ -30,11 +24,7 @@
             "hostname": {
                 "update": {
                     "error": {
-                        "close": "Fermer",
                         "title": "La requête a échoué."
-                    },
-                    "success": {
-                        "close": "Fermer"
                     }
                 },
                 "title": "Nom d’hôte"
@@ -61,15 +51,9 @@
         },
         "network": {
             "reset": {
-                "error": {
-                    "close": "Fermer"
-                },
                 "success": {
                     "close": "Fermer",
                     "title": "Réinitialiser"
-                },
-                "warning": {
-                    "cancel": "Annuler"
                 }
             },
             "title": "Wi-Fi"

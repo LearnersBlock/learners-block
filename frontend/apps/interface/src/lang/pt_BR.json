@@ -7,23 +7,14 @@
         "system": {
             "database": {
                 "reset": {
-                    "error": {
-                        "close": "Fechar"
-                    },
                     "success": {
                         "close": "Fechar"
-                    },
-                    "warning": {
-                        "cancel": "Cancelar"
                     }
                 }
             },
             "hostname": {
                 "update": {
                     "error": {
-                        "close": "Fechar"
-                    },
-                    "success": {
                         "close": "Fechar"
                     }
                 }
@@ -32,9 +23,6 @@
         "network": {
             "reset": {
                 "error": {
-                    "close": "Fechar"
-                },
-                "success": {
                     "close": "Fechar"
                 },
                 "warning": {
