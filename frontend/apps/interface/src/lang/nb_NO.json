@@ -20,18 +20,15 @@
             "database": {
                 "reset": {
                     "error": {
-                        "close": "Lukk",
                         "content": "Kunne ikke tilbakestille databasen.",
                         "title": "Tilbakestilling mislyktes"
                     },
                     "success": {
-                        "close": "Lukk",
                         "content": "Databasen ble tilbakestilt. Gjenoppfrisk siden for å bruke endringer.",
                         "title": "Tilbakestilt"
                     },
                     "warning": {
                         "submit": "Tilbakestill nå",
-                        "cancel": "Avbryt",
                         "content": "Hvis du fortsetter vil databasen bli tilbakestilt og alle innstillinger gå tapt.",
                         "title": "Er du sikker på at du vil tilbakestille databasen?"
                     },
@@ -42,12 +39,10 @@
             "hostname": {
                 "update": {
                     "error": {
-                        "close": "Lukk",
                         "content": "Kunne ikke endre vertsnavnet.",
                         "title": "Forespørsel mislyktes"
                     },
                     "success": {
-                        "close": "Lukk",
                         "content": "Vertsnavnet ble oppdatert til <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. Wi-Fi-nettverkets SSID har blitt oppdatert til <b>%ssid%</b>. Koble til <b>%ssid%</b> for å fortsette å bruke enheten din.",
                         "title": "Vertsnavn oppdatert"
                     },
@@ -86,18 +81,15 @@
         "network": {
             "reset": {
                 "error": {
-                    "close": "Lukk",
                     "content": "Kunne ikke tilbakestille Wi-Fi-tilkoblingen.",
                     "title": "Tilbakestilling mislyktes"
                 },
                 "success": {
-                    "close": "Lukk",
                     "content": "Koble til <b>lb.wifi</b>-nettverket for å sette opp igjen nettverkstilkoblingen.",
                     "title": "Tilbakestilt"
                 },
                 "warning": {
                     "submit": "Tilbakestill nå",
-                    "cancel": "Avbryt",
                     "content": "Hvis du fortsetter vil Wi-Fi-tilkoblingen bli tilbakestilt.",
                     "title": "Er du sikker på at du vil tilbakestille tilkoblingen?"
                 },
