@@ -14,11 +14,6 @@
     "settings-screen": {
         "system": {
             "database": {
-                "reset": {
-                    "success": {
-                        "close": "Fermer"
-                    }
-                },
                 "title": "Base de données"
             },
             "hostname": {
@@ -52,7 +47,6 @@
         "network": {
             "reset": {
                 "success": {
-                    "close": "Fermer",
                     "title": "Réinitialiser"
                 }
             },

@@ -32,11 +32,6 @@
         "title": "Einstellungen",
         "system": {
             "database": {
-                "reset": {
-                    "success": {
-                        "close": "Schließen"
-                    }
-                },
                 "title": "Datenbank"
             },
             "hostname": {
@@ -70,7 +65,6 @@
         "network": {
             "reset": {
                 "success": {
-                    "close": "Schließen",
                     "title": "Zurücksetzen"
                 }
             },
