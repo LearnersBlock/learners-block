@@ -1,0 +1,165 @@
+{
+    "general": {
+        "close": "Cerrar",
+        "save": "Guardar"
+    },
+    "settings-screen": {
+        "system": {
+            "database": {
+                "reset": {
+                    "error": {
+                        "close": "Cerrar",
+                        "content": "Se produjo un error y no se pudo restablecer la base de datos.",
+                        "title": "Falló el restablecimiento"
+                    },
+                    "success": {
+                        "close": "Cerrar",
+                        "content": "Se restableció la base de datos. Actualice la página para que los cambios surtan efecto.",
+                        "title": "Restablecer"
+                    },
+                    "warning": {
+                        "cancel": "Cancelar",
+                        "submit": "Restablecer ahora",
+                        "content": "Si continúa, se restablecerá la base de datos y se perderán todas las configuraciones.",
+                        "title": "¿Confirma que quiere restablecer la base de datos?"
+                    },
+                    "label": "Restablecer base de datos"
+                },
+                "title": "Base de datos"
+            },
+            "hostname": {
+                "update": {
+                    "error": {
+                        "close": "Cerrar",
+                        "content": "Se produjo un error y no se pudo cambiar el nombre de anfitrión.",
+                        "title": "Falló la solicitud"
+                    },
+                    "success": {
+                        "close": "Cerrar",
+                        "title": "Nombre de anfitrión actualizado",
+                        "content": "El nombre de anfitrión cambió a <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. El SSID de la red wifi se actualizó a <b>%ssid%</b>. Conéctese a <b>%ssid%</b> para seguir utilizando el dispositivo."
+                    },
+                    "label": "Actualizar nombre de anfitrión"
+                },
+                "title": "Nombre de anfitrión"
+            },
+            "versions": {
+                "components": {
+                    "ifm": "Gestor de archivos",
+                    "lb": "Learner’s Block",
+                    "wificonnect_ui": "Conexión wifi",
+                    "controller": "Controlador",
+                    "backend": "Motor",
+                    "frontend": "Interfaz"
+                },
+                "title": "Versiones"
+            },
+            "title": "Sistema"
+        },
+        "network": {
+            "reset": {
+                "error": {
+                    "close": "Cerrar",
+                    "content": "No se pudo restablecer la conexión wifi.",
+                    "title": "Falló el restablecimiento"
+                },
+                "success": {
+                    "close": "Cerrar",
+                    "content": "Conéctese a la red <b>lb.wifi</b> para volver a configurar la conexión de red.",
+                    "title": "Restablecer"
+                },
+                "warning": {
+                    "cancel": "Cancelar",
+                    "submit": "Restablecer ahora",
+                    "content": "Si continúa, se restablecerá la conexión wifi.",
+                    "title": "¿Confirma que quiere restablecer la conexión?"
+                },
+                "label": "Restablecer conexión wifi"
+            },
+            "title": "Wifi",
+            "connect": {
+                "label": "Conectarse al wifi"
+            }
+        },
+        "components": {
+            "fileviewer": {
+                "label": "Activar visor de archivos"
+            },
+            "title": "Componentes",
+            "website": {
+                "label": "Activar sitio web"
+            }
+        },
+        "title": "Configuración",
+        "back": "Atrás",
+        "filemanager": {
+            "title": "Gestor de archivos"
+        },
+        "language": {
+            "default": {
+                "label": "Idioma predeterminado"
+            },
+            "title": "Idioma"
+        },
+        "auth": {
+            "account": {
+                "new": {
+                    "title": "Crear cuenta"
+                },
+                "existing": {
+                    "title": "Actualizar cuenta"
+                }
+            },
+            "disabled": {
+                "description": "No ha definido ninguna contraseña. Cualquiera podrá acceder a las páginas de configuración.",
+                "title": "Autenticación desactivada"
+            },
+            "title": "Usuarios"
+        }
+    },
+    "auth-screen": {
+        "login": {
+            "submit": "Acceder",
+            "password": "Contraseña",
+            "username": "Nombre de usuario",
+            "title": "Acceder",
+            "description": "Acceda a su cuenta para continuar"
+        },
+        "logout": {
+            "title": "Saliendo…"
+        }
+    },
+    "home-screen": {
+        "quicknav": {
+            "website": {
+                "title": "Sitio web"
+            },
+            "files": {
+                "title": "Archivos"
+            }
+        },
+        "title": "Le damos la bienvenida"
+    },
+    "lang": {
+        "name": "Español",
+        "selector": {
+            "title": "Seleccione su idioma preferido"
+        }
+    },
+    "error-screen": {
+        "500": {
+            "button": "Volver a intentarlo",
+            "title": "Houston, tenemos un problema",
+            "description": "No se puede comunicar con el motor."
+        },
+        "404": {
+            "button": "Volver al inicio",
+            "description": "La página que ha intentado abrir no existe.",
+            "title": "Qué inoportuno"
+        }
+    },
+    "wifiportal-screen": {
+        "content": "Visite <b>%hostname%</b> en el navegador para comenzar a utilizar el dispositivo.",
+        "title": "Le damos la bienvenida al Learner’s Block"
+    }
+}
