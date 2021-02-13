@@ -61,20 +61,17 @@
             "reset": {
                 "label": "Reset Wi-Fi connection",
                 "warning": {
-                    "title": "Are you sure you want to reset the connection?",
+                    "title": "Are you certain you want to reset the connection?",
                     "content": "If you proceed, the Wi-Fi connection will be reset.",
-                    "cancel": "Cancel",
                     "submit": "Reset now"
                 },
                 "success": {
-                    "title": "Reset",
-                    "content": "Please connect to the <b>lb.wifi</b> network to re-configure the network connection.",
-                    "close": "Close"
+                    "title": "Reset successful",
+                    "content": "Please connect to the <b>lb.wifi</b> network to re-configure the network connection."
                 },
                 "error": {
                     "title": "Reset failed",
-                    "content": "The Wi-Fi connection could not be reset.",
-                    "close": "Close"
+                    "content": "The Wi-Fi connection could not be reset."
                 }
             }
         },
@@ -112,13 +109,11 @@
                     "label": "Update hostname",
                     "success": {
                         "title": "Hostname updated",
-                        "content": "The hostname was updated to <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. The Wi-Fi network SSID has been updated to <b>%ssid%</b>. Connect to <b>%ssid%</b> to continue using your device.",
-                        "close": "Close"
+                        "content": "The hostname was updated to <b><a href=\"http://%hostname%.local\">%hostname%.local</a></b>. The Wi-Fi network SSID has been updated to <b>%ssid%</b>. Connect to <b>%ssid%</b> to continue using your device."
                     },
                     "error": {
                         "title": "Request failed",
-                        "content": "An error occurred, the hostname could not be changed.",
-                        "close": "Close"
+                        "content": "An error occured and the hostname could not be changed."
                     }
                 }
             },
@@ -127,20 +122,17 @@
                 "reset": {
                     "label": "Reset database",
                     "warning": {
-                        "title": "Are you sure you want to reset the database?",
+                        "title": "Are you certain you want to reset the database?",
                         "content": "If you proceed, the database will be reset and all settings lost.",
-                        "cancel": "Cancel",
                         "submit": "Reset now"
                     },
                     "success": {
-                        "title": "Reset",
-                        "content": "The database was reset. Please refresh the page for changes to take effect.",
-                        "close": "Close"
+                        "title": "Reset successful",
+                        "content": "The database was reset. Please refresh the page for changes to take effect."
                     },
                     "error": {
                         "title": "Reset failed",
-                        "content": "An error occured and the database could not be reset.",
-                        "close": "Close"
+                        "content": "An error occured and the database could not be reset."
                     }
                 }
             }
@@ -160,6 +152,7 @@
     },
     "general": {
         "save": "Save",
-        "close": "Close"
+        "close": "Close",
+        "cancel": "Cancel"
     }
 }
