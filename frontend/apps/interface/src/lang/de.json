@@ -1,31 +1,122 @@
 {
-  "lang": {
-    "name": "Deutsch",
-    "selector": {
-      "title": "Select your preferred language"
+    "lang": {
+        "name": "Deutsch",
+        "selector": {
+            "title": "Select your preferred language"
+        }
+    },
+    "auth-screen": {
+        "login": {
+            "title": "Login",
+            "description": "Bitte verwenden Sie die bereitgestellten Zugangsdaten, um sich einzuloggen und auf eingeschränkte Inhalte zuzugreifen.",
+            "username": "Benutzername",
+            "password": "Passwort",
+            "submit": "Login"
+        },
+        "logout": {
+            "title": "Sie werden Ausgeloggt…"
+        }
+    },
+    "home-screen": {
+        "title": "Willkommen",
+        "quicknav": {
+            "files": {
+                "title": "Dateien"
+            },
+            "website": {
+                "title": "Webseite"
+            }
+        }
+    },
+    "settings-screen": {
+        "title": "Einstellungen",
+        "system": {
+            "database": {
+                "reset": {
+                    "error": {
+                        "close": "Schließen"
+                    },
+                    "success": {
+                        "close": "Schließen"
+                    },
+                    "warning": {
+                        "cancel": "Abbrechen"
+                    }
+                },
+                "title": "Datenbank"
+            },
+            "hostname": {
+                "update": {
+                    "error": {
+                        "close": "Schließen",
+                        "title": "Anfrage fehlgeschlagen."
+                    },
+                    "success": {
+                        "close": "Schließen"
+                    }
+                },
+                "title": "Hostname"
+            },
+            "versions": {
+                "components": {
+                    "ifm": "Dateimanager",
+                    "controller": "Controller"
+                },
+                "title": "Versionen"
+            },
+            "title": "System"
+        },
+        "auth": {
+            "account": {
+                "new": {
+                    "title": "Konto erstellen"
+                },
+                "existing": {
+                    "title": "Konto aktualisieren"
+                }
+            },
+            "title": "Benutzer"
+        },
+        "network": {
+            "reset": {
+                "error": {
+                    "close": "Schließen"
+                },
+                "success": {
+                    "close": "Schließen",
+                    "title": "Zurücksetzen"
+                },
+                "warning": {
+                    "cancel": "Abbrechen"
+                }
+            },
+            "title": "WLAN"
+        },
+        "filemanager": {
+            "title": "Dateimanager"
+        },
+        "language": {
+            "default": {
+                "label": "Voreingestellte Sprache"
+            },
+            "title": "Sprache"
+        },
+        "components": {
+            "title": "Komponenten"
+        },
+        "back": "Zurück"
+    },
+    "general": {
+        "close": "Schließen",
+        "save": "Speichen"
+    },
+    "error-screen": {
+        "500": {
+            "button": "Erneut versuchen",
+            "title": "Houston, wir haben ein Problem!"
+        },
+        "404": {
+            "button": "Zur Startseite"
+        }
     }
-  },
-  "auth-screen": {
-    "login": {
-      "title": "Login",
-      "description": "Bitte verwenden Sie die bereitgestellten Zugangsdaten, um sich einzuloggen und auf eingeschränkte Inhalte zuzugreifen.",
-      "username": "Benutzername",
-      "password": "Passwort",
-      "submit": "Login"
-    }
-  },
-  "home-screen": {
-    "title": "Willkommen",
-    "quicknav": {
-      "files": {
-        "title": "Dateien"
-      },
-      "website": {
-        "title": "Webseite"
-      }
-    }
-  },
-  "settings-screen": {
-    "title": "Einstellungen"
-  }
 }

@@ -1,1 +1,54 @@
-{}
+{
+    "general": {
+        "close": "Cerrar",
+        "save": "Guardar"
+    },
+    "settings-screen": {
+        "system": {
+            "database": {
+                "reset": {
+                    "error": {
+                        "close": "Cerrar"
+                    },
+                    "success": {
+                        "close": "Cerrar"
+                    },
+                    "warning": {
+                        "cancel": "Cancelar"
+                    }
+                }
+            },
+            "hostname": {
+                "update": {
+                    "error": {
+                        "close": "Cerrar"
+                    },
+                    "success": {
+                        "close": "Cerrar"
+                    }
+                }
+            }
+        },
+        "network": {
+            "reset": {
+                "error": {
+                    "close": "Cerrar"
+                },
+                "success": {
+                    "close": "Cerrar"
+                },
+                "warning": {
+                    "cancel": "Cancelar"
+                }
+            }
+        }
+    },
+    "auth-screen": {
+        "login": {
+            "submit": "Iniciar sesión",
+            "password": "Password",
+            "username": "Nombre de usuario",
+            "title": "Iniciar sesión"
+        }
+    }
+}
