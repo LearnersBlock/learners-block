@@ -61,7 +61,7 @@
             "reset": {
                 "label": "Reset Wi-Fi connection",
                 "warning": {
-                    "title": "Are you certain you want to reset the connection?",
+                    "title": "Are you sure you want to reset the connection?",
                     "content": "If you proceed, the Wi-Fi connection will be reset.",
                     "submit": "Reset now"
                 },
@@ -113,7 +113,7 @@
                     },
                     "error": {
                         "title": "Request failed",
-                        "content": "An error occured and the hostname could not be changed."
+                        "content": "An error occurred, the hostname could not be changed."
                     }
                 }
             },
@@ -122,7 +122,7 @@
                 "reset": {
                     "label": "Reset database",
                     "warning": {
-                        "title": "Are you certain you want to reset the database?",
+                        "title": "Are you sure you want to reset the database?",
                         "content": "If you proceed, the database will be reset and all settings lost.",
                         "submit": "Reset now"
                     },
