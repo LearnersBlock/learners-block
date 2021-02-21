@@ -8,7 +8,7 @@
 const Constants = {
     install (Vue, options) {
         // Get the container/frontend url
-        const frontendUrl = process.env.VUE_APP_API_BASE || location.protocol + '//' + location.hostname
+        const frontendUrl = process.env.VUE_APP_API_BASE || location.origin
 
         // Remove the port (i.e. :8081) from the URL
         const portRegex = /:\d+$/

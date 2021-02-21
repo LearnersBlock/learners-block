@@ -208,7 +208,6 @@ export default {
             Api()
                 .post('/system/wifi/reset')
                 .then((response) => {
-                    console.log(response)
                     // Set loading state
                     this.$store.commit('app/SET_LOADING', false)
 
