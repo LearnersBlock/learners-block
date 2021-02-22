@@ -202,3 +202,9 @@ table.dataTable thead th.sorting_desc:after {
 		max-width: 800px;
 	}
 }
+
+.bg-dark{background-color:#6baf65!important} 
+a:link {color:#1F2937;}
+a:active {color:#1F2937;}
+a:visited {color:#1F2937;}
+a:hover {color:#1F2937;}
