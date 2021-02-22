@@ -23,3 +23,7 @@ COPY --from=buildstep build-context/ /app/
 WORKDIR /app
 
 CMD ["node", "server.js"]
+
+# Health Check
+
+HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:3001

@@ -140,8 +140,3 @@ EXPOSE 8081 3000
 
 # Start services
 CMD bash -c "supervisord -c /etc/supervisor/conf.d/supervisord.conf"
-
-
-# Healthcheck
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8081/fpm-ping
