@@ -1,0 +1,77 @@
+version: '2.1'
+
+services:
+    controller:
+        container_name: lb_controller
+        build:
+            context: ./controller
+            dockerfile: Dockerfile.dev
+        restart: always
+        network_mode: "host"
+        volumes:
+            - 'portainer_data:/app/portainer'
+        labels:
+            io.balena.features.dbus: '1'
+            io.balena.features.supervisor-api: '1'
+            portainer: hidden
+        cap_add:
+            - NET_ADMIN
+        environment:
+            DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+
+    backend:
+        container_name: lb_backend 
+        build:
+            context: ./backend
+            dockerfile: Dockerfile.dev
+        restart: always
+        ports: 
+            - "3001:3001"
+        depends_on:
+            - "controller"
+        volumes:
+            - ./backend:/app/backend
+            - backend_database:/app/backend/db
+            - backend_nodemodules:/app/backend/node_modules
+        labels:
+            portainer: hidden
+
+    frontend:
+        container_name: lb_frontend 
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile.dev
+        restart: always
+        ports: 
+            - "8081:8081"
+            - "3000:3000"
+        # labels:
+        #     portainer: hidden
+        depends_on:
+            - "backend"
+        privileged: true
+        volumes:
+            - ./frontend/apps/interface:/app/web/public/interface
+            - frontend_nodemodules:/app/web/public/interface/node_modules
+            # - ./frontend/apps/file-manager/dist:/app/web/public/files
+
+    # portainer:
+    #     image: portainer/portainer-ce
+    #     restart: on-failure
+    #     ports:
+    #         - '9000:9000'
+    #     labels:
+    #         portainer: hidden
+    #         io.balena.features.balena-socket: '1'
+    #     depends_on:
+    #     - "controller"
+    #     volumes:
+    #         - 'portainer_data:/data'
+    #         - '/var/run/docker.sock:/var/run/docker.sock'
+    #     command: "--admin-password=$$2y$$05$$j4Gnyhud5p8W81VI7MCbJep1w/.ToYPn3KQEZerJNLqUaV2qKnvT."
+
+volumes:
+    backend_database:
+    backend_nodemodules:
+    frontend_nodemodules:
+    portainer_data:
