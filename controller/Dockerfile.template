@@ -1,5 +1,9 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node:build AS buildstep
 
+ENV NODE_ENV=production
+
+RUN npm config set unsafe-perm true
+
 COPY ./wifi-connect-ui/ui /build-context
 
 WORKDIR /build-context
@@ -12,9 +16,10 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-debian-python:3.8.6
 
 ## INSTALL PACKAGES
 
-# API
-
+COPY .env /app/
 COPY requirements.txt /tmp/
+
+# API
 
 RUN install_packages libdbus-glib-1-dev libgirepository1.0-dev && \
     pip install -r /tmp/requirements.txt --no-deps --no-cache-dir && \
@@ -38,7 +43,7 @@ RUN curl -Ls "https://github.com/balena-io/wifi-connect/releases/download/v$VERS
 
 ## CONFIGURE WIFI-CONNECT
 COPY scripts .
-COPY --from=buildstep build/ /app/common/wifi-connect/wifi-connect-ui/
+COPY --from=buildstep build-context/ /app/common/wifi-connect/wifi-connect-ui/
 
 ## CONFIGURE PORTAINER
 COPY portainer/portainer.db /app/portainer/portainer.db

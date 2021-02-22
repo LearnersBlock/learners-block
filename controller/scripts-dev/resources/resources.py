@@ -1,9 +1,17 @@
 from flask_restful import Resource
 from werkzeug import serving
+import os
 import shutil
 import time
+from dotenv import load_dotenv
 
 wifistatus = "down"
+
+#Load Python library for managing enviroment variables
+load_dotenv()
+
+# Import software version number
+VER = os.getenv('VER')
 
 #Disable logging for healthcheck
 parent_log_request = serving.WSGIRequestHandler.log_request
@@ -89,12 +97,7 @@ class systeminfo(Resource):
                     'available': humansize(shutil.disk_usage("/tmp")[-1])
                 },
                 "versions": {
-                    "lb": "0.0.1",
-                    "frontend": "0.0.1",
-                    "backend": "0.0.1",
-                    "controller": "0.0.1",
-                    "file_manager": "0.0.1",
-                    "wificonnect_ui": "0.0.1"
+                    "lb": VER
                 }
                }
 

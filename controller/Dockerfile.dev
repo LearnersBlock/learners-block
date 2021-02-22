@@ -4,6 +4,7 @@ FROM balenalib/amd64-debian-python:3.8.6
 
 # API
 
+COPY .env /app/
 COPY requirements.txt /tmp/
 
 RUN pip install --no-deps --no-cache-dir \
@@ -17,6 +18,7 @@ RUN pip install --no-deps --no-cache-dir \
     itsdangerous==1.1.0 \
     Jinja2==2.11.2 \
     MarkupSafe==1.1.1 \
+    python-dotenv==0.15.0 \
     pytz==2020.1 \
     requests==2.24.0 \
     six==1.15.0 \
