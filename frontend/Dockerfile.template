@@ -60,6 +60,9 @@ RUN chown -R nginx.nginx /run && \
     chown -R nobody.nobody /app/web/public/storage/website/ && \
     chown -R nobody.nobody /app/web/public/storage/fileshare/
 
+# Copy .env file for filemanager. Added at end of file as to be removed at a later date. 
+COPY --chown=nginx apps/file-manager/.env /app/web/public/files
+
 ## WRAP-UP
 EXPOSE 8081
 
