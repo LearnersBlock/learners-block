@@ -82,10 +82,10 @@ class portainer_start(Resource):
 
         response = container().start(container="portainer")
 
-        {'status': response["status_code"], 'message': response["text"]}, response["status_code"]
+        return {'status': response["status_code"], 'message': response["text"]}, response["status_code"]
 
 
-class portainer_stop(Resource):
+class portainer_exit(Resource):
     def get(self):
 
         check_permission()

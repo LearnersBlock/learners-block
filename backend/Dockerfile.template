@@ -7,6 +7,9 @@ ENV NODE_ENV=production
 COPY app /build-context
 WORKDIR /build-context
 
+# Create databse folder
+RUN mkdir db
+
 # Add production .env
 RUN mv .env.production .env
 

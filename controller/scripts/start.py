@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from resources.resources import device, health_check, host_config, journal_logs, portainer_status, \
-    portainer_start, portainer_stop, system_info, update, uuid, wifi_connection_status, wifi_forget, wifi_forget_all
+portainer_start, portainer_exit, system_info, update, uuid, wifi_connection_status, wifi_forget, wifi_forget_all
 from resources.processes import container, curl, wifi, wifi_connect
 import resources.globals
 import atexit
@@ -16,7 +16,7 @@ api = Api(app)
 
 print("Api-v1 - Starting API...")
 
-def launch():
+def launch(self):
     time.sleep(20)
     try:
         connected = wifi().check_connection()
@@ -66,7 +66,7 @@ except Exception as ex:
 
 # If connected to a wifi network then update device, otherwise launch wifi-connect
 try:
-    device_start = threading.Thread(target=launch, args=(None,), name='device_start')
+    device_start = threading.Thread(target=launch, args=(1,), name='device_start')
     device_start.start()
 
 except Exception as ex:
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     api.add_resource(journal_logs, '/v1/journallogs')
     api.add_resource(portainer_status, '/v1/portainer/status')
     api.add_resource(portainer_start, '/v1/portainer/start')
-    api.add_resource(portainer_stop, '/v1/portainer/stop')
+    api.add_resource(portainer_exit, '/v1/portainer/stop')
     api.add_resource(system_info, '/v1/system/info')
     api.add_resource(update, '/v1/update')
     api.add_resource(uuid, '/v1/uuid')

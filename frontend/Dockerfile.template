@@ -1,31 +1,3 @@
-FROM amd64/composer AS php-buildstep
-
-#Install required build dependencies
-RUN apk add ncurses
-
-# Copy content to prepare
-COPY apps/file-manager/ /build-context
-
-# Set workdir to the build folder
-WORKDIR /build-context
-
-# Run the build process
-RUN composer run build
-
-FROM balenalib/amd64-alpine-node:14.15.4-build AS node-buildstep
-
-# Set node env
-RUN npm config set unsafe-perm true
-
-# Copy frontend interface source code to container
-COPY ./apps/interface/ /build-context
-WORKDIR /build-context
-
-# Install app dependencies and run static production build
-RUN npm install
-RUN npm run build
-RUN npm run lint
-
 FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python:3.8.6
 
 ## Install packages
@@ -76,11 +48,11 @@ COPY config/nginx/production/ /etc/nginx/
 
 # INSERT FILE-MANAGER
 
-COPY --from=php-buildstep --chown=nginx /build-context/dist /app/web/public/files
+COPY --chown=nginx /apps/file-manager/dist /app/web/public/files
 
 # INSERT NODE WEB CONTENT
 
-COPY --from=node-buildstep --chown=nginx /build-context/dist /app/web/public/interface
+COPY --chown=nginx /apps/interface/dist /app/web/public/interface
 
 # SET PERMISSIONS
 RUN chown -R nginx.nginx /run && \
