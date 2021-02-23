@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from resources.resources import device, health_check, host_config, journal_logs, portainer_status, \
-portainer_start, portainer_exit, system_info, update, uuid, wifi_connection_status, wifi_forget, wifi_forget_all
+    portainer_up, portainer_sigterm, system_info, update, uuid, wifi_connection_status, wifi_forget, wifi_forget_all
 from resources.processes import container, curl, wifi, wifi_connect
 import resources.globals
 import atexit
@@ -42,8 +42,8 @@ def launch(self):
 
 # Stop portainer on boot
 try:
-    portainer_stop = threading.Thread(target=container.stop, args=(None,"portainer",10), name='portainer_stop')
-    portainer_stop.start()
+    portainer_sigterm = threading.Thread(target=container.sigterm, args=(None,"portainer",10), name='portainer_sigterm')
+    portainer_sigterm.start()
 
 except Exception as ex:
     print("Failed to stop Portainer. " + str(ex))
@@ -84,8 +84,8 @@ if __name__ == '__main__':
     api.add_resource(host_config, '/v1/hostconfig/<hostname>')
     api.add_resource(journal_logs, '/v1/journallogs')
     api.add_resource(portainer_status, '/v1/portainer/status')
-    api.add_resource(portainer_start, '/v1/portainer/start')
-    api.add_resource(portainer_exit, '/v1/portainer/stop')
+    api.add_resource(portainer_up, '/v1/portainer/up')
+    api.add_resource(portainer_sigterm, '/v1/portainer/sigterm')
     api.add_resource(system_info, '/v1/system/info')
     api.add_resource(update, '/v1/update')
     api.add_resource(uuid, '/v1/uuid')

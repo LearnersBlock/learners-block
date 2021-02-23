@@ -75,22 +75,22 @@ class portainer_status(Resource):
         return {'status': response["status_code"], 'message': entry["status"]}, response["status_code"]
 
 
-class portainer_start(Resource):
+class portainer_up(Resource):
     def get(self):
 
         check_permission()
 
-        response = container().start(container="portainer")
+        response = container().up(container="portainer")
 
         return {'status': response["status_code"], 'message': response["text"]}, response["status_code"]
 
 
-class portainer_exit(Resource):
+class portainer_sigterm(Resource):
     def get(self):
 
         check_permission()
 
-        response = container().stop(container="portainer")
+        response = container().sigterm(container="portainer")
 
         return {'status': response["status_code"], 'message': response["text"]}, response["status_code"]
 
