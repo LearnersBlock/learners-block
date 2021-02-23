@@ -60,15 +60,32 @@
                     "title": "Konto aktualisieren"
                 }
             },
-            "title": "Benutzer"
+            "title": "Benutzer",
+            "disabled": {
+                "title": "Authentifizierung deaktiviert"
+            }
         },
         "network": {
             "reset": {
                 "success": {
-                    "title": "Zurücksetzen"
-                }
+                    "title": "Erfolgreich zurücksetzen",
+                    "content": "Stellen Sie eine Verbindung zum <b> lb.wifi </ b> -Netzwerk her, um die Netzwerkverbindung neu zu konfigurieren."
+                },
+                "error": {
+                    "content": "Die WLAN-Verbindung konnte nicht zurückgesetzt werden.",
+                    "title": "Zurücksetzung Erfolglos"
+                },
+                "warning": {
+                    "submit": "Jetzt zurücksetzen",
+                    "content": "Wenn Sie fortfahren, wird die Wi-Fi-Verbindung zurückgesetzt.",
+                    "title": "Möchten Sie die Verbindung wirklich zurücksetzen?"
+                },
+                "label": "Setzen Sie die Wi-Fi-Verbindung zurück"
             },
-            "title": "WLAN"
+            "title": "WLAN",
+            "connect": {
+                "label": "Stellen Sie eine Verbindung zu Wi-Fi her"
+            }
         },
         "filemanager": {
             "title": "Dateimanager"
@@ -80,7 +97,13 @@
             "title": "Sprache"
         },
         "components": {
-            "title": "Komponenten"
+            "title": "Komponenten",
+            "website": {
+                "label": "Website aktivieren"
+            },
+            "fileviewer": {
+                "label": "Aktivieren Sie den Datei-Viewer"
+            }
         },
         "back": "Zurück"
     },
@@ -96,5 +119,9 @@
         "404": {
             "button": "Zur Startseite"
         }
+    },
+    "wifiportal-screen": {
+        "content": "Besuchen <b>%hostname%</b> in dem Browser um Ihr Gerät zu verwenden.",
+        "title": "Willkommen zum Lehrer Block"
     }
 }
