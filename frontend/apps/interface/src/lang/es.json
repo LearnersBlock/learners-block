@@ -1,7 +1,8 @@
 {
     "general": {
         "close": "Cerrar",
-        "save": "Guardar"
+        "save": "Guardar",
+        "cancel": "Cancelar"
     },
     "settings-screen": {
         "system": {
