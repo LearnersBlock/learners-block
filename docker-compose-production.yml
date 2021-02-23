@@ -28,7 +28,7 @@ services:
         depends_on:
             - "controller"
         volumes:
-            - 'backend_db:/app/backend/db'
+            - 'backend_db:/app/db'
         labels:
             portainer: hidden
 
