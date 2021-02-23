@@ -118,7 +118,7 @@ class container:
         abort(404, status=404,
             message='Container not found')
 
-    def up(self, container, sleep=0.1):
+    def start(self, container, sleep=0.1):
         time.sleep(sleep)
         response = curl(method="post-data",
                         path=f"/v2/applications/{resources.globals.BALENA_APP_ID}/start-service?apikey=",
@@ -126,7 +126,7 @@ class container:
 
         return response
 
-    def sigterm(self, container, sleep=0.1):
+    def stop(self, container, sleep=0.1):
         time.sleep(sleep)
         response = curl(method="post-data",
                         path=f"/v2/applications/{resources.globals.BALENA_APP_ID}/stop-service?apikey=",

@@ -63,13 +63,13 @@ class portainerstatus(Resource):
         return {'status': 200, 'message': "Running"}, 200
 
 
-class portainerup(Resource):
+class portainerstart(Resource):
     def get(self):
 
         return {'status': 200, 'message': 'OK'}, 200
 
 
-class portainersigterm(Resource):
+class portainerstop(Resource):
     def get(self):
 
         time.sleep(10)

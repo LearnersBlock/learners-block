@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api
-from resources.resources import portainerup, portainersigterm, portainerstatus, systeminfo, wificonnectionstatus, device, healthcheck, hostconfig, journallogs, update, uuid, wififorget, wififorgetall, wifitoggle
+from resources.resources import portainerstart, portainerstop, portainerstatus, systeminfo, wificonnectionstatus, device, healthcheck, hostconfig, journallogs, update, uuid, wififorget, wififorgetall, wifitoggle
 
 app = Flask(__name__)
 
@@ -16,8 +16,8 @@ if __name__ == '__main__':
     api.add_resource(hostconfig, '/v1/hostconfig/<hostname>') 
     api.add_resource(journallogs, '/v1/journallogs')
     api.add_resource(portainerstatus, '/v1/portainer/status')
-    api.add_resource(portainerup, '/v1/portainer/up')
-    api.add_resource(portainersigterm, '/v1/portainer/sigterm')
+    api.add_resource(portainerstart, '/v1/portainer/start')
+    api.add_resource(portainerstop, '/v1/portainer/stop')
     api.add_resource(update, '/v1/update')
     api.add_resource(uuid, '/v1/uuid')
     api.add_resource(systeminfo, '/v1/system/info')
