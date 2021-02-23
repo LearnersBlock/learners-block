@@ -1,7 +1,8 @@
 {
     "general": {
         "close": "Lukk",
-        "save": "Lagre"
+        "save": "Lagre",
+        "cancel": "Avbryt"
     },
     "error-screen": {
         "500": {
