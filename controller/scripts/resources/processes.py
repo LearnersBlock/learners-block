@@ -231,10 +231,10 @@ class wifi_connect:
         # Decide whether to use default SSID or match hostname
         if current_hostname == resources.config.default_hostname:
             cmd = f'/app/common/wifi-connect/wifi-connect -s {resources.config.deafult_ssid} \
-                -o 8080 --ui-directory /app/common/wifi-connect/wifi-connect-ui'.split()
+                -o 8080 --ui-directory /app/common/wifi-connect/ui'.split()
         else:
             cmd = f'/app/common/wifi-connect/wifi-connect -s {current_hostname} \
-                -o 8080 --ui-directory /app/common/wifi-connect/wifi-connect-ui'.split()
+                -o 8080 --ui-directory /app/common/wifi-connect/ui'.split()
 
         wifi_process = subprocess.Popen(cmd)
         time.sleep(4)

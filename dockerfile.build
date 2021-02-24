@@ -1,0 +1,54 @@
+FROM composer AS filemanager-buildstep
+
+#Install required build dependencies
+RUN apk add ncurses
+
+# Copy content to prepare
+COPY frontend/apps/file-manager/ /build-context
+
+# Set workdir to the build folder
+WORKDIR /build-context
+
+# Run the build process
+RUN composer run build
+
+FROM balenalib/amd64-alpine-node:14.15.4-build AS interface-buildstep
+
+# Copy package.json and lockfile to container
+COPY frontend/apps/interface/package.json /build-context/package.json
+COPY frontend/apps/interface/package-lock.json /build-context/package-lock.json
+WORKDIR /build-context
+
+# Install app dependencies
+RUN npm install
+
+# Copy interface source code to container and build
+COPY frontend/apps/interface/ /build-context
+RUN npm run build
+RUN npm run lint
+
+FROM balenalib/amd64-alpine-node:14.15.4-build AS controller-buildstep
+
+ENV NODE_ENV=production
+
+# Copy package.json and lockfile to container
+COPY controller/wifi-connect/ui/package.json /build-context/package.json
+COPY controller/wifi-connect/ui/package-lock.json /build-context/package-lock.json
+WORKDIR /build-context
+
+# Install app dependencies
+RUN npm install
+
+# Copy controller source code to container and build
+COPY controller/wifi-connect/ui /build-context
+RUN npm run build
+
+FROM alpine
+
+COPY --from=filemanager-buildstep /build-context/dist /build/filemanager
+
+COPY --from=interface-buildstep /build-context/dist /build/interface
+
+COPY --from=controller-buildstep /build-context/build /build/controller
+
+CMD cp -Rf /build/* /export/ && echo "Build complete and files added to directories. Check the logs above for build errors."

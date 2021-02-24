@@ -1,0 +1,11 @@
+version: '2.1'
+
+services:
+    build:
+        build:
+            context: .
+            dockerfile: dockerfile.build
+        volumes:
+            - ./frontend/apps/file-manager/dist:/export/filemanager
+            - ./frontend/apps/interface/dist:/export/interface
+            - ./controller/wifi-connect/ui/build:/export/controller

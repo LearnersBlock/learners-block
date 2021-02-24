@@ -29,7 +29,7 @@ COPY portainer/portainer.db /app/portainer/portainer.db
 
 ## CONFIGURE WIFI-CONNECT
 COPY scripts .
-COPY wifi-connect-ui/ui/build /app/common/wifi-connect/wifi-connect-ui/
+COPY wifi-connect/ui/build /app/common/wifi-connect/ui/
 
 #Insert version env file
 COPY .env /app/

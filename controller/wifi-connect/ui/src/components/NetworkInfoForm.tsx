@@ -85,7 +85,6 @@ export const NetworkInfoForm = ({
 			m={4}
 			mt={5}
 		>
-
 			<Form
 				width={['100%', '80%', '60%', '40%']}
 				onFormChange={({ formData }) => {
@@ -100,10 +99,10 @@ export const NetworkInfoForm = ({
 					mx: '20%',
 					mt: 3,
 					disabled: availableNetworks.length <= 0,
-					bg: "#6baf65"
+					bg: '#6baf65',
 				}}
 				submitButtonText={setlang.connect}
-			  />
+			/>
 		</Flex>
 	);
 };
