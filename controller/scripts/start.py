@@ -16,7 +16,9 @@ api = Api(app)
 
 print("Api-v1 - Starting API...")
 
-def launch():
+#Function for first launch
+def launch(self):
+    #Check if already connected to Wi-Fi
     time.sleep(20)
     try:
         connected = wifi().check_connection()
@@ -24,6 +26,7 @@ def launch():
         print("Api-v1 - Error checking wifi connection. Starting wifi-connect in order to allow debugging. " + str(ex))
         connected = None
 
+    # If connected, perform container updatem if not, start Wi-Fi Connect
     if connected:
         try:
             update().get()
@@ -40,10 +43,11 @@ def launch():
     print(response)
     return response
 
-# Stop portainer on boot
+# Stop portainer on boot 
+# String cannot be portainer_stop due to clash with endpoint
 try:
-    portainer_stop = threading.Thread(target=container.stop, args=(None,"portainer",10), name='portainer_stop')
-    portainer_stop.start()
+    portainer_exit = threading.Thread(target=container.stop, args=(None,"portainer",10), name='portainer_exit')
+    portainer_exit.start()
 
 except Exception as ex:
     print("Failed to stop Portainer. " + str(ex))
@@ -66,12 +70,13 @@ except Exception as ex:
 
 # If connected to a wifi network then update device, otherwise launch wifi-connect
 try:
-    device_start = threading.Thread(target=launch, args=(None,), name='device_start')
+    device_start = threading.Thread(target=launch, args=(1,), name='device_start')
     device_start.start()
 
 except Exception as ex:
     print("Failed during launch. Continuing for debug. " + str(ex))
 
+# Ensure Wi-Fi connection is shutdown softly on exit
 atexit.register(resources.processes.handle_exit, None, None)
 signal.signal(signal.SIGTERM, resources.processes.handle_exit)
 signal.signal(signal.SIGINT, resources.processes.handle_exit)

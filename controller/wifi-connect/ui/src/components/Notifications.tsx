@@ -16,9 +16,7 @@ export const Notifications = ({
 			{attemptedConnect && (
 				<Alert m={2} info>
 					<Txt.span>{setlang.applying_changes} </Txt.span>
-					<Txt.span>
-						{setlang.connection_reset_request}
-					</Txt.span>
+					<Txt.span>{setlang.connection_reset_request}</Txt.span>
 				</Alert>
 			)}
 			{!hasAvailableNetworks && (

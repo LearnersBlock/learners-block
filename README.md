@@ -32,7 +32,16 @@ Learner’s Block software is provided as a complete package ready to flash to a
 
 #### Deploy locally
 
-You may deploy the code to a device locally. We recommend the Balena documentation listed below to do so. This approach however will not benefit from automatic updates, and we cannot offer support for its use. 
+You may deploy the code to a device locally. This approach, however, will not benefit from automatic updates, and we cannot offer support for its use. 
+
+In order to prepare the code from this repository for deployment to a device:
+
+2. Download the [OS for your device](https://www.balena.io/os/) and flash it to your memory card. 
+1. Clone this repository.
+2. Execute `docker-compose -f docker-compose-build.yml up --build` to build the required components.
+3. After installing the [Balena CLI](https://github.com/balena-io/balena-cli), run `balena push name-of-your-device.local` to deploy. 
+
+More information on local deploynents is available from balena:
 
 [Balena Local Deployments](https://www.balena.io/docs/learn/develop/local-mode/)
 

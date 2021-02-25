@@ -23,6 +23,12 @@ services:
             context: ./backend
             dockerfile: Dockerfile.template
         restart: always
+        ports: 
+            - "3001:3001"
+        depends_on:
+            - "controller"
+        volumes:
+            - 'backend_db:/app/db'
         labels:
             portainer: hidden
 
@@ -38,20 +44,18 @@ services:
         labels:
             portainer: hidden
         depends_on:
-        - "controller"
         - "backend"
         privileged: true
 
     portainer:
-        image: portainer/portainer-ce
+        build:
+            context: ./portainer
         restart: on-failure
         ports:
             - '9000:9000'
         labels:
             portainer: hidden
             io.balena.features.balena-socket: '1'
-        depends_on:
-        - "controller"
         volumes:
             - 'portainer_data:/data'
         command: --admin-password=$2y$05$j4Gnyhud5p8W81VI7MCbJep1w/.ToYPn3KQEZerJNLqUaV2qKnvT.
@@ -59,3 +63,4 @@ services:
 volumes:
     filestorage:
     portainer_data:
+    backend_db:

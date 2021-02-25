@@ -1,4 +1,4 @@
-# learnersblock-app
+# Learner's Block Interface
 
 ## Project setup
 ```
@@ -20,5 +20,5 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
+### Customise configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

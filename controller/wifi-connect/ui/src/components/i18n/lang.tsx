@@ -33,37 +33,37 @@ if (language === 'ar') {
 	setlang = en;
 }
 
-if (! setlang.network_fetch_fail) {
+if (!setlang.network_fetch_fail) {
 	setlang.network_fetch_fail = en.network_fetch_fail;
 }
-if (! setlang.network_connect_fail) {
+if (!setlang.network_connect_fail) {
 	setlang.network_connect_fail = en.network_connect_fail;
 }
-if (! setlang.network_connect_fail) {
+if (!setlang.network_connect_fail) {
 	setlang.network_connect_fail = en.network_connect_fail;
 }
-if (! setlang.wifi) {
+if (!setlang.wifi) {
 	setlang.wifi = en.wifi;
 }
-if (! setlang.user) {
+if (!setlang.user) {
 	setlang.user = en.user;
 }
-if (! setlang.password) {
+if (!setlang.password) {
 	setlang.password = en.password;
 }
-if (! setlang.select_ssid) {
+if (!setlang.select_ssid) {
 	setlang.select_ssid = en.select_ssid;
 }
-if (! setlang.connect) {
+if (!setlang.connect) {
 	setlang.connect = en.connect;
 }
-if (! setlang.applying_changes) {
+if (!setlang.applying_changes) {
 	setlang.applying_changes = en.applying_changes;
 }
-if (! setlang.connection_reset_request) {
+if (!setlang.connection_reset_request) {
 	setlang.connection_reset_request = en.connection_reset_request;
 }
-if (! setlang.no_networks) {
+if (!setlang.no_networks) {
 	setlang.no_networks = en.no_networks;
 }
 

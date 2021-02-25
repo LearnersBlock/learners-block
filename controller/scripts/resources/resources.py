@@ -82,7 +82,7 @@ class portainer_start(Resource):
 
         response = container().start(container="portainer")
 
-        {'status': response["status_code"], 'message': response["text"]}, response["status_code"]
+        return {'status': response["status_code"], 'message': response["text"]}, response["status_code"]
 
 
 class portainer_stop(Resource):
@@ -116,12 +116,7 @@ class system_info(Resource):
                     'available': human_size(shutil.disk_usage("/tmp")[-1])
                 },
                 "versions": {
-                    'lb': resources.globals.LB_VER,
-                    'frontend': resources.globals.FRONTEND_VER,
-                    'backend': resources.globals.BACKEND_VER,
-                    'controller': resources.globals.CONTROLLER_VER,
-                    'file_manager': resources.globals.FILE_MANAGER_VER,
-                    'wificonnect_ui': resources.globals.WIFICONNECT_UI_VER
+                    'lb': resources.globals.VER
                     }
                }
 
