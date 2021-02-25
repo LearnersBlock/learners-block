@@ -2,19 +2,19 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python:3.8.6
 
 ## Install packages
 
-# Supervisor
+# Install SupervisorD
 RUN pip install supervisor==4.2.1 --no-deps --no-cache-dir
 
-# Mount dependencies
+# Add mount dependencies
 RUN install_packages findmnt util-linux grep
 
-# Nginx and PhP-FPM
+# Install Nginx and PhP-FPM
 RUN install_packages php7 php7-fpm php7-opcache php7-mysqli php7-json \
     php7-openssl php7-curl php7-zlib php7-xml php7-phar php7-intl php7-dom \
     php7-xmlreader php7-ctype php7-session php7-mbstring php7-gd nginx curl && \
     rm /etc/nginx/conf.d/default.conf
 
-# FILE-MANAGER DEPENDENCIES
+# Install File Manager dependencies
 RUN install_packages libbz2 libzip libcap openldap-dev php7-zip php7-ldap php7-bz2 \
     php7-fileinfo php7-posix
 
@@ -26,35 +26,35 @@ RUN mkdir -p /app/web/public/frontend && \
     mkdir -p /app/web/public/storage/website && \
     mkdir -p /app/web/public/storage/fileshare
 
-# SET APPLICATION DIRECTORY
+# Set application directory 
 WORKDIR /app/web/
 
-## CONFIGURE CONTROLLER
+## Configure the controller 
 
-# SUPERVISORD
+# Configure SupervisorD
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# USB
+# Enable USB support on device
 ENV UDEV=on
 COPY config/usb/udev/usb.rules /etc/udev/rules.d/usb.rules
 COPY config/usb/scripts /usr/src/scripts
 RUN chmod +x /usr/src/scripts/*
 
-## CONFIGURE PHP-FPM & NGINX
+## Configure PhP-FPM and NGINX
 
 COPY config/php/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY config/php/php.ini /etc/php7/conf.d/custom.ini
 COPY config/nginx/production/ /etc/nginx/
 
-# INSERT FILE-MANAGER
+# Insert File Manager source code
 
 COPY --chown=nginx /apps/file-manager/dist /app/web/public/files
 
-# INSERT NODE WEB CONTENT
+# Insert interface source code
 
 COPY --chown=nginx /apps/interface/dist /app/web/public/interface
 
-# SET PERMISSIONS
+# Set file permissions 
 RUN chown -R nginx.nginx /run && \
     chown -R nginx.nginx /app/web/public/frontend && \
     chown -R nobody.nobody /app/web/public/storage/website/ && \
@@ -63,7 +63,7 @@ RUN chown -R nginx.nginx /run && \
 # Copy .env file for filemanager. Added at end of file as to be removed at a later date. 
 COPY --chown=nginx apps/file-manager/.env /app/web/public/files
 
-## WRAP-UP
+# Start SupervisorD to manage processes
 EXPOSE 8081
 
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

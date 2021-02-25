@@ -1,6 +1,6 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian-python:3.8.6
 
-## INSTALL PACKAGES
+## Install package dependencies
 
 COPY requirements.txt /tmp/
 
@@ -8,13 +8,13 @@ RUN install_packages libdbus-glib-1-dev libgirepository1.0-dev && \
     pip install -r /tmp/requirements.txt --no-deps --no-cache-dir && \
     apt-get purge --auto-remove libdbus-glib-1-dev libgirepository1.0-dev -y
 
-# INSTALL WIFI CONNECT
+# Install Wi-Fi connect dependencies
 
 RUN install_packages \
     dnsmasq \
     wireless-tools
 
-## BUILD WI-FI CONNECT
+## Download Wi-Fi connect based on system architecture 
 WORKDIR /app
 
 RUN mkdir -p /app/common/wifi-connect
@@ -24,17 +24,17 @@ ARG VERSION="4.4.4"
 RUN curl -Ls "https://github.com/balena-io/wifi-connect/releases/download/v$VERSION/wifi-connect-v$VERSION-linux-%%BALENA_ARCH%%.tar.gz" \
   | tar -xvz -C /app/common/wifi-connect
 
-## CONFIGURE PORTAINER
+## Add in default Portainer database
 COPY portainer/portainer.db /app/portainer/portainer.db
 
-## CONFIGURE WIFI-CONNECT
+## Configure Wi-Fi connect
 COPY scripts .
 COPY wifi-connect/ui/build /app/common/wifi-connect/ui/
 
-#Insert version env file
+#Insert Learner's Block release version .env file
 COPY .env /app/
 
-## WRAP-UP
+## Launch controller
 CMD ["python3", "start.py"]
 
 HEALTHCHECK --start-period=20s --timeout=30s CMD curl --silent --fail http://127.0.0.1:9090/ || exit 1

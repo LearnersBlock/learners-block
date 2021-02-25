@@ -45,10 +45,14 @@ RUN npm run build
 
 FROM alpine
 
+# Copy built content ready for adding to folders
+
 COPY --from=filemanager-buildstep /build-context/dist /build/filemanager
 
 COPY --from=interface-buildstep /build-context/dist /build/interface
 
 COPY --from=controller-buildstep /build-context/build /build/controller
+
+# On start of the container, copy the content into the mounted directoies
 
 CMD cp -Rf /build/* /export/ && echo "Build complete and files added to directories. Check the logs above for build errors."

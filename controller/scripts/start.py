@@ -16,7 +16,9 @@ api = Api(app)
 
 print("Api-v1 - Starting API...")
 
+#Function for first launch
 def launch(self):
+    #Check if already connected to Wi-Fi
     time.sleep(20)
     try:
         connected = wifi().check_connection()
@@ -24,6 +26,7 @@ def launch(self):
         print("Api-v1 - Error checking wifi connection. Starting wifi-connect in order to allow debugging. " + str(ex))
         connected = None
 
+    # If connected, perform container updatem if not, start Wi-Fi Connect
     if connected:
         try:
             update().get()
@@ -73,6 +76,7 @@ try:
 except Exception as ex:
     print("Failed during launch. Continuing for debug. " + str(ex))
 
+# Ensure Wi-Fi connection is shutdown softly on exit
 atexit.register(resources.processes.handle_exit, None, None)
 signal.signal(signal.SIGTERM, resources.processes.handle_exit)
 signal.signal(signal.SIGINT, resources.processes.handle_exit)
