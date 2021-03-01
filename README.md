@@ -39,7 +39,7 @@ In order to prepare the code from this repository for deployment to a device:
 2. Download the [OS for your device](https://www.balena.io/os/) and flash it to your memory card. 
 1. Clone this repository.
 2. Execute `docker-compose -f docker-compose-build.yml up --build` to build the required components.
-3. After installing the [Balena CLI](https://github.com/balena-io/balena-cli), run `balena push name-of-your-device.local` to deploy. 
+3. After installing the [Balena CLI](https://github.com/balena-io/balena-cli), run `balena push hostname-of-your-device.local` to deploy. 
 
 More information on local deploynents is available from balena:
 
