@@ -1,7 +1,9 @@
 from flask import Flask
 from flask_restful import Api
-from resources.resources import device, health_check, host_config, journal_logs, portainer_status, \
-    portainer_start, portainer_stop, system_info, update, uuid, wifi_connection_status, wifi_forget, wifi_forget_all
+from resources.resources import device, health_check, host_config, \
+     journal_logs, portainer_status, \
+     portainer_start, portainer_stop, system_info, update, uuid, \
+     wifi_connection_status, wifi_forget, wifi_forget_all
 from resources.processes import container, curl, wifi, wifi_connect
 import resources.globals
 import atexit
@@ -16,21 +18,24 @@ api = Api(app)
 
 print("Api-v1 - Starting API...")
 
-#Function for first launch
+
+# Function for first launch
 def launch(self):
-    #Check if already connected to Wi-Fi
+    # Check if already connected to Wi-Fi
     time.sleep(20)
     try:
         connected = wifi().check_connection()
     except Exception as ex:
-        print("Api-v1 - Error checking wifi connection. Starting wifi-connect in order to allow debugging. " + str(ex))
+        print("Api-v1 - Error checking wifi connection. Starting wifi-connect \
+               in order to allow debugging. " + str(ex))
         connected = None
 
     # If connected, perform container updatem if not, start Wi-Fi Connect
     if connected:
         try:
             update().get()
-            response = "Api-v1 - API Started - Device already connected to local wifi, software update request made."
+            response = "Api-v1 - API Started - Device already connected to \
+                        local wifi, software update request made."
         except Exception as ex:
             response = "Software update failed. " + str(ex)
     else:
@@ -43,10 +48,13 @@ def launch(self):
     print(response)
     return response
 
-# Stop portainer on boot 
+
+# Stop portainer on boot
 # String cannot be portainer_stop due to clash with endpoint
 try:
-    portainer_exit = threading.Thread(target=container.stop, args=(None,"portainer",10), name='portainer_exit')
+    portainer_exit = threading.Thread(target=container.stop,
+                                      args=(None, "portainer", 10),
+                                      name='portainer_exit')
     portainer_exit.start()
 
 except Exception as ex:
@@ -55,22 +63,31 @@ except Exception as ex:
 # Check hostname in container is correct
 try:
     # Fetch container hostname and device hostname
-    container_hostname = subprocess.run(["hostname"], capture_output=True, text=True).stdout.rstrip()
-    device_hostname = curl(method="get", path="/v1/device/host-config?apikey=", supervisor_retries=20)
+    container_hostname = subprocess.run(["hostname"], capture_output=True,
+                                        text=True).stdout.rstrip()
+
+    device_hostname = curl(method="get", path="/v1/device/host-config?apikey=",
+                           supervisor_retries=20)
 
     # Check container and device hostname match
-    if container_hostname != device_hostname["json_response"]["network"]["hostname"]:
-        print("Api-v1 - Container hostname and device hostname do not match. Likely a hostname \
-        change has been performed. Balena Supervisor should detect this and rebuild \
-        the container shortly. Waiting 60 seconds before continuing anyway.")
+    if container_hostname != \
+       device_hostname["json_response"]["network"]["hostname"]:
+        print("Api-v1 - Container hostname and device hostname do not match. \
+               Likely a hostname \
+               change has been performed. Balena Supervisor should detect \
+               this and rebuild the container shortly. Waiting 60 seconds \
+               before continuing anyway.")
         time.sleep(60)
 
 except Exception as ex:
-    print("Api-v1 - Failed to compare hostnames, starting anyway: " + str(ex)) 
+    print("Api-v1 - Failed to compare hostnames, starting anyway: " + str(ex))
 
-# If connected to a wifi network then update device, otherwise launch wifi-connect
+# If connected to a wifi network then update device,
+# otherwise launch wifi-connect
 try:
-    device_start = threading.Thread(target=launch, args=(1,), name='device_start')
+    device_start = threading.Thread(target=launch,
+                                    args=(1,),
+                                    name='device_start')
     device_start.start()
 
 except Exception as ex:

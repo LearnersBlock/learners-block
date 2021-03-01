@@ -8,13 +8,15 @@ import threading
 # Disable logging for health_check
 parent_log_request = serving.WSGIRequestHandler.log_request
 
+
 # Restrict certain calls to API use only
 def check_permission():
-    try: 
+    try:
         if request.remote_addr[:4] != "172.":
             abort(403)  # Forbidden
     except Exception:
         pass
+
 
 def log_request(self, *args, **kwargs):
     if self.path == '/':
@@ -60,7 +62,8 @@ class journal_logs(Resource):
 
         response = curl(method="post-json",
                         path="/v2/journal-logs?apikey=",
-                        string='("follow", "false", "all", "true", "format", "short")')
+                        string='("follow", "false", "all", "true", \
+                            "format", "short")')
 
         return response["text"], response["status_code"]
 
@@ -72,7 +75,8 @@ class portainer_status(Resource):
 
         response, entry = container().status(container="portainer")
 
-        return {'status': response["status_code"], 'message': entry["status"]}, response["status_code"]
+        return {'status': response["status_code"],
+                'message': entry["status"]}, response["status_code"]
 
 
 class portainer_start(Resource):
@@ -82,7 +86,8 @@ class portainer_start(Resource):
 
         response = container().start(container="portainer")
 
-        return {'status': response["status_code"], 'message': response["text"]}, response["status_code"]
+        return {'status': response["status_code"],
+                'message': response["text"]}, response["status_code"]
 
 
 class portainer_stop(Resource):
@@ -92,7 +97,8 @@ class portainer_stop(Resource):
 
         response = container().stop(container="portainer")
 
-        return {'status': response["status_code"], 'message': response["text"]}, response["status_code"]
+        return {'status': response["status_code"],
+                'message': response["text"]}, response["status_code"]
 
 
 class update(Resource):
@@ -101,7 +107,8 @@ class update(Resource):
                         path="/v1/update?apikey=",
                         string='("force", "true")')
 
-        return {'status': response["status_code"], 'message': response["text"]}, response["status_code"]
+        return {'status': response["status_code"],
+                'message': response["text"]}, response["status_code"]
 
 
 class uuid(Resource):
@@ -118,7 +125,7 @@ class system_info(Resource):
                 "versions": {
                     'lb': resources.globals.VER
                     }
-               }
+                }
 
 
 class wifi_connection_status(Resource):
@@ -143,10 +150,13 @@ class wifi_forget(Resource):
         if not connection_state:
             return {
                 'status': 409,
-                'message': 'Device is already disconnected, connection cannot be reset.'
+                'message': 'Device is already disconnected, \
+                            connection cannot be reset.'
             }, 409
 
-        wifi_forget = threading.Thread(target=wifi.forget, args=(1,), name='wifi_forget')
+        wifi_forget = threading.Thread(target=wifi.forget,
+                                       args=(1,),
+                                       name='wifi_forget')
         wifi_forget.start()
 
         return {'status': 202, 'message': 'Reset request sent.'}, 202
@@ -157,7 +167,9 @@ class wifi_forget_all(Resource):
 
         check_permission()
 
-        wifi_forget_all = threading.Thread(target=wifi.forget_all, args=(1,), name='wifi_forget_all')
+        wifi_forget_all = threading.Thread(target=wifi.forget_all,
+                                           args=(1,),
+                                           name='wifi_forget_all')
         wifi_forget_all.start()
 
         return {'status': 202, 'message': 'Reset request sent.'}, 202

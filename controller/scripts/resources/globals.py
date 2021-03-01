@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-#Load Python library for managing enviroment variables
+# Load Python library for managing enviroment variables
 load_dotenv()
 
 # Set default version variables
@@ -18,4 +18,5 @@ try:
     VER = os.getenv('VER')
 
 except Exception as ex:
-    print("Failed to fetch all the variables. Continuing without but errors wil likely occur. " + str(ex))
+    print("Failed to fetch all the variables. Continuing without but \
+           errors wil likely occur. " + str(ex))

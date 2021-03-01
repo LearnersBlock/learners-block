@@ -7,6 +7,7 @@ import time
 import subprocess
 import sys
 
+
 def check_supervisor(supervisor_retries, timeout):
     # Check Balena Supervisor is ready
     retry = 1
@@ -26,7 +27,8 @@ def check_supervisor(supervisor_retries, timeout):
                       message='Supervisor returned error code.')
 
         except Exception as ex:
-            print(f'Waiting for Balena Supervisor to be ready. {str(ex)}. Retry {str(retry)}.')
+            print(f'Waiting for Balena Supervisor to be ready. \
+                    {str(ex)}. Retry {str(retry)}.')
 
             if retry == supervisor_retries:
                 abort(408, status=408,
@@ -45,31 +47,39 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
     try:
         if cmd["method"] == 'post-json':
             response = requests.post(
-                f'{resources.globals.BALENA_SUPERVISOR_ADDRESS}{cmd["path"]}{resources.globals.BALENA_SUPERVISOR_API_KEY}',
+                f'{resources.globals.BALENA_SUPERVISOR_ADDRESS}{cmd["path"]} \
+                {resources.globals.BALENA_SUPERVISOR_API_KEY}',
                 json=[cmd["string"]],
-                headers={"Content-Type": "application/json"}, timeout=timeout
+                headers={"Content-Type": "application/json"},
+                timeout=timeout
             )
 
         elif cmd["method"] == 'post-data':
             response = requests.post(
-                f'{resources.globals.BALENA_SUPERVISOR_ADDRESS}{cmd["path"]}{resources.globals.BALENA_SUPERVISOR_API_KEY}',
+                f'{resources.globals.BALENA_SUPERVISOR_ADDRESS}{cmd["path"]} \
+                {resources.globals.BALENA_SUPERVISOR_API_KEY}',
                 data=cmd["string"],
-                headers={"Content-Type": "application/json"}, timeout=timeout
+                headers={"Content-Type": "application/json"},
+                timeout=timeout
             )
 
         elif cmd["method"] == 'patch':
 
             response = requests.patch(
-                f'{resources.globals.BALENA_SUPERVISOR_ADDRESS}{cmd["path"]}{resources.globals.BALENA_SUPERVISOR_API_KEY}',
+                f'{resources.globals.BALENA_SUPERVISOR_ADDRESS}{cmd["path"]} \
+                {resources.globals.BALENA_SUPERVISOR_API_KEY}',
                 data=cmd["string"],
-                headers={"Content-Type": "application/json"}, timeout=timeout
+                headers={"Content-Type": "application/json"},
+                timeout=timeout
             )
 
         elif cmd["method"] == 'get':
 
             response = requests.get(
-                f'{resources.globals.BALENA_SUPERVISOR_ADDRESS}{cmd["path"]}{resources.globals.BALENA_SUPERVISOR_API_KEY}',
-                headers={"Content-Type": "application/json"}, timeout=timeout
+                f'{resources.globals.BALENA_SUPERVISOR_ADDRESS}{cmd["path"]} \
+                {resources.globals.BALENA_SUPERVISOR_API_KEY}',
+                headers={"Content-Type": "application/json"},
+                timeout=timeout
             )
     except Exception as ex:
         print("Curl request timed out. " + str(ex))
@@ -81,7 +91,9 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
     except Exception:
         return {"status_code": response.status_code, "text": response.text}
 
-    return {"status_code": response.status_code, "text": response.text, "json_response": response.json()}
+    return {"status_code": response.status_code, "text": response.text,
+            "json_response": response.json()}
+
 
 def handle_exit(*args):
     try:
@@ -96,6 +108,7 @@ def handle_exit(*args):
     print("Finshed the exit process")
     sys.exit(0)
 
+
 def human_size(nbytes):
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
     i = 0
@@ -104,6 +117,7 @@ def human_size(nbytes):
         i += 1
     f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
     return '%s %s' % (f, suffixes[i])
+
 
 class container:
     def status(self, container, sleep=0.1):
@@ -114,14 +128,15 @@ class container:
         for entry in response["json_response"]["containers"]:
             if entry['serviceName'] == container:
                 return response, entry
- 
+
         abort(404, status=404,
-            message='Container not found')
+              message='Container not found')
 
     def start(self, container, sleep=0.1):
         time.sleep(sleep)
         response = curl(method="post-data",
-                        path=f"/v2/applications/{resources.globals.BALENA_APP_ID}/start-service?apikey=",
+                        path=f"/v2/applications/{resources.globals.BALENA_APP_ID} \
+                               /start-service?apikey=",
                         string='{"serviceName": "%s"}' % (container))
 
         return response
@@ -129,7 +144,8 @@ class container:
     def stop(self, container, sleep=0.1):
         time.sleep(sleep)
         response = curl(method="post-data",
-                        path=f"/v2/applications/{resources.globals.BALENA_APP_ID}/stop-service?apikey=",
+                        path=f"/v2/applications/{resources.globals.BALENA_APP_ID} \
+                               /stop-service?apikey=",
                         string='{"serviceName": "%s"}' % (container))
 
         print(str(response["text"]) + str(response["status_code"]))
@@ -139,7 +155,9 @@ class container:
 class wifi:
     def check_connection(self):
 
-        run = subprocess.run(["iwgetid", "-r"], capture_output=True, text=True).stdout.rstrip()
+        run = subprocess.run(["iwgetid", "-r"],
+                             capture_output=True,
+                             text=True).stdout.rstrip()
 
         return run
 
@@ -158,20 +176,25 @@ class wifi:
         connections = NetworkManager.Settings.ListConnections()
 
         for connection in connections:
-            if connection.GetSettings()["connection"]["type"] == "802-11-wireless":
-                if connection.GetSettings()["802-11-wireless"]["ssid"] == current_ssid:
+            if connection.GetSettings()["connection"]["type"] \
+               == "802-11-wireless":
+                if connection.GetSettings()["802-11-wireless"]["ssid"] \
+                   == current_ssid:
                     print("wifi_forget: Deleting connection "
                           + connection.GetSettings()["connection"]["id"])
 
-                    # Delete the identified connection and change status code to 0 (success)
+                    # Delete the identified connection and change status
+                    # code to 0 (success)
                     connection.Delete()
                     status = 0
 
         # Check that a connection was deleted
         if status == 1:
-            print('Failed to delete connection, trying to clear all saved connections.')
+            print('Failed to delete connection, \
+                   trying to clear all saved connections.')
             wifi().forget_all()
-            return {'status': 500, 'message': 'wifi_forget failed, attempted wifi_forget_all instead'}, 500
+            return {'status': 500, 'message': 'wifi_forget failed, \
+            attempted wifi_forget_all instead'}, 500
 
         # Wait before trying to launch wifi-connect
         wifi_connect().start(wait=2)
@@ -189,11 +212,13 @@ class wifi:
         connections = NetworkManager.Settings.ListConnections()
 
         for connection in connections:
-            if connection.GetSettings()["connection"]["type"] == "802-11-wireless":
+            if connection.GetSettings()["connection"]["type"] \
+                    == "802-11-wireless":
                 print("Deleting connection "
                       + connection.GetSettings()["connection"]["id"])
 
-                # Delete the identified connection and change status code to 200 (success)
+                # Delete the identified connection and change
+                # status code to 200 (success)
                 connection.Delete()
 
         # Wait before trying to launch wifi-connect
@@ -216,9 +241,12 @@ class wifi_connect:
         except Exception:
             resources.config.default_hostname = 'lb'
 
-        # Get the current hostname of the container, and set a default on failure
+        # Get the current hostname of the container, and
+        # set a default on failure
         try:
-            current_hostname = subprocess.run(["hostname"], capture_output=True, text=True).stdout.rstrip()
+            current_hostname = subprocess.run(["hostname"],
+                                              capture_output=True,
+                                              text=True).stdout.rstrip()
         except Exception:
             current_hostname = resources.config.default_hostname
 
