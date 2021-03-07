@@ -10,6 +10,7 @@ services:
         network_mode: "host"
         volumes:
             - 'portainer_data:/app/portainer'
+            - 'controller_db:/app/db'
         labels:
             io.balena.features.dbus: '1'
             io.balena.features.supervisor-api: '1'
@@ -73,5 +74,6 @@ services:
 volumes:
     backend_database:
     backend_nodemodules:
+    controller_db:
     frontend_nodemodules:
     portainer_data:

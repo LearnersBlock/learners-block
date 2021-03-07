@@ -2,7 +2,6 @@
 .DS_Store
 
 # local env files
-.env
 .env.local
 .env.*.local
 __pycache__
@@ -17,7 +16,5 @@ __pycache__
 *.sw?
 
 # Applications
-/custom-ui/*
-/Dockerfile.dev.template
-/scripts/dev-start.sh
+/app/db/*
 !.gitkeep
