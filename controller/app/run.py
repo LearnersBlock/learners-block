@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from resources.models import db
@@ -22,6 +23,9 @@ def create_app(config):
     # Initalise and configure Flask
     app = Flask(__name__)
     app.config.from_object(config)
+
+    # Allow CORS
+    CORS(app)
 
     # Setup Flask-JWT-Extended
     jwt = JWTManager(app)
