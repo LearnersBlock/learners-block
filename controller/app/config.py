@@ -7,9 +7,6 @@ import secrets
 # Import .env file
 load_dotenv()
 
-# Import enviroment variables from files
-version = dotenv_values(".ver")
-
 
 # Fetch secret key of generate if absent
 def get_secret_key():

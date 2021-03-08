@@ -4,8 +4,8 @@ from flask_restful import Resource
 from werkzeug import serving
 import shutil
 
-# Import .ver file
-version = dotenv_values(".ver")
+# Import .version file
+version = dotenv_values(".version")
 
 # Import logging controller for log_request function
 parent_log_request = serving.WSGIRequestHandler.log_request
