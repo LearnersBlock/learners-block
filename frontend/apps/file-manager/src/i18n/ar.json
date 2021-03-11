@@ -23,7 +23,7 @@
     "extract_filename": "استخراج الملف",
     "extract_success": "تم استخراج الملف بنجاح",
     "file_copy_to": "الى",
-    "file_delete_confirm": "هل تود حذف الملف التالي",
+    "file_delete_confirm": "هل تود حذف الملف التالي -",
     "file_delete_error": "تعذر حذف الملف / الملفات",
     "file_delete_success": "تم حذف الملف / الملفات بنجاح",
     "file_display_error": "لا يمكن عرض أو تحرير الملف",

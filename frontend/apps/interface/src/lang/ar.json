@@ -17,10 +17,13 @@
         }
     },
     "settings-screen": {
-        "title": "Settings",
+        "title": "اعدادات",
         "back": "الى الخلف",
         "network": {
             "title": "واي فاي"
+        },
+        "components": {
+            "title": "عناصر"
         }
     },
     "auth-screen": {
