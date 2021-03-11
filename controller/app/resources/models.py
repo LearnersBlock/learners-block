@@ -22,8 +22,9 @@ def create_default_user():
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True,
-                         server_default="lb", nullable=False)
-    password = db.Column(db.String(128), unique=False, nullable=False)
+                         server_default='lb', nullable=False)
+    password = db.Column(db.String(128), unique=False,
+                         server_default=' ', nullable=False)
     files = db.Column(db.Boolean, unique=False,
                       server_default=expression.true(), nullable=False)
     library = db.Column(db.Boolean, unique=False,
