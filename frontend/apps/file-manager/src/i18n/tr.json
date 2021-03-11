@@ -44,5 +44,12 @@
     "copy": "Kopyala",
     "close": "Kapatma",
     "cancel": "İptal",
-    "archive_create_success": "Arşiv oluşturuldu."
+    "archive_create_success": "Arşiv oluşturuldu.",
+    "directoryname": "Dizin Adı",
+    "create_archive": "Arşiv oluştur",
+    "copy_success": "Dosyalar kopyalandı.",
+    "copy_error": "Aşağıda bulunan dosyalar kopyalanamadı:",
+    "archivename": "Arşiv ismi",
+    "archive_invalid_format": "Geçersiz arşiv biçimi.",
+    "archive_create_error": "Arşiv oluşturulamadı"
 }
