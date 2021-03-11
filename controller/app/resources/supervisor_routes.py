@@ -1,7 +1,8 @@
 from common.containers import container
 from common.processes import curl
-from flask_restful import Resource
+from flask import request
 from flask_jwt_extended import jwt_required
+from flask_restful import Resource
 import os
 
 
@@ -16,10 +17,12 @@ class device(Resource):
 
 class host_config(Resource):
     @jwt_required()
-    def get(self, hostname):
+    def post(self):
+        content = request.get_json()
         response = curl(method="patch",
                         path="/v1/device/host-config?apikey=",
-                        string='{"network": {"hostname": "%s"}}' % (hostname))
+                        string='{"network": {"hostname": "%s"}}' %
+                        (content["hostname"]))
 
         return {
             'status': response["status_code"],
