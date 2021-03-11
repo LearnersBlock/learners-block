@@ -6,7 +6,10 @@ from flask_jwt_extended import JWTManager
 from resources.models import db
 from resources.models import migrate
 from resources.models import create_default_user
-from resources.system_routes import health_check, system_info
+from resources.system_routes import health_check
+from resources.system_routes import rsync_fetch
+from resources.system_routes import rsync_stop
+from resources.system_routes import system_info
 import atexit
 import os
 import signal
@@ -182,6 +185,8 @@ if __name__ == '__main__':
     api.add_resource(portainer_status, '/v1/portainer/status')
     api.add_resource(portainer_start, '/v1/portainer/start')
     api.add_resource(portainer_stop, '/v1/portainer/stop')
+    api.add_resource(rsync_fetch, '/v1/rsync/fetch')
+    api.add_resource(rsync_stop, '/v1/rsync/stop')
     api.add_resource(set_password, '/v1/setpassword')
     api.add_resource(settings_ui, '/v1/settingsui')
     api.add_resource(set_ui, '/v1/setui')

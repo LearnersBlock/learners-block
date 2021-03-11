@@ -1,8 +1,19 @@
 from flask_restful import abort
-import requests
+import json
 import os
-import time
+import requests
+import shutil
+import subprocess
 import sys
+import time
+
+rsync_request_terminate = False
+
+
+def check_space():
+    total, used, free = shutil.disk_usage("/tmp")
+    if free <= 100000000:
+        return True
 
 
 def check_supervisor(supervisor_retries, timeout):
@@ -114,3 +125,64 @@ def human_size(nbytes):
         i += 1
     f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
     return '%s %s' % (f, suffixes[i])
+
+
+def rsync_run(rsync_url):
+    rsync_proc = subprocess.Popen(
+        ['rsync', '-azh', '--info=progress2', '--no-i-r', '--inplace',
+            rsync_url,
+            '/tmp'],
+        stdout=subprocess.PIPE,
+        universal_newlines=True
+    )
+
+    for line in iter(rsync_proc.stdout.readline, ''):
+        time.sleep(1)
+        if check_space() is True:
+            rsync_terminate(rsync_proc)
+            yield json.dumps({'status': 500, 'running': False,
+                              'message': 'Out of Space'}, 500)
+            break
+
+        global rsync_request_terminate
+        if rsync_request_terminate is True:
+            rsync_terminate(rsync_proc)
+            yield json.dumps({'status': 200, 'running': False,
+                              'message': 'RSync terminated by user'})
+            break
+
+        each_line = line.split()
+
+        if each_line:
+            json_output = {
+                "transferred": each_line[0],
+                "percentage": each_line[1],
+                "speed": each_line[2],
+                "remaining_time": each_line[3],
+                "comparing_files": False
+                }
+        else:
+            json_output = {
+                "comparing_files": True
+                }
+
+        yield json.dumps(json_output) + '<br/>\n'
+
+
+def rsync_terminate(rsync_proc):
+
+    if rsync_proc == "terminate_request":
+        global rsync_request_terminate
+        rsync_request_terminate = True
+        return "Sent exit command to subprocess"
+    try:
+        try:
+            rsync_request_terminate = False
+            rsync_proc.terminate()
+            rsync_proc.communicate(timeout=7)
+        except Exception:
+            print("SIGTERM failed. Killing RSync")
+            rsync_proc.kill()
+    except Exception as ex:
+        print("RSync was already down. " + str(ex))
+    return "Rsync terminated"
