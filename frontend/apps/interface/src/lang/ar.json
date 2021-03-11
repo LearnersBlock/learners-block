@@ -1,22 +1,37 @@
 {
-  "lang": {
-    "name": "عربى",
-    "selector": {
-      "title": "Select your preferred language"
+    "lang": {
+        "name": "الإنجليزية",
+        "selector": {
+            "title": "Select your preferred language"
+        }
+    },
+    "home-screen": {
+        "title": "أهلا بك",
+        "quicknav": {
+            "files": {
+                "title": "الملفات"
+            },
+            "website": {
+                "title": "موقع الكتروني"
+            }
+        }
+    },
+    "settings-screen": {
+        "title": "Settings",
+        "back": "الى الخلف",
+        "network": {
+            "title": "واي فاي"
+        }
+    },
+    "auth-screen": {
+        "login": {
+            "username": "اسم المستخدم",
+            "password": "كلمة المرور"
+        }
+    },
+    "general": {
+        "save": "حفظ",
+        "close": "إغلاق",
+        "cancel": "إلغاء"
     }
-  },
-  "home-screen": {
-    "title": "أهلا بك",
-    "quicknav": {
-      "files": {
-        "title": "الملفات"
-      },
-      "website": {
-        "title": "موقع الكتروني"
-      }
-    }
-  },
-  "settings-screen": {
-    "title": "Settings"
-  }
 }
