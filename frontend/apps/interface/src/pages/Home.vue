@@ -1,12 +1,12 @@
 <template>
      <q-page class="py-28 px-52">
        <div class="text-5xl text-gray-600">{{ $t('welcome') }}</div>
-        <hr class="mt-6 mb-10" />
-        <q-list class="w-2/3" bordered v-if="!allIsDisabled">
+        <hr class="mb-10"/>
+        <q-list v-if="!allIsDisabled">
           <q-item  v-if="settings.files" class="cursor-pointer py-3" tag="a" target="_self" href="https://www.facebook.com">
               <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('files')}}</q-item-label>
-              <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
             </q-item-section>
 
             <q-item-section side middle>
@@ -18,7 +18,7 @@
           <q-item v-if="settings.website"  class="cursor-pointer py-3" tag="a" target="_self" href="https://www.facebook.com">
             <q-item-section>
               <q-item-label class="josefin text-xl">{{ $t('website') }}</q-item-label>
-              <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
             </q-item-section>
 
             <q-item-section side middle>
@@ -30,7 +30,7 @@
           <q-item v-if="settings.makerspace" class="cursor-pointer py-3" to="/makerspace" target="_self" href="https://www.facebook.com">
             <q-item-section>
               <q-item-label class="josefin text-xl">{{ $t('makerspace') }}</q-item-label>
-              <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
             </q-item-section>
 
             <q-item-section side middle>
@@ -42,7 +42,7 @@
           <q-item v-if="settings.library" to="/library"  class="cursor-pointer py-3" href="https://www.facebook.com">
             <q-item-section>
               <q-item-label class="josefin text-xl">{{ $t('library') }}</q-item-label>
-              <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
             </q-item-section>
 
             <q-item-section side middle>
