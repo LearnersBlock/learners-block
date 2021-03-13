@@ -1,19 +1,21 @@
 <template>
     <q-page class="py-10 px-52">
-        <router-link  to="/">
-        <q-btn color="primary" class="mb-28">
+<q-page-sticky position="top-left" :offset="[18, 18]">
+        <router-link color="secondary" class="back text-h6 cursor-pointer" to="/">
+        <q-btn color="white" text-color="primary" class="text-subtitle2 text-weight-bold">
           {{$t('home')}}
         </q-btn>
         </router-link>
-
+   </q-page-sticky>
         <div class="text-5xl text-gray-600">{{ $t('settings') }}</div>
         <hr class="mt-6 mb-6" />
-   <div class="flex flex-col w-2/4">
+   <div class="flex flex-col">
      <q-list>
+     <q-item-label header class="text-2xl">Enable components</q-item-label>
      <q-item class="flex">
         <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('files')}}</q-item-label>
-              <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
        <q-toggle
         v-model="files"
@@ -33,7 +35,7 @@
      <q-item >
          <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('website')}}</q-item-label>
-              <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
     <q-toggle
         v-model="website"
@@ -53,7 +55,7 @@
       <q-item>
          <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('makerspace')}}</q-item-label>
-              <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
       <q-toggle
         v-model="makerspace"
@@ -72,7 +74,7 @@
      <q-item>
         <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('library')}}</q-item-label>
-              <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
       <q-toggle
         v-model="library"
@@ -89,18 +91,49 @@
      </q-item>
 
    </q-list>
+   <q-separator spaced />
+   <q-item-label header class="text-2xl">Login</q-item-label>
+
+   <q-separator spaced />
+   <q-item-label header class="text-2xl">Wi-Fi</q-item-label>
+    <div>
+   <div class="text-lg ml-4">
+     <div v-if="!wifi">
+      Status: {{$t('disconnect')}}
+   </div>
+   <div v-else>
+     Status: {{$t('connect')}}
+     </div>
+     </div>
+      <q-btn
+        v-model="wifi"
+        color="primary"
+        @click="connectDisconnectWifi"
+        class="ml-4 mt-3 mb-3"
+        :label="!wifi ? $t('connect'): $t('disconnect')"
+      />
+        <q-spinner
+        v-if="loading"
+        color="primary"
+        size="3em"
+      />
+    </div>
+   <q-separator spaced />
 
    </div>
-   <q-list bordered class="rounded-borders w-2/3 mt-10 ">
+   <q-list bordered class="rounded-borders mt-10 ">
       <q-expansion-item
         expand-separator
         icon="build"
         :label="$t('advanced')"
         class="w-full"
       >
+         <div class="text-lg ml-6 mt-6">
+      Set a new hostname:
+   </div>
        <q-card>
         <q-card-section>
-          <q-input filled class="ml-4 mr-2 mt-6 w-4/5"
+          <q-input filled class="ml-1 mr-2"
              :rules="[(val) =>
              !val.includes(' ') &&
              val.length <= 32
@@ -111,24 +144,18 @@
              :label="$t('hostname')"
              lazy-rules
               />
-            <q-btn color="primary" @click="updateHostname" :label="$t('set')" class="px-4 ml-4 mt-3 text-md" />
-         <div>
-           <q-btn
-              v-model="wifi"
-              color="primary"
-              @click="connectDisconnectWifi"
-              class="ml-4 mt-3"
-              :label="!wifi ? $t('connect'): $t('disconnect')"
-            />
-              <q-spinner
-              v-if="loading"
-              color="primary"
-              size="3em"
-            />
-         </div>
+            <q-btn color="primary" @click="updateHostname" :label="$t('set')" class="px-4 ml-4 mt-3 text-md mb-6" />
+            <q-separator spaced />
 
         <div>
+               <q-item class="flex">
+        <q-item-section>
+              <q-item-label class="josefin text-xl mt-3">{{$t('Portainer')}}</q-item-label>
+              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+        </q-item-section>
+        
           <q-toggle
+          class="mt-3"
             v-model="portainer"
             @input="updatePortainer"
             v-if="!portainerLoading"
@@ -141,19 +168,20 @@
             color="primary"
             size="3em"
           />
+               </q-item>
         </div>
         <a :href="'http://' + hostname + ':9000'" target="_blank" v-if="portainer">Hostname</a>
           </q-card-section>
         </q-card>
       </q-expansion-item>
    </q-list>
-   <div class="text-2xl mt-10 mb-4 text-gray-700">
+   <div class="text-center text-2xl mt-10 mb-4 text-gray-600">
       System Info
    </div>
-   <div class="flex flex-col">
-    <span><span class="text-lg">{{$t('total_storage')}}: </span>{{ sysInfo.storage.total }}</span>
-    <span><span class="text-lg">{{$t('available_storage') }}: </span> {{ sysInfo.storage.available }}</span>
-    <span><span class="text-lg">{{$t('version') }}: </span>{{ sysInfo.versions.lb }}</span>
+   <div class="flex flex-col text-center text-gray">
+    <span class="text-gray-600"><span>{{$t('total_storage')}}: </span>{{ sysInfo.storage.total }}</span>
+    <span class="text-gray-600"><span>{{$t('available_storage') }}: </span> {{ sysInfo.storage.available }}</span>
+    <span class="text-gray-600"><span>{{$t('version') }}: </span>{{ sysInfo.versions.lb }}</span>
    </div>
   </q-page>
 </template>
