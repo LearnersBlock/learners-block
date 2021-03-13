@@ -3,7 +3,7 @@
        <div class="text-5xl text-gray-600">{{ $t('welcome') }}</div>
         <hr class="mt-6 mb-10" />
         <q-list class="w-2/3" bordered v-if="!allIsDisabled">
-          <q-item  v-if="settings.files" class="cursor-pointer py-3" tag="a" target="_blank" href="https://www.facebook.com">
+          <q-item  v-if="settings.files" class="cursor-pointer py-3" tag="a" target="_self" href="https://www.facebook.com">
               <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('files')}}</q-item-label>
               <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
@@ -15,7 +15,7 @@
           </q-item>
           <q-separator v-if="settings.files"  />
 
-          <q-item v-if="settings.website"  class="cursor-pointer py-3" tag="a" target="_blank" href="https://www.facebook.com">
+          <q-item v-if="settings.website"  class="cursor-pointer py-3" tag="a" target="_self" href="https://www.facebook.com">
             <q-item-section>
               <q-item-label class="josefin text-xl">{{ $t('website') }}</q-item-label>
               <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
@@ -27,7 +27,7 @@
           </q-item>
           <q-separator v-if="settings.website"  />
 
-          <q-item v-if="settings.makerspace" class="cursor-pointer py-3" to="/makerspace" href="https://www.facebook.com">
+          <q-item v-if="settings.makerspace" class="cursor-pointer py-3" to="/makerspace" target="_self" href="https://www.facebook.com">
             <q-item-section>
               <q-item-label class="josefin text-xl">{{ $t('makerspace') }}</q-item-label>
               <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
