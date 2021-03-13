@@ -1,4 +1,5 @@
 from flask_jwt_extended import jwt_required
+from flask import request
 from flask_restful import Resource
 import subprocess
 import time
@@ -33,11 +34,12 @@ class device(Resource):
 class host_config(Resource):
     @jwt_required()
     def get(self, hostname):
+        content = request.get_json()
 
         return {
             'status': 200,
             'message': "OK",
-            'response': f"Hostname changed to '{hostname}'"
+            'response': f"Hostname changed to '{content['hostname']}'"
         }, 200
 
 

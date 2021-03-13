@@ -20,7 +20,7 @@ def get_secret_key():
 
 # Development configuration
 class Development:
-    if os.environ['FLASK_ENV'].lower != "production":
+    if os.environ['FLASK_ENV'].lower() != "production":
         # Flask variables #
         # JWT Auth
         JWT_TOKEN_LOCATION = ["headers", "cookies"]
@@ -32,12 +32,12 @@ class Development:
         SQLALCHEMY_DATABASE_URI = "sqlite:///db/sqlite.db"
         SQLALCHEMY_TRACK_MODIFICATIONS = False
         # Set below to False to prevent needing to pass additional header
-        # JWT_COOKIE_CSRF_PROTECT = False
+        JWT_COOKIE_CSRF_PROTECT = False
 
 
 # Production configuration
 class Production:
-    if os.environ['FLASK_ENV'].lower == "production":
+    if os.environ['FLASK_ENV'].lower() == "production":
         # JWT Auth
         JWT_TOKEN_LOCATION = ["headers", "cookies"]
         JWT_COOKIE_SECURE = False

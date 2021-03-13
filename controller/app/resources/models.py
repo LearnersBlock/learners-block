@@ -7,7 +7,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 salt = bcrypt.gensalt()
 default_password = \
-    b"$2b$12$0a/0XzNr23CKW61LI3v8P.EU0VXev1.nSBTE080.UGlcjj3LcweWO"
+    b'$2b$12$x70yiBuLG/YQ3GOyGlFdAOBB/NaJUFQulqSOH4WrznxZVnAmWVl9S'
 
 
 # Create default user
@@ -24,7 +24,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True,
                          server_default='lb', nullable=False)
     password = db.Column(db.String(128), unique=False,
-                         server_default=' ', nullable=False)
+                         server_default=str(default_password), nullable=False)
     files = db.Column(db.Boolean, unique=False,
                       server_default=expression.true(), nullable=False)
     library = db.Column(db.Boolean, unique=False,

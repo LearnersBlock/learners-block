@@ -1,0 +1,17 @@
+// app global css in SCSS form
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@font-face {
+    font-family: "josefin sans";
+    src: url("../assets/josefin-sans.ttf");
+}
+
+* {
+    font-family: 'josefin sans',sans-serif;
+}
+
+.josefin {
+    font-family: 'josefin sans';
+}

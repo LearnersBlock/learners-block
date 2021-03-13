@@ -1,0 +1,15 @@
+FROM balenalib/amd64-debian-python:3.8.6
+
+# Set working directory 
+WORKDIR /app
+
+# Set env variables
+ENV FLASK_ENV=development
+ENV FLASK_APP=run
+
+# Install required packages
+COPY app/requirements-dev.txt /tmp/
+RUN pip install -r /tmp/requirements-dev.txt --upgrade --no-deps --force-reinstall --no-cache-dir
+
+# Launch
+CMD python3 run.py

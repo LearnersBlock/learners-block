@@ -1,0 +1,1 @@
+FROM portainer/portainer-ce:2.1.1-alpine@sha256:a6c66f269dfbfc643720593c28ba9cc2a18591eb98cf01ba5b794fbf88e58eb5

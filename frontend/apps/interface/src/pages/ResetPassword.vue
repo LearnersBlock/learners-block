@@ -1,0 +1,56 @@
+<template>
+<q-page class="flex justify-center items-center">
+    <q-form
+      @submit="resetPassword"
+      class="w-1/5 mb-6"
+    >
+      <div class="text-h4 mb-6 text-gray-600">{{ $t('reset_password') }}</div>
+      <q-input
+        filled
+        v-model="newPassword"
+        :label="$t('your_new_password')"
+        type="password"
+      />
+      <q-btn
+        :label="$t('reset')"
+        class="mt-4"
+        type="submit"
+        color="primary"
+      />
+    </q-form>
+  </q-page>
+</template>
+
+<script lang="ts">
+import { computed, defineComponent, ref } from '@vue/composition-api'
+import Axios from 'app/node_modules/axios'
+
+export default defineComponent({
+  setup (_, { root }) {
+    // New password
+    const newPassword = ref<string>('')
+    const api = computed(() => {
+      return root.$store.getters.GET_API
+    })
+    // Reset password
+    const resetPassword = async () => {
+      const response = await Axios.post(`${api.value}/v1/setpassword`, { password: newPassword.value })
+      if (response.status === 200) {
+        root.$q.notify({ type: 'positive', message: 'Your password has been reset successfully' })
+        newPassword.value = ''
+      } else {
+        root.$q.notify({ type: 'negative', message: 'Something went wrong. Try again' })
+      }
+    }
+
+    return {
+      newPassword,
+      resetPassword
+    }
+  }
+})
+</script>
+
+<style scoped>
+
+</style>

@@ -7,6 +7,7 @@ import subprocess
 import sys
 import time
 
+# Set defalut global variable for terminating RSync
 rsync_request_terminate = False
 
 
@@ -104,6 +105,7 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
 
 def handle_exit(*args):
+    # Ensure Wi-Fi Connect is shutdown softly
     try:
         try:
             global wifi_process
@@ -118,6 +120,7 @@ def handle_exit(*args):
 
 
 def human_size(nbytes):
+    # Convert system file sizes to human readable
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
     i = 0
     while nbytes >= 1024 and i < len(suffixes)-1:
@@ -128,22 +131,26 @@ def human_size(nbytes):
 
 
 def rsync_run(rsync_url):
+    # Download requested content via RSync
     rsync_proc = subprocess.Popen(
         ['rsync', '-azh', '--info=progress2', '--no-i-r', '--inplace',
             rsync_url,
-            '/tmp'],
+            './storage/library'],
         stdout=subprocess.PIPE,
         universal_newlines=True
     )
 
+    # Read the output while downloading
     for line in iter(rsync_proc.stdout.readline, ''):
         time.sleep(1)
+        # Check if the device is running out of space
         if check_space() is True:
             rsync_terminate(rsync_proc)
             yield json.dumps({'status': 500, 'running': False,
                               'message': 'Out of Space'}, 500)
             break
 
+        # Check if user has sent terminate request
         global rsync_request_terminate
         if rsync_request_terminate is True:
             rsync_terminate(rsync_proc)
@@ -151,6 +158,7 @@ def rsync_run(rsync_url):
                               'message': 'RSync terminated by user'})
             break
 
+        # Return log content to browser
         each_line = line.split()
 
         if each_line:
@@ -170,7 +178,7 @@ def rsync_run(rsync_url):
 
 
 def rsync_terminate(rsync_proc):
-
+    # Terminate RSync upon user request
     if rsync_proc == "terminate_request":
         global rsync_request_terminate
         rsync_request_terminate = True

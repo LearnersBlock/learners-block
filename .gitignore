@@ -1,14 +1,30 @@
 # defaults
+.thumbs.db
 .DS_Store
-node_modules
-/dist
+**/node_modules/
+**/dist/
+**/build/
+**/.quasar/
+
+# Cordova related directories and files
+**/src-cordova/node_modules/
+**/src-cordova/platforms/
+**/src-cordova/plugins/
+**/src-cordova/www/
+
+# Capacitor related directories and files
+**/src-capacitor/www/
+**/src-capacitor/node_modules/
+
+# BEX related directories and files
+**/src-bex/www/
+**/src-bex/js/core/
 
 # local env files
 .env.local
 .env.*.local
-__pycache__/
-/env
-.venv
+**/__pycache__/
+**/.venv/
 
 # Log files
 npm-debug.log*
@@ -16,8 +32,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Editor directories and files
+**/.vscode/
 .idea
-.vscode
 *.suo
 *.ntvs*
 *.njsproj
@@ -25,4 +41,5 @@ yarn-error.log*
 *.sw?
 
 # Applications
+/controller/app/db/*
 !.gitkeep

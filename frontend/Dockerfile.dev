@@ -1,142 +1,72 @@
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-# Build step: File-Manager
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
+FROM balenalib/amd64-alpine-node:14-build
 
-FROM composer AS filemanager-buildstep
-
-#Install required build dependencies
-RUN apk add ncurses
-
-# Copy content to prepare
-COPY ./apps/file-manager /build-tmp
-
-# Set workdir to the temp. build folder
-WORKDIR /build-tmp
-
-# Prepare .env configuration
-RUN cp .env.example .env
-
-# Run the build process
-RUN composer run build
+## Install development dependencies
+RUN apk add python3
+RUN yarn global add @quasar/cli && export PATH="$(yarn global bin):$PATH"
 
 
+# --------------- ## Mirror of production file ## -------------- #
+# Install packages #
 
-
-
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-# Docker Image
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-
-FROM balenalib/amd64-alpine-node:14.15.4-build
-
-
-# Packages
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-
-# Install Supervisor
+## Install SupervisorD
 RUN apk add supervisor
 
-# Install dependencies
+## Add mount dependencies
 RUN install_packages findmnt util-linux grep
 
-# Install NGINX and PHP-FPM
+## Install Nginx and PhP-FPM
 RUN install_packages php7 php7-fpm php7-opcache php7-mysqli php7-json \
-    php7-openssl php7-curl php7-zlib php7-xml php7-phar php7-intl php7-dom \ 
+    php7-openssl php7-curl php7-zlib php7-xml php7-phar php7-intl php7-dom \
     php7-xmlreader php7-ctype php7-session php7-mbstring php7-gd nginx curl && \
     rm /etc/nginx/conf.d/default.conf
 
-# Install IFM Filemanager dependencies
-RUN install_packages libbz2 libzip libcap openldap-dev php7-zip php7-ldap \ 
-    php7-bz2 php7-fileinfo php7-posix
+## Install File Manager dependencies
+RUN install_packages libbz2 libzip libcap openldap-dev php7-zip php7-ldap php7-bz2 \
+    php7-fileinfo php7-posix
 
 
+# Create root directories #
+RUN mkdir -p /app/web/public/frontend && \
+    mkdir -p /app/web/public/files && \
+    mkdir -p /app/web/public/storage && \
+    mkdir -p /app/web/public/storage/library && \ 
+    mkdir -p /app/web/public/storage/website && \
+    mkdir -p /app/web/public/storage/fileshare
 
-# Directories
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-
-# Set application directory
+# Set application directory 
 WORKDIR /app/web/
 
-# Create root directories
-RUN mkdir -p ./public/interface && \
-    mkdir -p ./public/files && \ 
-    mkdir -p ./public/storage && \ 
-    mkdir -p ./public/storage/website && \
-    mkdir -p ./public/storage/fileshare
+# Configure the controller #
 
-# Create nginx pid directory
-RUN mkdir -p /run/nginx
-
-
-
-# Service configurations
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-
-# Copy Supervisor config to container
+## Configure SupervisorD
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Copy USB config to container and execute
-#ENV UDEV=on
+## Enable USB support on device
+ENV UDEV=on
 COPY config/usb/udev/usb.rules /etc/udev/rules.d/usb.rules
 COPY config/usb/scripts /usr/src/scripts
 RUN chmod +x /usr/src/scripts/*
 
-# Copy PHP-FPM & NGINX configs to container
+# Configure PhP-FPM and NGINX
 COPY config/php/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY config/php/php.ini /etc/php7/conf.d/custom.ini
-COPY config/nginx/development/ /etc/nginx/
+COPY /config/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY /config/nginx/conf/ /etc/nginx/conf.d/
 
-
-
-
-# Frontend interface app configuration
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-
-# Set node env
-ENV NODE_ENV=development
-
-# Create node modules folder
-RUN mkdir -p ./public/interface/node_modules
-
-# Copy frontend interface source code to container
-COPY ./apps/interface/ ./public/interface/
-
-# Install app dependencies
-RUN cd ./public/interface && npm install
-
-# Run static production build
-RUN cd ./public/interface && npm run build
-
-
-
-# Filemanager app configuration
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-
-# Copy the build artifacts to the container 
-COPY --from=filemanager-buildstep --chown=nginx /build-tmp/dist /app/web/public/files/dist
-
-# Copy the .env configuration file to the container
-# TODO: For security purposes, the .env needs to be copied to the files/ root
-# once the bugfix has been applied to the filemanager
-COPY --from=filemanager-buildstep --chown=nginx /build-tmp/.env /app/web/public/files/dist
-
-
-
-# Permissions
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
+## Set file permissions 
 RUN chown -R nginx.nginx /run && \
-    chown -R nginx.nginx /app/web/public/interface && \
-    chown -R nginx.nginx /app/web/public/files && \
+    chown -R nginx.nginx /app/web/public/frontend && \
+    chown -R nobody.nobody /app/web/public/storage/library/ && \
     chown -R nobody.nobody /app/web/public/storage/website/ && \
     chown -R nobody.nobody /app/web/public/storage/fileshare/
 
+# --------------- ## End mirror of production file ## -------------- #
 
+## Disable USB support to prevent error message in dev env
+ENV UDEV=off
 
-# Launch
-# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– #
-
-# Export ports
-EXPOSE 8081 3000
+# Overwrite default Supervisor.conf with dev version
+COPY config/supervisor/supervisord_dev.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Start services
-CMD bash -c "supervisord -c /etc/supervisor/conf.d/supervisord.conf"
+CMD yarn install --cwd /app/web/public/interface_dev/ && supervisord -c /etc/supervisor/conf.d/supervisord.conf

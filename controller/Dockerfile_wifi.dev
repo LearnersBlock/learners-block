@@ -1,0 +1,11 @@
+FROM balenalib/amd64-alpine-node:14-build
+
+# React host and port for Wi-Fi connect in dev mode
+ENV HOST=0.0.0.0
+ENV PORT=8080
+
+# Set working directory 
+WORKDIR /app/wifi-connect/ui/
+
+# Launch
+CMD yarn install && yarn start
