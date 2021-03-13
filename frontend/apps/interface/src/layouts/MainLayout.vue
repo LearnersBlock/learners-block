@@ -53,6 +53,7 @@
 <script lang="ts">
 
 import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
+import qLang from '../i18n/index'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -60,16 +61,16 @@ export default defineComponent({
     const leftDrawerOpen = ref(false)
     const languages = ref([
       {
-        label: 'English',
+        label: qLang.qEnUS.nativeName,
         value: 'en-us'
       },
       {
-        label: 'French',
-        value: 'fr'
+        label: qLang.qAr.nativeName,
+        value: 'ar'
       },
       {
-        label: 'Arabic',
-        value: 'ar'
+        label: qLang.qFr.nativeName,
+        value: 'fr'
       }
     ])
 
