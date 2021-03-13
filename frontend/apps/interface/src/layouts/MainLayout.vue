@@ -4,9 +4,7 @@
       <q-toolbar>
 
         <q-avatar>
-          <span class="material-icons q-ml-md text-h5">
-          view_in_ar
-        </span>
+          <img src="../assets/lb-logo.png">
         </q-avatar>
 
         <q-toolbar-title class="josefin text-h5 q-mt-xs" >
