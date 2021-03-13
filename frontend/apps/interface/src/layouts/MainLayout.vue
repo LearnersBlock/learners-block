@@ -32,12 +32,6 @@
           </q-item>
         </router-link>
 
-           <router-link to="/password_reset">
-          <q-item class="flex items-center" clickable>
-            <q-icon name="vpn_key"></q-icon>
-          </q-item>
-        </router-link>
-
           <q-item v-if="isAuthenticated" @click="logout" class="flex items-center" clickable>
             <q-icon name="logout"></q-icon>
           </q-item>

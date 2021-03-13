@@ -99,7 +99,7 @@ export const NetworkInfoForm = ({
 					mx: '20%',
 					mt: 3,
 					disabled: availableNetworks.length <= 0,
-					bg: '#6baf65',
+					bg: '#7AB774',
 				}}
 				submitButtonText={setlang.connect}
 			/>

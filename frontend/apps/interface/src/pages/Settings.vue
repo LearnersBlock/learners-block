@@ -1,21 +1,22 @@
 <template>
-    <q-page class="py-10 px-52">
-<q-page-sticky position="top-left" :offset="[18, 18]">
-        <router-link color="secondary" class="back text-h6 cursor-pointer" to="/">
-        <q-btn color="white" text-color="primary" class="text-subtitle2 text-weight-bold">
-          {{$t('home')}}
+    <q-page>
+        <router-link color="secondary" class="self-start mt-3 pl-3 lg:pl-40 text-h6 cursor-pointer" to="/">
+        <q-btn color="white" text-color="primary" class="mt-4 text-subtitle2 text-weight-bold">
+          {{$t('back')}}
         </q-btn>
         </router-link>
-   </q-page-sticky>
-        <div class="text-5xl text-gray-600">{{ $t('settings') }}</div>
-        <hr class="mt-6 mb-6" />
+    <div class="flex flex-col items-center">
+      <div class="max-w-5xl">
+      <div>
+        <div class="mt-10 pl-3 text-5xl text-gray-600">{{ $t('settings') }}</div>
+        <hr class="mt-3" />
    <div class="flex flex-col">
      <q-list>
-     <q-item-label header class="text-2xl">Enable components</q-item-label>
+     <q-item-label header class="pr-12 text-2xl">Enable components</q-item-label>
      <q-item class="flex">
         <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('files')}}</q-item-label>
-              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text.  Loresm ipsum dolor sit amet, consecte Loresm ipsum dolor sit amet, consecteoresm ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
        <q-toggle
         v-model="files"
@@ -29,13 +30,13 @@
       <q-spinner
         v-if="filesLoading"
         color="primary"
-        size="3em"
+        size="2em"
       />
      </q-item>
      <q-item >
          <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('website')}}</q-item-label>
-              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
     <q-toggle
         v-model="website"
@@ -48,14 +49,14 @@
        <q-spinner
        v-if="websiteLoading"
         color="primary"
-        size="3em"
+        size="2em"
       />
      </q-item>
 
       <q-item>
          <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('makerspace')}}</q-item-label>
-              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
       <q-toggle
         v-model="makerspace"
@@ -67,14 +68,14 @@
         <q-spinner
         v-if="makerspaceLoading"
         color="primary"
-        size="3em"
+        size="2em"
       />
      </q-item>
 
      <q-item>
         <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('library')}}</q-item-label>
-              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
       <q-toggle
         v-model="library"
@@ -86,7 +87,7 @@
        <q-spinner
         v-if="libraryLoading"
         color="primary"
-        size="3em"
+        size="2em"
       />
      </q-item>
 
@@ -94,34 +95,36 @@
    <q-separator spaced />
    <q-item-label header class="text-2xl">Login</q-item-label>
 
+      <q-btn outline rounded no-caps color="primary" to="/password_reset" :label="$t('reset_password')" class="ml-3 mr-3 mb-2 text-lg" />
+
    <q-separator spaced />
    <q-item-label header class="text-2xl">Wi-Fi</q-item-label>
     <div>
    <div class="text-lg ml-4">
      <div v-if="!wifi">
-      Status: {{$t('disconnect')}}
+      Status: {{$t('disconnected')}}
    </div>
    <div v-else>
-     Status: {{$t('connect')}}
+     Status: {{$t('connected')}}
      </div>
      </div>
-      <q-btn
+         </div>
+      <q-btn outline rounded no-caps
         v-model="wifi"
         color="primary"
         @click="connectDisconnectWifi"
-        class="ml-4 mt-3 mb-3"
+        class="ml-3 mr-3 mt-1 mb-2 text-lg"
         :label="!wifi ? $t('connect'): $t('disconnect')"
       />
         <q-spinner
         v-if="loading"
         color="primary"
-        size="3em"
+        size="2em"
       />
-    </div>
-   <q-separator spaced />
+
 
    </div>
-   <q-list bordered class="rounded-borders mt-10 ">
+   <q-list bordered class="rounded-borders mt-5 ">
       <q-expansion-item
         expand-separator
         icon="build"
@@ -133,7 +136,7 @@
    </div>
        <q-card>
         <q-card-section>
-          <q-input filled class="ml-1 mr-2"
+          <q-input filled class="ml-1 mr-1"
              :rules="[(val) =>
              !val.includes(' ') &&
              val.length <= 32
@@ -144,33 +147,32 @@
              :label="$t('hostname')"
              lazy-rules
               />
-            <q-btn color="primary" @click="updateHostname" :label="$t('set')" class="px-4 ml-4 mt-3 text-md mb-6" />
+            <q-btn outline rounded no-caps color="primary" @click="updateHostname" :label="$t('set')" class="px-4 ml-4 mt-3 text-md mb-6 text-lg" />
             <q-separator spaced />
 
         <div>
                <q-item class="flex">
         <q-item-section>
               <q-item-label class="josefin text-xl mt-3">{{$t('Portainer')}}</q-item-label>
-              <q-item-label class="text-base" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. text. Lorsad asd asd sdatext. Lorsad asd asd sdatext. Lorsad asd asd sdatext. Lorsad asd asd sdaLorsad asd asd sdasdasd em ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
-        
+
           <q-toggle
           class="mt-3"
             v-model="portainer"
             @input="updatePortainer"
             v-if="!portainerLoading"
-            :label="$t('portainer')"
             icon="widgets"
             size="lg"
           />
             <q-spinner
             v-if="portainerLoading"
             color="primary"
-            size="3em"
+            size="2em"
           />
                </q-item>
         </div>
-        <a :href="'http://' + hostname + ':9000'" target="_blank" v-if="portainer">Hostname</a>
+        <div class="pl-6"><a :href="'http://' + hostname + ':9000'" target="_blank" v-if="portainer">Click here to open Portainer</a></div>
           </q-card-section>
         </q-card>
       </q-expansion-item>
@@ -178,11 +180,14 @@
    <div class="text-center text-2xl mt-10 mb-4 text-gray-600">
       System Info
    </div>
-   <div class="flex flex-col text-center text-gray">
+   <div class="flex flex-col text-center text-gray pb-4">
     <span class="text-gray-600"><span>{{$t('total_storage')}}: </span>{{ sysInfo.storage.total }}</span>
     <span class="text-gray-600"><span>{{$t('available_storage') }}: </span> {{ sysInfo.storage.available }}</span>
     <span class="text-gray-600"><span>{{$t('version') }}: </span>{{ sysInfo.versions.lb }}</span>
    </div>
+  </div>
+    </div>
+        </div>
   </q-page>
 </template>
 
@@ -252,7 +257,7 @@ export default defineComponent({
       })
       setTimeout(() => {
         filesLoading.value = false
-      }, 1000)
+      }, 1)
     }
 
     const updateWebsite = async () => {
@@ -262,7 +267,7 @@ export default defineComponent({
       })
       setTimeout(() => {
         websiteLoading.value = false
-      }, 1000)
+      }, 1)
     }
 
     const updateLibrary = async () => {
@@ -272,7 +277,7 @@ export default defineComponent({
       })
       setTimeout(() => {
         libraryLoading.value = false
-      }, 1000)
+      }, 1)
     }
 
     const updateMakerspace = async () => {
@@ -282,7 +287,7 @@ export default defineComponent({
       })
       setTimeout(() => {
         makerspaceLoading.value = false
-      }, 1000)
+      }, 1)
     }
 
     const updatePortainer = async () => {
@@ -296,7 +301,7 @@ export default defineComponent({
 
       setTimeout(() => {
         portainerLoading.value = false
-      }, 1000)
+      }, 1)
     }
 
     const updateHostname = async () => {

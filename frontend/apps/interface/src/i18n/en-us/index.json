@@ -1,5 +1,6 @@
 {
   "login": "Login",
+  "back": "Back",
   "settings": "Settings",
   "files": "Files",
   "website": "Website",
@@ -11,6 +12,8 @@
   "set": "Set",
   "connect": "Connect",
   "disconnect": "Disconnect",
+  "connected": "Connected",
+  "disconnected": "Disconnected",
   "total_storage": "Total Storage",
   "available_storage": "Available Storage",
   "version": "Version",
