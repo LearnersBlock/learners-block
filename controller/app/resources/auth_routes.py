@@ -58,7 +58,6 @@ class login(Resource):
 
 
 class logout(Resource):
-    @jwt_required()
     def post(self):
         response = jsonify({"message": "logout successful"})
         unset_jwt_cookies(response)
@@ -94,4 +93,4 @@ class verify_login(Resource):
             verify_jwt_in_request()
             return {'logged_in': True, 'user': get_jwt_identity()}, 200
         except Exception:
-            return {'logged_in': False}, 401
+            return {'logged_in': False}, 200
