@@ -33,9 +33,8 @@ class device(Resource):
 
 class host_config(Resource):
     @jwt_required()
-    def get(self, hostname):
+    def post(self):
         content = request.get_json()
-
         return {
             'status': 200,
             'message': "OK",

@@ -177,7 +177,7 @@ if __name__ == '__main__':
     # Configure endpoints
     api.add_resource(device, '/v1/device')
     api.add_resource(health_check, '/')
-    api.add_resource(host_config, '/v1/hostconfig/<hostname>')
+    api.add_resource(host_config, '/v1/hostconfig')
     api.add_resource(hostname, '/v1/hostname')
     api.add_resource(journal_logs, '/v1/journallogs')
     api.add_resource(login, '/v1/login')

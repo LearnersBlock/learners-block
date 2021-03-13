@@ -2,7 +2,7 @@
     <q-page>
         <router-link color="secondary" class="self-start mt-3 pl-3 lg:pl-40 text-h6 cursor-pointer" to="/">
         <q-btn color="white" text-color="primary" class="mt-4 text-subtitle2 text-weight-bold">
-          {{$t('back')}}
+          {{$t('home')}}
         </q-btn>
         </router-link>
     <div class="flex flex-col items-center">
@@ -122,7 +122,6 @@
         size="2em"
       />
 
-
    </div>
    <q-list bordered class="rounded-borders mt-5 ">
       <q-expansion-item
@@ -131,7 +130,7 @@
         :label="$t('advanced')"
         class="w-full"
       >
-         <div class="text-lg ml-6 mt-6">
+   <div class="text-lg ml-6 mt-6">
       Set a new hostname:
    </div>
        <q-card>
@@ -306,7 +305,9 @@ export default defineComponent({
 
     const updateHostname = async () => {
       if (newHostname.value) {
-        await Axios.get(`${api.value}/v1/hostconfig/${newHostname.value}`)
+        await Axios.post(`${api.value}/v1/hostconfig`, {
+          hostname: newHostname.value
+        })
         const fetchedHostname = await Axios.get(`${api.value}/v1/hostname`)
         hostname.value = fetchedHostname.data.hostname
         newHostname.value = ''
