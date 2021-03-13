@@ -1,8 +1,8 @@
 <template>
-<q-page class="flex justify-center items-center">
+<q-page class="flex flex-col justify-center items-center">
     <q-form
       @submit="resetPassword"
-      class="w-1/5 mb-6"
+      class="mb-6 flex flex-col"
     >
       <div class="text-h4 mb-6 text-gray-600">{{ $t('reset_password') }}</div>
       <q-input
@@ -11,12 +11,17 @@
         :label="$t('your_new_password')"
         type="password"
       />
+
       <q-btn
         :label="$t('reset')"
         class="mt-4"
         type="submit"
-        color="primary"
+        color="white"
+        text-color="primary"
       />
+        <q-btn color="primary" text-color="white" class="mt-4" to="/">
+          {{$t('cancel')}}
+        </q-btn>
     </q-form>
   </q-page>
 </template>
