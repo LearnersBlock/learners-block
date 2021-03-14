@@ -36,7 +36,7 @@ class login(Resource):
         try:
             lb_database = User.query.filter_by(username='lb').first()
         except:
-            return {'response': 'Error reading database.'}, 403
+            return {'response': 'Error reading database.'}, 500
 
         try:
             content = request.get_json()
@@ -44,11 +44,11 @@ class login(Resource):
                                                    lb_database.password)
             username = content["username"].lower()
         except AttributeError:
-            return {'response': 'Error: Must pass valid string.'}, 403
+            return {'response': 'Error: Must pass valid string.'}, 200
 
         if username != lb_database.username or verify_password is not \
                 True:
-            return {"message": "Bad username or password"}, 401
+            return {"message": "Bad username or password"}, 200
         access_token = create_access_token(identity=username)
         response = jsonify({"message": "login successful",
                             "token": access_token})
