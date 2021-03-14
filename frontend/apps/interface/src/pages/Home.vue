@@ -35,31 +35,31 @@
           <q-separator v-if="settings.files" />
 
           <q-item
-            v-if="settings.website"
+            v-if="settings.library"
             class="cursor-pointer py-3"
             tag="a"
-            target="_self"
-            href="/website"
+            target="_blank"
+            href="https://library.learnersblock.org"
           >
             <q-item-section
               side
               middle
             >
               <q-icon
-                name="language"
-                color="yellow"
+                name="import_contacts"
+                color="green"
               />
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-2xl pr-12">
-                {{ $t('website') }}
+                {{ $t('library') }}
               </q-item-label>
               <q-item-label class="text-lg text-gray-500">
-                {{ $t('website_description') }}
+                {{ $t('library_description') }}
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-separator v-if="settings.website" />
+          <q-separator v-if="settings.library" />
 
           <q-item
             v-if="settings.makerspace"
@@ -86,32 +86,33 @@
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.makerspace" />
+
           <q-item
-            v-if="settings.library"
+            v-if="settings.website"
             class="cursor-pointer py-3"
             tag="a"
-            target="_blank"
-            href="https://library.learnersblock.org"
+            target="_self"
+            href="/website"
           >
             <q-item-section
               side
               middle
             >
               <q-icon
-                name="import_contacts"
-                color="green"
+                name="language"
+                color="yellow"
               />
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-2xl pr-12">
-                {{ $t('library') }}
+                {{ $t('website') }}
               </q-item-label>
               <q-item-label class="text-lg text-gray-500">
-                {{ $t('library_description') }}
+                {{ $t('website_description') }}
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-separator v-if="settings.library" />
+          <q-separator v-if="settings.website" />
         </q-list>
         <h1
           class="text-3xl text-gray-700"

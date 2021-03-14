@@ -28,7 +28,23 @@
               >
                 {{ $t('enable_components') }}
               </q-item-label>
-              <q-item class="flex">
+
+              <div class="text-base ml-4 mb-4 text-gray-600">
+                {{ $t('click_toggle') }}
+              </div>
+              <q-item
+                clickable
+                v-ripple
+                tag="a"
+                target="_blank"
+                href="/files"
+              >
+                <q-icon
+                  name="folder"
+                  color="orange"
+                  style="font-size: 2em"
+                  class="mr-3"
+                />
                 <q-item-section>
                   <q-item-label class="josefin text-xl">
                     {{ $t('files') }}
@@ -52,32 +68,56 @@
                   class="mt-5 mr-6"
                 />
               </q-item>
-              <q-item>
+
+              <q-item
+                clickable
+                v-ripple
+                tag="a"
+                target="_blank"
+                href="https://library.learnersblock.org"
+              >
+                <q-icon
+                  name="import_contacts"
+                  color="green"
+                  style="font-size: 2em"
+                  class="mr-3"
+                />
                 <q-item-section>
                   <q-item-label class="josefin text-xl">
-                    {{ $t('website') }}
+                    {{ $t('library') }}
                   </q-item-label>
                   <q-item-label class="text-base pr-1 text-gray-500">
-                    {{ $t('website_settings_description') }}
+                    {{ $t('library_settings_description') }}
                   </q-item-label>
                 </q-item-section>
                 <q-toggle
-                  v-model="website"
-                  icon="web"
+                  v-model="library"
+                  icon="import_contacts"
                   size="lg"
-                  class="ml-auto"
-                  v-if="!websiteLoading"
-                  @input="updateWebsite"
+                  v-if="!libraryLoading"
+                  @input="updateLibrary"
                 />
                 <q-spinner
-                  v-if="websiteLoading"
+                  v-if="libraryLoading"
                   color="primary"
                   size="2em"
                   class="mt-5 mr-6"
                 />
               </q-item>
 
-              <q-item>
+              <q-item
+                clickable
+                v-ripple
+                tag="a"
+                target="_blank"
+                href="/makerspace"
+              >
+                <q-icon
+                  name="space_bar"
+                  color="blue"
+                  style="font-size: 2em"
+                  class="mr-3"
+                />
                 <q-item-section>
                   <q-item-label class="josefin text-xl">
                     {{ $t('makerspace') }}
@@ -101,24 +141,37 @@
                 />
               </q-item>
 
-              <q-item>
+              <q-item
+                clickable
+                v-ripple
+                tag="a"
+                target="_blank"
+                href="/upload-website"
+              >
+                <q-icon
+                  name="language"
+                  color="yellow"
+                  style="font-size: 2em"
+                  class="mr-3"
+                />
                 <q-item-section>
                   <q-item-label class="josefin text-xl">
-                    {{ $t('library') }}
+                    {{ $t('website') }}
                   </q-item-label>
                   <q-item-label class="text-base pr-1 text-gray-500">
-                    {{ $t('library_settings_description') }}
+                    {{ $t('website_settings_description') }}
                   </q-item-label>
                 </q-item-section>
                 <q-toggle
-                  v-model="library"
-                  icon="import_contacts"
+                  v-model="website"
+                  icon="language"
                   size="lg"
-                  v-if="!libraryLoading"
-                  @input="updateLibrary"
+                  class="ml-auto"
+                  v-if="!websiteLoading"
+                  @input="updateWebsite"
                 />
                 <q-spinner
-                  v-if="libraryLoading"
+                  v-if="websiteLoading"
                   color="primary"
                   size="2em"
                   class="mt-5 mr-6"
@@ -126,6 +179,7 @@
               </q-item>
             </q-list>
             <q-separator spaced />
+
             <q-item-label
               header
               class="text-2xl"
