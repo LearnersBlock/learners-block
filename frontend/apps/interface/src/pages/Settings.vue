@@ -16,7 +16,7 @@
      <q-item class="flex">
         <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('files')}}</q-item-label>
-              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text.  Loresm ipsum dolor sit amet, consecte Loresm ipsum dolor sit amet, consecteoresm ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">Secondary line text.  Loresm ipsum dolor sit amet, consecte Loresm ipsum dolor sit amet, consecteoresm ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
        <q-toggle
         v-model="files"
@@ -36,7 +36,7 @@
      <q-item >
          <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('website')}}</q-item-label>
-              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
     <q-toggle
         v-model="website"
@@ -56,7 +56,7 @@
       <q-item>
          <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('makerspace')}}</q-item-label>
-              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
       <q-toggle
         v-model="makerspace"
@@ -75,7 +75,7 @@
      <q-item>
         <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('library')}}</q-item-label>
-              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
       <q-toggle
         v-model="library"
@@ -146,18 +146,18 @@
              :label="$t('hostname')"
              lazy-rules
               />
-            <q-btn outline rounded no-caps color="primary" @click="updateHostname" :label="$t('set')" class="px-4 ml-4 mt-3 text-md mb-6 text-lg" />
+            <q-btn outline rounded no-caps color="primary" @click="updateHostname" :label="$t('set')" class="full-width ml-3 mr-3 mt-1 mb-4 text-lg" />
             <q-separator spaced />
 
         <div>
                <q-item class="flex">
         <q-item-section>
               <q-item-label class="josefin text-xl mt-3">{{$t('Portainer')}}</q-item-label>
-              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. text. Lorsad asd asd sdatext. Lorsad asd asd sdatext. Lorsad asd asd sdatext. Lorsad asd asd sdaLorsad asd asd sdasdasd em ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. text. Lors ad asd asd sdatext. Lorsad asd asd sdatext. Lorsad asd asd sdatext. Lorsad asd asd sdaLorsad asd asd sdasdasd em ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
         </q-item-section>
 
           <q-toggle
-          class="mt-3"
+          class="mt-3 self-end"
             v-model="portainer"
             @input="updatePortainer"
             v-if="!portainerLoading"
@@ -176,10 +176,10 @@
         </q-card>
       </q-expansion-item>
    </q-list>
-   <div class="text-center text-2xl mt-10 mb-4 text-gray-600">
+   <div class="text-center text-2xl mt-6 mb-4 text-gray-600">
       System Info
    </div>
-   <div class="flex flex-col text-center text-gray pb-4">
+   <div class="flex flex-col text-center text-gray pb-5">
     <span class="text-gray-600"><span>{{$t('total_storage')}}: </span>{{ sysInfo.storage.total }}</span>
     <span class="text-gray-600"><span>{{$t('available_storage') }}: </span> {{ sysInfo.storage.available }}</span>
     <span class="text-gray-600"><span>{{$t('version') }}: </span>{{ sysInfo.versions.lb }}</span>

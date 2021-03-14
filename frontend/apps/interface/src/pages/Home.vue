@@ -1,55 +1,56 @@
 <template>
      <q-page>
-       <div class="flex flex-col items-center text-center md:text-left">
+       <div class="flex flex-col items-center text-center md:text-left ">
+                <div class="max-w-5xl">
        <div class="mt-10 text-4xl text-gray-600">{{ $t('welcome') }}</div>
         <hr class="mb-10"/>
         <q-list v-if="!allIsDisabled">
-          <q-item  v-if="settings.files" class="cursor-pointer py-3" tag="a" target="_self" href="https://www.facebook.com">
+          <q-item  v-if="settings.files" class="cursor-pointer py-3" tag="a" target="_self" href="/files">
             <q-item-section side middle>
               <q-icon name="folder" color="orange" />
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-xl pr-12">{{$t('files')}}</q-item-label>
-              <q-item-label class="text-lg" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.files"  />
 
-          <q-item v-if="settings.website"  class="cursor-pointer py-3" tag="a" target="_self" href="https://www.facebook.com">
+          <q-item v-if="settings.website"  class="cursor-pointer py-3" tag="a" target="_self" href="/website">
             <q-item-section side middle>
               <q-icon name="language" color="yellow" />
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-xl pr-12">{{ $t('website') }}</q-item-label>
-              <q-item-label class="text-lg" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg text-gray-500">Secondary l Lorem ipsum dolor sit amet, co Lorem ipsum dolor sit amet, co Lorem ipsum dolor sit amet, coine text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.website"  />
 
-          <q-item v-if="settings.makerspace" class="cursor-pointer py-3" to="/makerspace" target="_self" href="https://www.facebook.com">
+          <q-item v-if="settings.makerspace" class="cursor-pointer py-3" to="/makerspace" target="_self">
             <q-item-section side middle>
               <q-icon name="space_bar" color="blue" />
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-xl pr-12">{{ $t('makerspace') }}</q-item-label>
-              <q-item-label class="text-lg" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.makerspace" />
-
-          <q-item v-if="settings.library" to="/library"  class="cursor-pointer py-3" href="https://www.facebook.com">
+          <q-item v-if="settings.library" class="cursor-pointer py-3" tag="a" target="_blank" href="https://library.learnersblock.org">
             <q-item-section side middle>
               <q-icon name="import_contacts" color="green" />
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-xl pr-12">{{ $t('library') }}</q-item-label>
-              <q-item-label class="text-lg" caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.library" />
 
        </q-list>
        <h1 class="text-3xl text-gray-700" v-else>{{ $t('no_url_is_enabled') }}</h1>
+            </div>
             </div>
      </q-page>
 </template>
