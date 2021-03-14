@@ -113,7 +113,7 @@
                 href="/makerspace"
               >
                 <q-icon
-                  name="space_bar"
+                  name="create"
                   color="blue"
                   style="font-size: 2em"
                   class="mr-3"
@@ -128,7 +128,7 @@
                 </q-item-section>
                 <q-toggle
                   v-model="makerspace"
-                  icon="space_bar"
+                  icon="create"
                   size="lg"
                   v-if="!makerspaceLoading"
                   @input="updateMakerspace"

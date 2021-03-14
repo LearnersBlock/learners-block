@@ -72,7 +72,7 @@
               middle
             >
               <q-icon
-                name="space_bar"
+                name="create"
                 color="blue"
               />
             </q-item-section>
