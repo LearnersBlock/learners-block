@@ -1,10 +1,12 @@
 <template>
-<q-page class="flex flex-col justify-center items-center">
+  <q-page class="flex flex-col justify-center items-center">
     <q-form
       @submit="resetPassword"
       class="mb-6 flex flex-col"
     >
-      <div class="text-h4 mb-6 text-gray-600">{{ $t('reset_password') }}</div>
+      <div class="text-h4 mb-6 text-gray-600">
+        {{ $t('reset_password') }}
+      </div>
       <q-input
         filled
         v-model="newPassword"
@@ -19,9 +21,14 @@
         color="white"
         text-color="primary"
       />
-        <q-btn color="primary" text-color="white" class="mt-4" to="/">
-          {{$t('cancel')}}
-        </q-btn>
+      <q-btn
+        color="primary"
+        text-color="white"
+        class="mt-4"
+        to="/"
+      >
+        {{ $t('cancel') }}
+      </q-btn>
     </q-form>
   </q-page>
 </template>

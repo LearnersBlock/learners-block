@@ -1,7 +1,7 @@
 <template>
-    <div>
-        Captive Portal
-    </div>
+  <div>
+    Captive Portal
+  </div>
 </template>
 
 <script lang="ts">

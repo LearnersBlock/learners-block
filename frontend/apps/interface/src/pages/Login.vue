@@ -4,7 +4,9 @@
       @submit="login"
       class="mb-6 flex flex-col"
     >
-      <div class="text-h4 mb-6 text-gray-600">{{$t('login')}}</div>
+      <div class="text-h4 mb-6 text-gray-600">
+        {{ $t('login') }}
+      </div>
 
       <q-input
         filled
@@ -20,11 +22,16 @@
         color="white"
         text-color="primary"
       />
-              <q-btn color="primary" text-color="white" class="mt-4" to="/">
-          {{$t('cancel')}}
-        </q-btn>
+      <q-btn
+        color="primary"
+        text-color="white"
+        class="mt-4"
+        to="/"
+      >
+        {{ $t('cancel') }}
+      </q-btn>
     </q-form>
-</q-page>
+  </q-page>
 </template>
 
 <script lang="ts">

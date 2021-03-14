@@ -1,7 +1,7 @@
 <template>
-    <div>
-        Makerspace
-    </div>
+  <div>
+    Makerspace
+  </div>
 </template>
 
 <script lang="ts">

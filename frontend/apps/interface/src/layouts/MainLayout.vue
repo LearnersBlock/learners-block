@@ -2,37 +2,54 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-
         <q-avatar>
           <img src="../assets/lb-logo.png">
         </q-avatar>
 
-        <q-toolbar-title class="josefin text-h5 q-mt-xs" >
-          <router-link class="text-white" style="text-decoration:none;" to="/" >
-          Learner's Block
+        <q-toolbar-title class="josefin text-h5 q-mt-xs">
+          <router-link
+            class="text-white"
+            style="text-decoration:none;"
+            to="/"
+          >
+            Learner's Block
           </router-link>
         </q-toolbar-title>
         <q-item clickable>
           <span class="material-icons">
-          language
+            translate
           </span>
-           <q-menu>
-          <q-list style="min-width: 100px">
-            <q-item @click="changeLanguage(language.value)" v-for="language in languages" :key="language.value" clickable v-close-popup>
-              <q-item-section>{{ language.label }}</q-item-section>
-            </q-item>
-          </q-list>
-        </q-menu>
+          <q-menu>
+            <q-list style="min-width: 100px">
+              <q-item
+                @click="changeLanguage(language.value)"
+                v-for="language in languages"
+                :key="language.value"
+                clickable
+                v-close-popup
+              >
+                <q-item-section>{{ language.label }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
         </q-item>
         <router-link to="/settings">
-          <q-item class="flex items-center" clickable>
-            <q-icon name="settings"></q-icon>
+          <q-item
+            class="flex items-center"
+            clickable
+          >
+            <q-icon name="settings" />
           </q-item>
         </router-link>
 
-          <q-item v-if="isAuthenticated" @click="logout" class="flex items-center" clickable>
-            <q-icon name="logout"></q-icon>
-          </q-item>
+        <q-item
+          v-if="isAuthenticated"
+          @click="logout"
+          class="flex items-center"
+          clickable
+        >
+          <q-icon name="logout" />
+        </q-item>
       </q-toolbar>
     </q-header>
 

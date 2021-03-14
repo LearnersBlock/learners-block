@@ -1,7 +1,7 @@
 <template>
-    <div>
-        Library
-    </div>
+  <div>
+    Library
+  </div>
 </template>
 
 <script lang="ts">
