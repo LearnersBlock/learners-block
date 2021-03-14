@@ -1,8 +1,8 @@
 <template>
      <q-page>
-       <div class="flex flex-col items-center text-center md:text-left ">
+       <div class="flex flex-col items-center text-center md:text-left">
                 <div class="max-w-5xl">
-       <div class="mt-10 text-4xl text-gray-600">{{ $t('welcome') }}</div>
+       <div class="mt-10 text-4xl text-gray-600 ml-1 mr-1">{{ $t('welcome') }}</div>
         <hr class="mb-10"/>
         <q-list v-if="!allIsDisabled">
           <q-item  v-if="settings.files" class="cursor-pointer py-3" tag="a" target="_self" href="/files">
@@ -11,7 +11,7 @@
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-xl pr-12">{{$t('files')}}</q-item-label>
-              <q-item-label class="text-lg text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg text-gray-500">{{$t('files_description')}}</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.files"  />
@@ -22,7 +22,7 @@
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-xl pr-12">{{ $t('website') }}</q-item-label>
-              <q-item-label class="text-lg text-gray-500">Secondary l Lorem ipsum dolor sit amet, co Lorem ipsum dolor sit amet, co Lorem ipsum dolor sit amet, coine text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg text-gray-500">{{$t('website_description')}}</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.website"  />
@@ -33,7 +33,7 @@
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-xl pr-12">{{ $t('makerspace') }}</q-item-label>
-              <q-item-label class="text-lg text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg text-gray-500">{{$t('makerspace_description')}}</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.makerspace" />
@@ -43,7 +43,7 @@
             </q-item-section>
             <q-item-section>
               <q-item-label class="josefin text-xl pr-12">{{ $t('library') }}</q-item-label>
-              <q-item-label class="text-lg text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-lg text-gray-500">{{$t('library_description')}}</q-item-label>
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.library" />

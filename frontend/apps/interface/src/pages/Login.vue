@@ -1,31 +1,30 @@
 <template>
-  <div class="flex flex-col w-100 items-center justify-center">
-    <router-link class="mt-40"  to="/">
-        <q-btn color="primary" class="mb-28">
-          {{$t('home')}}
-        </q-btn>
-        </router-link>
+  <q-page class="flex flex-col justify-center items-center">
     <q-form
       @submit="login"
-      class="w-1/5 mb-6 self-center"
+      class="mb-6 flex flex-col"
     >
-      <div class="text-h4 mb-6 text-gray-600">Login</div>
+      <div class="text-h4 mb-6 text-gray-600">{{$t('login')}}</div>
 
       <q-input
         filled
         v-model="password"
-        label="Your password"
+        :label="$t('your_password')"
         type="password"
       />
 
       <q-btn
-        label="Login"
+        :label="$t('login')"
         class="mt-4"
         type="submit"
-        color="primary"
+        color="white"
+        text-color="primary"
       />
+              <q-btn color="primary" text-color="white" class="mt-4" to="/">
+          {{$t('cancel')}}
+        </q-btn>
     </q-form>
-</div>
+</q-page>
 </template>
 
 <script lang="ts">

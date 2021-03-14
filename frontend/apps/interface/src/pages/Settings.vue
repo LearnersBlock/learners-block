@@ -8,15 +8,15 @@
     <div class="flex flex-col items-center">
       <div class="max-w-5xl">
       <div>
-        <div class="mt-10 pl-3 text-5xl text-gray-600">{{ $t('settings') }}</div>
+        <div class="mt-10 pl-3 text-5xl text-gray-600">{{ $t('settings')}}</div>
         <hr class="mt-3" />
    <div class="flex flex-col">
      <q-list>
-     <q-item-label header class="pr-12 text-2xl">Enable components</q-item-label>
+     <q-item-label header class="pr-12 text-2xl">{{$t('enable_components')}}</q-item-label>
      <q-item class="flex">
         <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('files')}}</q-item-label>
-              <q-item-label class="text-base pr-1 text-gray-500">Secondary line text.  Loresm ipsum dolor sit amet, consecte Loresm ipsum dolor sit amet, consecteoresm ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">{{$t('files_settings_description')}}</q-item-label>
         </q-item-section>
        <q-toggle
         v-model="files"
@@ -36,7 +36,7 @@
      <q-item >
          <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('website')}}</q-item-label>
-              <q-item-label class="text-base pr-1 text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">{{$t('website_settings_description')}}</q-item-label>
         </q-item-section>
     <q-toggle
         v-model="website"
@@ -56,7 +56,7 @@
       <q-item>
          <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('makerspace')}}</q-item-label>
-              <q-item-label class="text-base pr-1 text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">{{$t('makerspace_settings_description')}}</q-item-label>
         </q-item-section>
       <q-toggle
         v-model="makerspace"
@@ -75,7 +75,7 @@
      <q-item>
         <q-item-section>
               <q-item-label class="josefin text-xl">{{$t('library')}}</q-item-label>
-              <q-item-label class="text-base pr-1 text-gray-500">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">{{$t('library_settings_description')}}</q-item-label>
         </q-item-section>
       <q-toggle
         v-model="library"
@@ -93,19 +93,19 @@
 
    </q-list>
    <q-separator spaced />
-   <q-item-label header class="text-2xl">Login</q-item-label>
+   <q-item-label header class="text-2xl">{{$t('login')}}</q-item-label>
 
       <q-btn outline rounded no-caps color="primary" to="/password_reset" :label="$t('reset_password')" class="ml-3 mr-3 mb-2 text-lg" />
 
    <q-separator spaced />
-   <q-item-label header class="text-2xl">Wi-Fi</q-item-label>
+   <q-item-label header class="text-2xl">{{$t('wifi')}}</q-item-label>
     <div>
    <div class="text-lg ml-4">
      <div v-if="!wifi">
-      Status: {{$t('disconnected')}}
+      {{ $t('settings') }}: {{$t('disconnected')}}
    </div>
    <div v-else>
-     Status: {{$t('connected')}}
+     {{ $t('settings') }}: {{$t('connected')}}
      </div>
      </div>
          </div>
@@ -131,7 +131,7 @@
         class="w-full"
       >
    <div class="text-lg ml-6 mt-6">
-      Set a new hostname:
+      {{$t('set_hostname_desc')}}
    </div>
        <q-card>
         <q-card-section>
@@ -152,8 +152,8 @@
         <div>
                <q-item class="flex">
         <q-item-section>
-              <q-item-label class="josefin text-xl mt-3">{{$t('Portainer')}}</q-item-label>
-              <q-item-label class="text-base pr-1" caption lines="2">Secondary line text. text. Lors ad asd asd sdatext. Lorsad asd asd sdatext. Lorsad asd asd sdatext. Lorsad asd asd sdaLorsad asd asd sdasdasd em ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              <q-item-label class="josefin text-xl mt-3">{{$t('portainer')}}</q-item-label>
+              <q-item-label class="text-base pr-1" caption lines="2">{{$t('portainer_settings_description')}}</q-item-label>
         </q-item-section>
 
           <q-toggle
@@ -171,13 +171,14 @@
           />
                </q-item>
         </div>
-        <div class="pl-6"><a :href="'http://' + hostname + ':9000'" target="_blank" v-if="portainer">Click here to open Portainer</a></div>
+        <div class="pl-6" v-if="portainer">{{$t('portainer_starting_at')}}: http://{{hostname}}:9000</div>
+        
           </q-card-section>
         </q-card>
       </q-expansion-item>
    </q-list>
    <div class="text-center text-2xl mt-6 mb-4 text-gray-600">
-      System Info
+      {{$t('system_info')}}
    </div>
    <div class="flex flex-col text-center text-gray pb-5">
     <span class="text-gray-600"><span>{{$t('total_storage')}}: </span>{{ sysInfo.storage.total }}</span>
@@ -245,7 +246,7 @@ export default defineComponent({
         await Axios.get(`${api.value}/v1/wifi/forget`)
         wifi.value = false
       } else {
-        window.open(`${hostname.value}.local:8080`)
+        window.open(`${hostname.value}:8080`)
       }
     }
 
