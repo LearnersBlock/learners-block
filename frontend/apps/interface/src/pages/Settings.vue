@@ -49,6 +49,7 @@
                   v-if="filesLoading"
                   color="primary"
                   size="2em"
+                  class="mt-5 mr-6"
                 />
               </q-item>
               <q-item>
@@ -72,6 +73,7 @@
                   v-if="websiteLoading"
                   color="primary"
                   size="2em"
+                  class="mt-5 mr-6"
                 />
               </q-item>
 
@@ -95,6 +97,7 @@
                   v-if="makerspaceLoading"
                   color="primary"
                   size="2em"
+                  class="mt-5 mr-6"
                 />
               </q-item>
 
@@ -118,6 +121,7 @@
                   v-if="libraryLoading"
                   color="primary"
                   size="2em"
+                  class="mt-5 mr-6"
                 />
               </q-item>
             </q-list>
@@ -152,7 +156,7 @@
                   {{ $t('status') }}: {{ $t('disconnected') }}
                 </div>
                 <div v-else>
-                  {{ $t('settings') }}: {{ $t('connected') }}
+                  {{ $t('status') }}: {{ $t('connected') }}
                 </div>
               </div>
             </div>
@@ -162,7 +166,7 @@
               no-caps
               v-model="wifi"
               color="primary"
-              @click="connectDisconnectWifi"
+              @click="wifiWarn"
               class="ml-3 mr-3 mt-1 mb-2 text-lg"
               :label="!wifi ? $t('connect'): $t('disconnect')"
             />
@@ -170,6 +174,7 @@
               v-if="loading"
               color="primary"
               size="2em"
+              class="mt-5 mr-6"
             />
           </div>
           <q-list
@@ -205,7 +210,7 @@
                     rounded
                     no-caps
                     color="primary"
-                    @click="updateHostname"
+                    @click="hostnameWarn"
                     :label="$t('set')"
                     class="full-width ml-3 mr-3 mt-1 mb-4 text-lg"
                   />
@@ -234,6 +239,7 @@
                         v-if="portainerLoading"
                         color="primary"
                         size="2em"
+                        class="mt-5 mr-6"
                       />
                     </q-item>
                   </div>
@@ -311,13 +317,26 @@ export default defineComponent({
       hostname.value = fetchedHostName.data.hostname
     })
 
-    const connectDisconnectWifi = async () => {
-      if (wifi.value === true) {
-        await Axios.get(`${api.value}/v1/wifi/forget`)
-        wifi.value = false
-      } else {
+    const wifiWarn = async () => {
+      if (wifi.value === false) {
         window.open(`${hostname.value}:8080`)
+      } else {
+        root.$q.dialog({
+          title: root.$tc('confirm'),
+          message: root.$tc('disconnect_wifi'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          connectDisconnectWifi()
+        }).onCancel(() => {
+        // console.log('>>>> Cancel')
+        })
       }
+    }
+
+    const connectDisconnectWifi = async () => {
+      await Axios.get(`${api.value}/v1/wifi/forget`)
+      wifi.value = false
     }
 
     const updateFiles = async () => {
@@ -385,6 +404,32 @@ export default defineComponent({
       }
     }
 
+    const hostnameWarn = async () => {
+      root.$q.dialog({
+        title: root.$tc('confirm'),
+        message: root.$tc('change_hostname_warning'),
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        updateHostname()
+
+        root.$q.dialog({
+          title: root.$tc('alert'),
+          message: root.$tc('hostname_changed_notification')
+        }).onOk(() => {
+          // console.log('OK')
+        }).onCancel(() => {
+          // console.log('Cancel')
+        }).onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    }
+
     return {
       files,
       website,
@@ -402,13 +447,13 @@ export default defineComponent({
       libraryLoading,
       filesLoading,
       sysInfo,
+      hostnameWarn,
+      wifiWarn,
       hostname,
       loading,
       updatePortainer,
       regexp,
-      newHostname,
-      updateHostname,
-      connectDisconnectWifi
+      newHostname
     }
   }
 })

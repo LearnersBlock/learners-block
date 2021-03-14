@@ -35,9 +35,14 @@
   "your_password": "Your password",
   "no_url_is_enabled": "No URL is enabled",
   "reset_password": "Reset password",
+  "confirm": "Confirm",
+  "alert": "Alert",
+  "hostname_changed_notification": "Your hostname has been updated. Please restart the system for this to take affect.",
   "set_hostname_desc": "Set a new hostname",
   "invalid_input": "Invalid Input",
   "portainer_starting_at": "Portainer starting at",
   "wifi": "Wi-Fi",
+  "change_hostname_warning": "Are you sure you want to change the hostname?",
+  "disconnect_wifi": "Are you sure you want to disconnect from the Wi-Fi?",
   "login_successfull": "Login successfull"
 }

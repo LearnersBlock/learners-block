@@ -35,6 +35,7 @@ class host_config(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
+        print(f"Hostname changed to '{content['hostname']}'")
         return {
             'status': 200,
             'message': "OK",
@@ -62,7 +63,6 @@ class journal_logs(Resource):
 class portainer_status(Resource):
     def get(self):
         global portainerstatus
-        print(portainerstatus)
         return {'status': 200, 'running': portainerstatus}, 200
 
 
