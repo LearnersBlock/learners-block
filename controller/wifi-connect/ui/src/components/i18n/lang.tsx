@@ -19,6 +19,8 @@ if (language === 'ar') {
 	setlang = de;
 } else if (language === 'en') {
 	setlang = en;
+} else if (language === 'en-us') {
+	setlang = en;
 } else if (language === 'fr') {
 	setlang = fr;
 } else if (language === 'es') {

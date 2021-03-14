@@ -383,7 +383,6 @@ export default defineComponent({
 
     const connectDisconnectWifi = async () => {
       await Axios.get(`${api.value}/v1/wifi/forget`)
-      wifi.value = false
     }
 
     const hostnameWarn = async () => {
@@ -488,7 +487,7 @@ export default defineComponent({
 
     const wifiWarn = async () => {
       if (wifi.value === false) {
-        window.open(`${hostname.value}:8080`)
+        window.open(`${hostname.value}:8080/?lang=${root.$i18n.locale}`)
       } else {
         root.$q.dialog({
           title: root.$tc('confirm'),
@@ -497,6 +496,7 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           connectDisconnectWifi()
+          wifi.value = false
         }).onCancel(() => {
         // console.log('>>>> Cancel')
         })
