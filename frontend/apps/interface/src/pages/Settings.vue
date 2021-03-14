@@ -139,7 +139,17 @@
               no-caps
               color="primary"
               to="/password_reset"
-              :label="$t('reset_password')"
+              :label="$t('set_password')"
+              class="ml-3 mr-3 mb-2 text-lg"
+            />
+
+            <q-btn
+              outline
+              rounded
+              no-caps
+              color="primary"
+              @click="disableLogin"
+              :label="$t('disable_password')"
               class="ml-3 mr-3 mb-2 text-lg"
             />
 
@@ -317,26 +327,44 @@ export default defineComponent({
       hostname.value = fetchedHostName.data.hostname
     })
 
-    const wifiWarn = async () => {
-      if (wifi.value === false) {
-        window.open(`${hostname.value}:8080`)
-      } else {
-        root.$q.dialog({
-          title: root.$tc('confirm'),
-          message: root.$tc('disconnect_wifi'),
-          cancel: true,
-          persistent: true
-        }).onOk(() => {
-          connectDisconnectWifi()
-        }).onCancel(() => {
-        // console.log('>>>> Cancel')
-        })
-      }
-    }
-
     const connectDisconnectWifi = async () => {
       await Axios.get(`${api.value}/v1/wifi/forget`)
       wifi.value = false
+    }
+
+    const hostnameWarn = async () => {
+      root.$q.dialog({
+        title: root.$tc('confirm'),
+        message: root.$tc('change_hostname_warning'),
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        updateHostname()
+
+        root.$q.dialog({
+          title: root.$tc('alert'),
+          message: root.$tc('hostname_changed_notification')
+        }).onOk(() => {
+          // console.log('OK')
+        }).onCancel(() => {
+          // console.log('Cancel')
+        }).onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    }
+
+    const disableLogin = async () => {
+      const response = await Axios.post(`${api.value}/v1/setpassword`, { password: ' ' })
+      if (response.status === 200) {
+        root.$q.notify({ type: 'positive', message: root.$tc('login_disabled') })
+      } else {
+        root.$q.notify({ type: 'negative', message: root.$tc('error') })
+      }
     }
 
     const updateFiles = async () => {
@@ -404,35 +432,27 @@ export default defineComponent({
       }
     }
 
-    const hostnameWarn = async () => {
-      root.$q.dialog({
-        title: root.$tc('confirm'),
-        message: root.$tc('change_hostname_warning'),
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        updateHostname()
-
+    const wifiWarn = async () => {
+      if (wifi.value === false) {
+        window.open(`${hostname.value}:8080`)
+      } else {
         root.$q.dialog({
-          title: root.$tc('alert'),
-          message: root.$tc('hostname_changed_notification')
+          title: root.$tc('confirm'),
+          message: root.$tc('disconnect_wifi'),
+          cancel: true,
+          persistent: true
         }).onOk(() => {
-          // console.log('OK')
+          connectDisconnectWifi()
         }).onCancel(() => {
-          // console.log('Cancel')
-        }).onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
-        })
-      }).onCancel(() => {
         // console.log('>>>> Cancel')
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
-      })
+        })
+      }
     }
 
     return {
       files,
       website,
+      disableLogin,
       library,
       makerspace,
       wifi,
