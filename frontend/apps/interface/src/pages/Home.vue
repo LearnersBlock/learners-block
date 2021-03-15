@@ -114,12 +114,12 @@
           </q-item>
           <q-separator v-if="settings.website" />
         </q-list>
-        <h1
-          class="text-3xl text-gray-700"
-          v-else
+        <div
+          v-if="!settings.website && !settings.files && !settings.makerspace && !settings.library"
+          class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
         >
-          {{ $t('no_url_is_enabled') }}
-        </h1>
+          {{ $t('enable_components_in') }}
+        </div>
       </div>
     </div>
   </q-page>
