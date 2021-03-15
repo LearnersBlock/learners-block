@@ -7,6 +7,15 @@
       {{ $t('visit_hostname') }}
       <br><br>
       http://{{ hostname }}
+      <span
+        @click="copyUrl;$q.notify($t('url_copied'));"
+        class="material-icons text-h6 mb-1 q-ml-sm cursor-pointer clipboard-sampleUrl"
+      >
+        content_copy
+        <q-tooltip>
+          <span class="text-subtitle1">Copy to clipboard</span>
+        </q-tooltip>
+      </span>
     </div>
   </div>
 </template>
@@ -14,6 +23,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import Axios from 'app/node_modules/axios'
+import { copyToClipboard } from 'quasar'
 
 export default defineComponent({
   setup (_, { root }) {
@@ -21,6 +31,10 @@ export default defineComponent({
     const api = computed(() => {
       return root.$store.getters.GET_API
     })
+
+    const copyUrl = () => {
+      copyToClipboard('http://' + hostname.value)
+    }
 
     const fetchHostname = async () => {
       const fetchedHostName = await Axios.get(`${api.value}/v1/hostname`)
@@ -30,6 +44,7 @@ export default defineComponent({
     fetchHostname()
 
     return {
+      copyUrl,
       hostname
     }
   }

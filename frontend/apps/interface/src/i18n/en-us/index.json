@@ -57,6 +57,7 @@
   "invalid_input": "Invalid Input. Hostnames must be: Max 32 characters; lower case; no spaces; no special characters other than ‘_’ and ‘-‘",
   "portainer_starting_at": "Portainer starting at",
   "wifi": "Wi-Fi",
+  "url_copied": "Copied URL to Clipboard",
   "change_hostname_warning": "Are you sure you want to change the hostname?",
   "disconnect_wifi": "Are you sure you want to disconnect from the Wi-Fi?",
   "login_successfull": "Login successfull"
