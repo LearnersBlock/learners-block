@@ -124,6 +124,10 @@ export default defineComponent({
 
       if (!root.$q.cookies.get('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
         root.$i18n.locale = usersLocale
+        root.$q.cookies.set('lang', root.$q.lang.getLocale(), {
+          path: '/',
+          sameSite: 'Lax'
+        })
       }
     })
 
