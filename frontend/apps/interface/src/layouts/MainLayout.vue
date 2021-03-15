@@ -92,6 +92,11 @@ export default defineComponent({
           'quasar/lang/' + 'he'
         ).then(lang => {
           root.$q.lang.set(lang.default)
+
+          root.$q.cookies.set('lang', value, {
+            path: '/',
+            sameSite: 'Lax'
+          })
         })
       } else {
         import(
@@ -99,6 +104,11 @@ export default defineComponent({
           'quasar/lang/' + 'en-us'
         ).then(lang => {
           root.$q.lang.set(lang.default)
+
+          root.$q.cookies.set('lang', value, {
+            path: '/',
+            sameSite: 'Lax'
+          })
         })
       }
       root.$i18n.locale = value
@@ -111,7 +121,8 @@ export default defineComponent({
 
     onMounted(() => {
       const usersLocale = root.$q.lang.getLocale()
-      if (usersLocale && languages.value.find(language => language.value === usersLocale)) {
+
+      if (!root.$q.cookies.get('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
         root.$i18n.locale = usersLocale
       }
     })
