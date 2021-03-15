@@ -338,24 +338,25 @@ import Axios from 'app/node_modules/axios'
 export default defineComponent({
   setup (_, { root }) {
     const files = ref<boolean>(false)
-    const hostnameValid = ref()
-    const website = ref<boolean>(false)
-    const library = ref<boolean>(false)
-    const makerspace = ref<boolean>(false)
-    const wifi = ref<boolean>(false)
-    const portainer = ref<boolean>(false)
-    const hostname = ref<string>('')
-    const newHostname = ref<string>('')
     const filesLoading = ref<boolean>(false)
-    const websiteLoading = ref<boolean>(false)
+    const hostname = ref<string>('')
+    const hostnameValid = ref()
+    const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
-    const makerspaceLoading = ref<boolean>(false)
-    const portainerLoading = ref<boolean>(false)
     const loading = ref<boolean>(false)
-    const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
+    const makerspace = ref<boolean>(false)
+    const makerspaceLoading = ref<boolean>(false)
+    const newHostname = ref<string>('')
+    const portainer = ref<boolean>(false)
+    const portainerLoading = ref<boolean>(false)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
+    const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
+    const website = ref<boolean>(false)
+    const websiteLoading = ref<boolean>(false)
+    const wifi = ref<boolean>(false)
+
     // Get api from store
     const api = computed(() => {
       return root.$store.getters.GET_API
@@ -508,31 +509,31 @@ export default defineComponent({
     }
 
     return {
-      files,
-      website,
       disableLogin,
+      files,
+      filesLoading,
+      hostname,
+      hostnameValid,
+      hostnameWarn,
       library,
+      libraryLoading,
+      loading,
       makerspace,
-      wifi,
+      makerspaceLoading,
+      newHostname,
       portainer,
+      portainerLoading,
+      regexp,
+      sysInfo,
       updateFiles,
-      updateWebsite,
       updateLibrary,
       updateMakerspace,
-      websiteLoading,
-      makerspaceLoading,
-      hostnameValid,
-      portainerLoading,
-      libraryLoading,
-      filesLoading,
-      sysInfo,
-      hostnameWarn,
-      wifiWarn,
-      hostname,
-      loading,
       updatePortainer,
-      regexp,
-      newHostname
+      website,
+      websiteLoading,
+      wifi,
+      wifiWarn,
+      updateWebsite
     }
   }
 })
