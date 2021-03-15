@@ -27,7 +27,6 @@ export default defineComponent({
       if (response.status === 200) {
         apiIsUp.value = true
       }
-      return apiIsUp
     }
 
     fetchPing()
