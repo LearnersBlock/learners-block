@@ -2,18 +2,16 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-avatar>
-          <img src="../assets/lb-logo.png">
-        </q-avatar>
+        <div class="ml-1">
+          <img src="../assets/lb-logo-white-full.svg">
+        </div>
 
         <q-toolbar-title class="josefin text-h5 q-mt-xs">
           <router-link
             class="text-white"
             style="text-decoration:none;"
             to="/"
-          >
-            Learner's Block
-          </router-link>
+          />
         </q-toolbar-title>
         <q-item clickable>
           <span class="material-icons">
