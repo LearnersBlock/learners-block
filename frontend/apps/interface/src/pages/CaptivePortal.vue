@@ -4,7 +4,7 @@
       {{ $t('welcome_lb') }}
     </div><br>
     <div class="text-xl text-center text-gray-500 ml-2 mr-2">
-      {{ $t('visit_hostname') }}
+      {{ $t('visit_to_begin') }}
       <br><br>
       http://{{ hostname }}
       <span

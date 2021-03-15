@@ -5,7 +5,7 @@
       class="mb-6 flex flex-col"
     >
       <div class="text-h4 mb-6 text-gray-600">
-        {{ $t('reset_password') }}
+        {{ $t('set_password') }}
       </div>
       <q-input
         filled
@@ -15,7 +15,7 @@
       />
 
       <q-btn
-        :label="$t('reset')"
+        :label="$t('set_password')"
         class="mt-4"
         type="submit"
         color="white"

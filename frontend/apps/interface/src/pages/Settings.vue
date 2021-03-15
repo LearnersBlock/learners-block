@@ -275,7 +275,7 @@
                     no-caps
                     color="primary"
                     @click="hostnameWarn"
-                    :label="$t('set')"
+                    :label="$t('set_hostname')"
                     class="full-width ml-3 mr-3 mt-1 mb-4 text-lg"
                   />
                   <q-separator spaced />
