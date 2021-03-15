@@ -17,15 +17,17 @@ import Axios from 'app/node_modules/axios'
 export default defineComponent({
   name: 'App',
   setup (_, { root }) {
-    const apiIsUp = ref<boolean>(false)
+    const apiIsUp = ref<boolean>(true)
     const api = computed(() => {
       return root.$store.getters.GET_API
     })
 
     const fetchPing = async () => {
-      const response = await Axios.get(`${api.value}`)
-      if (response.status === 200) {
+      try {
+        await Axios.get(`${api.value}`)
         apiIsUp.value = true
+      } catch (e) {
+        apiIsUp.value = false
       }
     }
 
