@@ -1,6 +1,6 @@
 <template>
-  <div>
-    Makerspace
+  <div class="mt-10 text-center text-h2">
+    Coming soon...
   </div>
 </template>
 

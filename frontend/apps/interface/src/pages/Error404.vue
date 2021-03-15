@@ -9,7 +9,7 @@
         class="text-h2"
         style="opacity:.4"
       >
-        Oops. Nothing here...
+        {{ $t('404') }}
       </div>
 
       <q-btn
@@ -18,7 +18,7 @@
         text-color="blue"
         unelevated
         to="/"
-        label="Go Home"
+        :label="$t('home')"
         no-caps
       />
     </div>
