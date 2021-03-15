@@ -104,6 +104,19 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
             "json_response": response.json()}
 
 
+def database_recover():
+    # Adding delay to allow user intervetion to abort
+    time.sleep(30)
+
+    # Remove the .db file. It will be rebuilt fresh on next boot.
+    # While this is a drastic step, it ensures devices do not
+    # get bricked in the field.
+    try:
+        os.remove(os.path.realpath('.') + "/db/sqlite.db")
+    except Exception:
+        print("Failed to delete the database file. May be missing.")
+
+
 def handle_exit(*args):
     # Ensure Wi-Fi Connect is shutdown softly
     try:
@@ -135,7 +148,7 @@ def rsync_run(rsync_url):
     rsync_proc = subprocess.Popen(
         ['rsync', '-azh', '--info=progress2', '--no-i-r', '--inplace',
             rsync_url,
-            './storage/library'],
+            os.path.realpath('.') + '/storage/library/'],
         stdout=subprocess.PIPE,
         universal_newlines=True
     )

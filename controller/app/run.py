@@ -34,11 +34,16 @@ def create_app(config):
     jwt = JWTManager(app)
 
     # Import database and migration process
-    db.init_app(app)
-    migrate.init_app(app, db)
-    with app.app_context():
-        db.create_all()
-        create_default_user()
+    try:
+        db.init_app(app)
+        migrate.init_app(app, db)
+        with app.app_context():
+            db.create_all()
+            create_default_user()
+    except Exception as ex:
+        print("Database error. Trying to recover: " + ex)
+        database_recover()
+
     api = Api(app)
     return app, api, jwt
 
@@ -132,10 +137,12 @@ if os.environ['FLASK_ENV'].lower() == "production":
 else:
     app, api, jwt = create_app('config.Development')
 
-# Import files reliant on App having been built
+# Import files reliant on Flask App having been built
 with app.app_context():
+    from common.processes import database_recover
     from resources.auth_routes import login, logout, set_password, verify_login
     from resources.database_routes import set_ui, settings_ui
+
 
 # Startup process
 if __name__ == '__main__':
