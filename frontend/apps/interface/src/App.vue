@@ -1,13 +1,41 @@
 <template>
-  <div id="q-app">
-    <router-view />
+  <div id="q-app row items-center justify-evenly">
+    <router-view v-if="apiIsUp" />
+    <div
+      v-else
+      class="text-h2 q-mt-xl q-ml-xl text-center"
+    >
+      {{ $t('api_down') }}
+    </div>
   </div>
 </template>
+
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, ref, computed } from '@vue/composition-api'
+import Axios from 'app/node_modules/axios'
 
 export default defineComponent({
-  name: 'App'
+  name: 'App',
+  setup (_, { root }) {
+    const apiIsUp = ref<boolean>(false)
+    const api = computed(() => {
+      return root.$store.getters.GET_API
+    })
+
+    const fetchPing = async () => {
+      const response = await Axios.get(`${api.value}`)
+      if (response.status === 200) {
+        apiIsUp.value = true
+      }
+      return apiIsUp
+    }
+
+    fetchPing()
+
+    return {
+      apiIsUp
+    }
+  }
 })
 </script>
 
