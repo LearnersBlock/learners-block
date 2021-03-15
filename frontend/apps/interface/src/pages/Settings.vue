@@ -385,6 +385,25 @@ export default defineComponent({
       await Axios.get(`${api.value}/v1/wifi/forget`)
     }
 
+    const disableLogin = async () => {
+      const response = await Axios.post(`${api.value}/v1/setpassword`, { password: ' ' })
+      if (response.status === 200) {
+        root.$q.notify({ type: 'positive', message: root.$tc('login_disabled') })
+      } else {
+        root.$q.notify({ type: 'negative', message: root.$tc('error') })
+      }
+    }
+
+    const updateFiles = async () => {
+      filesLoading.value = true
+      await Axios.post(`${api.value}/v1/setui`, {
+        files: files.value ? 'TRUE' : 'FALSE'
+      })
+      setTimeout(() => {
+        filesLoading.value = false
+      }, 1)
+    }
+
     const hostnameWarn = async () => {
       root.$q.dialog({
         title: root.$tc('confirm'),
@@ -409,25 +428,6 @@ export default defineComponent({
       }).onDismiss(() => {
         // console.log('I am triggered on both OK and Cancel')
       })
-    }
-
-    const disableLogin = async () => {
-      const response = await Axios.post(`${api.value}/v1/setpassword`, { password: ' ' })
-      if (response.status === 200) {
-        root.$q.notify({ type: 'positive', message: root.$tc('login_disabled') })
-      } else {
-        root.$q.notify({ type: 'negative', message: root.$tc('error') })
-      }
-    }
-
-    const updateFiles = async () => {
-      filesLoading.value = true
-      await Axios.post(`${api.value}/v1/setui`, {
-        files: files.value ? 'TRUE' : 'FALSE'
-      })
-      setTimeout(() => {
-        filesLoading.value = false
-      }, 1)
     }
 
     const updateWebsite = async () => {
