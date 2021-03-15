@@ -45,6 +45,7 @@
   "visit_hostname": "Visit the Learner's Block in your browser to start using your device.",
   "set_password": "Set password",
   "404": "Nothing here. You may have typed in a wrong address",
+  "401": "Unauthorised. Please try logging in again.",
   "confirm": "Confirm",
   "api_down": "The API is unavailable. Try again, or consider restarting the device.",
   "success": "Success",

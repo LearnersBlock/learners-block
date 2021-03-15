@@ -29,6 +29,16 @@ export default defineComponent({
       }
     }
 
+    Axios.interceptors.response.use(function (response) {
+      return response
+    }, function (error) {
+      if (error.response.status === 401) {
+        root.$store.dispatch('LOGOUT')
+        root.$router.push('/401')
+      }
+      return Promise.reject(error)
+    })
+
     fetchPing()
 
     return {

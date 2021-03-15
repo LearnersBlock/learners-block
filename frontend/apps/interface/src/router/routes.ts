@@ -11,7 +11,8 @@ const routes: RouteConfig[] = [
       { path: '/settings', component: () => import('pages/Settings.vue'), name: 'settings' },
       { path: '/captive-portal', component: () => import('pages/CaptivePortal.vue'), name: 'captive-portal' },
       { path: '/makerspace', component: () => import('pages/Makerspace.vue'), name: 'makerspace' },
-      { path: '/library', component: () => import('pages/Library.vue'), name: 'library' }
+      { path: '/library', component: () => import('pages/Library.vue'), name: 'library' },
+      { path: '/401', component: () => import('pages/401.vue'), name: '401' }
     ]
   },
 
