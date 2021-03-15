@@ -257,6 +257,7 @@
               <q-card>
                 <q-card-section>
                   <q-input
+                    ref="hostnameValid"
                     filled
                     class="ml-1 mr-1"
                     :rules="[(val) =>
@@ -267,7 +268,6 @@
                       || $t('invalid_input')]"
                     v-model="newHostname"
                     :label="$t('hostname')"
-                    lazy-rules
                   />
                   <q-btn
                     outline
@@ -338,6 +338,7 @@ import Axios from 'app/node_modules/axios'
 export default defineComponent({
   setup (_, { root }) {
     const files = ref<boolean>(false)
+    const hostnameValid = ref()
     const website = ref<boolean>(false)
     const library = ref<boolean>(false)
     const makerspace = ref<boolean>(false)
@@ -366,7 +367,6 @@ export default defineComponent({
       website.value = fetchedSettings.data.website
       library.value = fetchedSettings.data.library
       makerspace.value = fetchedSettings.data.makerspace
-
       // Get portainer status
       const fetchedPortainer = await Axios.get(`${api.value}/v1/portainer/status`)
       portainer.value = fetchedPortainer.data.message === 'Running'
@@ -394,6 +394,36 @@ export default defineComponent({
       }
     }
 
+    const hostnameWarn = async () => {
+      if (hostnameValid.value.validate() && newHostname.value !== '') {
+        root.$q.dialog({
+          title: root.$tc('confirm'),
+          message: root.$tc('change_hostname_warning'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          updateHostname()
+
+          root.$q.dialog({
+            title: root.$tc('success'),
+            message: root.$tc('hostname_changed_notification')
+          }).onOk(() => {
+          // console.log('OK')
+          }).onCancel(() => {
+          // console.log('Cancel')
+          }).onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+          })
+        }).onCancel(() => {
+        // console.log('>>>> Cancel')
+        }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+        })
+      } else {
+        root.$q.notify({ type: 'negative', message: root.$tc('invalid_hostname') })
+      }
+    }
+
     const updateFiles = async () => {
       filesLoading.value = true
       await Axios.post(`${api.value}/v1/setui`, {
@@ -401,42 +431,6 @@ export default defineComponent({
       })
       setTimeout(() => {
         filesLoading.value = false
-      }, 1)
-    }
-
-    const hostnameWarn = async () => {
-      root.$q.dialog({
-        title: root.$tc('confirm'),
-        message: root.$tc('change_hostname_warning'),
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        updateHostname()
-
-        root.$q.dialog({
-          title: root.$tc('alert'),
-          message: root.$tc('hostname_changed_notification')
-        }).onOk(() => {
-          // console.log('OK')
-        }).onCancel(() => {
-          // console.log('Cancel')
-        }).onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
-        })
-      }).onCancel(() => {
-        // console.log('>>>> Cancel')
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
-      })
-    }
-
-    const updateWebsite = async () => {
-      websiteLoading.value = true
-      await Axios.post(`${api.value}/v1/setui`, {
-        website: website.value ? 'TRUE' : 'FALSE'
-      })
-      setTimeout(() => {
-        websiteLoading.value = false
       }, 1)
     }
 
@@ -471,6 +465,16 @@ export default defineComponent({
 
       setTimeout(() => {
         portainerLoading.value = false
+      }, 1)
+    }
+
+    const updateWebsite = async () => {
+      websiteLoading.value = true
+      await Axios.post(`${api.value}/v1/setui`, {
+        website: website.value ? 'TRUE' : 'FALSE'
+      })
+      setTimeout(() => {
+        websiteLoading.value = false
       }, 1)
     }
 
@@ -517,6 +521,7 @@ export default defineComponent({
       updateMakerspace,
       websiteLoading,
       makerspaceLoading,
+      hostnameValid,
       portainerLoading,
       libraryLoading,
       filesLoading,
