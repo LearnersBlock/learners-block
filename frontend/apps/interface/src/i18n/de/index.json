@@ -1,1 +1,8 @@
-{}
+{
+    "cancel": "Abbrechen",
+    "connect": "Verbinden",
+    "login": "Login",
+    "password": "Passwort",
+    "username": "Benutzername",
+    "wifi": "WLAN"
+}
