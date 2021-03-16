@@ -22,19 +22,25 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 We provide and recommend using our Docker based development environment. The environment is built towards Mac OS AMD64. If you are running on another system, you may need to alter the image names in each of the Dockerfiles, replacing `amd64` with your operating system. A list of available images can be found [here]( https://www.balena.io/docs/reference/base-images/base-images/).  
 
-To start the development environment, clone the repository and run `docker-compose -f docker-compose-dev.yml up --build`. Enabling the Docker BuildKit will speed up build times considerably. 
+To start the development environment, clone the repository and run:
+
+`docker-compose -f docker-compose-dev.yml up --build`
+
+ Enabling the Docker BuildKit will speed up build times considerably. 
 
 After the containers start, required Node modules will be installed and development services run. This may take some time on the first run, please be patient. 
 
 Once all the build processes have completed, the components will be available on the following ports:
 
+```
 Frontend interface: 8082
 Controller: 9090
 WiFi-Connect: 8080
+```
 
 Each component is started in development mode, with hot-reload. Changing files in the folders on your system will trigger the reload.
 
-You can also see a production build (no hot-reload) on port 8081 if you build the interface first using: `docker-compose -f docker-compose-build.yml up --build`
+You can also see a production build (no hot-reload) on port `8081` if you build the interface first using: `docker-compose -f docker-compose-build.yml up --build`
 
 All development changes will require testing through the Balena OS and relevant hardware before being deployed to the fleet of devices. We will do our best to help with this but encourage as thorough testing as possible before submitting Pull Requests. Follow the [Balena local deployment](https://www.balena.io/docs/learn/develop/local-mode/) documentation on how to deploy to a local device.
 
