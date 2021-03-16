@@ -106,6 +106,8 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
 def database_recover():
     # Adding delay to allow user intervetion to abort
+    print("Database error detected. Waiting 30 seconds before deleting "
+          "database and restarting.")
     time.sleep(30)
 
     # Remove the .db file. It will be rebuilt fresh on next boot.

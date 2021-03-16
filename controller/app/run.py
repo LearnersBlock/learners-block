@@ -1,3 +1,4 @@
+from common.processes import database_recover
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
@@ -5,7 +6,6 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from resources.models import db
 from resources.models import migrate
-from resources.models import create_default_user
 from resources.system_routes import health_check
 from resources.system_routes import rsync_fetch
 from resources.system_routes import rsync_stop
@@ -34,15 +34,9 @@ def create_app(config):
     jwt = JWTManager(app)
 
     # Import database and migration process
-    try:
-        db.init_app(app)
-        migrate.init_app(app, db)
-        with app.app_context():
-            db.create_all()
-            create_default_user()
-    except Exception as ex:
-        print("Database error. Trying to recover: " + ex)
-        database_recover()
+
+    db.init_app(app)
+    migrate.init_app(app, db)
 
     api = Api(app)
     return app, api, jwt
@@ -139,13 +133,21 @@ else:
 
 # Import files reliant on Flask App having been built
 with app.app_context():
-    from common.processes import database_recover
     from resources.auth_routes import login, logout, set_password, verify_login
     from resources.database_routes import set_ui, settings_ui
 
 
 # Startup process
 if __name__ == '__main__':
+    from resources.models import create_default_user
+    try:
+        with app.app_context():
+            db.create_all()
+            create_default_user()
+    except Exception as ex:
+        print("Database error. Trying to recover: " + str(ex))
+        database_recover()
+
     # Load and launch based on dev or prod mode
     if os.environ['FLASK_ENV'].lower() == "production":
         print("Api-v1 - Starting API (Production)...")

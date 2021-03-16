@@ -9,8 +9,8 @@ class set_ui(Resource):
     def post(self):
         try:
             lb_database = User.query.filter_by(username='lb').first()
-        except:
-            return {'response': 'Error reading database.'}, 403
+        except Exception as ex:
+            return {'response': str(ex)}, 403
 
         try:
             content = request.get_json()
@@ -41,9 +41,8 @@ class set_ui(Resource):
 
             lb_database.save_to_db()
             return {'response': 'done'}, 200
-        except:
-            return {'message': 'Something went wrong saving to '
-                    'the database'}, 500
+        except Exception as ex:
+            return {'message': str(ex)}, 500
 
 
 class settings_ui(Resource):
