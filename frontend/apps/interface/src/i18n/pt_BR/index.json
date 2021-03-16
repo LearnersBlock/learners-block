@@ -1,1 +1,7 @@
-{}
+{
+    "cancel": "Cancelar",
+    "connect": "Conectar",
+    "password": "Senha",
+    "username": "Nome de usuário",
+    "wifi": "Wi-Fi"
+}

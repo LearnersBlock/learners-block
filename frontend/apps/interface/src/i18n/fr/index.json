@@ -1,1 +1,8 @@
-{}
+{
+    "cancel": "Annuler",
+    "library": "Bibliothèque",
+    "connect": "Connexion",
+    "password": "Mot de passe",
+    "username": "Nom d'utilisateur",
+    "wifi": "WiFi"
+}
