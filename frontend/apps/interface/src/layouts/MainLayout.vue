@@ -3,7 +3,12 @@
     <q-header elevated>
       <q-toolbar>
         <div class="ml-1">
-          <img src="../assets/lb-logo-white-full.svg">
+          <a href="/">
+            <img
+              alt=""
+              src="../assets/lb-logo-white-full.svg"
+            >
+          </a>
         </div>
 
         <q-toolbar-title class="josefin text-h5 q-mt-xs">
