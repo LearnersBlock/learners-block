@@ -192,7 +192,7 @@
               rounded
               no-caps
               color="primary"
-              to="/password_reset"
+              @click="$router.replace('password_reset')"
               :label="$t('set_password')"
               class="ml-3 mr-3 mb-2 text-lg"
             />

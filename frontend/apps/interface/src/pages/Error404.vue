@@ -1,7 +1,7 @@
 <template>
   <div class="fullscreen bg-primary text-white text-center q-pa-md flex flex-center">
     <div>
-      <div style="font-size: 30vh">
+      <div class="text-h1">
         404
       </div>
 
@@ -15,9 +15,9 @@
       <q-btn
         class="q-mt-xl"
         color="white"
-        text-color="blue"
+        text-color="primary"
         unelevated
-        to="/"
+        @click="$router.replace('/')"
         :label="$t('home')"
         no-caps
       />
