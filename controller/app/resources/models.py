@@ -22,17 +22,36 @@ def create_default_user():
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True,
-                         server_default='lb', nullable=False)
+                         server_default='lb',
+                         nullable=False)
+
     password = db.Column(db.String(128), unique=False,
-                         server_default=str(default_password), nullable=False)
+                         server_default=str(default_password),
+                         nullable=False)
+
     files = db.Column(db.Boolean, unique=False,
-                      server_default=expression.true(), nullable=False)
+                      server_default=expression.true(),
+                      nullable=False)
+
     library = db.Column(db.Boolean, unique=False,
-                        server_default=expression.true(), nullable=False)
+                        server_default=expression.true(),
+                        nullable=False)
+
     makerspace = db.Column(db.Boolean, unique=False,
-                           server_default=expression.true(), nullable=False)
+                           server_default=expression.true(),
+                           nullable=False)
+
     website = db.Column(db.Boolean, unique=False,
-                        server_default=expression.true(), nullable=False)
+                        server_default=expression.true(),
+                        nullable=False)
+
+    allow_password_reset = db.Column(db.Boolean, unique=False,
+                                     server_default=expression.true(),
+                                     nullable=False)
+
+    start_page = db.Column(db.String(80), unique=False,
+                           server_default=str("menu"),
+                           nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.username
