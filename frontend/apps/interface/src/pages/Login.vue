@@ -11,7 +11,7 @@
       <q-input
         filled
         v-model="password"
-        :label="$t('your_password')"
+        :label="$t('password')"
         type="password"
       />
 

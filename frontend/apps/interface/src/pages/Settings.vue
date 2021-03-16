@@ -26,7 +26,7 @@
                 header
                 class="pr-12 text-2xl"
               >
-                {{ $t('enable_components') }}
+                {{ $t('components') }}
               </q-item-label>
 
               <div class="text-base ml-4 mb-4 text-gray-600">

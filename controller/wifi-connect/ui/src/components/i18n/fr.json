@@ -1,12 +1,12 @@
 {
-    "network_fetch_fail": "Échec de la recherche des réseaux disponibles.",
+    "applying_changes": "Sauvegarde des changements…",
+    "connect": "Connexion",
+    "connection_reset_request": "Votre Learner's Block va maintenant tenter de se connecter. Il sera à votre disposition en connectant votre appareil au même réseau WiFi. Si après une minute votre Learner's Block n'est toujours pas connecté au réseau WiFi choisi, reconnectez-vous à votre Learner’s Block, vérifiez votre mot de passe et réessayez.",
     "network_connect_fail": "Échec de connexion au réseau.",
-    "wifi": "WiFi",
-    "user": "Utilisateur",
+    "network_fetch_fail": "Échec de la recherche des réseaux disponibles.",
+    "no_networks": "Aucun réseau WiFi disponible. Veuillez vous assurer qu'il y a un réseau disponible et redémarrez l'appareil.",
     "password": "Mot de passe",
     "select_ssid": "Sélectionnez le réseau WiFi",
-    "connect": "Connexion",
-    "applying_changes": "Sauvegarde des changements…",
-    "connection_reset_request": "Votre Learner's Block va maintenant tenter de se connecter. Il sera à votre disposition en connectant votre appareil au même réseau WiFi. Si après une minute votre Learner's Block n'est toujours pas connecté au réseau WiFi choisi, reconnectez-vous à votre Learner’s Block, vérifiez votre mot de passe et réessayez.",
-    "no_networks": "Aucun réseau WiFi disponible. Veuillez vous assurer qu'il y a un réseau disponible et redémarrez l'appareil."
+    "user": "Utilisateur",
+    "wifi": "WiFi"
 }

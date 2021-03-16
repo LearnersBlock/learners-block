@@ -1,1 +1,15 @@
-{}
+{
+    "404": "La página que ha intentado abrir no existe.",
+    "cancel": "Cancelar",
+    "components": "Componentes",
+    "files": "Archivos",
+    "hostname": "Hostname",
+    "login": "Acceder",
+    "password": "Contraseña",
+    "settings": "اعدادات",
+    "username": "Nombre de usuario",
+    "website": "Sitio web",
+    "welcome": "Le damos la bienvenida",
+    "welcome_lb": "Le damos la bienvenida al Learner’s Block",
+    "wifi": "Wi-Fi"
+}
