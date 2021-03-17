@@ -29,7 +29,7 @@ def refresh_expiring_jwts(response):
         return response
     except (RuntimeError, KeyError) as ex:
         # Case where there is not a valid JWT. Just return the original respone
-        print(inspect.stack()[0][3] + " - " + inspect.stack()[0][3] + " - "
+        print(inspect.stack()[0][3] + " - "
               + str(ex))
         return response
 

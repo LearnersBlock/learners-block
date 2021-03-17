@@ -70,7 +70,7 @@ def launch(self):
             response = "Api-v1 - API Started - Launched wifi-connect."
         except Exception as ex:
             response = ("Wifi-connect failed to launch. " +
-                        inspect.stack()[0][3] + " - " + inspect.stack()[0][3] +
+                        inspect.stack()[0][3] +
                         " - " + str(ex))
 
     print(response)
@@ -99,7 +99,7 @@ def hostname_check(self):
 
     except Exception as ex:
         print("Api-v1 - Failed to compare hostnames, starting anyway: "
-              + inspect.stack()[0][3] + " - " + inspect.stack()[0][3] +
+              + inspect.stack()[0][3] +
               " - " + str(ex))
 
 
