@@ -2,7 +2,7 @@
   <div class="fullscreen bg-primary text-white text-center q-pa-md flex flex-center">
     <div>
       <div class="text-h1">
-        404
+        {{ urlCode }}
       </div>
 
       <div
@@ -29,6 +29,14 @@
 import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
-  name: 'Error404'
+  name: 'Error404',
+  setup () {
+    const urlCode = <string>(window.location.pathname.split('/').pop())
+
+    return {
+      urlCode
+    }
+  }
 })
+
 </script>
