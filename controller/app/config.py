@@ -27,12 +27,16 @@ class Development:
         JWT_COOKIE_SECURE = False
         JWT_SECRET_KEY = get_secret_key()
         JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
-        # Database variables
         PROPAGATE_EXCEPTIONS = True
+        # Set below to False to prevent needing to pass additional header
+        # JWT_COOKIE_CSRF_PROTECT = False
+
+        # CORS
+        CORS_SUPPORTS_CREDENTIALS = True
+
+        # Database variables
         SQLALCHEMY_DATABASE_URI = "sqlite:///db/sqlite.db"
         SQLALCHEMY_TRACK_MODIFICATIONS = False
-        # Set below to False to prevent needing to pass additional header
-        JWT_COOKIE_CSRF_PROTECT = False
 
 
 # Production configuration
@@ -43,8 +47,8 @@ class Production:
         JWT_COOKIE_SECURE = False
         JWT_SECRET_KEY = get_secret_key()
         JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+        PROPAGATE_EXCEPTIONS = True
 
         # Database variables
-        PROPAGATE_EXCEPTIONS = True
         SQLALCHEMY_DATABASE_URI = "sqlite:///db/sqlite.db"
         SQLALCHEMY_TRACK_MODIFICATIONS = False

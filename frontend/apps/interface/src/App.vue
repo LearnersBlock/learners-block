@@ -31,6 +31,8 @@ export default defineComponent({
       }
     }
 
+    Axios.defaults.withCredentials = true
+
     Axios.interceptors.response.use(function (response) {
       return response
     }, function (error) {
