@@ -126,6 +126,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
 import Axios from 'app/node_modules/axios'
 

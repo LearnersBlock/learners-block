@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios from 'axios'
 
 export interface AuthStateInterface {
@@ -27,7 +28,7 @@ const auth = {
   },
   actions: {
     LOGIN: async ({ commit, getters }: { commit: any, getters: any }, payload: { username: string, password: string }) => {
-      const response = await Axios.post(`${getters.GET_API}/v1/login`, payload).catch((e) => {
+      const response = await Axios.post(`${getters.GET_API}/v1/login`, payload).catch(() => {
         throw Error('Wrong credentials')
       })
       if (response.status === 200) {
@@ -60,7 +61,5 @@ const auth = {
       }
     }
   }
-
 }
-
 export default auth
