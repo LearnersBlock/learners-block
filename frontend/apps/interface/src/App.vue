@@ -31,21 +31,6 @@ export default defineComponent({
       }
     }
 
-    Axios.defaults.withCredentials = true
-
-    Axios.interceptors.response.use(function (response) {
-      return response
-    }, function (error) {
-      if (error.response.status === 401) {
-        root.$store.dispatch('LOGOUT')
-        root.$router.push('/401')
-      } else {
-        console.log(error.response.status)
-        root.$router.push('/' + error.response.status)
-      }
-      return Promise.reject(error)
-    })
-
     fetchPing()
 
     return {

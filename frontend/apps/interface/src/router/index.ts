@@ -1,4 +1,5 @@
 import { route } from 'quasar/wrappers'
+import axios from 'axios'
 import VueRouter from 'vue-router'
 import { Store } from 'vuex'
 import store, { StateInterface } from '../store'
@@ -40,6 +41,21 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
       next()
     }
   })
+
+  axios.interceptors.response.use(function (response) {
+    return response
+  }, function (error) {
+    if (error.response.status === 401) {
+      store.dispatch('LOGOUT')
+      window.location.href = '/login'
+    } else {
+      console.log(error.response.status)
+      window.location.href = '/' + error.response.status
+    }
+    return Promise.reject(error)
+  })
+
+  axios.defaults.withCredentials = true
 
   return Router
 })
