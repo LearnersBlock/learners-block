@@ -65,7 +65,7 @@
     "load_config_error": "Kunne ikke laste inn oppsett.",
     "load_template_error": "Kunne ikke laste inn maler.",
     "load_text_error": "Kunne ikke laste inn tekster.",
-    "login": "Logg inn",
+    "login": "Log inn",
     "login_failed": "Kunne ikke logge inn.",
     "logout": "Logg ut",
     "method": "Metode",
