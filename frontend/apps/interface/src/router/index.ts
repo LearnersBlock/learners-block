@@ -46,7 +46,9 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
   }, function (error) {
     if (error.response.status === 401) {
       store.dispatch('LOGOUT')
-      Router.push('/login')
+      if (Router.currentRoute.fullPath !== '/') {
+        Router.push('/login')
+      }
     } else {
       console.log(error.response.status)
       Router.push('/' + error.response.status)
