@@ -25,7 +25,7 @@
         color="primary"
         text-color="white"
         class="mt-4"
-        @click="$router.replace('/')"
+        @click="$router.replace('/settings')"
       >
         {{ $t('cancel') }}
       </q-btn>
