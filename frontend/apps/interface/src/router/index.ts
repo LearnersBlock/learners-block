@@ -1,10 +1,9 @@
-import { route } from 'quasar/wrappers'
 import axios from 'axios'
-import VueRouter from 'vue-router'
+import { route } from 'quasar/wrappers'
+import routes from './routes'
 import { Store } from 'vuex'
 import store, { StateInterface } from '../store'
-
-import routes from './routes'
+import VueRouter from 'vue-router'
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation
@@ -47,10 +46,10 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
   }, function (error) {
     if (error.response.status === 401) {
       store.dispatch('LOGOUT')
-      window.location.href = '/login'
+      Router.push('/login')
     } else {
       console.log(error.response.status)
-      window.location.href = '/' + error.response.status
+      Router.push('/' + error.response.status)
     }
     return Promise.reject(error)
   })
