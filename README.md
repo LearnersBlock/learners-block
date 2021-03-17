@@ -1,4 +1,4 @@
-[![learnersblock.org](https://raw.githubusercontent.com/LearnersBlock/learners-block/master/frontend/apps/interface/src/assets/logos/lb-logo-full.svg)](https://learnersblock.org)
+[![learnersblock.org](https://learnersblock.org/images/lb-logo-full.svg)](https://learnersblock.org)
 
 Learner’s Block is still under development and not yet ready for stable production. Check back here for updates on progress or follow our [pre-deployment project list](https://github.com/LearnersBlock/learners-block/projects/3). 
 
