@@ -74,7 +74,7 @@
                 v-ripple
                 tag="a"
                 target="_blank"
-                href="https://library.learnersblock.org"
+                :href="'https://library.learnersblock.org/?hostname=' + hostname"
               >
                 <q-icon
                   name="import_contacts"

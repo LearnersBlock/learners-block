@@ -39,7 +39,7 @@
             class="cursor-pointer py-3"
             tag="a"
             target="_blank"
-            href="https://library.learnersblock.org"
+            href="/files/?path=library"
           >
             <q-item-section
               side
