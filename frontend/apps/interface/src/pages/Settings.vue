@@ -202,7 +202,7 @@
               rounded
               no-caps
               color="primary"
-              @click="disableLogin"
+              @click="disableLoginWarn"
               :label="$t('disable_password')"
               class="ml-3 mr-3 mb-2 text-lg"
             />
@@ -395,6 +395,17 @@ export default defineComponent({
       }
     }
 
+    const disableLoginWarn = async () => {
+      root.$q.dialog({
+        title: root.$tc('confirm'),
+        message: root.$tc('are_you_sure'),
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        disableLogin()
+      })
+    }
+
     const hostnameWarn = async () => {
       if (hostnameValid.value.validate() && newHostname.value !== '') {
         root.$q.dialog({
@@ -408,12 +419,6 @@ export default defineComponent({
           root.$q.dialog({
             title: root.$tc('success'),
             message: root.$tc('hostname_changed_notification')
-          }).onOk(() => {
-          // console.log('OK')
-          }).onCancel(() => {
-          // console.log('Cancel')
-          }).onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
           })
         }).onCancel(() => {
         // console.log('>>>> Cancel')
@@ -510,6 +515,7 @@ export default defineComponent({
 
     return {
       disableLogin,
+      disableLoginWarn,
       files,
       filesLoading,
       hostname,
