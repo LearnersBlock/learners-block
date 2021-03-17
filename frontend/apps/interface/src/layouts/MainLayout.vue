@@ -121,7 +121,7 @@ export default defineComponent({
 
     const logout = async () => {
       await root.$store.dispatch('LOGOUT')
-      root.$router.push('/login')
+      root.$router.push('/')
     }
 
     onMounted(() => {

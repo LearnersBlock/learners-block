@@ -50,6 +50,7 @@ export default defineComponent({
       if (response.status === 200) {
         root.$q.notify({ type: 'positive', message: root.$tc('password_set_success') })
         newPassword.value = ''
+        root.$router.push('/settings')
       } else {
         root.$q.notify({ type: 'negative', message: root.$tc('error') })
       }
