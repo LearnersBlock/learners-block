@@ -29,8 +29,6 @@ def refresh_expiring_jwts(response):
         return response
     except (RuntimeError, KeyError) as ex:
         # Case where there is not a valid JWT. Just return the original respone
-        print(inspect.stack()[0][3] + " - "
-              + str(ex))
         return response
 
 
@@ -103,4 +101,4 @@ class verify_login(Resource):
             return {'logged_in': True, 'user': get_jwt_identity()}
         except Exception as ex:
             print(inspect.stack()[0][3] + " - " + str(ex))
-            return {'logged_in': False}
+            return {'logged_in': False}, 401
