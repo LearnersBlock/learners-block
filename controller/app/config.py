@@ -24,6 +24,7 @@ class Development:
         # Flask variables #
         # JWT Auth
         JWT_TOKEN_LOCATION = ["headers", "cookies"]
+        JWT_COOKIE_SAMESITE = "Lax"
         JWT_COOKIE_SECURE = False
         JWT_SECRET_KEY = get_secret_key()
         JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
@@ -44,10 +45,14 @@ class Production:
     if os.environ['FLASK_ENV'].lower() == "production":
         # JWT Auth
         JWT_TOKEN_LOCATION = ["headers", "cookies"]
+        JWT_COOKIE_SAMESITE = "Lax"
         JWT_COOKIE_SECURE = False
         JWT_SECRET_KEY = get_secret_key()
         JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
         PROPAGATE_EXCEPTIONS = True
+
+        # CORS
+        CORS_SUPPORTS_CREDENTIALS = True
 
         # Database variables
         SQLALCHEMY_DATABASE_URI = "sqlite:///db/sqlite.db"
