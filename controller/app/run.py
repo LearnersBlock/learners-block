@@ -11,6 +11,7 @@ from resources.system_routes import rsync_fetch
 from resources.system_routes import rsync_stop
 from resources.system_routes import system_info
 import atexit
+import inspect
 import os
 import signal
 import subprocess
@@ -50,7 +51,8 @@ def launch(self):
         connected = wifi().check_connection()
     except Exception as ex:
         print("Api-v1 - Error checking wifi connection. Starting wifi-connect "
-              "in order to allow debugging. " + str(ex))
+              "in order to allow debugging. " + inspect.stack()[0][3] + " - "
+              + inspect.stack()[0][3] + " - " + str(ex))
         connected = None
 
     # If connected, perform container updatem if not, start Wi-Fi Connect
@@ -60,13 +62,16 @@ def launch(self):
             response = ('Api-v1 - API Started - Device already connected to '
                         'local wifi, software update request made.')
         except Exception as ex:
-            response = "Software update failed. " + str(ex)
+            response = ("Software update failed. " + inspect.stack()[0][3] +
+                        " - " + inspect.stack()[0][3] + " - " + str(ex))
     else:
         try:
             wifi_connect().start()
             response = "Api-v1 - API Started - Launched wifi-connect."
         except Exception as ex:
-            response = "Wifi-connect failed to launch. " + str(ex)
+            response = ("Wifi-connect failed to launch. " +
+                        inspect.stack()[0][3] + " - " + inspect.stack()[0][3] +
+                        " - " + str(ex))
 
     print(response)
     return response
@@ -94,7 +99,8 @@ def hostname_check(self):
 
     except Exception as ex:
         print("Api-v1 - Failed to compare hostnames, starting anyway: "
-              + str(ex))
+              + inspect.stack()[0][3] + " - " + inspect.stack()[0][3] +
+              " - " + str(ex))
 
 
 def portainer_check(self):
@@ -107,7 +113,8 @@ def portainer_check(self):
         portainer_exit.start()
 
     except Exception as ex:
-        print("Failed to stop Portainer. " + str(ex))
+        print("Failed to stop Portainer. " + inspect.stack()[0][3] +
+              " - " + inspect.stack()[0][3] + " - " + str(ex))
 
 
 def startup(self):
@@ -120,7 +127,8 @@ def startup(self):
         device_start.start()
 
     except Exception as ex:
-        print("Failed during launch. Continuing for debug. " + str(ex))
+        print("Failed during launch. Continuing for debug. " +
+              inspect.stack()[0][3] + " - " + str(ex))
 
 
 # Including initial app build here as database migration will not work when
@@ -145,7 +153,8 @@ if __name__ == '__main__':
             db.create_all()
             create_default_user()
     except Exception as ex:
-        print("Database error. Trying to recover: " + str(ex))
+        print("Database error. Trying to recover: " +
+              inspect.stack()[0][3] + " - " + str(ex))
         database_recover()
 
     # Load and launch based on dev or prod mode

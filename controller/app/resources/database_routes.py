@@ -2,6 +2,7 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from resources.models import User
+import inspect
 
 
 class set_ui(Resource):
@@ -10,11 +11,13 @@ class set_ui(Resource):
         try:
             lb_database = User.query.filter_by(username='lb').first()
         except Exception as ex:
-            return {'response': str(ex)}, 403
+            print(inspect.stack()[0][3] + " - " + str(ex))
+            return {'response': inspect.stack()[0][3] + " - " + str(ex)}, 403
 
         try:
             content = request.get_json()
-        except AttributeError:
+        except AttributeError as ex:
+            print(inspect.stack()[0][3] + " - " + str(ex))
             return {'response': 'Error: Must pass valid string.'}, 403
 
         try:
@@ -42,7 +45,8 @@ class set_ui(Resource):
             lb_database.save_to_db()
             return {'response': 'done'}, 200
         except Exception as ex:
-            return {'message': str(ex)}, 500
+            print(inspect.stack()[0][3] + " - " + str(ex))
+            return {'message': inspect.stack()[0][3] + " - " + str(ex)}, 500
 
 
 class settings_ui(Resource):

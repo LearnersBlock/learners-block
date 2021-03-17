@@ -13,6 +13,7 @@ from flask_jwt_extended import unset_jwt_cookies
 from flask_jwt_extended import verify_jwt_in_request
 from flask_restful import Resource
 from resources.models import User
+import inspect
 
 
 # Refresh token on each authorised request
@@ -26,8 +27,10 @@ def refresh_expiring_jwts(response):
             access_token = create_access_token(identity=get_jwt_identity())
             set_access_cookies(response, access_token)
         return response
-    except (RuntimeError, KeyError):
+    except (RuntimeError, KeyError) as ex:
         # Case where there is not a valid JWT. Just return the original respone
+        print(inspect.stack()[0][3] + " - " + inspect.stack()[0][3] + " - "
+              + str(ex))
         return response
 
 
@@ -36,19 +39,22 @@ class login(Resource):
         try:
             lb_database = User.query.filter_by(username='lb').first()
         except Exception as ex:
-            return {'response': str(ex)}, 500
+            print(inspect.stack()[0][3] + " - " + str(ex))
+            return {'response': inspect.stack()[0][3] + " - " + str(ex)}, 500
 
         try:
             content = request.get_json()
             verify_password = User.verify_password(content["password"],
                                                    lb_database.password)
             username = content["username"].lower()
-        except AttributeError:
+        except AttributeError as ex:
+            print(inspect.stack()[0][3] + " - " + str(ex))
             return {'response': 'Error: Must pass valid string.'}, 200
 
         if username != lb_database.username or verify_password is not \
                 True:
-            return {"message": "Bad username or password"}, 200
+            print("Bad username of password")
+            return {"message": "Bad username or password"}, 401
         access_token = create_access_token(identity=username)
         response = jsonify({"message": "login successful",
                             "token": access_token})
@@ -70,11 +76,13 @@ class set_password(Resource):
         try:
             lb_database = User.query.filter_by(username='lb').first()
         except Exception as ex:
-            return {'response': str(ex)}, 403
+            print(inspect.stack()[0][3] + " - " + str(ex))
+            return {'response': inspect.stack()[0][3] + " - " + str(ex)}, 403
 
         try:
             content = request.get_json()
-        except AttributeError:
+        except AttributeError as ex:
+            print(inspect.stack()[0][3] + " - " + str(ex))
             return {'response': 'Error: Must pass valid string.'}, 403
 
         try:
@@ -83,13 +91,16 @@ class set_password(Resource):
             lb_database.save_to_db()
             return {'response': 'done'}, 200
         except Exception as ex:
-            return {'message': str(ex)}, 500
+            print(inspect.stack()[0][3] + " - " + str(ex))
+            return {'database error': inspect.stack()[0][3] + " - " +
+                    str(ex)}, 500
 
 
 class verify_login(Resource):
     def get(self):
         try:
             verify_jwt_in_request()
-            return {'logged_in': True, 'user': get_jwt_identity()}, 200
-        except Exception:
-            return {'logged_in': False}, 200
+            return {'logged_in': True, 'user': get_jwt_identity()}
+        except Exception as ex:
+            print(inspect.stack()[0][3] + " - " + str(ex))
+            return {'logged_in': False}

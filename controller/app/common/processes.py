@@ -1,4 +1,5 @@
 from flask_restful import abort
+import inspect
 import json
 import os
 import requests
@@ -37,11 +38,12 @@ def check_supervisor(supervisor_retries, timeout):
 
         except Exception as ex:
             print(f'Waiting for Balena Supervisor to be ready. \
-                    {str(ex)}. Retry {str(retry)}.')
+                    {inspect.stack()[0][3] + " - " + str(ex)}. \
+                        Retry {str(retry)}.')
 
             if retry == supervisor_retries:
                 abort(408, status=408,
-                      message=str(ex).rstrip())
+                      message=inspect.stack()[0][3] + " - " + str(ex).rstrip())
 
             time.sleep(2)
             retry = retry + 1
@@ -91,9 +93,10 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
                 timeout=timeout
             )
     except Exception as ex:
-        print("Curl request timed out. " + str(ex))
+        print("Curl request timed out. " + inspect.stack()[0][3] + " - "
+              + str(ex))
         abort(408, status=408,
-              message=str(ex).rstrip())
+              message=inspect.stack()[0][3] + " - " + str(ex).rstrip())
 
     try:
         response.json()
@@ -129,7 +132,8 @@ def handle_exit(*args):
         except Exception:
             wifi_process.kill()
     except Exception as ex:
-        print("Wifi-connect was already down. " + str(ex))
+        print("Wifi-connect was already down. " + inspect.stack()[0][3] + " - "
+              + str(ex))
     print("Finshed the exit process")
     sys.exit(0)
 
@@ -207,5 +211,6 @@ def rsync_terminate(rsync_proc):
             print("SIGTERM failed. Killing RSync")
             rsync_proc.kill()
     except Exception as ex:
-        print("RSync was already down. " + str(ex))
+        print("RSync was already down. " + inspect.stack()[0][3] + " - "
+              + str(ex))
     return "Rsync terminated"
