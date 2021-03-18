@@ -13,7 +13,7 @@ RUN install_packages \
     wireless-tools
 
 # Install package dependencies
-COPY app/requirements.txt /tmp/
+COPY apps/backend/requirements.txt /tmp/
 
 RUN install_packages libdbus-glib-1-dev libgirepository1.0-dev && \
     pip install -r /tmp/requirements.txt --upgrade --no-deps --force-reinstall --no-cache-dir && \
@@ -28,13 +28,13 @@ RUN curl -Ls "https://github.com/balena-io/wifi-connect/releases/download/v$VERS
   | tar -xvz -C common/wifi-connect
 
 # Add in default Portainer database
-COPY portainer/portainer.db portainer/portainer.db
+COPY apps/portainer/portainer.db portainer/portainer.db
 
 # Add Wi-Fi connect UI
-COPY wifi-connect/ui/build common/wifi-connect/ui/
+COPY apps/wifi-connect/ui/build common/wifi-connect/ui/
 
 # Insert application
-COPY app .
+COPY apps/backend .
 
 # Check for database migrations then launch controller
 CMD flask db upgrade && python3 run.py

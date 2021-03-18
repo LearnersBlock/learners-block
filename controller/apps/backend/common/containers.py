@@ -20,8 +20,8 @@ class container:
     def start(self, container, sleep=0.1):
         time.sleep(sleep)
         response = curl(method="post-data",
-                        path=f"/v2/applications/{os.environ['BALENA_APP_ID']} \
-                               /start-service?apikey=",
+                        path=f"/v2/applications/{os.environ['BALENA_APP_ID']}"
+                               "/start-service?apikey=",
                         string='{"serviceName": "%s"}' % (container))
 
         return response
@@ -29,8 +29,8 @@ class container:
     def stop(self, container, sleep=0.1):
         time.sleep(sleep)
         response = curl(method="post-data",
-                        path=f"/v2/applications/{os.environ['BALENA_APP_ID']} \
-                               /stop-service?apikey=",
+                        path=f"/v2/applications/{os.environ['BALENA_APP_ID']}"
+                               "/stop-service?apikey=",
                         string='{"serviceName": "%s"}' % (container))
 
         print(str(response["text"]) + str(response["status_code"]))

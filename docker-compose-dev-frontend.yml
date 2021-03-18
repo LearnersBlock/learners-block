@@ -1,19 +1,6 @@
 version: '3.4'
 
 services:
-    wifi_connect:
-        build:
-            context: ./controller
-            dockerfile: Dockerfile_wifi.dev
-        stdin_open: true
-        ports: 
-            - "8080:8080"
-        labels:
-            portainer: hidden
-        volumes:
-            - './controller/wifi-connect/ui:/app/wifi-connect/ui:cached'
-            - 'yarn_cache_wifi:/usr/local/share/.cache/yarn/'
-
     controller:
         build:
             context: ./controller
@@ -25,7 +12,7 @@ services:
         labels:
             portainer: hidden
         volumes:
-            - ./controller/app:/app
+            - ./controller/apps/backend:/app
 
     frontend:
         build:
@@ -40,7 +27,7 @@ services:
             portainer: hidden
         volumes:
             - 'filestorage:/app/web/public/storage'
-            - './frontend/apps/interface:/app/web/public/interface/build/spa'
+            - './frontend/apps/interface/dist/spa:/app/web/public/interface'
             - './frontend/apps/interface:/app/web/public/interface_dev:cached'
             - './frontend/apps/file-manager/dist:/app/web/public/files'
             - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
@@ -48,4 +35,3 @@ services:
 volumes:
     filestorage:
     yarn_cache_frontend:
-    yarn_cache_wifi:

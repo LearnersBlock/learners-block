@@ -8,7 +8,7 @@ ENV FLASK_ENV=development
 ENV FLASK_APP=run
 
 # Install required packages
-COPY app/requirements-dev.txt /tmp/
+COPY apps/backend/requirements-dev.txt /tmp/
 RUN pip install -r /tmp/requirements-dev.txt --upgrade --no-deps --force-reinstall --no-cache-dir
 
 # Launch

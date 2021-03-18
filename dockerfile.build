@@ -47,8 +47,8 @@ RUN quasar build
 FROM balenalib/amd64-alpine-node:14-build AS controller-wifi-buildstep
 
 # Install node_modules
-COPY controller/wifi-connect/ui/yarn.lock /build-context-node/yarn.lock
-COPY controller/wifi-connect/ui/package.json /build-context-node/package.json
+COPY controller/apps/wifi-connect/ui/yarn.lock /build-context-node/yarn.lock
+COPY controller/apps/wifi-connect/ui/package.json /build-context-node/package.json
 
 ## Install app dependencies
 RUN yarn install --cwd /build-context-node
@@ -56,7 +56,7 @@ RUN yarn install --cwd /build-context-node
 WORKDIR /build-context
 
 ## Copy controller source code to container
-COPY controller/wifi-connect/ui .
+COPY controller/apps/wifi-connect/ui .
 
 # Ensure any old builds are removed before building
 # node_modules is excluded by .dockerignore but a check exists here just in case
@@ -83,8 +83,8 @@ COPY --from=controller-wifi-buildstep /build-context/build /build/controller
 
 # On start of the container, copy the content into the mounted directoies
 
-CMD rm -R /export/filemanager/* && \
-    rm -R /export/interface/* && \
-    rm -R /export/controller/* && \
+CMD rm -rf /export/filemanager/* && \
+    rm -rf /export/interface/* && \
+    rm -rf /export/controller/* && \
     cp -Rf /build/* /export/ && \  
     echo "Build complete and files added to directories. Check the logs above for build errors."

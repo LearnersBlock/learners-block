@@ -1,9 +1,11 @@
+# docker-conpose-build ignores
+**/build/
+**/dist/
+
 # defaults
 .thumbs.db
 .DS_Store
 **/node_modules/
-**/dist/
-**/build/
 **/.quasar/
 
 # Cordova related directories and files
@@ -41,5 +43,5 @@ yarn-error.log*
 *.sw?
 
 # Applications
-/controller/apps/backend/db/*
+/controller/app/db/*
 !.gitkeep

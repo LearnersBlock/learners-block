@@ -6,6 +6,6 @@ services:
             context: .
             dockerfile: Dockerfile.build
         volumes:
-            - ./frontend/apps/file-manager/dist/:/export/filemanager/
-            - ./frontend/apps/interface/dist/spa/:/export/interface/
-            - ./controller/wifi-connect/ui/build/:/export/controller/
+            - ./frontend/apps/file-manager/dist:/export/filemanager
+            - ./frontend/apps/interface/dist/spa:/export/interface
+            - ./controller/apps/wifi-connect/ui/build:/export/controller

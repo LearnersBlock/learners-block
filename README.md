@@ -20,26 +20,43 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 ### Development
 
-We provide and recommend using our Docker based development environment. The environment is built towards Mac OS AMD64. If you are running on another system, you may need to alter the image names in each of the Dockerfiles, replacing `amd64` with your operating system. A list of available images can be found [here]( https://www.balena.io/docs/reference/base-images/base-images/).  
+A Docker based development environment is available. The environment is built towards Mac OS AMD64. If you are running on another system, you may need to alter the image names in each of the Dockerfiles, replacing `amd64` with your operating system. A list of available images can be found [here]( https://www.balena.io/docs/reference/base-images/base-images/).  
 
-To start the development environment:
-
-Run `docker-compose -f docker-compose-build.yml up --build` to build the required components.
-
-Run `docker-compose -f docker-compose-dev.yml up --build` to start the development enviroment. 
+There are two development docker-compose files, one for the frontend and one for WiFi Connect.
 
 Enabling the Docker BuildKit will speed up build times considerably. 
 
-After the containers start, required Node modules will be installed and development services run. This may take some time on the first run, please be patient. 
+#### Frontend
 
-Once all the build processes have completed, the components will be available on the following ports:
+Build the required components:
 
+`docker-compose -f docker-compose-build.yml up --build`
+
+Start the environment:
+
+`docker-compose -f docker-compose-dev-frontend.yml up --build`
+
+_Ports:_
 ```
 Frontend interface (hot-reload): 8082
 Production interface (no hot-reload): 8081
 Controller (hot-reload): 9090
+```
+
+#### Wi-Fi Connect
+
+Start the environment:
+
+`docker-compose -f docker-compose-dev-wifi.yml up --build`
+
+_Ports:_
+```
 WiFi-Connect (hot-reload): 8080
 ```
+
+#### Using the environments
+
+After the containers start, required Node modules will be installed and development services run. This may take some time on the first run, please be patient. 
 
 Changing files in the folders on your system will trigger the reload on hot-reload components.
 
