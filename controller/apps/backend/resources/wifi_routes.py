@@ -28,10 +28,10 @@ class wifi_forget(Resource):
                            'connection cannot be reset.'
             }, 409
 
-        wifi_forget = threading.Thread(target=wifi.forget,
-                                       args=(1,),
-                                       name='wifi_forget')
-        wifi_forget.start()
+        wifi_forget_thread = threading.Thread(target=wifi.forget,
+                                              args=(1,),
+                                              name='wifi_forget_thread')
+        wifi_forget_thread.start()
 
         return {'status': 202, 'message': 'Accepted'}, 202
 
@@ -39,9 +39,10 @@ class wifi_forget(Resource):
 class wifi_forget_all(Resource):
     @jwt_required()
     def get(self):
-        wifi_forget_all = threading.Thread(target=wifi.forget_all,
-                                           args=(1,),
-                                           name='wifi_forget_all')
-        wifi_forget_all.start()
+        wifi_forget_thread_all = threading.Thread(
+                                            target=wifi.forget_all,
+                                            args=(1,),
+                                            name='wifi_forget_thread_all')
+        wifi_forget_thread_all.start()
 
         return {'status': 202, 'message': 'Accepted'}, 202

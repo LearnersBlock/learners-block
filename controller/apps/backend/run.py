@@ -39,6 +39,7 @@ def create_app(config):
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # Enable Flask-Restful API
     api = Api(app)
     return app, api, jwt
 
@@ -162,7 +163,7 @@ if __name__ == '__main__':
         print("Api-v1 - Starting API (Production)...")
         from common.processes import curl
         from common.containers import container
-        from common.processes import handle_exit
+        from common.wifi import handle_exit
         from common.wifi import wifi
         from common.wifi import wifi_connect
         from resources.system_routes import hostname

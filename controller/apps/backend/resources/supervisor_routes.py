@@ -43,7 +43,7 @@ class journal_logs(Resource):
 
 class portainer_status(Resource):
     def get(self):
-        response, entry = container().status(container="portainer")
+        response, entry = container().status(container_name="portainer")
 
         if entry["status"] == "Running":
             process_status = True
@@ -57,7 +57,7 @@ class portainer_status(Resource):
 class portainer_start(Resource):
     @jwt_required()
     def get(self):
-        response = container().start(container="portainer")
+        response = container().start(container_name="portainer")
 
         return {'status': response["status_code"],
                 'message': "OK",
@@ -67,7 +67,7 @@ class portainer_start(Resource):
 class portainer_stop(Resource):
     @jwt_required()
     def get(self):
-        response = container().stop(container="portainer")
+        response = container().stop(container_name="portainer")
 
         return {'status': response["status_code"],
                 'message': "OK",

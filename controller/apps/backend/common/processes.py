@@ -5,7 +5,6 @@ import os
 import requests
 import shutil
 import subprocess
-import sys
 import time
 
 # Set defalut global variable for terminating RSync
@@ -13,9 +12,10 @@ rsync_request_terminate = False
 
 
 def check_space():
-    total, used, free = shutil.disk_usage("/tmp")
+    _, _, free = shutil.disk_usage("/tmp")
     if free <= 100000000:
         return True
+    return False
 
 
 def check_supervisor(supervisor_retries, timeout):
@@ -37,9 +37,9 @@ def check_supervisor(supervisor_retries, timeout):
                       message='Supervisor returned error code.')
 
         except Exception as ex:
-            print(f'Waiting for Balena Supervisor to be ready. \
-                    {inspect.stack()[0][3] + " - " + str(ex)}. \
-                        Retry {str(retry)}.')
+            print(f'Waiting for Balena Supervisor to be ready. '
+                  f'{inspect.stack()[0][3] + " - " + str(ex)}.'
+                  f'Retry {str(retry)}.')
 
             if retry == supervisor_retries:
                 abort(408, status=408,
@@ -58,8 +58,8 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
     try:
         if cmd["method"] == 'post-json':
             response = requests.post(
-                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]} \
-                {os.environ["BALENA_SUPERVISOR_API_KEY"]}',
+                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
+                f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
                 json=[cmd["string"]],
                 headers={"Content-Type": "application/json"},
                 timeout=timeout
@@ -67,8 +67,8 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
         elif cmd["method"] == 'post-data':
             response = requests.post(
-                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]} \
-                {os.environ["BALENA_SUPERVISOR_API_KEY"]}',
+                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
+                f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
                 data=cmd["string"],
                 headers={"Content-Type": "application/json"},
                 timeout=timeout
@@ -77,8 +77,8 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
         elif cmd["method"] == 'patch':
 
             response = requests.patch(
-                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]} \
-                {os.environ["BALENA_SUPERVISOR_API_KEY"]}',
+                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
+                f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
                 data=cmd["string"],
                 headers={"Content-Type": "application/json"},
                 timeout=timeout
@@ -87,8 +87,8 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
         elif cmd["method"] == 'get':
 
             response = requests.get(
-                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]} \
-                {os.environ["BALENA_SUPERVISOR_API_KEY"]}',
+                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
+                f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
                 headers={"Content-Type": "application/json"},
                 timeout=timeout
             )
@@ -122,22 +122,6 @@ def database_recover():
         print("Failed to delete the database file. May be missing.")
 
 
-def handle_exit(*args):
-    # Ensure Wi-Fi Connect is shutdown softly
-    try:
-        try:
-            global wifi_process
-            wifi_process.terminate()
-            wifi_process.communicate(timeout=10)
-        except Exception:
-            wifi_process.kill()
-    except Exception as ex:
-        print("Wifi-connect was already down. " + inspect.stack()[0][3] + " - "
-              + str(ex))
-    print("Finshed the exit process")
-    sys.exit(0)
-
-
 def human_size(nbytes):
     # Convert system file sizes to human readable
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
@@ -165,8 +149,8 @@ def rsync_run(rsync_url):
         # Check if the device is running out of space
         if check_space() is True:
             rsync_terminate(rsync_proc)
-            yield json.dumps({'status': 500, 'running': False,
-                              'message': 'Out of Space'}, 500)
+            yield json.dumps({"status": 500, "running": False,
+                              "message": "Out of Space"})
             break
 
         # Check if user has sent terminate request
@@ -207,8 +191,8 @@ def rsync_terminate(rsync_proc):
             rsync_request_terminate = False
             rsync_proc.terminate()
             rsync_proc.communicate(timeout=7)
-        except Exception:
-            print("SIGTERM failed. Killing RSync")
+        except Exception as ex:
+            print("SIGTERM failed. Killing RSync" + str(ex))
             rsync_proc.kill()
     except Exception as ex:
         print("RSync was already down. " + inspect.stack()[0][3] + " - "

@@ -1,9 +1,27 @@
 from flask_restful import abort
+import inspect
 import NetworkManager
 import os
 import subprocess
 import time
 import requests
+import sys
+
+
+def handle_exit(*args):
+    # Ensure Wi-Fi Connect is shutdown softly
+    try:
+        try:
+            global wifi_process
+            wifi_process.terminate()
+            wifi_process.communicate(timeout=10)
+        except Exception:
+            wifi_process.kill()
+    except Exception as ex:
+        print("Wifi-connect was already down. " + inspect.stack()[0][3] + " - "
+              + str(ex))
+    print("Finshed the exit process")
+    sys.exit(0)
 
 
 class wifi:

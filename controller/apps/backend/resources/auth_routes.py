@@ -27,7 +27,7 @@ def refresh_expiring_jwts(response):
             access_token = create_access_token(identity=get_jwt_identity())
             set_access_cookies(response, access_token)
         return response
-    except (RuntimeError, KeyError) as ex:
+    except (RuntimeError, KeyError):
         # Case where there is not a valid JWT. Just return the original respone
         return response
 
