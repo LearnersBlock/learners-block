@@ -1,7 +1,9 @@
+from common.processes import database_recover
 from sqlalchemy.sql import expression
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import bcrypt
+import inspect
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -11,11 +13,17 @@ default_password = \
 
 
 # Create default user
-def create_default_user():
-    if not User.query.filter_by(username='lb').first():
-        lb_database = User(password=default_password)
-        db.session.add(lb_database)
-        db.session.commit()
+def init_database():
+    try:
+        db.create_all()
+        if not User.query.filter_by(username='lb').first():
+            lb_database = User(password=default_password)
+            db.session.add(lb_database)
+            db.session.commit()
+    except Exception as ex:
+        print("Database error. Trying to recover: " +
+              inspect.stack()[0][3] + " - " + str(ex))
+        database_recover()
 
 
 # Set database content
@@ -56,12 +64,12 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+    def hash_password(password):
+        return bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt(12))
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
-
-    def hash_password(password):
-        return bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt(12))
 
     def verify_password(password, hashed_password):
         return bcrypt.checkpw(password.encode('utf8'), hashed_password)

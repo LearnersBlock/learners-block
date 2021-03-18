@@ -1,4 +1,3 @@
-from common.processes import database_recover
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
@@ -10,162 +9,60 @@ from resources.system_routes import health_check
 from resources.system_routes import rsync_fetch
 from resources.system_routes import rsync_stop
 from resources.system_routes import system_info
-import atexit
 import inspect
 import os
-import signal
-import subprocess
-import threading
-import time
 
 # Import .env file
 load_dotenv()
 
+# Load extensions
+jwt = JWTManager()
+api = Api()
 
-# Create Flask app instance and required databases
-def create_app(config):
+
+# Create Flask app instance
+def create_app():
     # Initalise and configure Flask
     app = Flask(__name__)
-    app.config.from_object(config)
+
+    # Import relevant config
+    if os.environ['FLASK_ENV'].lower() == "production":
+        from config import Production
+        app.config.from_object(Production)
+    else:
+        from config import Development
+        app.config.from_object(Development)
 
     # Allow CORS
     CORS(app)
 
     # Setup Flask-JWT-Extended
-    jwt = JWTManager(app)
+    jwt.init_app(app)
 
     # Import database and migration process
-
     db.init_app(app)
     migrate.init_app(app, db)
 
-    # Enable Flask-Restful API
-    api = Api(app)
-    return app, api, jwt
+    return app
 
 
-# Function for first launch called by 'startup' function
-def launch(self):
-    # Check if already connected to Wi-Fi
-    time.sleep(20)
-    try:
-        connected = wifi().check_connection()
-    except Exception as ex:
-        print("Api-v1 - Error checking wifi connection. Starting wifi-connect "
-              "in order to allow debugging. " + inspect.stack()[0][3] + " - "
-              + inspect.stack()[0][3] + " - " + str(ex))
-        connected = None
-
-    # If connected, perform container updatem if not, start Wi-Fi Connect
-    if connected:
-        try:
-            update().get()
-            response = ('Api-v1 - API Started - Device already connected to '
-                        'local wifi, software update request made.')
-        except Exception as ex:
-            response = ("Software update failed. " + inspect.stack()[0][3] +
-                        " - " + inspect.stack()[0][3] + " - " + str(ex))
-    else:
-        try:
-            wifi_connect().start()
-            response = "Api-v1 - API Started - Launched wifi-connect."
-        except Exception as ex:
-            response = ("Wifi-connect failed to launch. " +
-                        inspect.stack()[0][3] +
-                        " - " + str(ex))
-
-    print(response)
-    return response
-
-
-def hostname_check(self):
-    # Check hostname in container is correct
-    try:
-        # Fetch container hostname and device hostname
-        container_hostname = subprocess.run(["hostname"], capture_output=True,
-                                            text=True).stdout.rstrip()
-
-        device_hostname = curl(method="get",
-                               path="/v1/device/host-config?apikey=",
-                               supervisor_retries=20)
-
-        # Check container and device hostname match
-        if container_hostname != \
-                device_hostname["json_response"]["network"]["hostname"]:
-            print("Api-v1 - Container hostname and device hostname do not "
-                  "match. Likely a hostname change has been performed. Balena "
-                  "Supervisor should detect this and rebuild the container "
-                  "shortly. Waiting 60 seconds before continuing anyway.")
-            time.sleep(60)
-
-    except Exception as ex:
-        print("Api-v1 - Failed to compare hostnames, starting anyway: "
-              + inspect.stack()[0][3] +
-              " - " + str(ex))
-
-
-def portainer_check(self):
-    # Stop portainer on boot
-    # String cannot be portainer_stop due to clash with endpoint
-    try:
-        portainer_exit = threading.Thread(target=container.stop,
-                                          args=(None, "portainer", 10),
-                                          name='portainer_exit')
-        portainer_exit.start()
-
-    except Exception as ex:
-        print("Failed to stop Portainer. " + inspect.stack()[0][3] +
-              " - " + inspect.stack()[0][3] + " - " + str(ex))
-
-
-def startup(self):
-    # If connected to a wifi network then update device,
-    # otherwise launch wifi-connect
-    try:
-        device_start = threading.Thread(target=launch,
-                                        args=(1,),
-                                        name='device_start')
-        device_start.start()
-
-    except Exception as ex:
-        print("Failed during launch. Continuing for debug. " +
-              inspect.stack()[0][3] + " - " + str(ex))
-
-
-# Including initial app build here as database migration will not work when
-# under __name__
-
-if os.environ['FLASK_ENV'].lower() == "production":
-    app, api, jwt = create_app('config.Production')
-else:
-    app, api, jwt = create_app('config.Development')
-
-# Import files reliant on Flask App having been built
-with app.app_context():
-    from resources.auth_routes import login, logout, set_password, verify_login
-    from resources.database_routes import set_ui, settings_ui
+app = create_app()
 
 
 # Startup process
 if __name__ == '__main__':
-    from resources.models import create_default_user
-    try:
-        with app.app_context():
-            db.create_all()
-            create_default_user()
-    except Exception as ex:
-        print("Database error. Trying to recover: " +
-              inspect.stack()[0][3] + " - " + str(ex))
-        database_recover()
+    # Initialise database
+    with app.app_context():
+        from resources.auth_routes import login, logout, set_password, \
+             verify_login
+        from resources.database_routes import set_ui, settings_ui
+        from resources.models import init_database
+
+        init_database()
 
     # Load and launch based on dev or prod mode
     if os.environ['FLASK_ENV'].lower() == "production":
-        print("Api-v1 - Starting API (Production)...")
-        from common.processes import curl
-        from common.containers import container
-        from common.wifi import handle_exit
-        from common.wifi import wifi
-        from common.wifi import wifi_connect
+        from boot.production import startup
         from resources.system_routes import hostname
         from resources.supervisor_routes import device, host_config, \
             journal_logs, portainer_status, portainer_start, portainer_stop, \
@@ -173,25 +70,19 @@ if __name__ == '__main__':
         from resources.wifi_routes import wifi_connection_status, \
             wifi_forget, wifi_forget_all
 
-        # Ensure soft shutdown to term wifi-connect
-        atexit.register(handle_exit, None, None)
-        signal.signal(signal.SIGTERM, handle_exit)
-        signal.signal(signal.SIGINT, handle_exit)
-
-        # Check portainer status on boot
-        portainer_check(None)
-
-        # Check hostnames are set correctly
-        hostname_check(None)
-
-        # Start app
-        startup(None)
+        print("Api-v1 - Starting API (Production)...")
+        try:
+            startup()
+        except Exception as ex:
+            print("Failed on boot. " +
+                  inspect.stack()[0][3] + " - " + str(ex))
 
     else:
-        print("Api-v1 - Starting API (Development)...")
         from resources.dev_routes import device, host_config, hostname, \
             journal_logs, portainer_status, portainer_start, portainer_stop, \
             update, uuid, wifi_connection_status, wifi_forget, wifi_forget_all
+
+        print("Api-v1 - Starting API (Development)...")
 
     # Configure endpoints
     api.add_resource(device, '/v1/device')
@@ -216,5 +107,7 @@ if __name__ == '__main__':
     api.add_resource(wifi_connection_status, '/v1/wifi/connectionstatus')
     api.add_resource(wifi_forget, '/v1/wifi/forget')
     api.add_resource(wifi_forget_all, '/v1/wifi/forgetall')
+
+    api.init_app(app)
 
     app.run(port=9090, host='0.0.0.0')
