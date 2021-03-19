@@ -63,6 +63,7 @@ class journal_logs(Resource):
 class portainer_status(Resource):
     def get(self):
         global portainerstatus
+        time.sleep(3)
         return {'status': 200, 'running': portainerstatus}, 200
 
 
@@ -70,6 +71,7 @@ class portainer_start(Resource):
     @jwt_required()
     def get(self):
         global portainerstatus
+        time.sleep(5)
         portainerstatus = True
         return {'status': 200,
                 'message': "OK",
@@ -80,9 +82,8 @@ class portainer_stop(Resource):
     @jwt_required()
     def get(self):
         global portainerstatus
+        time.sleep(5)
         portainerstatus = False
-
-        time.sleep(10)
 
         return {'status': 200,
                 'message': "OK",
@@ -104,6 +105,7 @@ class uuid(Resource):
 class wifi_connection_status(Resource):
     def get(self):
         global wifistatus
+        time.sleep(7)
         return {'status': 200, 'running': wifistatus}, 200
 
 
