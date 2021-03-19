@@ -36,6 +36,9 @@ if (language === 'ar') {
 if (!setlang.network_fetch_fail) {
 	setlang.network_fetch_fail = en.network_fetch_fail;
 }
+if (!setlang.network_absent) {
+	setlang.network_absent = en.network_absent;
+}
 if (!setlang.network_connect_fail) {
 	setlang.network_connect_fail = en.network_connect_fail;
 }

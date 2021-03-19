@@ -85,6 +85,8 @@ export const NetworkInfoForm = ({
 			m={4}
 			mt={5}
 		>
+			{' '}
+			<Flex mb={3}>{setlang.network_absent}</Flex>
 			<Form
 				width={['100%', '80%', '60%', '40%']}
 				onFormChange={({ formData }) => {
