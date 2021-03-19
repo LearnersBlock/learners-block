@@ -60,5 +60,6 @@
     "wifi": "Wi-Fi",
     "your_new_password": "Your new password",
     "are_you_sure": "Are you sure?",
-    "loading": "Loading …"
+    "loading": "Loading …",
+    "need_connection": "You need to be connected to WiFi to use these features."
 }
