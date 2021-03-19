@@ -74,7 +74,7 @@
                 v-ripple
                 tag="a"
                 target="_blank"
-                :href="'https://library.learnersblock.org/?hostname=' + hostname"
+                :href="'https://library.learnersblock.org/?hostname=' + windowHostname"
               >
                 <q-icon
                   name="import_contacts"
@@ -311,7 +311,7 @@
                     class="pl-6"
                     v-if="portainer"
                   >
-                    {{ $t('portainer_starting_at') }}: http://{{ hostname }}:9000
+                    {{ $t('portainer_starting_at') }}: http://{{ windowHostname }}:9000
                   </div>
                 </q-card-section>
               </q-card>
@@ -340,6 +340,7 @@ export default defineComponent({
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(false)
     const hostname = ref<string>('')
+    const windowHostname = ref<string>(window.location.hostname)
     const hostnameValid = ref()
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
@@ -489,15 +490,12 @@ export default defineComponent({
         await Axios.post(`${api.value}/v1/hostconfig`, {
           hostname: newHostname.value
         })
-        const fetchedHostname = await Axios.get(`${api.value}/v1/hostname`)
-        hostname.value = fetchedHostname.data.hostname
-        newHostname.value = ''
       }
     }
 
     const wifiWarn = async () => {
       if (wifi.value === false) {
-        window.open(`${hostname.value}:8080/?lang=${root.$i18n.locale}`)
+        window.open(window.location.hostname + `:8080/?lang=${root.$i18n.locale}`)
       } else {
         root.$q.dialog({
           title: root.$tc('confirm'),
@@ -539,7 +537,8 @@ export default defineComponent({
       websiteLoading,
       wifi,
       wifiWarn,
-      updateWebsite
+      updateWebsite,
+      windowHostname
     }
   }
 })
