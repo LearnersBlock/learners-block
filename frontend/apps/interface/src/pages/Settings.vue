@@ -79,7 +79,7 @@
                 :disabled="!wifi"
                 :href="'https://library.learnersblock.org/?hostname=' + windowHostname"
               >
-                >        <q-tooltip
+                <q-tooltip
                   v-if="!wifi"
                   content-style="font-size: 16px"
                 >
@@ -257,7 +257,7 @@
               color="primary"
               @click="wifiWarn"
               class="ml-3 mr-3 mt-1 mb-2 text-lg"
-              :disable="togglesLoading"
+              :disable="wifiLoading"
               :disabled="wifiLoading"
               :label="!wifi ? $t('connect'): $t('disconnect')"
             />
