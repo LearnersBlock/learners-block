@@ -59,5 +59,7 @@
     "welcome_lb": "Welcome to the Learner's Block",
     "wifi": "Wi-Fi",
     "your_new_password": "Your new password",
-    "are_you_sure": "Are you sure?"
+    "are_you_sure": "Are you sure?",
+    "loading": "Loading …",
+    "need_connection": "You need to be connected to WiFi to use these features."
 }

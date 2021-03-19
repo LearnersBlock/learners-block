@@ -8,5 +8,6 @@
     "password": "Password",
     "select_ssid": "Select Wi-Fi Network",
     "user": "User",
-    "wifi": "Wi-Fi"
+    "wifi": "Wi-Fi",
+    "network_absent": "If you cannot see your network, reboot the device and try again."
 }
