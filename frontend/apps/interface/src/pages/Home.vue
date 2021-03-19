@@ -3,7 +3,7 @@
     <div class="flex flex-col items-center">
       <div class="max-w-5xl">
         <div class="mt-10 text-4xl text-gray-600 mb-6 text-center">
-          {{ $t('welcome') }}
+          {{ $t('welcome_lb') }}
         </div>
         <q-separator />
         <q-list v-if="!allIsDisabled">
@@ -114,8 +114,15 @@
           </q-item>
           <q-separator v-if="settings.website" />
         </q-list>
+        
+                <div
+          v-if="settingsLoading"
+          class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
+        >
+          {{ $t('loading') }}
+        </div>
         <div
-          v-if="!settings.website && !settings.files && !settings.makerspace && !settings.library"
+          v-else-if="!settings.website && !settings.files && !settings.makerspace && !settings.library"
           class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
         >
           {{ $t('enable_components_in') }}
@@ -134,6 +141,7 @@ export default defineComponent({
   setup (_, { root }) {
     // Settings for the ui
     const settings = ref<any>({})
+    const settingsLoading = ref<boolean>(true)
     // Check to see if everything is disabled
     const allIsDisabled = !!(settings.value.files === false &&
                           settings.value.library === false &&
@@ -148,14 +156,16 @@ export default defineComponent({
     onMounted(async () => {
       Axios.get(`${api.value}/v1/settingsui`).then(res => {
         settings.value = res.data
+        settingsLoading.value = false
       }).catch(e => {
         console.log(e.message)
       })
     })
 
     return {
+      allIsDisabled,
       settings,
-      allIsDisabled
+      settingsLoading
     }
   }
 })

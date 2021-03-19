@@ -58,6 +58,8 @@
                   icon="folder"
                   class="self-end"
                   size="lg"
+                  :disable="togglesLoading"
+                  :disabled="togglesLoading"
                   v-if="!filesLoading"
                   @input="updateFiles"
                 />
@@ -94,6 +96,8 @@
                   v-model="library"
                   icon="import_contacts"
                   size="lg"
+                  :disable="togglesLoading"
+                  :disabled="togglesLoading"
                   v-if="!libraryLoading"
                   @input="updateLibrary"
                 />
@@ -130,6 +134,8 @@
                   v-model="makerspace"
                   icon="create"
                   size="lg"
+                  :disable="togglesLoading"
+                  :disabled="togglesLoading"
                   v-if="!makerspaceLoading"
                   @input="updateMakerspace"
                 />
@@ -167,6 +173,8 @@
                   icon="language"
                   size="lg"
                   class="ml-auto"
+                  :disable="togglesLoading"
+                  :disabled="togglesLoading"
                   v-if="!websiteLoading"
                   @input="updateWebsite"
                 />
@@ -216,7 +224,10 @@
             </q-item-label>
             <div>
               <div class="text-lg ml-4">
-                <div v-if="!wifi">
+                <div v-if="wifiLoading">
+                  {{ $t('status') }}: {{ $t('loading') }}
+                </div>
+                <div v-else-if="!wifi">
                   {{ $t('status') }}: {{ $t('disconnected') }}
                 </div>
                 <div v-else>
@@ -232,6 +243,8 @@
               color="primary"
               @click="wifiWarn"
               class="ml-3 mr-3 mt-1 mb-2 text-lg"
+              :disable="togglesLoading"
+              :disabled="wifiLoading"
               :label="!wifi ? $t('connect'): $t('disconnect')"
             />
             <q-spinner
@@ -354,9 +367,11 @@ export default defineComponent({
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
+    const togglesLoading = ref<boolean>(true)
     const website = ref<boolean>(false)
     const websiteLoading = ref<boolean>(false)
     const wifi = ref<boolean>(false)
+    const wifiLoading = ref<boolean>(true)
 
     // Get api from store
     const api = computed(() => {
@@ -369,6 +384,7 @@ export default defineComponent({
       website.value = fetchedSettings.data.website
       library.value = fetchedSettings.data.library
       makerspace.value = fetchedSettings.data.makerspace
+      togglesLoading.value = false
       // Get portainer status
       const fetchedPortainer = await Axios.get(`${api.value}/v1/portainer/status`)
       portainer.value = fetchedPortainer.data.message === 'Running'
@@ -378,6 +394,7 @@ export default defineComponent({
       // Get connection status
       const fetchedConnectionStatus = await Axios.get(`${api.value}/v1/wifi/connectionstatus`)
       wifi.value = fetchedConnectionStatus.data.running !== false
+      wifiLoading.value = false
       // Get hostname
       const fetchedHostName = await Axios.get(`${api.value}/v1/hostname`)
       hostname.value = fetchedHostName.data.hostname
@@ -529,6 +546,7 @@ export default defineComponent({
       portainerLoading,
       regexp,
       sysInfo,
+      togglesLoading,
       updateFiles,
       updateLibrary,
       updateMakerspace,
@@ -536,9 +554,10 @@ export default defineComponent({
       website,
       websiteLoading,
       wifi,
+      wifiLoading,
       wifiWarn,
-      updateWebsite,
-      windowHostname
+      windowHostname,
+      updateWebsite
     }
   }
 })
