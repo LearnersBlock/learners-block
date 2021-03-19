@@ -1,1 +1,6 @@
-{}
+{
+    "cancel": "Vazgeç",
+    "username": "Kullanıcı adı",
+    "password": "Parola",
+    "login": "Oturum aç"
+}
