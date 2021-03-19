@@ -308,6 +308,8 @@
                         class="mt-3 self-end"
                         v-model="portainer"
                         @input="updatePortainer"
+                        :disable="portainerToggleLoading"
+                        :disabled="portainerToggleLoading"
                         v-if="!portainerLoading"
                         icon="widgets"
                         size="lg"
@@ -363,6 +365,7 @@ export default defineComponent({
     const newHostname = ref<string>('')
     const portainer = ref<boolean>(false)
     const portainerLoading = ref<boolean>(false)
+    const portainerToggleLoading = ref<boolean>(true)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
@@ -388,6 +391,7 @@ export default defineComponent({
       // Get portainer status
       const fetchedPortainer = await Axios.get(`${api.value}/v1/portainer/status`)
       portainer.value = fetchedPortainer.data.message === 'Running'
+      portainerToggleLoading.value = false
       // Get SystemInfo
       const fetchedSysInfo = await Axios.get(`${api.value}/v1/system/info`)
       sysInfo.value = fetchedSysInfo.data
@@ -544,6 +548,7 @@ export default defineComponent({
       newHostname,
       portainer,
       portainerLoading,
+      portainerToggleLoading,
       regexp,
       sysInfo,
       togglesLoading,
