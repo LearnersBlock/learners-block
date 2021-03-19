@@ -8,7 +8,7 @@
       <br><br>
       http://{{ hostname }}.local
       <span
-        @click="copyUrl;$q.notify($t('url_copied'));"
+        @click="copyUrl();$q.notify($t('url_copied'));"
         class="material-icons text-h6 mb-1 q-ml-sm cursor-pointer clipboard-sampleUrl"
       >
         content_copy
@@ -33,7 +33,7 @@ export default defineComponent({
     })
 
     const copyUrl = () => {
-      copyToClipboard('http://' + hostname.value + ".local")
+      copyToClipboard('http://' + hostname.value + '.local')
     }
 
     const fetchHostname = async () => {
