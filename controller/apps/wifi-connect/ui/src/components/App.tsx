@@ -1,4 +1,7 @@
 import React from 'react';
+import logo from '../img/lb-logo-full.svg';
+import styled from '@emotion/styled';
+import { color, space } from 'styled-system';
 import { Provider, Container } from 'rendition';
 import { NetworkInfoForm } from './NetworkInfoForm';
 import { Notifications } from './Notifications';
@@ -19,6 +22,8 @@ const GlobalStyle = createGlobalStyle`
 		font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 	}
 `;
+
+const Box = styled('div')(space, color);
 
 export interface NetworkInfo {
 	ssid?: string;
@@ -81,7 +86,9 @@ const App = () => {
 	return (
 		<Provider>
 			<GlobalStyle />
-
+			<Box bg="white" p={3}>
+				{<img src={logo} style={{ height: 30 }} alt="logo" />}
+			</Box>
 			<Container>
 				<Notifications
 					attemptedConnect={attemptedConnect}
