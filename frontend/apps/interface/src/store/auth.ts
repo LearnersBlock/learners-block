@@ -55,7 +55,7 @@ const auth = {
           Authorization: `Bearer ${payload}`
         }
       })
-      if (response.status === 200) {
+      if (response.data.logged_in === true) {
         commit('SET_TOKEN', payload)
         Axios.defaults.headers.common.Authorization = `Bearer ${payload}`
       }

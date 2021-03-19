@@ -33,6 +33,8 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
         next()
       }).catch(() => {
         next('/login')
+      }).catch(() => {
+        next()
       })
     } else if (to.name === 'login' && store.getters.isAuthenticated) {
       next('/')

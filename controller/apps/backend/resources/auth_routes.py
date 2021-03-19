@@ -100,5 +100,5 @@ class verify_login(Resource):
             verify_jwt_in_request()
             return {'logged_in': True, 'user': get_jwt_identity()}
         except Exception as ex:
-            print(inspect.stack()[0][3] + " - " + str(ex))
-            return {'logged_in': False}, 401
+            print(self.__class__.__name__ + " - " + str(ex))
+            return {'logged_in': False}
