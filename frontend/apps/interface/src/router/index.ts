@@ -42,18 +42,19 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
       next()
     }
   })
-
   axios.interceptors.response.use(function (response) {
     return response
   }, function (error) {
-    if (error.response.status === 401) {
-      store.dispatch('LOGOUT')
-      if (Router.currentRoute.fullPath !== '/') {
-        Router.push('/login')
+    if (error.resonse) {
+      if (error.response.status === 401 || error.code === 'ECONNABORTED') {
+        store.dispatch('LOGOUT')
+        if (Router.currentRoute.fullPath !== '/') {
+          Router.push('/login')
+        }
+      } else {
+        console.log(error.response.status)
+        Router.push('/' + error.response.status)
       }
-    } else {
-      console.log(error.response.status)
-      Router.push('/' + error.response.status)
     }
     return Promise.reject(error)
   })
