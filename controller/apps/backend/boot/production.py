@@ -13,7 +13,7 @@ import signal
 
 
 # Function for first launch called by 'startup' function
-def launch_wifi():
+def launch_wifi(self):
     # Check if already connected to Wi-Fi
     time.sleep(20)
     try:
@@ -110,6 +110,3 @@ def startup():
 
     # Check hostnames are set correctly
     hostname_check()
-
-    # Start app
-    startup()

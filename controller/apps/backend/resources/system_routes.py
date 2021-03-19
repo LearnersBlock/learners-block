@@ -38,7 +38,7 @@ class hostname(Resource):
                                path="/v1/device/host-config?apikey=")
         return {
             'status': 200,
-            'hostname': device_hostname,
+            'hostname': device_hostname["json_response"]["network"]["hostname"],
             'message': "OK"
         }, 200
 
