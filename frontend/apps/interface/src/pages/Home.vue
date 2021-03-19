@@ -114,8 +114,8 @@
           </q-item>
           <q-separator v-if="settings.website" />
         </q-list>
-        
-                <div
+
+        <div
           v-if="settingsLoading"
           class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
         >

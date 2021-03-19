@@ -76,8 +76,15 @@
                 v-ripple
                 tag="a"
                 target="_blank"
+                :disabled="!wifi"
                 :href="'https://library.learnersblock.org/?hostname=' + windowHostname"
               >
+                >        <q-tooltip
+                  v-if="!wifi"
+                  content-style="font-size: 16px"
+                >
+                  {{ $t('need_connection') }}
+                </q-tooltip>
                 <q-icon
                   name="import_contacts"
                   color="green"
@@ -112,10 +119,17 @@
               <q-item
                 clickable
                 v-ripple
+                :disabled="!wifi"
                 tag="a"
                 target="_blank"
                 href="/makerspace"
               >
+                <q-tooltip
+                  v-if="!wifi"
+                  content-style="font-size: 16px"
+                >
+                  {{ $t('need_connection') }}
+                </q-tooltip>
                 <q-icon
                   name="create"
                   color="blue"
