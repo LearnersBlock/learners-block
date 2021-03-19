@@ -20,8 +20,8 @@ def launch_wifi():
         connected = wifi().check_connection()
     except Exception as ex:
         print("Api-v1 - Error checking wifi connection. Starting wifi-connect "
-              "in order to allow debugging. " + inspect.stack()[0][3] + " - "
-              + inspect.stack()[0][3] + " - " + str(ex))
+              "in order to allow debugging. " +
+              inspect.stack()[0][3] + " - " + str(ex))
         connected = None
 
     # If connected, perform container updatem if not, start Wi-Fi Connect
@@ -31,7 +31,7 @@ def launch_wifi():
             response = ('Api-v1 - API Started - Device already connected to '
                         'local wifi, software update request made.')
         except Exception as ex:
-            response = ("Software update failed. " + inspect.stack()[0][3] +
+            response = ("Software update failed. " +
                         " - " + inspect.stack()[0][3] + " - " + str(ex))
     else:
         try:
@@ -83,7 +83,7 @@ def portainer_check():
         portainer_exit.start()
 
     except Exception as ex:
-        print("Failed to stop Portainer. " + inspect.stack()[0][3] +
+        print("Failed to stop Portainer. " +
               " - " + inspect.stack()[0][3] + " - " + str(ex))
 
 

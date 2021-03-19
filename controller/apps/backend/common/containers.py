@@ -1,5 +1,6 @@
 from flask_restful import abort
 from common.processes import curl
+import inspect
 import os
 import time
 
@@ -33,5 +34,7 @@ class container:
                                "/stop-service?apikey=",
                         string='{"serviceName": "%s"}' % (container_name))
 
-        print(str(response["text"]) + str(response["status_code"]))
+        print(self.__class__.__name__ + inspect.stack()[0][3] + " - " +
+              str(response["text"]) +
+              str(response["status_code"]))
         return response

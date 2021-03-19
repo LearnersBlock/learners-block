@@ -37,8 +37,8 @@ class login(Resource):
         try:
             lb_database = User.query.filter_by(username='lb').first()
         except Exception as ex:
-            print(inspect.stack()[0][3] + " - " + str(ex))
-            return {'response': inspect.stack()[0][3] + " - " + str(ex)}, 500
+            print(self.__class__.__name__ + " - " + str(ex))
+            return {'response': self.__class__.__name__ + " - " + str(ex)}, 500
 
         try:
             content = request.get_json()
@@ -46,13 +46,13 @@ class login(Resource):
                                                    lb_database.password)
             username = content["username"].lower()
         except AttributeError as ex:
-            print(inspect.stack()[0][3] + " - " + str(ex))
+            print(self.__class__.__name__ + " - " + str(ex))
             return {'response': 'Error: Must pass valid string.'}, 200
 
         if username != lb_database.username or verify_password is not \
                 True:
-            print("Bad username of password")
-            return {"message": "Bad username or password"}, 401
+            print(self.__class__.__name__ + " - Invaild username of password")
+            return {"message": "Invalid or password"}, 401
         access_token = create_access_token(identity=username)
         response = jsonify({"message": "login successful",
                             "token": access_token})
@@ -74,13 +74,13 @@ class set_password(Resource):
         try:
             lb_database = User.query.filter_by(username='lb').first()
         except Exception as ex:
-            print(inspect.stack()[0][3] + " - " + str(ex))
-            return {'response': inspect.stack()[0][3] + " - " + str(ex)}, 403
+            print(self.__class__.__name__ + " - " + str(ex))
+            return {'response': self.__class__.__name__ + " - " + str(ex)}, 403
 
         try:
             content = request.get_json()
         except AttributeError as ex:
-            print(inspect.stack()[0][3] + " - " + str(ex))
+            print(self.__class__.__name__ + " - " + str(ex))
             return {'response': 'Error: Must pass valid string.'}, 403
 
         try:
@@ -89,8 +89,8 @@ class set_password(Resource):
             lb_database.save_to_db()
             return {'response': 'done'}, 200
         except Exception as ex:
-            print(inspect.stack()[0][3] + " - " + str(ex))
-            return {'database error': inspect.stack()[0][3] + " - " +
+            print(self.__class__.__name__ + " - " + str(ex))
+            return {'database error': self.__class__.__name__ + " - " +
                     str(ex)}, 500
 
 

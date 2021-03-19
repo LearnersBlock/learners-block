@@ -11,13 +11,13 @@ class set_ui(Resource):
         try:
             lb_database = User.query.filter_by(username='lb').first()
         except Exception as ex:
-            print(inspect.stack()[0][3] + " - " + str(ex))
-            return {'response': inspect.stack()[0][3] + " - " + str(ex)}, 403
+            print(self.__class__.__name__ + " - " + str(ex))
+            return {'response': self.__class__.__name__ + " - " + str(ex)}, 403
 
         try:
             content = request.get_json()
         except AttributeError as ex:
-            print(inspect.stack()[0][3] + " - " + str(ex))
+            print(self.__class__.__name__ + " - " + str(ex))
             return {'response': 'Error: Must pass valid string.'}, 403
 
         try:
@@ -45,8 +45,8 @@ class set_ui(Resource):
             lb_database.save_to_db()
             return {'response': 'done'}, 200
         except Exception as ex:
-            print(inspect.stack()[0][3] + " - " + str(ex))
-            return {'message': inspect.stack()[0][3] + " - " + str(ex)}, 500
+            print(self.__class__.__name__ + " - " + str(ex))
+            return {'message': self.__class__.__name__ + " - " + str(ex)}, 500
 
 
 class settings_ui(Resource):
