@@ -13,7 +13,6 @@ from flask_jwt_extended import unset_jwt_cookies
 from flask_jwt_extended import verify_jwt_in_request
 from flask_restful import Resource
 from resources.models import User
-import inspect
 
 
 # Refresh token on each authorised request
