@@ -31,5 +31,12 @@
     "api_down": "API-et er utilgjengelig. Prøv igjen eller overvei å starte enheten på ny.",
     "advanced": "Avansert",
     "404": "Siden du prøver å nå finnes ikke.",
-    "401": "Uautorisert. Prøv å logge inn igjen."
+    "401": "Uautorisert. Prøv å logge inn igjen.",
+    "are_you_sure": "Er du sikker?",
+    "success": "Vellykket",
+    "set_password": "Sett passord",
+    "set_hostname_desc": "Sett et nytt vertsnavn",
+    "set_hostname": "Sett vertsnavn",
+    "password": "Passord",
+    "files_description": "Utforsk filene lagret til enheten her."
 }
