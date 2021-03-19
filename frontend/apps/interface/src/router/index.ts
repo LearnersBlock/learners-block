@@ -23,6 +23,8 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  axios.defaults.withCredentials = true
+
   Router.beforeEach(async (to, _, next) => {
     store.commit('SET_API', 'http://' + window.location.hostname + ':9090')
     if (!store.getters.isAuthenticated && localStorage.getItem('learners-block-token') !== null) {
@@ -58,8 +60,6 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
     }
     return Promise.reject(error)
   })
-
-  axios.defaults.withCredentials = true
 
   return Router
 })

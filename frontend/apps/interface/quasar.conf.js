@@ -9,7 +9,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { configure } = require('quasar/wrappers')
 
-const devAPI = 'http://0.0.0.0:9090'
+const devAPI = 'http://localhost:9090'
 
 module.exports = configure(function (ctx) {
   return {
