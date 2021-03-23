@@ -404,7 +404,7 @@ export default defineComponent({
       togglesLoading.value = false
       // Get portainer status
       const fetchedPortainer = await Axios.get(`${api.value}/v1/portainer/status`)
-      portainer.value = fetchedPortainer.data.message === 'Running'
+      portainer.value = fetchedPortainer.data.container_status === 'Running'
       portainerToggleLoading.value = false
       // Get SystemInfo
       const fetchedSysInfo = await Axios.get(`${api.value}/v1/system/info`)

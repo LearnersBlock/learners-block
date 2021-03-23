@@ -45,13 +45,8 @@ class portainer_status(Resource):
     def get(self):
         response, entry = container().status(container_name="portainer")
 
-        if entry["status"] == "Running":
-            process_status = True
-        else:
-            process_status = False
-
         return {'status': response["status_code"],
-                'running': process_status}, response["status_code"]
+                'container_status': entry["status"]}, response["status_code"]
 
 
 class portainer_start(Resource):
