@@ -28,7 +28,7 @@
     "library": "Library",
     "library_description": "Browse the downloaded library content here.",
     "library_settings_description": "Download content from the Learner's Block Library.",
-    "login": "Log in",
+    "login": "Login",
     "login_disabled": "Login password has been disabled.",
     "login_successfull": "Login successful",
     "makerspace": "Makerspace",

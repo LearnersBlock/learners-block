@@ -2,5 +2,7 @@
     "cancel": "Vazgeç",
     "username": "Kullanıcı adı",
     "password": "Parola",
-    "login": "Oturum aç"
+    "login": "Oturum aç",
+    "wifi": "Wi-Fi",
+    "connect": "Bağlan"
 }

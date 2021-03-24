@@ -65,7 +65,7 @@
     "load_config_error": "Could not load configuration.",
     "load_template_error": "Could not load templates.",
     "load_text_error": "Could not load texts.",
-    "login": "Log in",
+    "login": "Login",
     "login_failed": "Login failed.",
     "logout": "Log Off",
     "method": "Method",
