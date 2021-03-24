@@ -8,5 +8,6 @@
     "password": "Passord",
     "select_ssid": "Velg Wi-Fi-nettverk",
     "user": "Bruker",
-    "wifi": "Wi-Fi"
+    "wifi": "Wi-Fi",
+    "network_absent": "Hvis du ikke kan se nettverket kan du starte enheten på ny og prøve igjen."
 }
