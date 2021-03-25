@@ -20,9 +20,7 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 ### Development
 
-A Docker based development environment is available. The environment is built towards Mac OS AMD64. If you are running on another system, you may need to alter the image names in each of the Dockerfiles, replacing `amd64` with your operating system. A list of available images can be found [here]( https://www.balena.io/docs/reference/base-images/base-images/).  
-
-There are two development docker-compose files, one for the frontend and one for WiFi Connect.
+A Docker based development environment is available. There are two development docker-compose files, one for the frontend and one for WiFi Connect.
 
 Enabling the Docker BuildKit will speed up build times considerably. 
 

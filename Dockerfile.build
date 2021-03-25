@@ -1,23 +1,23 @@
 # Build File Manager
-FROM composer AS filemanager-buildstep
+FROM composer:2.0.11 AS filemanager-buildstep
 
-## Install required build dependencies
+# Install required build dependencies
 RUN apk add ncurses
 
-## Set workdir to the build folder
+# Set workdir to the build folder
 WORKDIR /build-context
 
-## Copy content to prepare
+# Copy content to prepare
 COPY frontend/apps/file-manager/ .
 
-## Run the build process
+# Run the build process
 RUN composer run build
 
 
 # Build interface
-FROM balenalib/amd64-alpine-node:14-build AS interface-buildstep
+FROM node:14.16.0-alpine3.12 AS interface-buildstep
 
-## Instal Quasar
+# Instal Quasar
 RUN yarn global add @quasar/cli && export PATH="$(yarn global bin):$PATH"
 
 # Install node_modules
@@ -28,7 +28,7 @@ RUN yarn install --cwd /build-context-node
 
 WORKDIR /build-context
 
-## Copy interface source code to container
+# Copy interface source code to container
 COPY frontend/apps/interface/ .
 
 # Ensure any old builds are removed before building
@@ -44,18 +44,18 @@ RUN yarn run lint
 RUN quasar build
 
 # Build Wi-Fi Connect
-FROM balenalib/amd64-alpine-node:14-build AS controller-wifi-buildstep
+FROM node:14.16.0-alpine3.12 AS controller-wifi-buildstep
 
 # Install node_modules
 COPY controller/apps/wifi-connect/ui/yarn.lock /build-context-node/yarn.lock
 COPY controller/apps/wifi-connect/ui/package.json /build-context-node/package.json
 
-## Install app dependencies
+# Install app dependencies
 RUN yarn install --cwd /build-context-node
 
 WORKDIR /build-context
 
-## Copy controller source code to container
+# Copy controller source code to container
 COPY controller/apps/wifi-connect/ui .
 
 # Ensure any old builds are removed before building
@@ -71,9 +71,9 @@ RUN mv -f /build-context-node/node_modules .
 RUN yarn build
 
 
-FROM alpine
+FROM alpine:3.12
 
-## Copy built content ready for adding to folders
+# Copy built content ready for adding to folders
 
 COPY --from=filemanager-buildstep /build-context/dist /build/filemanager
 

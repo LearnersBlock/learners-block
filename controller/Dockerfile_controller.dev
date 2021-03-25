@@ -1,4 +1,4 @@
-FROM balenalib/amd64-debian-python:3.8.6
+FROM python:3.8.6-buster
 
 # Set working directory 
 WORKDIR /app
