@@ -1,0 +1,31 @@
+name: "tagged-release"
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      
+      - name: Build
+        run: |
+          docker-compose -f docker-compose-build.yml up --build
+          tar -czvf ../Learners-Block-$RELEASE_VERSION.tar.gz -C $GITHUB_WORKSPACE .
+          mv ../Learners-Block-$RELEASE_VERSION.tar.gz $GITHUB_WORKSPACE
+          echo "done!"
+
+      - uses: "marvinpinto/action-automatic-releases@v1.1.1"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            Learners-Block-*.tar.gz
