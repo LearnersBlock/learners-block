@@ -19,7 +19,7 @@
     "error": "Something went wrong. Try again.",
     "files": "Files",
     "files_description": "Browse the files saved to the device here.",
-    "files_settings_description": "Add files to your device. Only users logged in can delete them.",
+    "files_settings_description": "Manage files on your device. Only users logged in can delete them.",
     "home": "Home",
     "hostname": "Hostname",
     "hostname_changed_notification": "Your hostname has been updated. Please restart the device for this to take effect.",
