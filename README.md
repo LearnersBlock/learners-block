@@ -20,6 +20,8 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 ### Development
 
+All development is currently done on the develop branch. It is this branch that users should fork and submit pull requests to. When it's time for a release the develop branch is merged into the master branch where it is built and deployed to our servers. 
+
 A Docker based development environment is available. There are two development docker-compose files, one for the frontend and one for WiFi Connect.
 
 Enabling the Docker BuildKit will speed up build times considerably. 
