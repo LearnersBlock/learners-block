@@ -67,7 +67,7 @@ class portainer_status(Resource):
         if portainerstatus is True:
             return {'status': 200, 'container_status': 'Running'}, 200
         else:
-            return {'status': 200, 'container_status': 'Stopped'}, 200   
+            return {'status': 200, 'container_status': 'Stopped'}, 200
 
 
 class portainer_start(Resource):

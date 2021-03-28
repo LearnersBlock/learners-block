@@ -23,22 +23,22 @@ class set_ui(Resource):
             if "files" in content:
                 if content["files"].lower() == "true":
                     lb_database.files = True
-                elif content["files"].lower() == "false":
+                else:
                     lb_database.files = False
             if "library" in content:
                 if content["library"].lower() == "true":
                     lb_database.library = True
-                elif content["library"].lower() == "false":
+                else:
                     lb_database.library = False
             if "makerspace" in content:
                 if content["makerspace"].lower() == "true":
                     lb_database.makerspace = True
-                elif content["makerspace"].lower() == "false":
+                else:
                     lb_database.makerspace = False
             if "website" in content:
                 if content["website"].lower() == "true":
                     lb_database.website = True
-                elif content["website"].lower() == "false":
+                else:
                     lb_database.website = False
 
             lb_database.save_to_db()
