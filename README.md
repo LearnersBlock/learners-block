@@ -20,7 +20,7 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 ### Development
 
-All development is currently done on the develop branch. It is this branch that users should fork and submit pull requests to. When it's time for a release the develop branch is merged into the master branch where it is built and deployed to our servers. 
+All development is currently done on the 'develop' branch. It is this branch that users should fork and submit pull requests to. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built and deployed to our servers. 
 
 A Docker based development environment is available. There are two development docker-compose files, one for the frontend and one for WiFi Connect.
 
@@ -66,7 +66,25 @@ All development changes will require testing through the Balena OS and relevant 
 
 #### Pre-built
 
-Learner’s Block software is provided as a complete package ready to flash to an SD card, including an operating system with pre-defined keys that allow for automatic updates. To benefit from these automatic updates [download the image files](https://downloads.learnersblock.org).
+Learner’s Block software is provided as a complete package ready to flash to an SD card, including an operating system with pre-defined keys that allow for automatic updates. To benefit from these automatic updates download the image files from our [downloads page](https://downloads.learnersblock.org).
+
+Alternatively, you can download these images from the GitHub releases page. There you will also find a 'pre-release' tagged 'develop' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. 
+
+Release names follow the following format:
+
+**Releases:**
+```
+# Source code with built and minified assets.
+Learners-Block-Dist-v%%version-number%%.tar.gz 
+
+# Image which runs production code from 'master' branch.
+Learners-Block-%%device-type%%-v%%version-number%%.tar.gz 
+```
+**Pre-releases:**
+```
+## Image which runs latest commits from the 'develop' branch. 
+Learners-Block-Dev-%%device-type%%-develop.zip 
+```
 
 #### Deploy locally
 
