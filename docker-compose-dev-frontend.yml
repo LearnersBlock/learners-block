@@ -12,7 +12,7 @@ services:
         labels:
             portainer: hidden
         volumes:
-            - ./controller/apps/backend:/app
+            - './controller/apps/backend:/app'
 
     frontend:
         build:

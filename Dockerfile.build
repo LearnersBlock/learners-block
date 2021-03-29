@@ -15,63 +15,47 @@ RUN composer run build
 
 
 # Build interface
-FROM node:14.16.0-alpine3.12 AS interface-buildstep
+FROM node:14.16.0-alpine3.13 AS interface-buildstep
 
 # Instal Quasar
 RUN yarn global add @quasar/cli && export PATH="$(yarn global bin):$PATH"
 
-# Install node_modules
-COPY frontend/apps/interface/yarn.lock /build-context-node/yarn.lock
-COPY frontend/apps/interface/package.json /build-context-node/package.json
-
-RUN yarn install --cwd /build-context-node
-
 WORKDIR /build-context
 
+# Install node_modules
+COPY frontend/apps/interface/yarn.lock ./yarn.lock
+COPY frontend/apps/interface/package.json ./package.json
+
+RUN yarn install
+
 # Copy interface source code to container
+# 'node_modules' is excluded by .dockerignore
 COPY frontend/apps/interface/ .
-
-# Ensure any old builds are removed before building
-# node_modules is excluded by .dockerignore but a check exists here just in case
-RUN mkdir -p ./dist/ && rm -r ./dist/
-RUN mkdir -p ./node_modules/ && rm -r ./node_modules/
-
-# Add in built node_modules
-# Moved in rather than created in place to avoid dependence on .dockerignore
-RUN mv -f /build-context-node/node_modules .
 
 RUN yarn run lint
 RUN quasar build
 
 # Build Wi-Fi Connect
-FROM node:14.16.0-alpine3.12 AS controller-wifi-buildstep
-
-# Install node_modules
-COPY controller/apps/wifi-connect/ui/yarn.lock /build-context-node/yarn.lock
-COPY controller/apps/wifi-connect/ui/package.json /build-context-node/package.json
-
-# Install app dependencies
-RUN yarn install --cwd /build-context-node
+FROM node:14.16.0-alpine3.13 AS controller-wifi-buildstep
 
 WORKDIR /build-context
 
+# Install node_modules
+COPY controller/apps/wifi-connect/ui/yarn.lock ./yarn.lock 
+COPY controller/apps/wifi-connect/ui/package.json ./package.json
+
+# Install app dependencies
+RUN yarn install
+
 # Copy controller source code to container
+# 'node_modules' is excluded by .dockerignore
 COPY controller/apps/wifi-connect/ui .
-
-# Ensure any old builds are removed before building
-# node_modules is excluded by .dockerignore but a check exists here just in case
-RUN mkdir -p ./build/ && rm -r ./build/
-RUN mkdir -p ./node_modules/ && rm -r ./node_modules/
-
-# Move in built node_modules
-# Moved in rather than created in place to avoid dependence on .dockerignore
-RUN mv -f /build-context-node/node_modules .
 
 # Build
 RUN yarn build
 
 
-FROM alpine:3.12
+FROM busybox
 
 # Copy built content ready for adding to folders
 
