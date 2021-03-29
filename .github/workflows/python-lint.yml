@@ -3,12 +3,17 @@ name: Python Lint
 on:
   push:
     branches: '**'
+    paths-ignore:
+      - 'controller/apps/wifi-connect/ui/src/components/i18n/**'  
     paths:
       - 'controller/apps/backend/**'
   pull_request:
     branches: '**'
+    paths-ignore:
+      - 'controller/apps/wifi-connect/ui/src/components/i18n/**'  
     paths:
       - 'controller/apps/backend/**'
+
 
 defaults:
     run:

@@ -5,10 +5,14 @@ on:
     branches: '**'
     paths:
       - 'frontend/apps/interface/**'
+    paths-ignore:
+      - 'frontend/apps/interface/src/i18n/**'  
   pull_request:
     branches: '**'
     paths:
       - 'frontend/apps/interface/**'
+    paths-ignore:
+      - 'frontend/apps/interface/src/i18n/**'  
 
 defaults:
     run:
