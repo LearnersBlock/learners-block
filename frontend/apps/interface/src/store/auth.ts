@@ -12,7 +12,7 @@ const auth = {
   },
   getters: {
     isAuthenticated: (state: AuthStateInterface) => {
-      return state.token !== '' && localStorage.getItem('learners-block-token') !== null
+      return state.token !== '' && sessionStorage.getItem('learners-block-token') !== null
     },
     GET_API: (state: AuthStateInterface) => {
       return state.api
@@ -33,7 +33,7 @@ const auth = {
       })
       if (response.status === 200) {
         const token = response.data.token
-        localStorage.setItem('learners-block-token', token)
+        sessionStorage.setItem('learners-block-token', token)
         Axios.defaults.headers.common.Authorization = `Bearer ${token}`
         commit('SET_TOKEN', token)
         return true
@@ -44,7 +44,7 @@ const auth = {
         throw new Error(e.message)
       })
       if (response.status === 200) {
-        localStorage.removeItem('learners-block-token')
+        sessionStorage.removeItem('learners-block-token')
         Axios.defaults.headers.common.Authorization = null
         commit('SET_TOKEN', null)
       }

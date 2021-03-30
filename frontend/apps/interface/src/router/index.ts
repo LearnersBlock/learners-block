@@ -27,8 +27,8 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
 
   Router.beforeEach(async (to, _, next) => {
     store.commit('SET_API', 'http://' + window.location.hostname + ':9090')
-    if (!store.getters.isAuthenticated && localStorage.getItem('learners-block-token') !== null) {
-      await store.dispatch('VERIFY_LOGIN', localStorage.getItem('learners-block-token'))
+    if (!store.getters.isAuthenticated && sessionStorage.getItem('learners-block-token') !== null) {
+      await store.dispatch('VERIFY_LOGIN', sessionStorage.getItem('learners-block-token'))
     }
     if ((to.name === 'settings' || to.name === 'password_reset') && !store.getters.isAuthenticated) {
       store.dispatch('LOGIN', { username: 'lb', password: ' ' }).then(() => {
