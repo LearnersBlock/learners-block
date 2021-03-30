@@ -20,7 +20,7 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 ### Development
 
-All development is currently done on the 'develop' branch. It is this branch that users should fork and submit pull requests too. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built and deployed to our servers. 
+All development is currently done on the 'develop' branch. It is this branch that users should fork and where pull requests should be submitted. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built and deployed to our servers. 
 
 A Docker based development environment is available. There are two development docker-compose files, one for the frontend and one for WiFi Connect.
 
@@ -114,7 +114,11 @@ We thrive to ensure the features developed are those most in line with the commu
 ## Contributing
 
 ### Pull requests
-We welcome contributions, they are what keep the Block alive! For pull requests we suggest discussing the changes through a ticket first. This is for your own sake in case there are already changes ongoing that will affect your contribution. If you are looking to contribute but do not have a specific feature or goal in mind, please check the list of [Good First Issues](https://github.com/LearnersBlock/learners-block/contribute) and our [voting platform](https://vote.learnersblock.org), which contains a list of features prioritised by the community.
+We welcome contributions, they are what keep the Block alive! For pull requests we suggest discussing the changes through a ticket first. This is for your own sake in case there are already changes ongoing that will affect your contribution. 
+
+If you are looking to contribute but do not have a specific feature or goal in mind, please check the list of [Good First Issues](https://github.com/LearnersBlock/learners-block/contribute) and our [voting platform](https://vote.learnersblock.org), which contains a list of features prioritised by the community.
+
+All development is currently done on the 'develop' branch. It is this branch that users should fork and where pull requests should be submitted. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built and deployed to our servers. 
 
 ### Bug reports
 

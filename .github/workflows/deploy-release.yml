@@ -20,7 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set env
+      - name: Set environment variables
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - if: startsWith(github.ref, 'refs/tags/v')
@@ -74,7 +74,7 @@ jobs:
           bash $GITHUB_WORKSPACE/balena-image-builder/entrypoint.sh development
 
       - if: startsWith(github.ref, 'refs/heads/develop')
-        name: Create Development ChangeLog and Publish Pre-Release
+        name: Create development changeLog and publish pre-release
         uses: "marvinpinto/action-automatic-releases@v1.1.1"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -94,7 +94,7 @@ jobs:
           bash $GITHUB_WORKSPACE/balena-image-builder/entrypoint.sh production
 
       - if: startsWith(github.ref, 'refs/tags/v')
-        name: Create Production ChangeLog and Publish Releases
+        name: Create production changeLog and publish releases
         uses: "marvinpinto/action-automatic-releases@v1.1.1"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
