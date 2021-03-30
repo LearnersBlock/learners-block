@@ -287,7 +287,7 @@
                   <q-input
                     ref="hostnameValid"
                     filled
-                    class="ml-1 mr-1"
+                    class="ml-1 mr-1 text-lowercase"
                     :rules="[(val) =>
                       !val.includes(' ') &&
                       val.length <= 32
