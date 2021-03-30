@@ -3,12 +3,12 @@
     <q-header elevated>
       <q-toolbar>
         <div class="ml-1">
-          <a href="/">
+          <router-link to="/">
             <img
               alt=""
               src="../assets/lb-logo-white-full.svg"
             >
-          </a>
+          </router-link>
         </div>
 
         <q-toolbar-title class="josefin text-h5 q-mt-xs">
