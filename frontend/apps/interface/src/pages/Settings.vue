@@ -67,7 +67,7 @@
                   v-if="filesLoading"
                   color="primary"
                   size="2em"
-                  class="mt-5 mr-6"
+                  class="mt-6 mr-6"
                 />
               </q-item>
 
@@ -112,7 +112,7 @@
                   v-if="libraryLoading"
                   color="primary"
                   size="2em"
-                  class="mt-5 mr-6"
+                  class="mt-6 mr-6"
                 />
               </q-item>
 
@@ -157,7 +157,7 @@
                   v-if="makerspaceLoading"
                   color="primary"
                   size="2em"
-                  class="mt-5 mr-6"
+                  class="mt-6 mr-6"
                 />
               </q-item>
 
@@ -196,7 +196,7 @@
                   v-if="websiteLoading"
                   color="primary"
                   size="2em"
-                  class="mt-5 mr-6"
+                  class="mt-6 mr-6"
                 />
               </q-item>
             </q-list>
@@ -265,7 +265,7 @@
               v-if="loading"
               color="primary"
               size="2em"
-              class="mt-5 mr-6"
+              class="mt-6 mr-6"
             />
           </div>
           <q-list
@@ -332,7 +332,7 @@
                         v-if="portainerLoading"
                         color="primary"
                         size="2em"
-                        class="mt-5 mr-6"
+                        class="mt-6 mr-6"
                       />
                     </q-item>
                   </div>
