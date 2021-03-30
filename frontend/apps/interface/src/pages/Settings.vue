@@ -4,6 +4,7 @@
       <div class="max-w-5xl">
         <div>
           <q-btn
+            to="/"
             rounded
             color="white"
             text-color="primary"
