@@ -3,7 +3,7 @@
     <router-view v-if="apiIsUp" />
     <div
       v-else
-      class="text-h2 q-mt-xl q-ml-xl text-center"
+      class="text-h4 q-mt-xl text-center"
     >
       {{ $t('api_down') }}
     </div>
