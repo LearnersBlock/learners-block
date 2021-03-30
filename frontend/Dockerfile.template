@@ -45,6 +45,10 @@ COPY config/php/php.ini /etc/php7/conf.d/custom.ini
 COPY /config/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY /config/nginx/conf/ /etc/nginx/conf.d/
 
+# Insert website holding page
+COPY --chown=nginx /config/nginx/assets/index.html /app/web/public/storage/website/index.html
+COPY --chown=nginx /config/nginx/assets/web.png /app/web/public/storage/website/web.png
+
 # Insert File Manager source code
 COPY --chown=nginx /apps/file-manager/dist /app/web/public/files
 
