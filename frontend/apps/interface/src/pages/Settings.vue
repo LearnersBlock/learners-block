@@ -350,10 +350,19 @@
           <div class="text-center text-2xl mt-6 mb-4 text-gray-600">
             {{ $t('system_info') }}
           </div>
-          <div class="flex flex-col text-center text-gray pb-5">
+          <div
+            v-if="!sysInfoLoading"
+            class="flex flex-col text-center text-gray pb-5"
+          >
             <span class="text-gray-600"><span>{{ $t('total_storage') }}: </span>{{ sysInfo.storage.total }}</span>
             <span class="text-gray-600"><span>{{ $t('available_storage') }}: </span> {{ sysInfo.storage.available }}</span>
             <span class="text-gray-600"><span>{{ $t('version') }}: </span>{{ sysInfo.versions.lb }}</span>
+          </div>
+          <div
+            v-else
+            class="flex flex-col text-center text-gray pb-5"
+          >
+            <span class="text-gray-600"><span>Loading...</span>{{ sysInfo.versions.lb }}</span>
           </div>
         </div>
       </div>
@@ -384,6 +393,7 @@ export default defineComponent({
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
+    const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
     const togglesLoading = ref<boolean>(true)
     const website = ref<boolean>(false)
@@ -410,6 +420,7 @@ export default defineComponent({
       // Get SystemInfo
       const fetchedSysInfo = await Axios.get(`${api.value}/v1/system/info`)
       sysInfo.value = fetchedSysInfo.data
+      sysInfoLoading.value = false
       // Get connection status
       const fetchedConnectionStatus = await Axios.get(`${api.value}/v1/wifi/connectionstatus`)
       wifi.value = fetchedConnectionStatus.data.running !== false
@@ -571,6 +582,7 @@ export default defineComponent({
       portainerToggleLoading,
       regexp,
       sysInfo,
+      sysInfoLoading,
       togglesLoading,
       updateFiles,
       updateLibrary,

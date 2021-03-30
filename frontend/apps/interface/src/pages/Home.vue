@@ -167,7 +167,6 @@ export default defineComponent({
         root.$q.loading.hide()
       })
     })
-      
 
     return {
       allIsDisabled,
