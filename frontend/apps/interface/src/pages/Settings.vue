@@ -59,11 +59,11 @@
                   size="lg"
                   :disable="togglesLoading"
                   :disabled="togglesLoading"
-                  v-if="!filesLoading"
+                  v-if="!filesLoading && !wifiLoading"
                   @input="updateFiles"
                 />
                 <q-spinner
-                  v-if="filesLoading"
+                  v-if="filesLoading || wifiLoading"
                   color="primary"
                   size="2em"
                   class="mt-6 mr-6"
@@ -105,11 +105,11 @@
                   size="lg"
                   :disable="togglesLoading"
                   :disabled="togglesLoading"
-                  v-if="!libraryLoading"
+                  v-if="!libraryLoading && !wifiLoading"
                   @input="updateLibrary"
                 />
                 <q-spinner
-                  v-if="libraryLoading"
+                  v-if="libraryLoading || wifiLoading"
                   color="primary"
                   size="2em"
                   class="mt-6 mr-6"
@@ -151,11 +151,11 @@
                   size="lg"
                   :disable="togglesLoading"
                   :disabled="togglesLoading"
-                  v-if="!makerspaceLoading"
+                  v-if="!makerspaceLoading && !wifiLoading"
                   @input="updateMakerspace"
                 />
                 <q-spinner
-                  v-if="makerspaceLoading"
+                  v-if="makerspaceLoading || wifiLoading"
                   color="primary"
                   size="2em"
                   class="mt-6 mr-6"
@@ -190,11 +190,11 @@
                   class="ml-auto"
                   :disable="togglesLoading"
                   :disabled="togglesLoading"
-                  v-if="!websiteLoading"
+                  v-if="!websiteLoading && !wifiLoading"
                   @input="updateWebsite"
                 />
                 <q-spinner
-                  v-if="websiteLoading"
+                  v-if="websiteLoading || wifiLoading"
                   color="primary"
                   size="2em"
                   class="mt-6 mr-6"
@@ -325,12 +325,12 @@
                         @input="updatePortainer"
                         :disable="portainerToggleLoading"
                         :disabled="portainerToggleLoading"
-                        v-if="!portainerLoading"
+                        v-if="!portainerLoading && !wifiLoading"
                         icon="widgets"
                         size="lg"
                       />
                       <q-spinner
-                        v-if="portainerLoading"
+                        v-if="portainerLoading || wifiLoading"
                         color="primary"
                         size="2em"
                         class="mt-6 mr-6"
@@ -467,8 +467,8 @@ export default defineComponent({
       }
     }
 
-    const openLibrary = () => {
-      window.open('https://library.learnersblock.org/?hostname=' + windowHostname)
+    function openLibrary () {
+      window.open('https://library.learnersblock.org/?hostname=' + window.location.hostname)
     }
 
     const updateFiles = async () => {
