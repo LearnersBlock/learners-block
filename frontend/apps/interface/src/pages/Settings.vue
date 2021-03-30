@@ -1,22 +1,21 @@
 <template>
   <q-page>
-    <router-link
-      color="secondary"
-      class="self-start mt-3 pl-3 lg:pl-40 text-h6 cursor-pointer"
-      to="/"
-    >
-      <q-btn
-        color="white"
-        text-color="primary"
-        class="mt-4 text-subtitle2 text-weight-bold"
-      >
-        {{ $t('home') }}
-      </q-btn>
-    </router-link>
     <div class="flex flex-col items-center">
       <div class="max-w-5xl">
         <div>
-          <div class="mt-10 pl-3 text-5xl text-gray-600">
+          <q-btn
+            rounded
+            color="white"
+            text-color="primary"
+            class="ml-3 mt-9 text-subtitle2 text-weight-bold"
+          >
+            <span class="material-icons mr-1 mb-.5">
+              arrow_back_ios
+            </span><div class="mt-0.5">
+              {{ $t('home') }}
+            </div>
+          </q-btn>
+          <div class="mt-9 pl-3 text-5xl text-gray-600">
             {{ $t('settings') }}
           </div>
           <hr class="mt-3">
