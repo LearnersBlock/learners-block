@@ -77,7 +77,7 @@
                 target="_blank"
                 :disabled="!wifi"
                 :disable="!wifi"
-                :href="wifi ? 'https://library.learnersblock.org/?hostname=' + windowHostname: x"
+                @click="openLibrary"
               >
                 <q-tooltip
                   v-if="!wifi"
@@ -467,6 +467,10 @@ export default defineComponent({
       }
     }
 
+    const openLibrary = () => {
+      window.open('https://library.learnersblock.org/?hostname=' + windowHostname)
+    }
+
     const updateFiles = async () => {
       filesLoading.value = true
       await Axios.post(`${api.value}/v1/setui`, {
@@ -561,6 +565,7 @@ export default defineComponent({
       makerspace,
       makerspaceLoading,
       newHostname,
+      openLibrary,
       portainer,
       portainerLoading,
       portainerToggleLoading,
