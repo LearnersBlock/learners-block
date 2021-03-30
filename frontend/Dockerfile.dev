@@ -4,14 +4,13 @@ FROM node:14.16.0-alpine3.13
 RUN apk add python3
 RUN yarn global add @quasar/cli && export PATH="$(yarn global bin):$PATH"
 
+# Install SupervisorD
+RUN apk add supervisor
 
 # --------------- ## Mirror of production file ## -------------- #
 # ----------- 'install_packages' switched for 'apk add' --------- #
 
-# Install SupervisorD
-RUN apk add supervisor
-
-# Add mount dependencies
+## Add mount dependencies
 RUN apk add findmnt util-linux grep
 
 # Install Nginx and PhP-FPM
@@ -25,13 +24,14 @@ RUN apk add libbz2 libzip libcap openldap-dev php7-zip php7-ldap php7-bz2 \
     php7-fileinfo php7-posix
 
 # Create root directories #
-RUN mkdir -p /app/web/public/frontend && \
-    mkdir -p /app/web/public/files && \
+RUN mkdir -p /app/web/public/files && \
+    mkdir -p /app/web/public/frontend && \
     mkdir -p /app/web/public/storage && \
+    mkdir -p /app/web/public/storage/fileshare && \
     mkdir -p /app/web/public/storage/library && \ 
-    mkdir -p /app/web/public/storage/website && \
-    mkdir -p /app/web/public/storage/fileshare
-
+    mkdir -p /app/web/public/storage/makerspace && \ 
+    mkdir -p /app/web/public/storage/website
+    
 # Set application directory 
 WORKDIR /app/web/
 
@@ -50,12 +50,19 @@ COPY config/php/php.ini /etc/php7/conf.d/custom.ini
 COPY /config/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY /config/nginx/conf/ /etc/nginx/conf.d/
 
+# Insert File Manager source code
+COPY --chown=nginx /apps/file-manager/dist /app/web/public/files
+
+# Insert interface source code
+COPY --chown=nginx /apps/interface/dist/spa /app/web/public/interface
+
 # Set file permissions 
 RUN chown -R nginx.nginx /run && \
     chown -R nginx.nginx /app/web/public/frontend && \
+    chown -R nobody.nobody /app/web/public/storage/fileshare/ && \
     chown -R nobody.nobody /app/web/public/storage/library/ && \
-    chown -R nobody.nobody /app/web/public/storage/website/ && \
-    chown -R nobody.nobody /app/web/public/storage/fileshare/
+    chown -R nobody.nobody /app/web/public/storage/makerspace/ && \
+    chown -R nobody.nobody /app/web/public/storage/website/
 
 # --------------- ## End mirror of production file ## -------------- #
 
