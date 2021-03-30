@@ -35,6 +35,15 @@ def launch_wifi(self):
                         " - " + inspect.stack()[0][3] + " - " + str(ex))
     else:
         try:
+            # Refresh networks in area before launch
+            run = subprocess.run(
+                        ["nmcli", "d", "wifi", "rescan", "&&",
+                         "nmcli", "d", "wifi"],
+                        capture_output=True,
+                        text=True).stdout.rstrip()
+            print(run)
+
+            # Launch Wi-Fi Connect
             wifi_connect().start()
             response = "Api-v1 - API Started - Launched wifi-connect."
         except Exception as ex:
