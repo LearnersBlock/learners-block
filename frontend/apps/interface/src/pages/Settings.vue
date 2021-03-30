@@ -77,7 +77,8 @@
                 tag="a"
                 target="_blank"
                 :disabled="!wifi"
-                :href="'https://library.learnersblock.org/?hostname=' + windowHostname"
+                :disable="!wifi"
+                :href="wifi ? 'https://library.learnersblock.org/?hostname=' + windowHostname: x"
               >
                 <q-tooltip
                   v-if="!wifi"
@@ -120,9 +121,10 @@
                 clickable
                 v-ripple
                 :disabled="!wifi"
+                :disable="!wifi"
                 tag="a"
                 target="_blank"
-                href="/makerspace"
+                to="/makerspace"
               >
                 <q-tooltip
                   v-if="!wifi"
