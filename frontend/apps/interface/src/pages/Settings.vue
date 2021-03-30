@@ -530,7 +530,7 @@ export default defineComponent({
 
     const wifiWarn = async () => {
       if (wifi.value === false) {
-        window.open(window.location.hostname + `:8080/?lang=${root.$i18n.locale}`)
+        window.open('http://' + window.location.hostname + `:8080/index.html?lang=${root.$i18n.locale}`)
       } else {
         root.$q.dialog({
           title: root.$tc('confirm'),
