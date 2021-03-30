@@ -24,7 +24,7 @@ All development is currently done on the 'develop' branch. It is this branch tha
 
 A Docker based development environment is available. There are two development docker-compose files, one for the frontend and one for WiFi Connect.
 
-Enabling the Docker BuildKit will speed up build times considerably. 
+On the GitHub releases page you will also find a 'pre-release' tagged 'development' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. Pre-releases will also provide real-time logs to our servers for debugging and are not recommended for production use.
 
 #### Frontend
 
@@ -68,9 +68,9 @@ All development changes will require testing through the Balena OS and relevant 
 
 Learner’s Block software is provided as a complete package ready to flash to an SD card, including an operating system with pre-defined keys that allow for automatic updates. To benefit from these automatic updates download the image files from our [downloads page](https://downloads.learnersblock.org).
 
-Alternatively, you can download these images from the GitHub releases page. There you will also find a 'pre-release' tagged 'development' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. 
+Alternatively, you can download these images from the GitHub releases page. 
 
-Release names follow the following format:
+Release names follow the following formats:
 
 **Releases:**
 ```
