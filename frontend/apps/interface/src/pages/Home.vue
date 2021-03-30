@@ -154,13 +154,20 @@ export default defineComponent({
 
     // Get settings
     onMounted(async () => {
+      root.$q.loading.show({
+        delay: 400 // ms
+      })
+
       Axios.get(`${api.value}/v1/settingsui`).then(res => {
         settings.value = res.data
         settingsLoading.value = false
+        root.$q.loading.hide()
       }).catch(e => {
         console.log(e.message)
+        root.$q.loading.hide()
       })
     })
+      
 
     return {
       allIsDisabled,
