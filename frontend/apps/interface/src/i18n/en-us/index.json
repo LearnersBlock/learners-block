@@ -2,7 +2,7 @@
     "401": "Unauthorised. Please try logging in again.",
     "404": "The page you tried to reach doesn't exist.",
     "advanced": "Advanced",
-    "api_down": "The API is unavailable. Try again, or consider restarting the device.",
+    "api_down": "The API is unavailable. Try refreshing this page.",
     "available_storage": "Available Storage",
     "cancel": "Cancel",
     "change_hostname_warning": "Are you sure you want to change the hostname?",
@@ -18,11 +18,11 @@
     "enable_components_in": "You can enable components in the Settings panel.",
     "error": "Something went wrong. Try again.",
     "files": "Files",
-    "files_description": "Browse files saved to the device here.",
-    "files_settings_description": "Manage files on your device. Only users logged in can delete them.",
+    "files_description": "Browse files saved to your Block here.",
+    "files_settings_description": "Manage files on your Block. Only users logged in can delete them.",
     "home": "Home",
     "hostname": "Hostname",
-    "hostname_changed_notification": "Your hostname has been updated. Please restart the device for this to take effect.",
+    "hostname_changed_notification": "Your hostname has been updated. Please restart the Block for this to take effect.",
     "invalid_hostname": "You have submitted an invalid hostname. Please try again.",
     "invalid_input": "Hostnames must be: Max 32 characters; lower case; no spaces; no special characters other than ‘_’ and ‘-‘",
     "library": "Library",
@@ -61,5 +61,6 @@
     "your_new_password": "Your new password",
     "are_you_sure": "Are you sure?",
     "loading": "Loading …",
-    "need_connection": "You need to connect to WiFi or Ethernet to use these features."
+    "need_connection": "You need to connect to WiFi or Ethernet to use these features.",
+    "internet_no_wifi": "Are you connected to ethernet? To connect your Block to a Wi-Fi hotspot, you must first connect to your Block via Wi-Fi."
 }
