@@ -61,5 +61,6 @@
     "your_new_password": "Your new password",
     "are_you_sure": "Are you sure?",
     "loading": "Loading …",
-    "need_connection": "You need to connect to WiFi or Ethernet to use these features."
+    "need_connection": "You need to connect to WiFi or Ethernet to use these features.",
+    "internet_no_wifi": "Are you connected to ethernet? To connect your Block to a Wi-Fi hotspot, you must first connect to your Block with Wi-Fi."
 }
