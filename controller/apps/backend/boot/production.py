@@ -12,7 +12,7 @@ import time
 # Function for first launch called by 'startup' function
 def launch_wifi(self):
     # Check if already connected to Wi-Fi
-    time.sleep(20)
+    time.sleep(10)
     try:
         connected = wifi().check_connection()
     except Exception as ex:
@@ -33,12 +33,12 @@ def launch_wifi(self):
     else:
         try:
             # Refresh networks in area before launch
-            run = subprocess.run(
-                        ["nmcli", "d", "wifi", "rescan", "&&",
-                         "nmcli", "d", "wifi"],
-                        capture_output=True,
-                        text=True).stdout.rstrip()
-            print(run)
+            print("Refreshing network points")
+
+            subprocess.run(
+                ["iw", "wlan0", "scan"],
+                capture_output=True,
+                text=True).stdout.rstrip()
 
             # Launch Wi-Fi Connect
             wifi_connect().start()

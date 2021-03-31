@@ -12,11 +12,13 @@ def handle_exit(*args):
     global wifi_process
     try:
         if 'wifi_process' in globals():
-            print("Terminating wifi-connect")
+            print("Terminating wifi-connect.")
             wifi_process.terminate()
-            wifi_process.communicate(timeout=10)
+            wifi_process.communicate(timeout=8)
+            print("Terminated wifi-connect, exiting.")
             sys.exit(0)
     except Exception:
+        print("Failed to terminate wifi-connect. Executing kill.")
         wifi_process.kill()
         sys.exit(0)
 
