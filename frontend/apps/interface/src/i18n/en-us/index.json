@@ -24,7 +24,7 @@
     "hostname": "Hostname",
     "hostname_changed_notification": "Your hostname has been updated. Please restart the device for this to take effect.",
     "invalid_hostname": "You have submitted an invalid hostname. Please try again.",
-    "invalid_input": "Invalid Input. Hostnames must be: Max 32 characters; lower case; no spaces; no special characters other than ‘_’ and ‘-‘",
+    "invalid_input": "Hostnames must be: Max 32 characters; lower case; no spaces; no special characters other than ‘_’ and ‘-‘",
     "library": "Library",
     "library_description": "Browse downloaded library content here.",
     "library_settings_description": "Download content from the Learner's Block Library.",
