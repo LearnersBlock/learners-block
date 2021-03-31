@@ -4,7 +4,7 @@
       <div class="max-w-5xl">
         <div>
           <q-btn
-            to="/"
+            @click="$router.replace('/')"
             rounded
             color="white"
             text-color="primary"
@@ -12,7 +12,8 @@
           >
             <span class="material-icons mr-1 mb-.5">
               arrow_back_ios
-            </span><div class="mt-0.5">
+            </span>
+            <div class="mt-0.5">
               {{ $t('home') }}
             </div>
           </q-btn>
