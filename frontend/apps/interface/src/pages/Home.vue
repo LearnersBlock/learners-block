@@ -12,7 +12,7 @@
             class="cursor-pointer py-3"
             tag="a"
             target="_self"
-            href="/files"
+            href="/files/"
           >
             <q-item-section
               side
@@ -39,7 +39,7 @@
             class="cursor-pointer py-3"
             tag="a"
             target="_blank"
-            href="/files/?path=library"
+            href="/library/"
           >
             <q-item-section
               side
@@ -64,7 +64,7 @@
           <q-item
             v-if="settings.makerspace"
             class="cursor-pointer py-3"
-            to="/makerspace"
+            href="/makerspace/"
             target="_self"
           >
             <q-item-section
@@ -92,7 +92,7 @@
             class="cursor-pointer py-3"
             tag="a"
             target="_self"
-            href="/website"
+            href="/website/"
           >
             <q-item-section
               side
