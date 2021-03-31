@@ -21,7 +21,7 @@ def launch_wifi(self):
               inspect.stack()[0][3] + " - " + str(ex))
         connected = None
 
-    # If connected, perform container updatem if not, start Wi-Fi Connect
+    # If connected, perform container update, if not, start Wi-Fi Connect
     if connected:
         try:
             update().get()
@@ -52,7 +52,7 @@ def launch_wifi(self):
     return response
 
 
-def hostname_check():
+def startup():
     # Check hostname in container is correct
     try:
         # Fetch container hostname and device hostname
@@ -71,17 +71,26 @@ def hostname_check():
                   "match. Likely a hostname change has been performed. Balena "
                   "Supervisor should detect this and rebuild the container "
                   "shortly. Waiting 60 seconds before continuing anyway.")
-            time.sleep(60)
+            time.sleep(30)
 
     except Exception as ex:
         print("Api-v1 - Failed to compare hostnames, starting anyway: "
               + inspect.stack()[0][3] +
               " - " + str(ex))
 
+    # If connected to a wifi network then update device,
+    # otherwise launch wifi-connect
+    try:
+        wifi_thread = threading.Thread(target=launch_wifi,
+                                       args=(1,),
+                                       name='wifi_thread')
+        wifi_thread.start()
 
-def portainer_check():
+    except Exception as ex:
+        print("Failed during launch. Continuing for debug. " +
+              inspect.stack()[0][3] + " - " + str(ex))
+
     # Stop portainer on boot
-    # String cannot be portainer_stop due to clash with endpoint
     try:
         portainer_exit = threading.Thread(target=container.stop,
                                           args=(None, "portainer", 10),
@@ -91,23 +100,3 @@ def portainer_check():
     except Exception as ex:
         print("Failed to stop Portainer. " +
               " - " + inspect.stack()[0][3] + " - " + str(ex))
-
-
-def startup():
-    # If connected to a wifi network then update device,
-    # otherwise launch wifi-connect
-    try:
-        device_start = threading.Thread(target=launch_wifi,
-                                        args=(1,),
-                                        name='device_start')
-        device_start.start()
-
-    except Exception as ex:
-        print("Failed during launch. Continuing for debug. " +
-              inspect.stack()[0][3] + " - " + str(ex))
-
-    # Check portainer status on boot
-    portainer_check()
-
-    # Check hostnames are set correctly
-    hostname_check()
