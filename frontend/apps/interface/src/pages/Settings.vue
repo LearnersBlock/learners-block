@@ -83,6 +83,9 @@
               >
                 <q-tooltip
                   v-if="!internet"
+                  anchor="top middle"
+                  self="center middle"
+                  :offset="[10, 10]"
                   content-style="font-size: 16px"
                 >
                   {{ $t('need_connection') }}
@@ -130,6 +133,9 @@
                 <q-tooltip
                   v-if="!internet"
                   content-style="font-size: 16px"
+                  anchor="top middle"
+                  self="center middle"
+                  :offset="[10, 10]"
                 >
                   {{ $t('need_connection') }}
                 </q-tooltip>
@@ -255,27 +261,15 @@
             <q-btn
               outline
               rounded
+              :loading="wifiLoading"
               no-caps
               v-model="wifi"
               color="primary"
               @click="wifiWarn"
               class="ml-3 mr-3 mt-1 mb-2 text-lg"
-              :disable="wifiLoading || internet && !wifi"
-              :disabled="wifiLoading|| internet && !wifi"
+              :disable="wifiLoading"
+              :disabled="wifiLoading"
               :label="!wifi ? $t('connect'): $t('disconnect')"
-            >
-              <q-tooltip
-                v-if="internet && !wifi"
-                content-style="font-size: 16px"
-              >
-                {{ $t('internet_no_wifi') }}
-              </q-tooltip>
-            </q-btn>
-            <q-spinner
-              v-if="loading"
-              color="primary"
-              size="2em"
-              class="mt-6 mr-6"
             />
           </div>
           <q-list
@@ -558,7 +552,9 @@ export default defineComponent({
     }
 
     const wifiWarn = async () => {
-      if (wifi.value === false) {
+      if (internet.value && !wifi.value) {
+        root.$q.notify({ type: 'negative', message: root.$tc('internet_no_wifi') })
+      } else if (wifi.value === false) {
         window.open('http://' + window.location.hostname + `:8080/index.html?lang=${root.$i18n.locale}`)
       } else {
         root.$q.dialog({
