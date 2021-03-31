@@ -46,6 +46,9 @@ export default defineComponent({
     })
     // Reset password
     const resetPassword = async () => {
+      root.$q.loading.show({
+        delay: 400 // ms
+      })
       const response = await Axios.post(`${api.value}/v1/setpassword`, { password: newPassword.value })
       if (response.status === 200) {
         root.$q.notify({ type: 'positive', message: root.$tc('password_set_success') })
@@ -54,6 +57,7 @@ export default defineComponent({
       } else {
         root.$q.notify({ type: 'negative', message: root.$tc('error') })
       }
+      root.$q.loading.hide()
     }
 
     return {
