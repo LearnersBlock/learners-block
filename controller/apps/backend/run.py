@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager
 from resources.models import db
 from resources.models import migrate
 from resources.system_routes import health_check
+from resources.system_routes import internet_connection_status
 from resources.system_routes import rsync_fetch
 from resources.system_routes import rsync_stop
 from resources.system_routes import system_info
@@ -100,6 +101,8 @@ if __name__ == '__main__':
     api.add_resource(health_check, '/')
     api.add_resource(host_config, '/v1/hostconfig')
     api.add_resource(hostname, '/v1/hostname')
+    api.add_resource(internet_connection_status,
+                     '/v1/internet/connectionstatus')
     api.add_resource(journal_logs, '/v1/journallogs')
     api.add_resource(login, '/v1/login')
     api.add_resource(logout, '/v1/logout')

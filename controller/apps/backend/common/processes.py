@@ -6,6 +6,7 @@ import requests
 import shutil
 import subprocess
 import time
+import urllib
 
 # Set defalut global variable for terminating RSync
 rsync_request_terminate = False
@@ -16,6 +17,14 @@ def check_space():
     if free <= 100000000:
         return True
     return False
+
+
+def check_internet():
+    try:
+        urllib.request.urlopen('http://google.com')
+        return True
+    except Exception:
+        return False
 
 
 def check_supervisor(supervisor_retries, timeout):

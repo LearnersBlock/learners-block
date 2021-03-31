@@ -1,3 +1,4 @@
+from common.processes import check_internet
 from common.processes import curl
 from common.wifi import wifi
 from common.wifi import wifi_connect
@@ -9,7 +10,6 @@ import threading
 import time
 
 
-# Function for first launch called by 'startup' function
 def launch_wifi(self):
     # Check if already connected to Wi-Fi
     time.sleep(10)
@@ -21,20 +21,11 @@ def launch_wifi(self):
               inspect.stack()[0][3] + " - " + str(ex))
         connected = None
 
-    # If connected, perform container update, if not, start Wi-Fi Connect
-    if connected:
-        try:
-            update().get()
-            response = ('Api-v1 - API Started - Device already connected to '
-                        'local wifi, software update request made.')
-        except Exception as ex:
-            response = ("Software update failed. " +
-                        " - " + inspect.stack()[0][3] + " - " + str(ex))
-    else:
+    # If not connected, start Wi-Fi-Connect
+    if not connected:
         try:
             # Refresh networks in area before launch
             print("Refreshing network points")
-
             subprocess.run(
                 ["iw", "wlan0", "scan"],
                 capture_output=True,
@@ -47,6 +38,16 @@ def launch_wifi(self):
             response = ("Wifi-connect failed to launch. " +
                         inspect.stack()[0][3] +
                         " - " + str(ex))
+
+    # If internet available (ethernet or WiFi) request update
+    if check_internet():
+        try:
+            update().get()
+            response = ('Api-v1 - API Started - Internet available, '
+                        'software update request made.')
+        except Exception as ex:
+            response = ("Software update failed. " +
+                        " - " + inspect.stack()[0][3] + " - " + str(ex))
 
     print(response)
     return response
@@ -70,7 +71,7 @@ def startup():
             print("Api-v1 - Container hostname and device hostname do not "
                   "match. Likely a hostname change has been performed. Balena "
                   "Supervisor should detect this and rebuild the container "
-                  "shortly. Waiting 60 seconds before continuing anyway.")
+                  "shortly. Waiting 30 seconds before continuing anyway.")
             time.sleep(30)
 
     except Exception as ex:

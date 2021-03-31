@@ -1,4 +1,5 @@
 from dotenv import dotenv_values
+from common.processes import check_internet
 from common.processes import curl
 from common.processes import human_size
 from common.processes import rsync_terminate
@@ -43,6 +44,14 @@ class hostname(Resource):
             ["hostname"],
             'message': "OK"
         }, 200
+
+
+class internet_connection_status(Resource):
+    def get(self):
+        if check_internet():
+            return {'status': 200, 'connected': True}, 200
+        else:
+            return {'status': 206, 'connected': False}, 206
 
 
 class rsync_fetch(Resource):

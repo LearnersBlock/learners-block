@@ -77,12 +77,12 @@
                 v-ripple
                 tag="a"
                 target="_blank"
-                :disabled="!wifi"
-                :disable="!wifi"
+                :disabled="!internet"
+                :disable="!internet"
                 @click="openLibrary"
               >
                 <q-tooltip
-                  v-if="!wifi"
+                  v-if="!internet"
                   content-style="font-size: 16px"
                 >
                   {{ $t('need_connection') }}
@@ -121,14 +121,14 @@
               <q-item
                 clickable
                 v-ripple
-                :disabled="!wifi"
-                :disable="!wifi"
+                :disabled="!internet"
+                :disable="!internet"
                 tag="a"
                 target="_blank"
                 to="/makerspace"
               >
                 <q-tooltip
-                  v-if="!wifi"
+                  v-if="!internet"
                   content-style="font-size: 16px"
                 >
                   {{ $t('need_connection') }}
@@ -260,10 +260,17 @@
               color="primary"
               @click="wifiWarn"
               class="ml-3 mr-3 mt-1 mb-2 text-lg"
-              :disable="wifiLoading"
-              :disabled="wifiLoading"
+              :disable="wifiLoading || internet && !wifi"
+              :disabled="wifiLoading|| internet && !wifi"
               :label="!wifi ? $t('connect'): $t('disconnect')"
-            />
+            >
+              <q-tooltip
+                v-if="internet && !wifi"
+                content-style="font-size: 16px"
+              >
+                {{ $t('internet_no_wifi') }}
+              </q-tooltip>
+            </q-btn>
             <q-spinner
               v-if="loading"
               color="primary"
@@ -381,7 +388,7 @@ export default defineComponent({
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(false)
     const hostname = ref<string>('')
-    const windowHostname = ref<string>(window.location.hostname)
+    const internet = ref<boolean>(false)
     const hostnameValid = ref()
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
@@ -402,6 +409,7 @@ export default defineComponent({
     const websiteLoading = ref<boolean>(false)
     const wifi = ref<boolean>(false)
     const wifiLoading = ref<boolean>(true)
+    const windowHostname = ref<string>(window.location.hostname)
 
     // Get api from store
     const api = computed(() => {
@@ -427,6 +435,9 @@ export default defineComponent({
       const fetchedConnectionStatus = await Axios.get(`${api.value}/v1/wifi/connectionstatus`)
       wifi.value = fetchedConnectionStatus.data.running !== false
       wifiLoading.value = false
+      // Get internet connection status
+      const fetchedInternetConnectionStatus = await Axios.get(`${api.value}/v1/internet/connectionstatus`)
+      internet.value = fetchedInternetConnectionStatus.data.connected !== false
       // Get hostname
       const fetchedHostName = await Axios.get(`${api.value}/v1/hostname`)
       hostname.value = fetchedHostName.data.hostname
@@ -572,6 +583,7 @@ export default defineComponent({
       hostname,
       hostnameValid,
       hostnameWarn,
+      internet,
       library,
       libraryLoading,
       loading,
