@@ -116,11 +116,15 @@ export default defineComponent({
     }
 
     onMounted(() => {
+      root.$q.loading.show({
+        delay: 400 // ms
+      })
       const usersLocale = root.$q.lang.getLocale()
       if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
         root.$i18n.locale = usersLocale
         localStorage.setItem('lang', usersLocale)
       }
+      root.$q.loading.hide()
     })
 
     return { leftDrawerOpen, languages, changeLanguage, logout, isAuthenticated }
