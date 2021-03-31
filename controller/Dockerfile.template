@@ -10,6 +10,7 @@ WORKDIR /app
 # Install Wi-Fi connect dependencies
 RUN install_packages \
     dnsmasq \
+    network-manager \
     wireless-tools
 
 # Install package dependencies
