@@ -1,5 +1,4 @@
 from common.processes import curl
-from common.wifi import handle_exit
 from common.wifi import wifi
 from common.wifi import wifi_connect
 from common.containers import container
@@ -8,8 +7,6 @@ import inspect
 import subprocess
 import threading
 import time
-import atexit
-import signal
 
 
 # Function for first launch called by 'startup' function
@@ -108,11 +105,6 @@ def startup():
     except Exception as ex:
         print("Failed during launch. Continuing for debug. " +
               inspect.stack()[0][3] + " - " + str(ex))
-
-    # Ensure soft shutdown to term wifi-connect
-    atexit.register(handle_exit, None, None)
-    signal.signal(signal.SIGTERM, handle_exit)
-    signal.signal(signal.SIGINT, handle_exit)
 
     # Check portainer status on boot
     portainer_check()

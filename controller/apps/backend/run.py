@@ -9,8 +9,10 @@ from resources.system_routes import health_check
 from resources.system_routes import rsync_fetch
 from resources.system_routes import rsync_stop
 from resources.system_routes import system_info
+import atexit
 import inspect
 import os
+import signal
 
 # Import .env file
 load_dotenv()
@@ -63,6 +65,7 @@ if __name__ == '__main__':
     # Load and launch based on dev or prod mode
     if os.environ['FLASK_ENV'].lower() == "production":
         from boot.production import startup
+        from common.wifi import handle_exit
         from resources.system_routes import hostname
         from resources.supervisor_routes import device, host_config, \
             journal_logs, portainer_status, portainer_start, portainer_stop, \
@@ -71,6 +74,13 @@ if __name__ == '__main__':
             wifi_forget, wifi_forget_all
 
         print("Api-v1 - Starting API (Production)...")
+
+        # Ensure soft shutdown to term wifi-connect
+        atexit.register(handle_exit, None, None)
+        signal.signal(signal.SIGTERM, handle_exit)
+        signal.signal(signal.SIGINT, handle_exit)
+
+        # Execute startup processes
         try:
             startup()
         except Exception as ex:
