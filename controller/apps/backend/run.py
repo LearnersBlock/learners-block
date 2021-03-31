@@ -79,6 +79,7 @@ if __name__ == '__main__':
         atexit.register(handle_exit, None, None)
         signal.signal(signal.SIGTERM, handle_exit)
         signal.signal(signal.SIGINT, handle_exit)
+        signal.signal(signal.SIGHUP, handle_exit)
 
         # Execute startup processes
         try:
