@@ -43,9 +43,6 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
   })
 
   Router.beforeEach(async (to, _, next) => {
-    Loading.show({
-      delay: 1 // ms
-    })
     store.commit('SET_API', 'http://' + window.location.hostname + ':9090')
     if (!store.getters.isAuthenticated && sessionStorage.getItem('learners-block-token') !== null) {
       await store.dispatch('VERIFY_LOGIN', sessionStorage.getItem('learners-block-token'))
@@ -63,7 +60,6 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
     } else {
       next()
     }
-    Loading.hide()
   })
   axios.interceptors.response.use(function (response) {
     return response

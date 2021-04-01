@@ -36,14 +36,13 @@
             </q-list>
           </q-menu>
         </q-item>
-        <router-link to="/settings">
-          <q-item
-            class="flex items-center"
-            clickable
-          >
-            <q-icon name="settings" />
-          </q-item>
-        </router-link>
+        <q-item
+          @click="settings"
+          class="flex items-center"
+          clickable
+        >
+          <q-icon name="settings" />
+        </q-item>
 
         <q-item
           v-if="isAuthenticated"
@@ -115,6 +114,16 @@ export default defineComponent({
       root.$router.push('/')
     }
 
+    const settings = async () => {
+      root.$q.loading.show({
+        delay: 400 // ms
+      })
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      await root.$router.push('/settings').catch(() => {})
+
+      root.$q.loading.hide()
+    }
+
     onMounted(() => {
       root.$q.loading.show({
         delay: 400 // ms
@@ -127,7 +136,7 @@ export default defineComponent({
       root.$q.loading.hide()
     })
 
-    return { leftDrawerOpen, languages, changeLanguage, logout, isAuthenticated }
+    return { leftDrawerOpen, languages, changeLanguage, logout, isAuthenticated, settings }
   }
 })
 </script>

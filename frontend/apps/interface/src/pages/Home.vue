@@ -161,11 +161,10 @@ export default defineComponent({
       Axios.get(`${api.value}/v1/settingsui`).then(res => {
         settings.value = res.data
         settingsLoading.value = false
-        root.$q.loading.hide()
       }).catch(e => {
         console.log(e.message)
-        root.$q.loading.hide()
       })
+      root.$q.loading.hide()
     })
 
     return {
