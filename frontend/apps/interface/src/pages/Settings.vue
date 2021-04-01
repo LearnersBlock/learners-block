@@ -48,7 +48,7 @@
                 />
                 <q-item-section>
                   <q-item-label class="josefin text-xl">
-                    {{ $t('files') }}
+                    {{ $t('file_manager') }}
                   </q-item-label>
                   <q-item-label class="text-base pr-1 text-gray-500">
                     {{ $t('files_settings_description') }}
