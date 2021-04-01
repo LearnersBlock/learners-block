@@ -20,6 +20,7 @@
         class="mt-4"
         type="submit"
         color="white"
+        :loading="submitting"
         text-color="primary"
       />
       <q-btn
@@ -43,9 +44,11 @@ export default defineComponent({
     const username = ref<string>('lb')
     // Password
     const password = ref<string>('')
+    const submitting = ref<boolean>(false)
 
     // Login and show message
     const login = async () => {
+      submitting.value = true
       root.$store.dispatch('LOGIN', { username: username.value, password: password.value })
         .then(() => {
           root.$q.notify({
@@ -59,13 +62,15 @@ export default defineComponent({
             type: 'negative',
             message: e.message
           })
+          submitting.value = false
         })
     }
 
     return {
       username,
       password,
-      login
+      login,
+      submitting
     }
   }
 })

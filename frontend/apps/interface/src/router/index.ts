@@ -31,7 +31,7 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
     if (to.name) {
       // Start the route progress bar.
       Loading.show({
-        delay: 400 // ms
+        delay: 300 // ms
       })
     }
     next()

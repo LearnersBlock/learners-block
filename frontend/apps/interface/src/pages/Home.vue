@@ -155,7 +155,7 @@ export default defineComponent({
     // Get settings
     onMounted(async () => {
       root.$q.loading.show({
-        delay: 400 // ms
+        delay: 300 // ms
       })
 
       Axios.get(`${api.value}/v1/settingsui`).then(res => {

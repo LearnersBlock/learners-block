@@ -110,13 +110,18 @@ export default defineComponent({
     }
 
     const logout = async () => {
+      root.$q.loading.show({
+        delay: 300 // ms
+      })
       await root.$store.dispatch('LOGOUT')
-      root.$router.push('/')
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      await root.$router.push('/').catch(() => {})
+      root.$q.loading.hide()
     }
 
     const settings = async () => {
       root.$q.loading.show({
-        delay: 400 // ms
+        delay: 300 // ms
       })
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       await root.$router.push('/settings').catch(() => {})
@@ -126,7 +131,7 @@ export default defineComponent({
 
     onMounted(() => {
       root.$q.loading.show({
-        delay: 400 // ms
+        delay: 300 // ms
       })
       const usersLocale = root.$q.lang.getLocale()
       if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
