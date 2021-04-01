@@ -409,33 +409,44 @@ export default defineComponent({
     const api = computed(() => {
       return root.$store.getters.GET_API
     })
+
+    // API calls for onMounted
+    const fetchedSettings = Axios.get(`${api.value}/v1/settingsui`)
+    const fetchedPortainer = Axios.get(`${api.value}/v1/portainer/status`)
+    const fetchedSysInfo = Axios.get(`${api.value}/v1/system/info`)
+    const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connectionstatus`)
+    const fetchedInternetConnectionStatus = Axios.get(`${api.value}/v1/internet/connectionstatus`)
+    const fetchedHostName = Axios.get(`${api.value}/v1/hostname`)
+
     onMounted(async () => {
-      // Get settings
-      const fetchedSettings = await Axios.get(`${api.value}/v1/settingsui`)
-      files.value = fetchedSettings.data.files
-      website.value = fetchedSettings.data.website
-      library.value = fetchedSettings.data.library
-      makerspace.value = fetchedSettings.data.makerspace
-      togglesLoading.value = false
-      // Get portainer status
-      const fetchedPortainer = await Axios.get(`${api.value}/v1/portainer/status`)
-      portainer.value = fetchedPortainer.data.container_status === 'Running'
-      portainerToggleLoading.value = false
-      // Get SystemInfo
-      const fetchedSysInfo = await Axios.get(`${api.value}/v1/system/info`)
-      sysInfo.value = fetchedSysInfo.data
-      sysInfoLoading.value = false
-      // Get connection status
-      const fetchedConnectionStatus = await Axios.get(`${api.value}/v1/wifi/connectionstatus`)
-      wifi.value = fetchedConnectionStatus.data.running !== false
-      wifiLoading.value = false
-      // Get internet connection status
-      const fetchedInternetConnectionStatus = await Axios.get(`${api.value}/v1/internet/connectionstatus`)
-      internet.value = fetchedInternetConnectionStatus.data.connected !== false
-      // Get hostname
-      const fetchedHostName = await Axios.get(`${api.value}/v1/hostname`)
-      hostname.value = fetchedHostName.data.hostname
+      apiCall()
     })
+
+    async function apiCall (): Promise<void> {
+      await Axios.all([fetchedSettings, fetchedPortainer, fetchedSysInfo,
+        fetchedConnectionStatus, fetchedInternetConnectionStatus,
+        fetchedHostName]).then(Axios.spread(function (res1, res2, res3, res4, res5, res6): void {
+        // Get settings
+        files.value = res1.data.files
+        website.value = res1.data.website
+        library.value = res1.data.library
+        makerspace.value = res1.data.makerspace
+        togglesLoading.value = false
+        // Get portainer status
+        portainer.value = res2.data.container_status === 'Running'
+        portainerToggleLoading.value = false
+        // Get SystemInfo
+        sysInfo.value = res3.data
+        sysInfoLoading.value = false
+        // Get connection status
+        wifi.value = res4.data.running !== false
+        wifiLoading.value = false
+        // Get internet connection status
+        internet.value = res5.data.connected !== false
+        // Get hostname
+        hostname.value = res6.data.hostname
+      }))
+    }
 
     const connectDisconnectWifi = async () => {
       await Axios.get(`${api.value}/v1/wifi/forget`)
