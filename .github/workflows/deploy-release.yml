@@ -6,7 +6,7 @@ on:
       - "v*.*.*"
     branches:
       - "develop"
-
+      - "!l10n_master"
 jobs:
   deploy-release:
     name: "Deploy Release"
