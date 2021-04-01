@@ -4,6 +4,7 @@ import routes from './routes'
 import { Store } from 'vuex'
 import store, { StateInterface } from '../store'
 import VueRouter from 'vue-router'
+import { Loading } from 'quasar'
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation
@@ -24,6 +25,22 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
   })
 
   axios.defaults.withCredentials = true
+
+  Router.beforeResolve((to, _from, next) => {
+    // If this isn't an initial page load.
+    if (to.name) {
+      // Start the route progress bar.
+      Loading.show({
+        delay: 400 // ms
+      })
+    }
+    next()
+  })
+
+  Router.afterEach(() => {
+    // Complete the animation of the route progress bar.
+    Loading.hide()
+  })
 
   Router.beforeEach(async (to, _, next) => {
     store.commit('SET_API', 'http://' + window.location.hostname + ':9090')
