@@ -1,4 +1,5 @@
 from flask_restful import abort
+import http.client as httplib
 import inspect
 import json
 import os
@@ -6,7 +7,6 @@ import requests
 import shutil
 import subprocess
 import time
-import urllib
 
 # Set defalut global variable for terminating RSync
 rsync_request_terminate = False
@@ -20,10 +20,13 @@ def check_space():
 
 
 def check_internet():
+    conn = httplib.HTTPConnection("8.8.8.8", timeout=2)
     try:
-        urllib.request.urlopen('http://google.com')
+        conn.request("HEAD", "/")
+        conn.close()
         return True
     except Exception:
+        conn.close()
         return False
 
 
