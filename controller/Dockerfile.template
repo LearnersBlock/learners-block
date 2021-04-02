@@ -26,16 +26,16 @@ RUN mkdir -p common/wifi-connect
 ARG VERSION="4.4.4"
 
 RUN curl -Ls "https://github.com/balena-io/wifi-connect/releases/download/v$VERSION/wifi-connect-v$VERSION-linux-%%BALENA_ARCH%%.tar.gz" \
-  | tar -xvz -C common/wifi-connect
-
-# Add in default Portainer database
-COPY apps/portainer/portainer.db portainer/portainer.db
+  | tar -xvz -C common/wifi-connect && rm -Rf common/wifi-connect/ui/*
 
 # Add Wi-Fi connect UI
 COPY apps/wifi-connect/ui/build common/wifi-connect/ui/
 
 # Insert application
 COPY apps/backend .
+
+# Add in default Portainer database
+COPY apps/portainer/portainer.db portainer/portainer.db
 
 # Check for database migrations then launch controller
 CMD ["bash", "start.sh"]
