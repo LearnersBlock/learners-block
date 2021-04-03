@@ -4,6 +4,7 @@ import os
 import subprocess
 import time
 import requests
+import signal
 import sys
 
 
@@ -21,6 +22,12 @@ def handle_exit(*args):
         print("Failed to terminate wifi-connect. Executing kill.")
         wifi_process.kill()
         sys.exit(0)
+
+    # Terminate all child processes
+    try:
+        os.killpg(os.getpid(), signal.SIGTERM)
+    except Exception:
+        print("Processes already killed")
 
     print("Finshed the exit process")
     sys.exit(0)
