@@ -39,5 +39,6 @@ yarn-error.log*
 *.sw?
 
 # Applications
-/controller/app/db/*
+/controller/apps/backend/db/*
+/controller/apps/backend/storage/library/*
 !.gitkeep
