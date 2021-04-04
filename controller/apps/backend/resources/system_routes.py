@@ -55,7 +55,7 @@ class internet_connection_status(Resource):
 
 
 class rsync_fetch(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self):
         try:
             content = request.get_json()
@@ -67,7 +67,7 @@ class rsync_fetch(Resource):
 
 
 class rsync_status(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
 
         status = rsync_get_status()
