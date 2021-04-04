@@ -4,50 +4,51 @@ namespace IFM_Extensions;
 /**
  * Lang Controller
  * 
- * Controller to get/set the language parameter for the filemanager
- * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+ * Extension to get/set the language parameter based on the cookie stored by the interface. The cookie is named 'lang'
+ * and stores the prefered language as i18n locale, i.e. 'en-US' 
+ * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
 class Lang extends IFM_Extensions {
     function __construct() {
-        // prepare variables
-        $this->lang = 'en';
+        // Set default
+        $this->lang = 'en-US';
 
-        // start lang logic
-        $this->check_lang_param();
+        // Start lang logic
+        $this->check_lang_cookie();
     }
 
 
 
     /**
-     * check_lang_param
+     * Check for lang cookie
      * 
-     * Checks whether or not the lang URL parameter was set. If so, it will
-     * proceed to set the lang env variable.
-    */
+     * Checks whether or not the lang cookie exists and if so, update the language settings.
+     */
 
-    private function check_lang_param () {
-        if (isset($_GET['lang'])) {
-            // store lang param
-            $this->lang = (string) $_GET['lang'];
-
-            // now check
-            if ($this->lang) {
-                $this->set_lang();
-            }
+    private function check_lang_cookie () {
+        // Get the language cookie
+        $cookie_lang = isset($_COOKIE['lang']) ? filter_var($_COOKIE['lang'], FILTER_SANITIZE_STRING) : false;
+        
+        // Check if we have a value to work with
+        if ($cookie_lang) {
+            // If so, update the lang
+            $this->lang = $cookie_lang;
         }
+
+        // Update the Filemanager settings
+        $this->set_lang();
     }
 
 
 
     /**
-     * set_lang
+     * Set language
      * 
-     * Sets the language envariable using the previously stored language fetched
-     * from the URL parameter.
+     * Sets the language env variable using the previously fetched cookie or fallback value.
     */
 
     private function set_lang() {
-        // inject the language param as an env variable
+        // Inject the language param as an env variable
         putenv("IFM_LANGUAGE=$this->lang");
     }
 }
