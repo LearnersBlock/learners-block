@@ -64,6 +64,7 @@
           <q-item
             v-if="settings.makerspace"
             class="cursor-pointer py-3"
+            tag="a"
             href="/makerspace/"
             target="_self"
           >
@@ -92,7 +93,7 @@
             class="cursor-pointer py-3"
             tag="a"
             target="_self"
-            href="/website/"
+            href="/website"
           >
             <q-item-section
               side
