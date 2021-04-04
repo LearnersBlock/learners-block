@@ -11,6 +11,8 @@ WORKDIR /app
 RUN install_packages \
     dnsmasq \
     iw \
+    psmisc \
+    rsync \
     wireless-tools
 
 # Install package dependencies

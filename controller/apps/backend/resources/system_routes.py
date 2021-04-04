@@ -2,10 +2,10 @@ from dotenv import dotenv_values
 from common.processes import check_internet
 from common.processes import curl
 from common.processes import human_size
+from common.processes import rsync_get_status
 from common.processes import rsync_terminate
-from common.processes import rsync_run
+from common.processes import rsync_download
 from flask import request
-from flask import Response
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from werkzeug import serving
@@ -55,22 +55,50 @@ class internet_connection_status(Resource):
 
 
 class rsync_fetch(Resource):
-    @jwt_required()
+    @jwt_required
     def post(self):
         try:
             content = request.get_json()
+            rsync_download(content["rsync_url"])
         except AttributeError:
             return {'response': 'Error: Must pass valid string.'}, 403
 
-        return Response(rsync_run(content["rsync_url"]), mimetype='text/html')
-        # Use below line instead as alternative stream to console
-        # Response(generate(), mimetype= 'text/event-stream')
+        return {'response': 'Process complete.'}, 200
+
+
+class rsync_status(Resource):
+    @jwt_required
+    def get(self):
+
+        status = rsync_get_status()
+
+        print(status, flush=True)
+
+        # If out of space
+        if status['progress'] == "space-error":
+            return {'status': 200, 'progress': 1, "complete": True,
+                    'speed': 0, 'transferred': 'Complete'}, 200
+
+        # Send finished pattern when complete = true
+        if status['complete'] is True:
+            return {'status': 200, 'progress': 1, "complete": True,
+                    'speed': 0, 'transferred': 'Complete'}, 200
+
+        # Handle empty variables while the files are being checked
+        if status['progress'][:-1] == '':
+            return {'status': 200, 'progress': 0, "complete": False,
+                    'speed': 0, 'transferred': 0}, 200
+
+        # Return current RSync progress
+        return {'status': 200, 'progress': int(status['progress'][:-1])/100,
+                'speed': status['speed'],
+                'transferred': status['transferred'],
+                'complete': False}, 200
 
 
 class rsync_stop(Resource):
-    @jwt_required()
     def get(self):
-        rsync_terminate("terminate_request")
+        rsync_terminate()
 
         return {'status': 200, 'message': 'Terminate request sent'}, 200
 

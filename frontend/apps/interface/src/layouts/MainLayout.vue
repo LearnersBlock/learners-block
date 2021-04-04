@@ -133,6 +133,13 @@ export default defineComponent({
       root.$q.loading.show({
         delay: 300 // ms
       })
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const langCookie = ref<any>(root.$q.localStorage.getItem('lang'))
+      if (langCookie.value) {
+        root.$i18n.locale = langCookie.value
+      }
+
       const usersLocale = root.$q.lang.getLocale()
       if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
         root.$i18n.locale = usersLocale

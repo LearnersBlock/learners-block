@@ -1,10 +1,10 @@
 from flask_restful import abort
+from system_routes import rsync_terminate
 import NetworkManager
 import os
 import subprocess
 import time
 import requests
-import signal
 import sys
 
 
@@ -25,7 +25,7 @@ def handle_exit(*args):
 
     # Terminate all child processes
     try:
-        os.killpg(os.getpid(), signal.SIGTERM)
+        rsync_terminate()
     except Exception:
         print("Processes already killed")
 

@@ -1,7 +1,6 @@
 from flask_restful import abort
 import http.client as httplib
 import inspect
-import json
 import os
 import requests
 import shutil
@@ -9,7 +8,13 @@ import subprocess
 import time
 
 # Set defalut global variable for terminating RSync
-rsync_request_terminate = False
+rsync_log = ''
+rsync_status = {
+                "progress": "0%",
+                "complete": False,
+                "transferred": 0,
+                "speed": 0
+                }
 
 
 def check_space():
@@ -121,7 +126,7 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
 def database_recover():
     # Adding delay to allow user intervetion to abort
-    print("Database error detected. Waiting 30 seconds before deleting "
+    print("Database error detected. Waiting 60 seconds before deleting "
           "database and restarting.")
     time.sleep(60)
 
@@ -145,68 +150,96 @@ def human_size(nbytes):
     return '%s %s' % (f, suffixes[i])
 
 
-def rsync_run(rsync_url):
-    # Download requested content via RSync
+def rsync_download(rsync_url):
+
+    global rsync_proc
+    # Download requested via RSync
+    try:
+        if rsync_proc.poll() is None:
+            return "running"
+    except Exception:
+        pass
+
+    print("Starting Download")
     rsync_proc = subprocess.Popen(
         ['rsync', '-azh', '--info=progress2', '--no-i-r', '--inplace',
             rsync_url,
             os.path.realpath('.') + '/storage/library/'],
         stdout=subprocess.PIPE,
-        universal_newlines=True
+        universal_newlines=True,
+        bufsize=1,
+        start_new_session=True
     )
 
-    # Read the output while downloading
-    for line in iter(rsync_proc.stdout.readline, ''):
-        time.sleep(1)
-        # Check if the device is running out of space
-        if check_space() is True:
-            rsync_terminate(rsync_proc)
-            yield json.dumps({"status": 500, "running": False,
-                              "message": "Out of Space"})
-            break
-
-        # Check if user has sent terminate request
-        global rsync_request_terminate
-        if rsync_request_terminate is True:
-            rsync_terminate(rsync_proc)
-            yield json.dumps({'status': 200, 'running': False,
-                              'message': 'RSync terminated by user'})
-            break
-
-        # Return log content to browser
-        each_line = line.split()
-
-        if each_line:
-            json_output = {
-                "transferred": each_line[0],
-                "percentage": each_line[1],
-                "speed": each_line[2],
-                "remaining_time": each_line[3],
-                "comparing_files": False
-                }
-        else:
-            json_output = {
-                "comparing_files": True
-                }
-
-        yield json.dumps(json_output) + '<br/>\n'
-
-
-def rsync_terminate(rsync_proc):
-    # Terminate RSync upon user request
-    if rsync_proc == "terminate_request":
-        global rsync_request_terminate
-        rsync_request_terminate = True
-        return "Sent exit command to subprocess"
     try:
-        try:
-            rsync_request_terminate = False
-            rsync_proc.terminate()
-            rsync_proc.communicate(timeout=7)
-        except Exception as ex:
-            print("SIGTERM failed. Killing RSync" + str(ex))
-            rsync_proc.kill()
+        for line in rsync_proc.stdout:
+            global rsync_log
+            rsync_log = line
+    except Exception:
+        print("RSync Proc terminated. Ending logging")
+
+    rsync_terminate()
+
+    return 0
+
+
+def rsync_get_status():
+    global rsync_status
+    global rsync_log
+
+    if check_space() is True:
+        rsync_terminate()
+        return {"progress": "space-error"}
+
+    if rsync_status['complete'] is True:
+        rsync_status['complete'] = False
+        return {"progress": "1%",
+                "complete": True}
+
+    # Split log lines
+    each_line = rsync_log.split()
+
+    if each_line:
+        json_output = {
+            "transferred": each_line[0],
+            "progress": each_line[1],
+            "speed": each_line[2],
+            "remaining_time": each_line[3],
+            "comparing_files": False,
+            "complete": False
+            }
+    else:
+        json_output = {
+            "progress": '0%',
+            "comparing_files": True,
+            "complete": False,
+            "transferred": 0,
+            "speed": 0
+            }
+
+    return json_output
+
+
+def rsync_terminate():
+    # Terminate RSync upon user request
+    try:
+        global rsync_proc
+        rsync_proc.terminate()
+        rsync_proc.communicate(timeout=5)
+        rsync_proc.wait(timeout=None)
+        subprocess.run(["killall", "-r", "rsync"])
+        print("Terminated RSync")
     except Exception as ex:
-        print("RSync was already down. " + inspect.stack()[0][3] + " - "
-              + str(ex))
+        print("SIGTERM failed. Killing RSync" + str(ex))
+        try:
+            rsync_proc.kill()
+        except Exception:
+            print("Could not kill")
+
+    global rsync_status
+    rsync_status = {
+                "progress": "1%",
+                "complete": True,
+                "terminated": 'yes'
+                }
     return "Rsync terminated"

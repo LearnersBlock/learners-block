@@ -26,13 +26,15 @@ A Docker based development environment is available. There are two development d
 
 On the GitHub releases page you will also find a 'pre-release' tagged 'development' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. Pre-releases will also provide real-time logs to our servers for debugging and are not recommended for production use.
 
+Development of the the Library interface takes place on a [separate repository](https://github.com/LearnersBlock/library). 
+
 #### Frontend
 
 Build the required components:
 
 `docker-compose -f docker-compose-build.yml up --build`
 
-Start the environment:
+Start the development environment:
 
 `docker-compose -f docker-compose-dev-frontend.yml up --build`
 
