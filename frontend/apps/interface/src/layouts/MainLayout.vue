@@ -79,8 +79,16 @@ export default defineComponent({
         value: 'ar'
       },
       {
+        label: 'Español',
+        value: 'es'
+      },
+      {
         label: 'Français',
         value: 'fr'
+      },
+      {
+        label: 'Português',
+        value: 'pt_BR'
       }
     ])
 
