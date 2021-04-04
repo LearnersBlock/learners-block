@@ -79,7 +79,7 @@
                 target="_self"
                 :disabled="!internet"
                 :disable="!internet"
-                to="/upload-library"
+                href="/upload-library"
               >
                 <q-tooltip
                   v-if="!internet"

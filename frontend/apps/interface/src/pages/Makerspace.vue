@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-10 text-center text-h2">
+  <div class="ml-3 mr-3 mt-10 text-center text-h2">
     Coming soon. In the meantime, download directly from your Makerspace account and then upload the files via the File Manager.
   </div>
 </template>
