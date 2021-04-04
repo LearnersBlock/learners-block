@@ -76,7 +76,7 @@
                 clickable
                 v-ripple
                 tag="a"
-                target="_blank"
+                target="_self"
                 :disabled="!internet"
                 :disable="!internet"
                 to="/upload-library"
@@ -127,7 +127,7 @@
                 :disabled="!internet"
                 :disable="!internet"
                 tag="a"
-                target="_blank"
+                target="_self"
                 to="/makerspace"
               >
                 <q-tooltip
