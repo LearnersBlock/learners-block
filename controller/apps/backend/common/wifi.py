@@ -1,5 +1,5 @@
 from flask_restful import abort
-from system_routes import rsync_terminate
+from resources.system_routes import rsync_terminate
 import NetworkManager
 import os
 import subprocess
