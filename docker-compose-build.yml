@@ -8,4 +8,5 @@ services:
         volumes:
             - './frontend/apps/file-manager/dist:/export/filemanager'
             - './frontend/apps/interface/dist/spa:/export/interface'
+            - './frontend/apps/library/dist/spa:/export/library'
             - './controller/apps/wifi-connect/ui/build:/export/controller'

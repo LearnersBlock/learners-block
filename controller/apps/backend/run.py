@@ -8,6 +8,7 @@ from resources.models import migrate
 from resources.system_routes import health_check
 from resources.system_routes import internet_connection_status
 from resources.system_routes import rsync_fetch
+from resources.system_routes import rsync_status
 from resources.system_routes import rsync_stop
 from resources.system_routes import system_info
 import atexit
@@ -110,6 +111,7 @@ if __name__ == '__main__':
     api.add_resource(portainer_start, '/v1/portainer/start')
     api.add_resource(portainer_stop, '/v1/portainer/stop')
     api.add_resource(rsync_fetch, '/v1/rsync/fetch')
+    api.add_resource(rsync_status, '/v1/rsync/status')
     api.add_resource(rsync_stop, '/v1/rsync/stop')
     api.add_resource(set_password, '/v1/setpassword')
     api.add_resource(settings_ui, '/v1/settingsui')

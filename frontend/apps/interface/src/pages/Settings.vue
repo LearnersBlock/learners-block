@@ -79,7 +79,7 @@
                 target="_blank"
                 :disabled="!internet"
                 :disable="!internet"
-                @click="openLibrary"
+                to="/upload-library"
               >
                 <q-tooltip
                   v-if="!internet"
@@ -496,10 +496,6 @@ export default defineComponent({
       }
     }
 
-    function openLibrary () {
-      window.open('https://library.learnersblock.org/?hostname=' + window.location.hostname)
-    }
-
     const updateFiles = async () => {
       filesLoading.value = true
       await Axios.post(`${api.value}/v1/setui`, {
@@ -597,7 +593,6 @@ export default defineComponent({
       makerspace,
       makerspaceLoading,
       newHostname,
-      openLibrary,
       portainer,
       portainerLoading,
       portainerToggleLoading,

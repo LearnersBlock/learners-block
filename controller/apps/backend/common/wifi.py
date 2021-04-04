@@ -1,4 +1,5 @@
 from flask_restful import abort
+from resources.system_routes import rsync_terminate
 import NetworkManager
 import os
 import subprocess
@@ -21,6 +22,12 @@ def handle_exit(*args):
         print("Failed to terminate wifi-connect. Executing kill.")
         wifi_process.kill()
         sys.exit(0)
+
+    # Terminate all child processes
+    try:
+        rsync_terminate()
+    except Exception:
+        print("Processes already killed")
 
     print("Finshed the exit process")
     sys.exit(0)

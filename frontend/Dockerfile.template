@@ -51,6 +51,9 @@ COPY --chown=nginx /config/nginx/assets/web.png /app/web/public/storage/website/
 # Insert File Manager source code
 COPY --chown=nginx /apps/file-manager/dist /app/web/public/files
 
+# Insert Library source code
+COPY --chown=nginx /apps/library/dist/spa /app/web/public/library
+
 # Insert interface source code
 COPY --chown=nginx /apps/interface/dist/spa /app/web/public/interface
 
