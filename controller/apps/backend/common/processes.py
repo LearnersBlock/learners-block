@@ -1,5 +1,4 @@
 from flask_restful import abort
-import http.client as httplib
 import inspect
 import os
 import requests
@@ -25,13 +24,16 @@ def check_space():
 
 
 def check_internet():
-    conn = httplib.HTTPConnection("8.8.8.8", timeout=2)
+
     try:
-        conn.request("HEAD", "/")
-        conn.close()
+        subprocess.check_output(['wget', '-q',
+                                 '--spider',
+                                 '--no-check-certificate',
+                                 '1.1.1.1'],
+                                timeout=4)
         return True
-    except Exception:
-        conn.close()
+    except Exception as ex:
+        print(str(ex))
         return False
 
 

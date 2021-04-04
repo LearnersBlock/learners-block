@@ -6,7 +6,8 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y \
     psmisc \
-    rsync && \
+    rsync \
+    wget && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set env variables

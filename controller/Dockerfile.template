@@ -13,6 +13,7 @@ RUN install_packages \
     iw \
     psmisc \
     rsync \
+    wget \
     wireless-tools
 
 # Install package dependencies
