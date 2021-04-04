@@ -38,7 +38,7 @@
             v-if="settings.library"
             class="cursor-pointer py-3"
             tag="a"
-            target="_blank"
+            target="_self"
             href="/library/"
           >
             <q-item-section

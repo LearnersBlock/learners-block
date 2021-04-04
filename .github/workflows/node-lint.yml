@@ -2,12 +2,10 @@ name: Node Lint
 
 on:
   push:
-    branches: '**'
     paths:
       - 'frontend/apps/interface/**'
       - '!frontend/apps/interface/src/i18n/**'
   pull_request:
-    branches: '**'
     paths:
       - 'frontend/apps/interface/**'
       - '!frontend/apps/interface/src/i18n/**'  

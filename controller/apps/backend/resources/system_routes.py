@@ -86,7 +86,8 @@ class rsync_status(Resource):
 
         # Handle empty variables while the files are being checked
         if status['progress'][:-1] == '':
-            return {'status': 200, 'progress': 0, "complete": False,
+            return {'status': 200, 'progress': 'checking_files',
+                    "complete": False,
                     'speed': 0, 'transferred': 0}, 200
 
         # Return current RSync progress
