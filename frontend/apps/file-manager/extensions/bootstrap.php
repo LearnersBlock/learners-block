@@ -5,13 +5,13 @@ namespace IFM_Extensions;
  * IFM Extensions Loader
  * 
  * Load all custom extensions for the IFM Filemanager
- * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+ * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
 class IFM_Extensions {
     function __construct() {
         // Set environment vars
         $is_dev_env     = (getenv('ENV') === 'development');
-        $host_dev_env   = '0.0.0.0:9090';
+        $host_dev_env   = 'http://controller:9090';
         $host_prod_env  = $_SERVER['HTTP_HOST'];
         
         // Prepare settings
