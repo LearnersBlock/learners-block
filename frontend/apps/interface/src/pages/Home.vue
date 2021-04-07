@@ -157,7 +157,7 @@ export default defineComponent({
     })
 
     // Get settings
-    onMounted(async () => {
+    onMounted(() => {
       $q.loading.show({
         delay: 300 // ms
       })

@@ -46,6 +46,7 @@ export default defineComponent({
     const $router = useRouter()
     const $store = useStore()
     const $q = useQuasar()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
     // New password
     const newPassword = ref<string>('')

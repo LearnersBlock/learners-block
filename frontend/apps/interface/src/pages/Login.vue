@@ -47,6 +47,7 @@ export default defineComponent({
     const $store = useStore()
     const $router = useRouter()
     const $q = useQuasar()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
     // Username
     const username = ref<string>('lb')
@@ -55,17 +56,17 @@ export default defineComponent({
     const submitting = ref<boolean>(false)
 
     // Login and show message
-    const login = async () => {
+    function login () {
       submitting.value = true
       $store.dispatch('LOGIN', { username: username.value, password: password.value })
         .then(() => {
           $q.notify({
             type: 'positive',
-            message: t('login_successfull') as string
+            message: t('login_successfull')
           })
           $router.push('/settings')
         })
-        .catch((e: { message: never }) => {
+        .catch((e: { message: never}) => {
           $q.notify({
             type: 'negative',
             message: e.message

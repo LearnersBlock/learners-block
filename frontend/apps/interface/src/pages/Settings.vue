@@ -377,6 +377,7 @@ export default defineComponent({
   setup () {
     const $store = useStore()
     const $q = useQuasar()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(false)
@@ -417,7 +418,7 @@ export default defineComponent({
     const fetchedInternetConnectionStatus = Axios.get(`${api.value}/v1/internet/connectionstatus`)
     const fetchedHostName = Axios.get(`${api.value}/v1/hostname`)
 
-    onMounted(async () => {
+    onMounted(() => {
       apiCall()
     })
 
@@ -460,7 +461,7 @@ export default defineComponent({
       }
     }
 
-    const disableLoginWarn = async () => {
+    function disableLoginWarn () {
       $q.dialog({
         title: t('confirm'),
         message: t('are_you_sure'),
@@ -471,7 +472,7 @@ export default defineComponent({
       })
     }
 
-    const hostnameWarn = async () => {
+    function hostnameWarn () {
       if (hostnameValid.value.validate() && newHostname.value !== '') {
         $q.dialog({
           title: t('confirm'),
@@ -486,16 +487,16 @@ export default defineComponent({
             message: t('hostname_changed_notification')
           })
         }).onCancel(() => {
-        // console.log('>>>> Cancel')
+          // console.log('>>>> Cancel')
         }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
+          // console.log('I am triggered on both OK and Cancel')
         })
       } else {
         $q.notify({ type: 'negative', message: t('invalid_hostname') })
       }
     }
 
-    const redirect = async () => {
+    function redirect () {
       window.open('/upload-library/')
     }
 
@@ -561,7 +562,7 @@ export default defineComponent({
       }
     }
 
-    const wifiWarn = async () => {
+    function wifiWarn () {
       if (internet.value && !wifi.value) {
         $q.notify({ type: 'negative', message: t('internet_no_wifi') })
       } else if (wifi.value === false) {
@@ -576,7 +577,7 @@ export default defineComponent({
           connectDisconnectWifi()
           wifi.value = false
         }).onCancel(() => {
-        // console.log('>>>> Cancel')
+          // console.log('>>>> Cancel')
         })
       }
     }

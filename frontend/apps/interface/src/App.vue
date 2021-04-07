@@ -1,15 +1,18 @@
 <template>
-    <router-view v-if="apiIsUp" class="row items-center justify-evenly" />
-    <div
-      v-else
-      class="text-h4 q-mt-xl text-center"
-    >
-      {{ $t('api_down') }}
-    </div>
+  <router-view
+    v-if="apiIsUp"
+    class="row items-center justify-evenly"
+  />
+  <div
+    v-else
+    class="text-h4 q-mt-xl text-center"
+  >
+    {{ $t('api_down') }}
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
 import Axios from 'app/node_modules/axios'
 import { useStore } from './store'
 
@@ -22,16 +25,14 @@ export default defineComponent({
       return $store.getters.GET_API
     })
 
-    const fetchPing = async () => {
+    onMounted(async () => {
       try {
         await Axios.get(`${api.value}`)
         apiIsUp.value = true
       } catch (e) {
         apiIsUp.value = false
       }
-    }
-
-    fetchPing()
+    })
 
     return {
       apiIsUp

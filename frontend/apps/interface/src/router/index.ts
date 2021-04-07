@@ -83,6 +83,7 @@ export default route<StateInterface>(function ({ store }) {
         }
       } else {
         console.log(error.response.status)
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         Router.push('/' + error.response.status)
       }
     }
