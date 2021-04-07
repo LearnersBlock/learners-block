@@ -60,7 +60,6 @@
                   class="self-end"
                   size="lg"
                   :disable="togglesLoading"
-                  :disabled="togglesLoading"
                   v-if="!filesLoading && !wifiLoading"
                   @input="updateFiles"
                 />
@@ -77,16 +76,15 @@
                 v-ripple
                 tag="a"
                 target="_self"
-                :disabled="!internet"
                 :disable="!internet"
-                href="/upload-library"
+                @click="redirect"
               >
                 <q-tooltip
                   v-if="!internet"
                   anchor="top middle"
                   self="center middle"
                   :offset="[10, 10]"
-                  content-style="font-size: 16px"
+                  style="font-size: 16px"
                 >
                   {{ $t('need_connection') }}
                 </q-tooltip>
@@ -109,7 +107,6 @@
                   icon="import_contacts"
                   size="lg"
                   :disable="togglesLoading"
-                  :disabled="togglesLoading"
                   v-if="!libraryLoading && !wifiLoading"
                   @input="updateLibrary"
                 />
@@ -124,7 +121,6 @@
               <q-item
                 clickable
                 v-ripple
-                :disabled="!internet"
                 :disable="!internet"
                 tag="a"
                 target="_self"
@@ -132,7 +128,7 @@
               >
                 <q-tooltip
                   v-if="!internet"
-                  content-style="font-size: 16px"
+                  style="font-size: 16px"
                   anchor="top middle"
                   self="center middle"
                   :offset="[10, 10]"
@@ -158,7 +154,6 @@
                   icon="create"
                   size="lg"
                   :disable="togglesLoading"
-                  :disabled="togglesLoading"
                   v-if="!makerspaceLoading && !wifiLoading"
                   @input="updateMakerspace"
                 />
@@ -197,7 +192,6 @@
                   size="lg"
                   class="ml-auto"
                   :disable="togglesLoading"
-                  :disabled="togglesLoading"
                   v-if="!websiteLoading && !wifiLoading"
                   @input="updateWebsite"
                 />
@@ -268,7 +262,6 @@
               @click="wifiWarn"
               class="ml-3 mr-3 mt-1 mb-2 text-lg"
               :disable="wifiLoading"
-              :disabled="wifiLoading"
               :label="!wifi ? $t('connect'): $t('disconnect')"
             />
           </div>
@@ -327,7 +320,6 @@
                         v-model="portainer"
                         @input="updatePortainer"
                         :disable="portainerToggleLoading"
-                        :disabled="portainerToggleLoading"
                         v-if="!portainerLoading && !wifiLoading"
                         icon="widgets"
                         size="lg"
@@ -374,11 +366,18 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
+import { useQuasar } from 'quasar'
+import { useStore } from '../store'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
-  setup (_, { root }) {
+  name: 'Settings',
+  setup () {
+    const $store = useStore()
+    const $q = useQuasar()
+    const { t } = useI18n()
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(false)
     const hostname = ref<string>('')
@@ -407,7 +406,7 @@ export default defineComponent({
 
     // Get api from store
     const api = computed(() => {
-      return root.$store.getters.GET_API
+      return $store.getters.GET_API
     })
 
     // API calls for onMounted
@@ -455,16 +454,16 @@ export default defineComponent({
     const disableLogin = async () => {
       const response = await Axios.post(`${api.value}/v1/setpassword`, { password: ' ' })
       if (response.status === 200) {
-        root.$q.notify({ type: 'positive', message: root.$tc('login_disabled') })
+        $q.notify({ type: 'positive', message: t('login_disabled') })
       } else {
-        root.$q.notify({ type: 'negative', message: root.$tc('error') })
+        $q.notify({ type: 'negative', message: t('error') })
       }
     }
 
     const disableLoginWarn = async () => {
-      root.$q.dialog({
-        title: root.$tc('confirm'),
-        message: root.$tc('are_you_sure'),
+      $q.dialog({
+        title: t('confirm'),
+        message: t('are_you_sure'),
         cancel: true,
         persistent: true
       }).onOk(() => {
@@ -474,17 +473,17 @@ export default defineComponent({
 
     const hostnameWarn = async () => {
       if (hostnameValid.value.validate() && newHostname.value !== '') {
-        root.$q.dialog({
-          title: root.$tc('confirm'),
-          message: root.$tc('change_hostname_warning'),
+        $q.dialog({
+          title: t('confirm'),
+          message: t('change_hostname_warning'),
           cancel: true,
           persistent: true
         }).onOk(() => {
           updateHostname()
 
-          root.$q.dialog({
-            title: root.$tc('success'),
-            message: root.$tc('hostname_changed_notification')
+          $q.dialog({
+            title: t('success'),
+            message: t('hostname_changed_notification')
           })
         }).onCancel(() => {
         // console.log('>>>> Cancel')
@@ -492,8 +491,12 @@ export default defineComponent({
         // console.log('I am triggered on both OK and Cancel')
         })
       } else {
-        root.$q.notify({ type: 'negative', message: root.$tc('invalid_hostname') })
+        $q.notify({ type: 'negative', message: t('invalid_hostname') })
       }
+    }
+
+    const redirect = async () => {
+      window.open('/upload-library/')
     }
 
     const updateFiles = async () => {
@@ -560,13 +563,13 @@ export default defineComponent({
 
     const wifiWarn = async () => {
       if (internet.value && !wifi.value) {
-        root.$q.notify({ type: 'negative', message: root.$tc('internet_no_wifi') })
+        $q.notify({ type: 'negative', message: t('internet_no_wifi') })
       } else if (wifi.value === false) {
-        window.open('http://' + window.location.hostname + `:8080/index.html?lang=${root.$i18n.locale}`)
+        window.open('http://' + window.location.hostname + `:8080/index.html?lang=${$q.lang.isoName}`)
       } else {
-        root.$q.dialog({
-          title: root.$tc('confirm'),
-          message: root.$tc('disconnect_wifi'),
+        $q.dialog({
+          title: t('confirm'),
+          message: t('disconnect_wifi'),
           cancel: true,
           persistent: true
         }).onOk(() => {
@@ -596,6 +599,7 @@ export default defineComponent({
       portainer,
       portainerLoading,
       portainerToggleLoading,
+      redirect,
       regexp,
       sysInfo,
       sysInfoLoading,

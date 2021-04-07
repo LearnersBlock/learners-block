@@ -63,16 +63,24 @@
 
 <script lang="ts">
 
-import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { useStore } from '../store'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'MainLayout',
-  setup (_, { root }) {
+  setup () {
+    const $router = useRouter()
+    const $q = useQuasar()
+    const $store = useStore()
     const leftDrawerOpen = ref(false)
+    const { locale } = useI18n({ useScope: 'global' })
     const languages = ref([
       {
         label: 'English',
-        value: 'en-us'
+        value: 'en-US'
       },
       {
         label: 'اَلْعَرَبِيَّةُ',
@@ -93,7 +101,7 @@ export default defineComponent({
     ])
 
     const isAuthenticated = computed(() => {
-      return root.$store.getters.isAuthenticated
+      return $store.getters.isAuthenticated
     })
 
     const changeLanguage = (value: string) => {
@@ -101,62 +109,61 @@ export default defineComponent({
         import(
         /* webpackInclude: /(de|en-us)\.js$/ */
           'quasar/lang/' + 'he'
-        ).then(lang => {
-          root.$q.lang.set(lang.default)
-          root.$q.cookies.set('lang', value, { sameSite: 'Lax', path: '/', expires: 365 })
+        ).then(() => {
+          locale.value = value
+          $q.cookies.set('lang', value, { sameSite: 'Lax', path: '/', expires: 365 })
           localStorage.setItem('lang', value)
         })
       } else {
         import(
         /* webpackInclude: /(de|en-us)\.js$/ */
-          'quasar/lang/' + 'en-us'
-        ).then(lang => {
-          root.$q.lang.set(lang.default)
-          root.$q.cookies.set('lang', value, { sameSite: 'Lax', path: '/', expires: 365 })
+          'quasar/lang/' + 'en-US'
+        ).then(() => {
+          locale.value = value
+          $q.cookies.set('lang', value, { sameSite: 'Lax', path: '/', expires: 365 })
           localStorage.setItem('lang', value)
         })
       }
-      root.$i18n.locale = value
+      $q.lang.isoName = value
     }
 
     const logout = async () => {
-      root.$q.loading.show({
+      $q.loading.show({
         delay: 300 // ms
       })
-      await root.$store.dispatch('LOGOUT')
+      await $store.dispatch('LOGOUT')
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await root.$router.push('/').catch(() => {})
-      root.$q.loading.hide()
+      await $router.push('/').catch(() => {})
+      $q.loading.hide()
     }
 
     const settings = async () => {
-      root.$q.loading.show({
+      $q.loading.show({
         delay: 300 // ms
       })
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await root.$router.push('/settings').catch(() => {})
+      await $router.push('/settings').catch(() => {})
 
-      root.$q.loading.hide()
+      $q.loading.hide()
     }
 
     onMounted(() => {
-      root.$q.loading.show({
+      $q.loading.show({
         delay: 300 // ms
       })
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const langCookie = ref<any>(root.$q.localStorage.getItem('lang'))
+      const langCookie = ref<any>($q.localStorage.getItem('lang'))
       if (langCookie.value) {
-        root.$i18n.locale = langCookie.value
+        locale.value = langCookie.value
       }
 
-      const usersLocale = root.$q.lang.getLocale()
+      const usersLocale = $q.lang.getLocale()
       if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
-        root.$i18n.locale = usersLocale
-        root.$q.cookies.set('lang', usersLocale, { sameSite: 'Lax', path: '/', expires: 365 })
+        locale.value = usersLocale
+        $q.cookies.set('lang', usersLocale, { sameSite: 'Lax', path: '/', expires: 365 })
         localStorage.setItem('lang', usersLocale)
       }
-      root.$q.loading.hide()
+      $q.loading.hide()
     })
 
     return { leftDrawerOpen, languages, changeLanguage, logout, isAuthenticated, settings }

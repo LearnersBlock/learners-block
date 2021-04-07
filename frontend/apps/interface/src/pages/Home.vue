@@ -134,12 +134,15 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
+import { useQuasar } from 'quasar'
+import { useStore } from '../store'
 
 export default defineComponent({
-  setup (_, { root }) {
+  setup () {
+    const $store = useStore()
+    const $q = useQuasar()
     // Settings for the ui
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
@@ -150,12 +153,12 @@ export default defineComponent({
                           settings.value.makerspace === false)
     // Get API from Store
     const api = computed(() => {
-      return root.$store.getters.GET_API
+      return $store.getters.GET_API
     })
 
     // Get settings
     onMounted(async () => {
-      root.$q.loading.show({
+      $q.loading.show({
         delay: 300 // ms
       })
 
@@ -165,7 +168,7 @@ export default defineComponent({
       }).catch(e => {
         console.log(e.message)
       })
-      root.$q.loading.hide()
+      $q.loading.hide()
     })
 
     return {

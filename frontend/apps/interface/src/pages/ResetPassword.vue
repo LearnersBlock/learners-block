@@ -34,30 +34,38 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
+import { useQuasar } from 'quasar'
+import { useStore } from '../store'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
-  setup (_, { root }) {
+  setup () {
+    const $router = useRouter()
+    const $store = useStore()
+    const $q = useQuasar()
+    const { t } = useI18n()
     // New password
     const newPassword = ref<string>('')
     const api = computed(() => {
-      return root.$store.getters.GET_API
+      return $store.getters.GET_API
     })
     // Reset password
     const resetPassword = async () => {
-      root.$q.loading.show({
+      $q.loading.show({
         delay: 300 // ms
       })
       const response = await Axios.post(`${api.value}/v1/setpassword`, { password: newPassword.value })
       if (response.status === 200) {
-        root.$q.notify({ type: 'positive', message: root.$tc('password_set_success') })
+        $q.notify({ type: 'positive', message: t('password_set_success') })
         newPassword.value = ''
-        root.$router.push('/settings')
+        $router.push('/settings')
       } else {
-        root.$q.notify({ type: 'negative', message: root.$tc('error') })
+        $q.notify({ type: 'negative', message: t('error') })
       }
-      root.$q.loading.hide()
+      $q.loading.hide()
     }
 
     return {

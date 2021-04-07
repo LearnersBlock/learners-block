@@ -21,15 +21,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
 import { copyToClipboard } from 'quasar'
+import { useStore } from '../store'
 
 export default defineComponent({
-  setup (_, { root }) {
+  setup () {
+    const $store = useStore()
     const hostname = ref<string>('')
     const api = computed(() => {
-      return root.$store.getters.GET_API
+      return $store.getters.GET_API
     })
 
     const copyUrl = () => {

@@ -1,25 +1,25 @@
 <template>
-  <div id="q-app row items-center justify-evenly">
-    <router-view v-if="apiIsUp" />
+    <router-view v-if="apiIsUp" class="row items-center justify-evenly" />
     <div
       v-else
       class="text-h4 q-mt-xl text-center"
     >
       {{ $t('api_down') }}
     </div>
-  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from '@vue/composition-api'
+import { defineComponent, ref, computed } from 'vue'
 import Axios from 'app/node_modules/axios'
+import { useStore } from './store'
 
 export default defineComponent({
   name: 'App',
-  setup (_, { root }) {
+  setup () {
+    const $store = useStore()
     const apiIsUp = ref<boolean>(true)
     const api = computed(() => {
-      return root.$store.getters.GET_API
+      return $store.getters.GET_API
     })
 
     const fetchPing = async () => {
