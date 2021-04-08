@@ -497,7 +497,7 @@ export default defineComponent({
     }
 
     function redirect () {
-      window.open('/upload-library/')
+      location.href = '/upload-library/'
     }
 
     const updateFiles = async () => {
