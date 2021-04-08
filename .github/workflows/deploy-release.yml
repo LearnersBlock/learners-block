@@ -39,7 +39,7 @@ jobs:
 
       - name: Build Quasar and WiFi-Connect
         run: |
-          docker-compose -f docker-compose-build.yml up --build
+          docker-compose -f docker-compose.build.yml up --build
 
       - if: startsWith(github.ref, 'refs/tags/v')
         name: Create ZIP Package for Releases

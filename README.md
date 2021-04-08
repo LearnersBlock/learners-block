@@ -32,11 +32,11 @@ Development of the the Library interface takes place on a [separate repository](
 
 Build the required components:
 
-`docker-compose -f docker-compose-build.yml up --build`
+`docker-compose -f docker-compose.build.yml up --build`
 
 Start the development environment:
 
-`docker-compose -f docker-compose-dev-frontend.yml up --build`
+`docker-compose -f docker-compose.dev-frontend.yml up --build`
 
 _Ports:_
 ```
@@ -49,7 +49,7 @@ Controller (hot-reload): 9090
 
 Start the environment:
 
-`docker-compose -f docker-compose-dev-wifi.yml up --build`
+`docker-compose -f docker-compose.dev-wifi.yml up --build`
 
 _Ports:_
 ```
@@ -96,7 +96,7 @@ In order to prepare the code from this repository for deployment to a device:
 
 2. Download the [OS for your device](https://www.balena.io/os/) and flash it to your memory card. 
 1. Clone this repository.
-2. Execute `docker-compose -f docker-compose-build.yml up --build` to build the required components.
+2. Execute `docker-compose -f docker-compose.build.yml up --build` to build the required components.
 3. After installing the [Balena CLI](https://github.com/balena-io/balena-cli), run `balena push hostname-of-your-device.local` to deploy. 
 
 More information on local deployments is available from Balena:
