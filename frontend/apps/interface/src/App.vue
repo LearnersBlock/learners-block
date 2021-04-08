@@ -12,27 +12,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from 'vue'
+import { defineComponent, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
-import { useStore } from './store'
 
 export default defineComponent({
   name: 'App',
   setup () {
-    const $store = useStore()
     const apiIsUp = ref<boolean>(true)
-    const api = computed(() => {
-      return $store.getters.GET_API
-    })
 
-    onMounted(async () => {
-      try {
-        await Axios.get(`${api.value}`)
-        apiIsUp.value = true
-      } catch (e) {
+    Axios.get('http://' + window.location.hostname + ':9090')
+      .catch(function (error) {
         apiIsUp.value = false
-      }
-    })
+        console.log(error)
+      })
 
     return {
       apiIsUp

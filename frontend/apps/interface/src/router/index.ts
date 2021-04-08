@@ -62,7 +62,6 @@ export default route<StateInterface>(function ({ store }) {
     if ((to.name === 'settings' || to.name === 'password_reset') && !store.getters.isAuthenticated) {
       await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).catch(() => {
         next('/login')
-        next()
       })
     }
     if (to.name === 'login' && store.getters.isAuthenticated) {
@@ -82,7 +81,6 @@ export default route<StateInterface>(function ({ store }) {
           Router.push('/login')
         }
       } else {
-        console.log(error.response.status)
         // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         Router.push('/' + error.response.status)
       }
