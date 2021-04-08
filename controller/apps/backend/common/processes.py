@@ -3,6 +3,7 @@ import inspect
 import os
 import requests
 import shutil
+import socket
 import subprocess
 import time
 
@@ -23,17 +24,13 @@ def check_space():
     return False
 
 
-def check_internet():
-
+def check_internet(host="8.8.8.8", port=53, timeout=3):
     try:
-        subprocess.check_output(['wget', '-q',
-                                 '--spider',
-                                 '--no-check-certificate',
-                                 '1.1.1.1'],
-                                timeout=4)
+        socket.setdefaulttimeout(timeout)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
         return True
-    except Exception as ex:
-        print(str(ex))
+    except socket.error as ex:
+        print(ex, flush=True)
         return False
 
 
