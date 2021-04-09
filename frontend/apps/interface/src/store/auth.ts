@@ -49,16 +49,24 @@ const auth = {
         commit('SET_TOKEN', null)
       }
     },
-    VERIFY_LOGIN: async ({ commit, getters }: { commit: any, getters: any }, payload: string) => {
-      const response = await Axios.get(`${getters.GET_API}/v1/verifylogin`, {
+    VERIFY_LOGIN: async ({ commit, getters, dispatch }: { commit: any, getters: any, dispatch: any }, payload: string) => {
+      await Axios.get(`${getters.GET_API}/v1/verifylogin`, {
         headers: {
           Authorization: `Bearer ${payload}`
         }
+      }).then((response) => {
+        if (response.data.logged_in === true) {
+          commit('SET_TOKEN', payload)
+          Axios.defaults.headers.common.Authorization = `Bearer ${payload}`
+          return true
+        } else {
+          dispatch('LOGOUT')
+          return false
+        }
+      }).catch(() => {
+        dispatch('LOGOUT')
+        return false
       })
-      if (response.data.logged_in === true) {
-        commit('SET_TOKEN', payload)
-        Axios.defaults.headers.common.Authorization = `Bearer ${payload}`
-      }
     }
   }
 }
