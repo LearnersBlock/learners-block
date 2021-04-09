@@ -64,28 +64,7 @@ export default route<StateInterface>(function ({ store }) {
         next('/login')
       })
     }
-    if (to.name === 'login' && store.getters.isAuthenticated) {
-      next('/')
-    } else {
-      next()
-    }
-  })
-  axios.interceptors.response.use(function (response) {
-    return response
-  }, function (error) {
-    if (error.resonse) {
-      if (error.response.status === 401 || error.code === 'ECONNABORTED') {
-        store.dispatch('LOGOUT')
-
-        if (Router.currentRoute) {
-          Router.push('/login')
-        }
-      } else {
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        Router.push('/' + error.response.status)
-      }
-    }
-    return Promise.reject(error)
+    next()
   })
 
   return Router
