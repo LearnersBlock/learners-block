@@ -74,5 +74,8 @@ ENV UDEV=off
 # Overwrite default Supervisor.conf with dev version
 COPY config/supervisor/supervisord_dev.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Overwrite default NGINX.conf with dev version
+COPY /config/nginx/nginx.dev.conf /etc/nginx/nginx.conf
+
 # Start services
 CMD yarn install --cwd /app/web/public/interface_dev/ && supervisord -c /etc/supervisor/conf.d/supervisord.conf

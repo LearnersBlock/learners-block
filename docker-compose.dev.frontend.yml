@@ -17,9 +17,6 @@ services:
             context: ./frontend
             dockerfile: Dockerfile.dev
         ports: 
-            # Live reload Quasar interface
-            - "8082:8082"
-            # Orignal server via NGINX
             - "8081:8081"
         labels:
             portainer: hidden

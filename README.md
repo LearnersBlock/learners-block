@@ -22,9 +22,9 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 All development is currently done on the 'develop' branch. It is this branch that users should fork and where pull requests should be submitted. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built and deployed to our servers. 
 
-A Docker based development environment is available. There are two development docker-compose files, one for the frontend and one for WiFi Connect.
+A Docker based development environment is available. There are two development docker-compose files, one for the primary frontend interface and one for WiFi Connect.
 
-On the GitHub releases page you will also find a 'pre-release' tagged 'development' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. Pre-releases will also provide real-time logs to our servers for debugging and are not recommended for production use.
+On the GitHub releases page you will find a 'pre-release' tagged 'development' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. Pre-releases will also provide real-time logs to our servers for debugging and are not recommended for production use.
 
 Development of the the Library interface takes place on a [separate repository](https://github.com/LearnersBlock/library). 
 
@@ -36,12 +36,11 @@ Build the required components:
 
 Start the development environment:
 
-`docker-compose -f docker-compose.dev-frontend.yml up --build`
+`docker-compose -f docker-compose.dev.frontend.yml up --build`
 
 _Ports:_
 ```
-Frontend interface (hot-reload): 8082
-Production interface (no hot-reload): 8081
+Frontend interface (hot-reload): 8081
 Controller (hot-reload): 9090
 ```
 
@@ -49,7 +48,7 @@ Controller (hot-reload): 9090
 
 Start the environment:
 
-`docker-compose -f docker-compose.dev-wifi.yml up --build`
+`docker-compose -f docker-compose.dev.wifi.yml up --build`
 
 _Ports:_
 ```
