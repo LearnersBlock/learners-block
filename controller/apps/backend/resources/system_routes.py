@@ -40,7 +40,7 @@ class download_status(Resource):
         print(status, flush=True)
 
         # Return current download progress
-        return {'status': 200, 'progress': status['progress']}, 200
+        return status, 200
 
 
 class download_stop(Resource):
@@ -105,22 +105,7 @@ class rsync_status(Resource):
 
         print(status, flush=True)
 
-        # If URL cannot be resolved
-        if status['progress'] == "error":
-            return {'progress': status['progress']}, 200
-
-        # If out of space
-        if status['progress'] == "space-error":
-            return {'progress': status['progress']}, 200
-
-        # If complete
-        if status['progress'] == "complete":
-            return {'progress': status['progress']}, 200
-
-        # Return current RSync progress
-        return {'progress': status['progress'],
-                'speed': status['speed'],
-                'transferred': status['transferred']}, 200
+        return status
 
 
 class rsync_stop(Resource):
