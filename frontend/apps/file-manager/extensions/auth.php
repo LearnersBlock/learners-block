@@ -12,7 +12,7 @@ use GuzzleHttp\Exception\ClientException;
 class JWTAuth extends IFM_Extensions {
     function __construct() {
         // Set config
-        $this->auth_cookie_name = 'auth';
+        $this->auth_cookie_name = 'access_token_cookie';
 
         // Set default admin params
         $this->admin_params = array(
@@ -106,13 +106,12 @@ class JWTAuth extends IFM_Extensions {
 
                 // Check status code to match the expected 401
                 if (isset($response_code) && $response_code === 401) {
-                    // If so, force logout and ask for re-login
-                    header('Location: /login?redirect=/files?mode=admin');
+                    header('Location: /settings');
                 }
             }
         } else {
-            // Otherwise, if no token cookie present, force redirect to the login view
-            header('Location: /login?redirect=/files?mode=admin'); 
+            // Otherwise, if no token cookie present, redirect back to the settings page
+            header('Location: /settings'); 
         }
     }
 
