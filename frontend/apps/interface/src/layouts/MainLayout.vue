@@ -107,7 +107,7 @@ export default defineComponent({
     const changeLanguage = (value: string) => {
       if (value === 'ar') {
         import(
-        /* webpackInclude: /(de|en-us)\.js$/ */
+        /* webpackInclude: /(de|en-US)\.js$/ */
           'quasar/lang/' + 'he'
         ).then(() => {
           locale.value = value
@@ -116,7 +116,7 @@ export default defineComponent({
         })
       } else {
         import(
-        /* webpackInclude: /(de|en-us)\.js$/ */
+        /* webpackInclude: /(de|en-US)\.js$/ */
           'quasar/lang/' + 'en-US'
         ).then(() => {
           locale.value = value
