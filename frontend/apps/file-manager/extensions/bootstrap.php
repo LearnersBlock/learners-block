@@ -10,12 +10,12 @@ namespace IFM_Extensions;
 class IFM_Extensions {
     function __construct() {
         // Prepare settings
-        define('ROOT_PATH', dirname(dirname(__FILE__)));
-        define('EXTENSIONS_PATH', ROOT_PATH . '/extensions');
+        define('LB_IFM_ROOT_PATH', dirname(dirname(__FILE__)));
+        define('LB_IFM_EXTENSIONS_PATH', LB_IFM_ROOT_PATH . '/extensions');
         define('LB_API_BASE_URL', 'http://172.17.0.1:9090');
 
         // Load composer
-        require_once ROOT_PATH . '/vendor/autoload.php';
+        require_once LB_IFM_ROOT_PATH . '/vendor/autoload.php';
 
         // Load custom extensions
         $this->load_extensions();
@@ -31,11 +31,11 @@ class IFM_Extensions {
 
     private function load_extensions () {
         // Auth
-        require_once EXTENSIONS_PATH . '/auth.php';
+        require_once LB_IFM_EXTENSIONS_PATH . '/auth.php';
         $extension_auth = new \IFM_Extensions\JWTAuth();
 
         // Lang
-        require_once EXTENSIONS_PATH . '/lang.php';
+        require_once LB_IFM_EXTENSIONS_PATH . '/lang.php';
         $extension_lang = new \IFM_Extensions\Lang();
     }
 }
