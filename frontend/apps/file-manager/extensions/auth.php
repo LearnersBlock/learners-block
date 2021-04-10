@@ -16,8 +16,8 @@ class JWTAuth extends IFM_Extensions {
 
         // Set default admin params
         $this->admin_params = array(
-            'IFM_ROOT_DIR'          => $_ENV['FILEMANAGER_ADMIN_ROOT_DIR'] ?: '/app/web/public/storage',
-            'IFM_ROOT_PUBLIC_URL'   => $_ENV['FILEMANAGER_ADMIN_PUBLIC_URL'] ?: '/storage/',
+            'IFM_ROOT_DIR'          => '/app/web/public/storage',
+            'IFM_ROOT_PUBLIC_URL'   => '/storage/',
             'IFM_API_COPYMOVE'      => '1',
             'IFM_API_CREATEDIR'     => '1',
             'IFM_API_CREATEFILE'    => '1',
