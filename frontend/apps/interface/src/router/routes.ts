@@ -9,8 +9,8 @@ const routes: RouteRecordRaw[] = [
       { path: '/login', component: () => import('pages/Login.vue'), name: 'login' },
       { path: '/password_reset', component: () => import('pages/ResetPassword.vue'), name: 'password_reset' },
       { path: '/settings', component: () => import('pages/Settings.vue'), name: 'settings' },
-      { path: '/captive-portal', component: () => import('pages/CaptivePortal.vue'), name: 'captive-portal' },
-      { path: '/upload-makerspace', component: () => import('pages/Upload-MakerSpace.vue'), name: 'upload-makerspace' },
+      { path: '/captive_portal', component: () => import('pages/CaptivePortal.vue'), name: 'captive_portal' },
+      { path: '/upload_makerspace', component: () => import('pages/UploadMakerSpace.vue'), name: 'upload_makerspace' },
       { path: '/401', component: () => import('pages/401.vue'), name: '401' }
     ]
   },

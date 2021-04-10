@@ -124,7 +124,7 @@
                 :disable="!internet"
                 tag="a"
                 target="_self"
-                to="/upload-makerspace"
+                to="/upload_makerspace"
               >
                 <q-tooltip
                   v-if="!internet"
