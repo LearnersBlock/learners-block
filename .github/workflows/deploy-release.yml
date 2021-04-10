@@ -14,6 +14,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          fetch-depth: '0'
 
       - name: Turnstyle
         uses: softprops/turnstyle@v1
@@ -36,6 +39,13 @@ jobs:
           message: 'Update version files'
           branch: master
           add: './controller/apps/backend/.version'
+
+      - if: startsWith(github.ref, 'refs/tags/v')
+        name: Checkout production Library from 'main' branch
+        run: |
+          cd ./frontend/apps/library && \
+            git checkout -f main && \
+            cd $GITHUB_WORKSPACE
 
       - name: Build Quasar and WiFi-Connect
         run: |

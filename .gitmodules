@@ -1,0 +1,3 @@
+[submodule "frontend/apps/library"]
+	path = frontend/apps/library
+	url = https://github.com/LearnersBlock/library

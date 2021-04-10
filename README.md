@@ -18,21 +18,19 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 ## Installation
 
-### Development
+### Development Notes
 
-All development is currently done on the 'develop' branch. It is this branch that users should fork and where pull requests should be submitted. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built and deployed to our servers. 
-
-A Docker based development environment is available. There are two development docker-compose files, one for the primary frontend interface and one for WiFi Connect.
+All development is currently done on the 'develop' branch. It is this branch that users should fork and where pull requests should be submitted. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built for deployment. 
 
 On the GitHub releases page you will find a 'pre-release' tagged 'development' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. Pre-releases will also provide real-time logs to our servers for debugging and are not recommended for production use.
 
-Development of the Library interface takes place on a [separate repository](https://github.com/LearnersBlock/library). If you need to include the Library in your development environment: 
+### Development Instructions
 
-1. Clone the repository into `/frontend/apps/library`
-2. Run `yarn install` in the library directory. 
-3. Rename `.env.example` to `.env`
+When cloning this repository, the following command is recommended to ensure submodules are included:
 
-The Library will be served as part of the main interface with hot-reload enabled. 
+`git clone --recursive [URL to Git repo]`
+
+A Docker based development environment is available. There are two development docker-compose files, one for the primary frontend interface and one for WiFi Connect.
 
 #### Frontend
 
@@ -60,6 +58,10 @@ _Ports:_
 ```
 WiFi-Connect (hot-reload): 8080
 ```
+
+#### Library
+
+Development of the Library interface takes place on a [separate repository](https://github.com/LearnersBlock/library), which is included in this repository as a submodule located at `/frontend/apps/library`. By default, it points to the `develop` branch. The Library will be served as part of the main interface in the Docker development environment with hot-reload enabled. 
 
 #### Using the environments
 

@@ -68,6 +68,9 @@ RUN chown -R nginx.nginx /run && \
 
 # --------------- ## End mirror of production file ## -------------- #
 
+# Enable Library OnDevice mode
+ENV ONDEVICE=TRUE
+
 # Disable USB support to prevent error message in dev env
 ENV UDEV=off
 
@@ -78,4 +81,6 @@ COPY config/supervisor/supervisord_dev.conf /etc/supervisor/conf.d/supervisord.c
 COPY /config/nginx/nginx.dev.conf /etc/nginx/nginx.conf
 
 # Start services
-CMD yarn install --cwd /app/web/public/interface_dev/ && supervisord -c /etc/supervisor/conf.d/supervisord.conf
+CMD yarn install --cwd /app/web/public/interface_dev/ && \
+    yarn install --cwd /app/web/public/library/ && \ 
+    supervisord -c /etc/supervisor/conf.d/supervisord.conf
