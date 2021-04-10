@@ -33,30 +33,7 @@ class JWTAuth extends IFM_Extensions {
         $this->client = new GuzzleHttp\Client();
 
         // Start authentication
-        $this->is_auth_enabled();
-    }
-
-
-
-    /**
-     * Check if auth mode has been enabled 
-     * 
-     * Checks whether or not the file manager admin mode has been enabled via the "mode=admin" URL parameter. If so, run
-     * the authentication process.
-     * 
-     * @return void.
-     */
-
-    private function is_auth_enabled () {
-        if (isset($_GET['mode'])) {
-            // Store mode param
-            $mode = filter_var($_GET['mode'], FILTER_SANITIZE_STRING);
-
-            // Check for mode type
-            if ($mode === 'admin') {
-                $this->authenticate();
-            }
-        }
+        $this->authenticate();
     }
 
 
@@ -109,9 +86,6 @@ class JWTAuth extends IFM_Extensions {
                     header('Location: /settings');
                 }
             }
-        } else {
-            // Otherwise, if no token cookie present, redirect back to the settings page
-            header('Location: /settings'); 
         }
     }
 
