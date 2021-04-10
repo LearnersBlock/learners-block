@@ -21,6 +21,14 @@ version = dotenv_values(".version")
 parent_log_request = serving.WSGIRequestHandler.log_request
 
 
+# Function for disabling enpoint logging
+def log_request(self, *args, **kwargs):
+    if self.path == '/':
+        return
+
+    parent_log_request(self, *args, **kwargs)
+
+
 class download_fetch(Resource):
     @jwt_required()
     def post(self):
@@ -48,14 +56,6 @@ class download_stop(Resource):
         download_terminate()
 
         return {'status': 200, 'message': 'Terminate request sent'}, 200
-
-
-# Function for disabling enpoint logging
-def log_request(self, *args, **kwargs):
-    if self.path == '/':
-        return
-
-    parent_log_request(self, *args, **kwargs)
 
 
 class health_check(Resource):

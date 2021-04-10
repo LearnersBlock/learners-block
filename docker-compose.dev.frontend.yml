@@ -21,9 +21,8 @@ services:
         labels:
             portainer: hidden
         volumes:
-            - './frontend/apps/interface/dist/spa:/app/web/public/interface'
             - './frontend/apps/interface:/app/web/public/interface_dev:cached'
-            - './frontend/apps/library/dist/spa:/app/web/public/library:cached'
+            - './frontend/apps/library:/app/web/public/library:cached'
             - './frontend/apps/file-manager/dist:/app/web/public/files'
             - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
 

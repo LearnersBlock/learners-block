@@ -43,4 +43,5 @@ yarn-error.log*
 # Applications
 /controller/apps/backend/db/*
 /controller/apps/backend/storage/library/*
+/frontend/apps/library/*
 !.gitkeep
