@@ -68,9 +68,6 @@ RUN chown -R nginx.nginx /run && \
 
 # --------------- ## End mirror of production file ## -------------- #
 
-# Set env var
-ENV ENV=development
-
 # Disable USB support to prevent error message in dev env
 ENV UDEV=off
 
