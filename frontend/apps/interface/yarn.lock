@@ -1037,14 +1037,14 @@
   resolved "https://registry.yarnpkg.com/@positron/stack-trace/-/stack-trace-1.0.0.tgz#14fcc712a530038ef9be1ce6952315a839f466a8"
   integrity sha1-FPzHEqUwA475vhzmlSMVqDn0Zqg=
 
-"@quasar/app@^3.0.0-beta.13":
-  version "3.0.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-3.0.0-beta.13.tgz#7e35e0561dcf8f1c4e9a62a9d76f9bcec540780c"
-  integrity sha512-OdqrXaArWy/juJIf40rr8cdU3qukwnrDJy4pkGebmONUg2Us3IzNLByVKd3C6yTK+qaA4gEIQ58liTHm+NZjfQ==
+"@quasar/app@^3.0.0-beta.15":
+  version "3.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-3.0.0-beta.15.tgz#5c7d1857be0c500a8086e966576e315ec407d6a8"
+  integrity sha512-Mh5c2fd+TkjIJYsoVMBCyb0HTzj4+qM+Pw31ILKYwmWBqRwWq+u6+c2ElIYP9TypF9+/ycqgkcCwKL/7VhvvZA==
   dependencies:
     "@quasar/babel-preset-app" "2.0.1"
     "@quasar/fastclick" "1.1.4"
-    "@quasar/ssr-helpers" "1.0.0"
+    "@quasar/ssr-helpers" "1.1.0"
     "@types/cordova" "0.0.34"
     "@types/electron-packager" "14.0.0"
     "@types/express" "4.17.11"
@@ -1155,12 +1155,13 @@
   resolved "https://registry.yarnpkg.com/@quasar/fastclick/-/fastclick-1.1.4.tgz#21ed3e9a4387dcb43022a08af4ef08a5f1abf159"
   integrity sha512-i9wbyV4iT+v4KhtHJynUFhH5LiEPvAEgSnwMqPN4hf/8uRe82nDl5qP5agrp2el1h0HzyBpbvHaW7NB0BPrtvA==
 
-"@quasar/ssr-helpers@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@quasar/ssr-helpers/-/ssr-helpers-1.0.0.tgz#70f76ff6c22153c5ca566c6ada96c5e5ed8a2eb2"
-  integrity sha512-08mjEZDdzc0Lq47B+/vFPOTXamLte4Cy/lBmk7bieyTii/429ezavV4zWFT9sCEZN0P4HWFMI/YkERn5bwkokw==
+"@quasar/ssr-helpers@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@quasar/ssr-helpers/-/ssr-helpers-1.1.0.tgz#35165c5cd3f191299af1bea30b24f6d1b6667cbd"
+  integrity sha512-8aiMON41IW03o8mTbMecgTavB5RFL0FQiG8i2wtJNcQLQTu+v3XBM8k5Q+SeB/3FTPw7L/xpbZuaFk1iAra5Sg==
   dependencies:
     hash-sum "^2.0.0"
+    serialize-javascript "^5.0.1"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
