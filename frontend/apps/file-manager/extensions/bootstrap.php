@@ -9,15 +9,10 @@ namespace IFM_Extensions;
 
 class IFM_Extensions {
     function __construct() {
-        // Set environment vars
-        $is_dev_env     = (getenv('ENV') === 'development');
-        $host_dev_env   = 'http://controller:9090';
-        $host_prod_env  = $_SERVER['HTTP_HOST'];
-        
         // Prepare settings
         define('ROOT_PATH', dirname(dirname(__FILE__)));
         define('EXTENSIONS_PATH', ROOT_PATH . '/extensions');
-        define('LB_API_BASE_URL', $is_dev_env ? $host_dev_env : $host_prod_env);
+        define('LB_API_BASE_URL', 'http://172.17.0.1:9090');
 
         // Load composer
         require_once ROOT_PATH . '/vendor/autoload.php';
