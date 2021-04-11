@@ -1,5 +1,5 @@
 {
-    "name": "learnersblock/ifm",
+    "name": "learnersblock/learners-block",
     "description": "Filemanager for the Learner's Block project, based on misterunknown/ifm",
     "type": "project",
     "license": "MIT License (MIT)",
@@ -10,15 +10,14 @@
         },
         {
             "name": "Maximilian Oertel",
-            "email": "info@maximilianoertel.de"
+            "email": "maximilian@beyond-consulting.xyz"
         }
     ],
     "scripts": {
         "build": "./scripts/build.sh"
     },
     "require": {
-        "guzzlehttp/guzzle": "^7.2",
-        "vlucas/phpdotenv": "^5.2"
+        "guzzlehttp/guzzle": "^7.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.4"

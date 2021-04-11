@@ -93,7 +93,7 @@
             class="cursor-pointer py-3"
             tag="a"
             target="_self"
-            href="/website"
+            href="/website/"
           >
             <q-item-section
               side

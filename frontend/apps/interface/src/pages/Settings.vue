@@ -37,8 +37,8 @@
                 clickable
                 v-ripple
                 tag="a"
-                target="_blank"
-                href="/files"
+                target="_self"
+                href="/upload-files/"
               >
                 <q-icon
                   name="folder"
@@ -169,8 +169,8 @@
                 clickable
                 v-ripple
                 tag="a"
-                target="_blank"
-                href="/upload-website"
+                target="_self"
+                href="/upload-website/"
               >
                 <q-icon
                   name="language"
