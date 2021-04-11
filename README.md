@@ -26,9 +26,13 @@ On the GitHub releases page you will find a 'pre-release' tagged 'development' w
 
 ### Development Instructions
 
-When cloning this repository, the following command is recommended to ensure submodules are included:
+When cloning this repository, the following command is required to ensure submodules are included:
 
-`git clone --recursive [URL to Git repo]`
+`git clone --recursive https://github.com/LearnersBlock/learners-block.git`
+
+If you have already cloned the repository and need to fetch submodules:
+
+`git submodule update --remote`
 
 A Docker based development environment is available. There are two development docker-compose files, one for the primary frontend interface and one for WiFi Connect.
 
