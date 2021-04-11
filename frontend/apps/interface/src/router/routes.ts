@@ -11,6 +11,7 @@ const routes: RouteRecordRaw[] = [
       { path: '/settings', component: () => import('pages/Settings.vue'), name: 'settings' },
       { path: '/captive_portal', component: () => import('pages/CaptivePortal.vue'), name: 'captive_portal' },
       { path: '/upload_makerspace', component: () => import('pages/UploadMakerSpace.vue'), name: 'upload_makerspace' },
+      { path: '/portainer', redirect: '/portainer//' },
       { path: '/401', component: () => import('pages/401.vue'), name: '401' }
     ]
   },

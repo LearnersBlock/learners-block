@@ -335,8 +335,9 @@
                   <div
                     class="pl-6"
                     v-if="portainer"
+                    href="/test"
                   >
-                    {{ $t('portainer_starting_at') }}: http://{{ windowHostname }}:9000
+                    {{ $t('portainer_starting_at') }}: <a href="/portainer/">http://{{ windowHostname }}/portainer/</a>
                   </div>
                 </q-card-section>
               </q-card>
