@@ -1,27 +1,39 @@
 import axios from 'axios'
 import { route } from 'quasar/wrappers'
+import {
+  createMemoryHistory,
+  createRouter,
+  createWebHashHistory,
+  createWebHistory
+} from 'vue-router'
+import { StateInterface } from '../store'
 import routes from './routes'
-import { Store } from 'vuex'
-import store, { StateInterface } from '../store'
-import VueRouter from 'vue-router'
 import { Loading } from 'quasar'
+
 /*
  * If not building with SSR mode, you can
- * directly export the Router instantiation
+ * directly export the Router instantiation;
+ *
+ * The function below can be async too; either use
+ * async/await or return a Promise which resolves
+ * with the Router instance.
  */
 
-export default route<Store<StateInterface>>(function ({ Vue }) {
-  Vue.use(VueRouter)
+export default route<StateInterface>(function ({ store }) {
+  const createHistory =
+    process.env.SERVER
+      ? createMemoryHistory
+      : process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory
 
-  const Router = new VueRouter({
-    scrollBehavior: () => ({ x: 0, y: 0 }),
+  const Router = createRouter({
+    scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
 
-    // Leave these as is and change from quasar.conf.js instead!
+    // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
-    mode: process.env.VUE_ROUTER_MODE,
-    base: process.env.VUE_ROUTER_BASE
+    history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
+    )
   })
 
   axios.defaults.withCredentials = true
@@ -48,34 +60,11 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
       await store.dispatch('VERIFY_LOGIN', sessionStorage.getItem('learners-block-token'))
     }
     if ((to.name === 'settings' || to.name === 'password_reset') && !store.getters.isAuthenticated) {
-      store.dispatch('LOGIN', { username: 'lb', password: ' ' }).then(() => {
-        next()
-      }).catch(() => {
+      await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).catch(() => {
         next('/login')
-      }).catch(() => {
-        next()
       })
-    } else if (to.name === 'login' && store.getters.isAuthenticated) {
-      next('/')
-    } else {
-      next()
     }
-  })
-  axios.interceptors.response.use(function (response) {
-    return response
-  }, function (error) {
-    if (error.resonse) {
-      if (error.response.status === 401 || error.code === 'ECONNABORTED') {
-        store.dispatch('LOGOUT')
-        if (Router.currentRoute.fullPath !== '/') {
-          Router.push('/login')
-        }
-      } else {
-        console.log(error.response.status)
-        Router.push('/' + error.response.status)
-      }
-    }
-    return Promise.reject(error)
+    next()
   })
 
   return Router

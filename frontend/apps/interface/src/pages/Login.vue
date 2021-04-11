@@ -36,10 +36,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { useStore } from '../store'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
-  setup (_, { root }) {
+  setup () {
+    const $store = useStore()
+    const $router = useRouter()
+    const $q = useQuasar()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { t } = useI18n()
     // Username
     const username = ref<string>('lb')
     // Password
@@ -47,18 +56,18 @@ export default defineComponent({
     const submitting = ref<boolean>(false)
 
     // Login and show message
-    const login = async () => {
+    function login () {
       submitting.value = true
-      root.$store.dispatch('LOGIN', { username: username.value, password: password.value })
+      $store.dispatch('LOGIN', { username: username.value, password: password.value })
         .then(() => {
-          root.$q.notify({
+          $q.notify({
             type: 'positive',
-            message: root.$t('login_successfull') as string
+            message: t('login_successfull')
           })
-          root.$router.push('/settings')
+          $router.push('/settings')
         })
-        .catch(e => {
-          root.$q.notify({
+        .catch((e: { message: never}) => {
+          $q.notify({
             type: 'negative',
             message: e.message
           })

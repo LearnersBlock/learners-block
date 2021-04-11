@@ -1,10 +1,13 @@
 from dotenv import dotenv_values
+from common.downloads import download_get_status
+from common.downloads import download_start
+from common.downloads import download_terminate
+from common.downloads import rsync_get_status
+from common.downloads import rsync_start
+from common.downloads import rsync_terminate
 from common.processes import check_internet
 from common.processes import curl
 from common.processes import human_size
-from common.processes import rsync_get_status
-from common.processes import rsync_terminate
-from common.processes import rsync_download
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
@@ -24,6 +27,35 @@ def log_request(self, *args, **kwargs):
         return
 
     parent_log_request(self, *args, **kwargs)
+
+
+class download_fetch(Resource):
+    @jwt_required()
+    def post(self):
+        try:
+            content = request.get_json()
+            download_start(content["download_url"])
+        except AttributeError:
+            return {'response': 'Error: Must pass valid string.'}, 403
+
+        return {'response': 'Process complete.'}, 200
+
+
+class download_status(Resource):
+    def get(self):
+        status = download_get_status()
+
+        print(status, flush=True)
+
+        # Return current download progress
+        return status, 200
+
+
+class download_stop(Resource):
+    def get(self):
+        download_terminate()
+
+        return {'status': 200, 'message': 'Terminate request sent'}, 200
 
 
 class health_check(Resource):
@@ -59,42 +91,21 @@ class rsync_fetch(Resource):
     def post(self):
         try:
             content = request.get_json()
-            rsync_download(content["rsync_url"])
+            rsync_start(content["rsync_url"])
         except AttributeError:
             return {'response': 'Error: Must pass valid string.'}, 403
 
-        return {'response': 'Process complete.'}, 200
+        return {'response': 'Process complete'}, 200
 
 
 class rsync_status(Resource):
-    @jwt_required()
     def get(self):
 
         status = rsync_get_status()
 
         print(status, flush=True)
 
-        # If out of space
-        if status['progress'] == "space-error":
-            return {'status': 200, 'progress': 1, "complete": True,
-                    'speed': 0, 'transferred': 'Complete'}, 200
-
-        # Send finished pattern when complete = true
-        if status['complete'] is True:
-            return {'status': 200, 'progress': 1, "complete": True,
-                    'speed': 0, 'transferred': 'Complete'}, 200
-
-        # Handle empty variables while the files are being checked
-        if status['progress'][:-1] == '':
-            return {'status': 200, 'progress': 'checking_files',
-                    "complete": False,
-                    'speed': 0, 'transferred': 0}, 200
-
-        # Return current RSync progress
-        return {'status': 200, 'progress': int(status['progress'][:-1])/100,
-                'speed': status['speed'],
-                'transferred': status['transferred'],
-                'complete': False}, 200
+        return status
 
 
 class rsync_stop(Resource):

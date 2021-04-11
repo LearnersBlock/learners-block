@@ -18,30 +18,37 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 ## Installation
 
-### Development
+### Development Notes
 
-All development is currently done on the 'develop' branch. It is this branch that users should fork and where pull requests should be submitted. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built and deployed to our servers. 
+All development is currently done on the 'develop' branch. It is this branch that users should fork and where pull requests should be submitted. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built for deployment. 
 
-A Docker based development environment is available. There are two development docker-compose files, one for the frontend and one for WiFi Connect.
+On the GitHub releases page you will find a 'pre-release' tagged 'development' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. Pre-releases will also provide real-time logs to our servers for debugging and are not recommended for production use.
 
-On the GitHub releases page you will also find a 'pre-release' tagged 'development' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. Pre-releases will also provide real-time logs to our servers for debugging and are not recommended for production use.
+### Development Instructions
 
-Development of the the Library interface takes place on a [separate repository](https://github.com/LearnersBlock/library). 
+When cloning this repository, the following command is required to ensure submodules are included:
+
+`git clone --recursive https://github.com/LearnersBlock/learners-block.git`
+
+If you have already cloned the repository and need to fetch submodules:
+
+`git submodule update --remote`
+
+A Docker based development environment is available. There are two development docker-compose files, one for the primary frontend interface and one for WiFi Connect.
 
 #### Frontend
 
 Build the required components:
 
-`docker-compose -f docker-compose-build.yml up --build`
+`docker-compose -f docker-compose.build.yml up --build`
 
 Start the development environment:
 
-`docker-compose -f docker-compose-dev-frontend.yml up --build`
+`docker-compose -f docker-compose.dev.frontend.yml up --build`
 
 _Ports:_
 ```
-Frontend interface (hot-reload): 8082
-Production interface (no hot-reload): 8081
+Frontend interface (hot-reload): 8081
 Controller (hot-reload): 9090
 ```
 
@@ -49,12 +56,16 @@ Controller (hot-reload): 9090
 
 Start the environment:
 
-`docker-compose -f docker-compose-dev-wifi.yml up --build`
+`docker-compose -f docker-compose.dev.wifi.yml up --build`
 
 _Ports:_
 ```
 WiFi-Connect (hot-reload): 8080
 ```
+
+#### Library
+
+Development of the Library interface takes place on a [separate repository](https://github.com/LearnersBlock/library), which is included in this repository as a submodule located at `/frontend/apps/library`. By default, it points to the `develop` branch. The Library will be served as part of the main interface in the Docker development environment with hot-reload enabled. 
 
 #### Using the environments
 
@@ -96,7 +107,7 @@ In order to prepare the code from this repository for deployment to a device:
 
 2. Download the [OS for your device](https://www.balena.io/os/) and flash it to your memory card. 
 1. Clone this repository.
-2. Execute `docker-compose -f docker-compose-build.yml up --build` to build the required components.
+2. Execute `docker-compose -f docker-compose.build.yml up --build` to build the required components.
 3. After installing the [Balena CLI](https://github.com/balena-io/balena-cli), run `balena push hostname-of-your-device.local` to deploy. 
 
 More information on local deployments is available from Balena:

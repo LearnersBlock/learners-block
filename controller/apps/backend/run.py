@@ -5,6 +5,9 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from resources.models import db
 from resources.models import migrate
+from resources.system_routes import download_fetch
+from resources.system_routes import download_status
+from resources.system_routes import download_stop
 from resources.system_routes import health_check
 from resources.system_routes import internet_connection_status
 from resources.system_routes import rsync_fetch
@@ -99,6 +102,9 @@ if __name__ == '__main__':
 
     # Configure endpoints
     api.add_resource(device, '/v1/device')
+    api.add_resource(download_fetch, '/v1/download/fetch')
+    api.add_resource(download_status, '/v1/download/status')
+    api.add_resource(download_stop, '/v1/download/stop')
     api.add_resource(health_check, '/')
     api.add_resource(host_config, '/v1/hostconfig')
     api.add_resource(hostname, '/v1/hostname')

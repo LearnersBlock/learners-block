@@ -13,7 +13,7 @@ RUN apk add supervisor
 ## Add mount dependencies
 RUN apk add findmnt util-linux grep
 
-# Install Nginx and PhP-FPM
+# Install Nginx and PHP-FPM
 RUN apk add php7 php7-fpm php7-opcache php7-mysqli php7-json \
     php7-openssl php7-curl php7-zlib php7-xml php7-phar php7-intl php7-dom \
     php7-xmlreader php7-ctype php7-session php7-mbstring php7-gd nginx curl && \
@@ -43,7 +43,7 @@ COPY config/usb/udev/usb.rules /etc/udev/rules.d/usb.rules
 COPY config/usb/scripts /usr/src/scripts
 RUN chmod +x /usr/src/scripts/*
 
-# Configure PhP-FPM and NGINX
+# Configure PHP-FPM and NGINX
 COPY config/php/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY config/php/php.ini /etc/php7/conf.d/custom.ini
 COPY /config/nginx/nginx.conf /etc/nginx/nginx.conf
@@ -68,11 +68,19 @@ RUN chown -R nginx.nginx /run && \
 
 # --------------- ## End mirror of production file ## -------------- #
 
+# Enable Library OnDevice mode
+ENV ONDEVICE=TRUE
+
 # Disable USB support to prevent error message in dev env
 ENV UDEV=off
 
 # Overwrite default Supervisor.conf with dev version
 COPY config/supervisor/supervisord_dev.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Overwrite default NGINX.conf with dev version
+COPY /config/nginx/nginx.dev.conf /etc/nginx/nginx.conf
+
 # Start services
-CMD yarn install --cwd /app/web/public/interface_dev/ && supervisord -c /etc/supervisor/conf.d/supervisord.conf
+CMD yarn install --cwd /app/web/public/interface_dev/ && \
+    yarn install --cwd /app/web/public/library/ && \ 
+    supervisord -c /etc/supervisor/conf.d/supervisord.conf

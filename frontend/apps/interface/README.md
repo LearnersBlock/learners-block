@@ -8,9 +8,9 @@ to:
 const devAPI = 'http://localhost:9090'
 ```
 
-This will prevent errors about cookies being stored across domains when using the Quasar default load page of http://localhost:8082.
+This will prevent errors about cookies being stored across domains when using the Quasar default load page of http://localhost:8081.
 
-Alternatively, ensure you navigate to the development page via http://0.0.0.0:8082 and not http://localhost:8082.
+Alternatively, ensure you navigate to the development page via http://0.0.0.0:8081 and not http://localhost:8081.
 
 ## Install the dependencies
 ```bash

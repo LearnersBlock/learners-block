@@ -4,7 +4,7 @@ services:
     controller:
         build:
             context: ./controller
-            dockerfile: Dockerfile_controller.dev
+            dockerfile: Dockerfile.dev.controller
         ports: 
             - "9090:9090"
         labels:
@@ -17,16 +17,12 @@ services:
             context: ./frontend
             dockerfile: Dockerfile.dev
         ports: 
-            # Live reload Quasar interface
-            - "8082:8082"
-            # Orignal server via NGINX
             - "8081:8081"
         labels:
             portainer: hidden
         volumes:
-            - './frontend/apps/interface/dist/spa:/app/web/public/interface'
             - './frontend/apps/interface:/app/web/public/interface_dev:cached'
-            - './frontend/apps/library/dist/spa:/app/web/public/library:cached'
+            - './frontend/apps/library:/app/web/public/library:cached'
             - './frontend/apps/file-manager/dist:/app/web/public/files'
             - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
 

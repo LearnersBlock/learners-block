@@ -3,17 +3,8 @@ import inspect
 import os
 import requests
 import shutil
-import subprocess
+import socket
 import time
-
-# Set defalut global variable for terminating RSync
-rsync_log = ''
-rsync_status = {
-                "progress": "0%",
-                "complete": False,
-                "transferred": 0,
-                "speed": 0
-                }
 
 
 def check_space():
@@ -23,17 +14,13 @@ def check_space():
     return False
 
 
-def check_internet():
-
+def check_internet(host="8.8.8.8", port=53, timeout=3):
     try:
-        subprocess.check_output(['wget', '-q',
-                                 '--spider',
-                                 '--no-check-certificate',
-                                 '1.1.1.1'],
-                                timeout=4)
+        socket.setdefaulttimeout(timeout)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
         return True
-    except Exception as ex:
-        print(str(ex))
+    except socket.error as ex:
+        print(ex, flush=True)
         return False
 
 
@@ -150,98 +137,3 @@ def human_size(nbytes):
         i += 1
     f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
     return '%s %s' % (f, suffixes[i])
-
-
-def rsync_download(rsync_url):
-
-    global rsync_proc
-    # Download requested via RSync
-    try:
-        if rsync_proc.poll() is None:
-            return "running"
-    except Exception:
-        pass
-
-    print("Starting Download")
-    rsync_proc = subprocess.Popen(
-        ['rsync', '-azh', '--info=progress2', '--no-i-r', '--inplace',
-            rsync_url,
-            os.path.realpath('.') + '/storage/library/'],
-        stdout=subprocess.PIPE,
-        universal_newlines=True,
-        bufsize=1,
-        start_new_session=True
-    )
-
-    try:
-        for line in rsync_proc.stdout:
-            global rsync_log
-            rsync_log = line
-    except Exception:
-        print("RSync Proc terminated. Ending logging")
-
-    rsync_terminate()
-
-    return 0
-
-
-def rsync_get_status():
-    global rsync_status
-    global rsync_log
-
-    if check_space() is True:
-        rsync_terminate()
-        return {"progress": "space-error"}
-
-    if rsync_status['complete'] is True:
-        rsync_status['complete'] = False
-        return {"progress": "1%",
-                "complete": True}
-
-    # Split log lines
-    each_line = rsync_log.split()
-
-    if each_line:
-        json_output = {
-            "transferred": each_line[0],
-            "progress": each_line[1],
-            "speed": each_line[2],
-            "remaining_time": each_line[3],
-            "comparing_files": False,
-            "complete": False
-            }
-    else:
-        json_output = {
-            "progress": '0%',
-            "comparing_files": True,
-            "complete": False,
-            "transferred": 0,
-            "speed": 0
-            }
-
-    return json_output
-
-
-def rsync_terminate():
-    # Terminate RSync upon user request
-    try:
-        global rsync_proc
-        rsync_proc.terminate()
-        rsync_proc.communicate(timeout=5)
-        rsync_proc.wait(timeout=None)
-        subprocess.run(["killall", "-r", "rsync"])
-        print("Terminated RSync")
-    except Exception as ex:
-        print("SIGTERM failed. Killing RSync" + str(ex))
-        try:
-            rsync_proc.kill()
-        except Exception:
-            print("Could not kill")
-
-    global rsync_status
-    rsync_status = {
-                "progress": "1%",
-                "complete": True,
-                "terminated": 'yes'
-                }
-    return "Rsync terminated"

@@ -4,7 +4,7 @@ services:
     wifi_connect:
         build:
             context: ./controller
-            dockerfile: Dockerfile_wifi.dev
+            dockerfile: Dockerfile.dev.wifi
         stdin_open: true
         ports: 
             - "8080:8080"

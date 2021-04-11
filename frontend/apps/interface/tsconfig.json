@@ -1,4 +1,3 @@
-// Used to fix an issue in Visual Studio for apps in sub-folders
 {
   "extends": "@quasar/app/tsconfig-preset",
   "compilerOptions": {

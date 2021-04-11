@@ -1,60 +1,47 @@
 <?php
 namespace IFM_Extensions;
-use Dotenv;
 
 /**
  * IFM Extensions Loader
  * 
- * Load all custom extensions for the IFM filemanager
- * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+ * Load all custom extensions for the IFM Filemanager
+ * –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
 class IFM_Extensions {
     function __construct() {
-        // define some base constants
-        define('ROOT_PATH', dirname(dirname(__FILE__)));
-        define('EXTENSIONS_PATH', ROOT_PATH . '/extensions');
+        // Prepare settings
+        define('LB_IFM_ROOT_PATH', dirname(dirname(__FILE__)));
+        define('LB_IFM_EXTENSIONS_PATH', LB_IFM_ROOT_PATH . '/extensions');
+        define('LB_API_BASE_URL', 'http://172.17.0.1:9090');
 
-        // load composer
-        require_once ROOT_PATH . '/vendor/autoload.php';
+        // Load composer
+        require_once LB_IFM_ROOT_PATH . '/vendor/autoload.php';
 
-        // load all custom extensions
-        $this->load_dotenv();
+        // Load custom extensions
         $this->load_extensions();
-    }
-
-
-
-    /**
-     * load_dotenv
-     * 
-     * Loads the .env confile file into the filemanager to provide environment
-     * variable support for IFM and the extensions
-    */
-
-    private function load_dotenv () {
-        // load dotenv config
-        $dotenv = Dotenv\Dotenv::createImmutable(ROOT_PATH);
-        $dotenv->load();
     }
 
 
     
     /**
-     * load_extensions
+     * Load Extensions
      * 
-     * Loads all custom extensions for the IFM filemanager such as auth, etc.
+     * Loads all custom extensions for the IFM Filemanager such as auth, etc.
     */
 
     private function load_extensions () {
-        // auth
-        require_once EXTENSIONS_PATH . '/auth.php';
+        // Auth
+        require_once LB_IFM_EXTENSIONS_PATH . '/auth.php';
         $extension_auth = new \IFM_Extensions\JWTAuth();
 
-        // lang
-        require_once EXTENSIONS_PATH . '/lang.php';
+        // Lang
+        require_once LB_IFM_EXTENSIONS_PATH . '/lang.php';
         $extension_lang = new \IFM_Extensions\Lang();
+
+        // Path Config
+        require_once LB_IFM_EXTENSIONS_PATH . '/pathconfig.php';
+        $extension_pathconfig = new \IFM_Extensions\PathConfig();
     }
 }
-
 
 new IFM_Extensions();

@@ -10,29 +10,27 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.10.0",
-    "@vue/composition-api": "^1.0.0-rc.5",
+    "@quasar/extras": "^1.10.2",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "quasar": "^1.15.9",
-    "vue-i18n": "^8.24.1"
+    "quasar": "^2.0.0-beta.12",
+    "vue-i18n": "^9.1.0"
   },
   "devDependencies": {
-    "@quasar/app": "^2.2.3",
+    "@quasar/app": "^3.0.0-beta.15",
     "@tailwindcss/postcss7-compat": "^2.0.3",
     "@types/node": "^14.14.33",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
     "autoprefixer": "^9.0.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^7.21.0",
+    "eslint": "^7.14.0",
     "eslint-config-standard": "^16.0.2",
-    "eslint-loader": "^4.0.2",
-    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^5.0.0",
-    "eslint-plugin-vue": "^7.7.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-vue": "^7.0.0",
+    "eslint-webpack-plugin": "^2.4.0",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },

@@ -37,6 +37,7 @@ RUN yarn run lint
 
 RUN quasar build
 
+
 # Build Wi-Fi Connect
 FROM node:14.16.0-alpine3.13 AS controller-wifi-buildstep
 
@@ -59,22 +60,25 @@ RUN yarn build
 
 FROM node:14.16.0-alpine3.13 AS library-buildstep
 
+# Add enviroment variable for OnDevice build
+ENV ONDEVICE=TRUE
+
 # Instal Dependencies
 RUN yarn global add @quasar/cli && \
     export PATH="$(yarn global bin):$PATH"
 
-RUN apk add git
-
-# Check latest commit and if new then build without cache
-ADD https://api.github.com/repos/LearnersBlock/library/git/refs/heads/main /tmp/version.json
-
 WORKDIR /build-context
 
-RUN git clone https://github.com/LearnersBlock/library.git .
-
-RUN echo ONDEVICE=TRUE > .env
+# Install node_modules
+COPY frontend/apps/library/yarn.lock ./yarn.lock
+COPY frontend/apps/library/package.json ./package.json
 
 RUN yarn install
+
+# Copy library source code to container
+# 'node_modules' is excluded by .dockerignore
+COPY frontend/apps/library/ .
+
 RUN yarn run lint
 
 RUN quasar build

@@ -1,23 +1,15 @@
-import { boot } from 'quasar/wrappers'
+import { createI18n } from 'vue-i18n'
 import messages from 'src/i18n'
-import Vue from 'vue'
-import VueI18n from 'vue-i18n'
+// you'll need to create the src/i18n/index.js file too
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    i18n: VueI18n;
-  }
-}
-
-Vue.use(VueI18n)
-
-export const i18n = new VueI18n({
-  locale: 'en-us',
-  fallbackLocale: 'en-us',
+const i18n = createI18n({
+  locale: 'en-US',
   messages
 })
 
-export default boot(({ app }) => {
+export default ({ app }) => {
   // Set i18n instance on app
-  app.i18n = i18n
-})
+  app.use(i18n)
+}
+
+export { i18n }
