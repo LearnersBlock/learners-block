@@ -37,6 +37,10 @@ class IFM_Extensions {
         // Lang
         require_once LB_IFM_EXTENSIONS_PATH . '/lang.php';
         $extension_lang = new \IFM_Extensions\Lang();
+
+        // Path Config
+        require_once LB_IFM_EXTENSIONS_PATH . '/pathconfig.php';
+        $extension_pathconfig = new \IFM_Extensions\PathConfig();
     }
 }
 

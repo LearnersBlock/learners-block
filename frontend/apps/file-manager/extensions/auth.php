@@ -1,7 +1,5 @@
 <?php
 namespace IFM_Extensions;
-use GuzzleHttp;
-use GuzzleHttp\Exception\ClientException;
 
 /**
  * Auth Controller
@@ -13,21 +11,7 @@ class JWTAuth extends IFM_Extensions {
     function __construct() {
         // Set config
         $this->auth_cookie_name = 'access_token_cookie';
-
-        // Set default admin params
-        $this->admin_params = array(
-            'IFM_ROOT_DIR'          => '/app/web/public/storage',
-            'IFM_ROOT_PUBLIC_URL'   => '/storage/',
-            'IFM_API_COPYMOVE'      => '1',
-            'IFM_API_CREATEDIR'     => '1',
-            'IFM_API_CREATEFILE'    => '1',
-            'IFM_API_EDIT'          => '1',
-            'IFM_API_DELETE'        => '1',
-            'IFM_API_EXTRACT'       => '1',
-            'IFM_API_UPLOAD'        => '1',
-            'IFM_API_REMOTEUPLOAD'  => '1',
-            'IFM_API_RENAME'        => '1'
-        );
+        $this->auth_env_var_name = 'LB_IFM_AUTHENTICATED';
 
         // Prepare guzzle client
         $this->client = new GuzzleHttp\Client();
@@ -51,41 +35,42 @@ class JWTAuth extends IFM_Extensions {
         // Get the token
         $token = (string) $this->get_token_from_cookie();
 
-        // Check if we have a token to work with
-        if ($token) {
-            try {
-                // Run the request
-                $response = $this->client->request(
-                    'GET',
-                    LB_API_BASE_URL . '/v1/verifylogin',
-                    [
-                        'headers' => [
-                            'Authorization' => 'Bearer ' . $token,
-                            'Accept'        => 'application/json',
-                        ]
+        // If no token present, abort
+        if (!$token) {
+            $this->set_admin_mode(false);
+            return false; 
+        }
+
+        try {
+            // Run the request
+            $response = $this->client->request(
+                'GET',
+                LB_API_BASE_URL . '/v1/verifylogin',
+                [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $token,
+                        'Accept'        => 'application/json',
                     ]
-                );
+                ]
+            );
 
-                // Token verification was a success, process request response
-                $body = $response->getBody(true);
-                $body = json_decode($body);
+            // Token verification was a success, process request response
+            $body = $response->getBody(true);
+            $body = json_decode($body);
 
-                // Make sure we have the correct response
-                if ($response->getStatusCode() == 200 && $body->logged_in) {
-                    // And enable the admin mode
-                    $this->enable_admin_mode();
-                }
-            } catch (ClientException $e) {
-                // Handle client exceptions (4xx)
-                $response = $e->getResponse();
-                $response_code = $response->getStatusCode();
-                $response_body = $response->getBody()->getContents();
+            // Make sure we have the correct response
+            if ($response->getStatusCode() == 200 && $body->logged_in) {
+                // And enable the admin mode
+                $this->set_admin_mode(true);
+                return true;
+            } 
 
-                // Check status code to match the expected 401
-                if (isset($response_code) && $response_code === 401) {
-                    header('Location: /settings');
-                }
-            }
+            // Otherwise, force disable auth
+            $this->set_admin_mode(false);
+        } catch (\Exception $e) {
+            // An error occured, force disable auth
+            // @TODO: Add proper error handling 
+            $this->set_admin_mode(false);
         }
     }
 
@@ -100,40 +85,43 @@ class JWTAuth extends IFM_Extensions {
      */
 
     private function get_token_from_cookie () {
-        if (isset($_COOKIE[$this->auth_cookie_name])) {
-            // Decode the JSON string saved in the cookie
-            $token = filter_var($_COOKIE[$this->auth_cookie_name], FILTER_SANITIZE_STRING);
-
-            // Check we have a token in here
-            if (isset($token)) {
-                // If so, return it
-                return $token;
-            }
-            
-            // Otherwise abort
+        // Check that we have a cookie to work with 
+        if (!isset($_COOKIE[$this->auth_cookie_name])) {
+            // Otherwise, abort
             return false;
         }
 
-        // Abort
-        return false;
+        // Decode the JSON string saved in the cookie
+        $token = filter_var($_COOKIE[$this->auth_cookie_name], FILTER_SANITIZE_STRING);
+
+        // Check we have a token in here
+        if (!isset($token)) {
+            // Otherwise, abort
+            return false;
+        }
+        
+        // Finally, return the token for validation
+        return $token;
     }
 
 
 
     /**
-     * Enable admin mode
+     * Set admin mode
      * 
-     * Adds all the env varaibles required to enable the filemanager admin mode based on the parameters and values
-     * defined in the constructor above. 
+     * Adds or removes a custom env variable for other extensions to use.
      * 
+     * @param Boolean $success If auth was successful or not 
      * @return void.
      */
 
-    private function enable_admin_mode() {
-        // Loop over all admin params
-        foreach($this->admin_params as $setting => $value) {
-            // Inject the param as env variables
-            putenv("$setting=$value");
+    private function set_admin_mode(bool $success) {
+        if ($success) {
+            // Auth succeeded
+            putenv("{$this->auth_env_var_name}=true");
+        } else {
+            // Auth failed
+            putenv("{$this->auth_env_var_name}=false");
         }
     }
 }
