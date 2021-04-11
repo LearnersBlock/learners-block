@@ -1,5 +1,6 @@
 <?php
 namespace IFM_Extensions;
+use GuzzleHttp;
 
 /**
  * Auth Controller
