@@ -1,6 +1,12 @@
 <template>
   <div>
     <div class="text-4xl text-gray-600 text-center ml-2 mr-2">
+      <center class="mb-5">
+        <img
+          alt=""
+          src="../assets/lb-icon.png"
+        >
+      </center>
       {{ $t('welcome_lb') }}
     </div><br>
     <div class="text-xl text-center text-gray-500 ml-2 mr-2">

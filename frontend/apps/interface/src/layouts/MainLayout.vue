@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar v-if="currentPath.path !== '/captive_portal'">
         <div class="ml-1">
           <router-link to="/">
             <img
@@ -76,6 +76,7 @@ export default defineComponent({
     const $q = useQuasar()
     const $store = useStore()
     const leftDrawerOpen = ref(false)
+    const currentPath = $router.currentRoute.value
     const { locale } = useI18n({ useScope: 'global' })
     const languages = ref([
       {
@@ -166,7 +167,7 @@ export default defineComponent({
       $q.loading.hide()
     })
 
-    return { leftDrawerOpen, languages, changeLanguage, logout, isAuthenticated, settings }
+    return { currentPath, leftDrawerOpen, languages, changeLanguage, logout, isAuthenticated, settings }
   }
 })
 </script>
