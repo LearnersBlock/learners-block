@@ -61,7 +61,7 @@
                   size="lg"
                   :disable="togglesLoading"
                   v-if="!filesLoading && !wifiLoading"
-                  @input="updateFiles"
+                  @update:model-value="updateFiles"
                 />
                 <q-spinner
                   v-if="filesLoading || wifiLoading"
@@ -108,7 +108,7 @@
                   size="lg"
                   :disable="togglesLoading"
                   v-if="!libraryLoading && !wifiLoading"
-                  @input="updateLibrary"
+                  @update:model-value="updateLibrary"
                 />
                 <q-spinner
                   v-if="libraryLoading || wifiLoading"
@@ -155,7 +155,7 @@
                   size="lg"
                   :disable="togglesLoading"
                   v-if="!makerspaceLoading && !wifiLoading"
-                  @input="updateMakerspace"
+                  @update:model-value="updateMakerspace"
                 />
                 <q-spinner
                   v-if="makerspaceLoading || wifiLoading"
@@ -193,7 +193,7 @@
                   class="ml-auto"
                   :disable="togglesLoading"
                   v-if="!websiteLoading && !wifiLoading"
-                  @input="updateWebsite"
+                  @update:model-value="updateWebsite"
                 />
                 <q-spinner
                   v-if="websiteLoading || wifiLoading"
@@ -318,7 +318,7 @@
                       <q-toggle
                         class="mt-3 self-end"
                         v-model="portainer"
-                        @input="updatePortainer"
+                        @update:model-value="updatePortainer"
                         :disable="portainerToggleLoading"
                         v-if="!portainerLoading && !wifiLoading"
                         icon="widgets"

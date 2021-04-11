@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mt-10 text-4xl text-gray-600 text-center ml-2 mr-2">
+    <div class="text-4xl text-gray-600 text-center ml-2 mr-2">
       {{ $t('welcome_lb') }}
     </div><br>
     <div class="text-xl text-center text-gray-500 ml-2 mr-2">
