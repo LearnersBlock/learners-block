@@ -16,7 +16,7 @@
     "disconnect_wifi": "Are you sure you want to disconnect from the Wi-Fi?",
     "disconnected": "Disconnected",
     "enable_components_in": "You can enable components in the Settings panel.",
-    "error": "Something went wrong. Try again.",
+    "error": "An error occurred.",
     "files": "Files",
     "files_description": "Browse files here.",
     "files_settings_description": "Manage files on your Block. Only users logged in can delete them.",
