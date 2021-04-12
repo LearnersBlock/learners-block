@@ -76,7 +76,7 @@
     "options": "Options",
     "owner": "Owner",
     "password": "Password",
-    "path_content": "Content of",
+    "path_content": "Current directory",
     "pattern_error_slashes": "Pattern cannot contain slashes.",
     "permission_change_error": "Could not change permissions:",
     "permission_change_success": "Permissions changed.",

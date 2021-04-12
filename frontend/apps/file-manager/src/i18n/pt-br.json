@@ -65,7 +65,7 @@
     "load_config_error": "Não foi possível carregar as configurações.",
     "load_template_error": "Não foi possível carregar o template.",
     "load_text_error": "Não foi possível carregar os textos.",
-    "login": "Entrar",
+    "login": "Conecte-se",
     "login_failed": "Login falhou.",
     "logout": "Deslogar",
     "method": "Método",
