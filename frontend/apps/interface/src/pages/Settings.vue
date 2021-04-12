@@ -337,7 +337,10 @@
                     v-if="portainer"
                     href="/test"
                   >
-                    {{ $t('portainer_starting_at') }}: <a href="/portainer/">http://{{ windowHostname }}/portainer/</a>
+                    {{ $t('portainer_starting_at') }}: <a
+                      href="/portainer/"
+                      target="_blank"
+                    >http://{{ windowHostname }}/portainer/</a>
                   </div>
                 </q-card-section>
               </q-card>
@@ -413,7 +416,11 @@ export default defineComponent({
 
     // API calls for onMounted
     const fetchedSettings = Axios.get(`${api.value}/v1/settingsui`)
-    const fetchedPortainer = Axios.get(`${api.value}/v1/portainer/status`)
+    const fetchedPortainer = Axios.get(`${api.value}/v1/portainer/status`, {
+      validateStatus: function (status) {
+        return status < 500 // Resolve only if the status code is less than 500
+      }
+    })
     const fetchedSysInfo = Axios.get(`${api.value}/v1/system/info`)
     const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connectionstatus`)
     const fetchedInternetConnectionStatus = Axios.get(`${api.value}/v1/internet/connectionstatus`)
@@ -446,7 +453,10 @@ export default defineComponent({
         internet.value = res5.data.connected !== false
         // Get hostname
         hostname.value = res6.data.hostname
-      }))
+      })).catch(e => {
+        console.log(e.message)
+        $q.notify({ type: 'negative', message: t('error') })
+      })
     }
 
     const connectDisconnectWifi = async () => {
@@ -533,9 +543,16 @@ export default defineComponent({
 
     const updatePortainer = async () => {
       portainerLoading.value = true
-
       if (portainer.value) {
-        await Axios.get(`${api.value}/v1/portainer/start`)
+        const portainerStarter = await Axios.get(`${api.value}/v1/portainer/start`, {
+          validateStatus: function (status) {
+            return status < 500 // Resolve only if the status code is less than 500
+          }
+        })
+        if (portainerStarter.status === 404) {
+          $q.notify({ type: 'negative', message: t('portainer_unavailable') })
+          portainer.value = false
+        }
       } else {
         await Axios.get(`${api.value}/v1/portainer/stop`)
       }
