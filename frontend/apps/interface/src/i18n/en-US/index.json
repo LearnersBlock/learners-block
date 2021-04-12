@@ -63,5 +63,6 @@
     "loading": "Loading …",
     "need_connection": "You need to connect to WiFi or Ethernet to use these features.",
     "internet_no_wifi": "Are you connected to ethernet? To connect your Block to a Wi-Fi hotspot, you must first connect to your Block via Wi-Fi.",
-    "file_manager": "File Manager"
+    "file_manager": "File Manager",
+    "portainer_unavailable": "Portainer is not currently available for your device."
 }
