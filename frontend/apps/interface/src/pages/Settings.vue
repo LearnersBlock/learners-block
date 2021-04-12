@@ -55,12 +55,12 @@
                   </q-item-label>
                 </q-item-section>
                 <q-toggle
+                  v-if="!filesLoading && !wifiLoading"
                   v-model="files"
                   icon="folder"
                   class="self-end"
                   size="lg"
                   :disable="togglesLoading"
-                  v-if="!filesLoading && !wifiLoading"
                   @update:model-value="updateFiles"
                 />
                 <q-spinner
@@ -150,11 +150,11 @@
                   </q-item-label>
                 </q-item-section>
                 <q-toggle
+                  v-if="!makerspaceLoading && !wifiLoading"
                   v-model="makerspace"
                   icon="create"
                   size="lg"
                   :disable="togglesLoading"
-                  v-if="!makerspaceLoading && !wifiLoading"
                   @update:model-value="updateMakerspace"
                 />
                 <q-spinner
@@ -335,7 +335,6 @@
                   <div
                     class="pl-6"
                     v-if="portainer"
-                    href="/test"
                   >
                     {{ $t('portainer_starting_at') }}: <a
                       href="/portainer/"

@@ -59,7 +59,7 @@ class IFM {
 		"showpath" => 0,
 		"contextmenu" => 1,
 		"disable_mime_detection" => 0,
-		"showrefresh" => 1,
+		"showrefresh" => 0,
 		"forceproxy" => 0,
 		"confirmoverwrite" => 1
 	);
