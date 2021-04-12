@@ -8,5 +8,6 @@
     "password": "Senha",
     "select_ssid": "Selecione a rede Wi-Fi",
     "user": "Usuário",
-    "wifi": "Wi-Fi"
+    "wifi": "Wi-Fi",
+    "network_absent": "Se você não ver a sua rede, reinicie o dispositivo e tente novamente."
 }
