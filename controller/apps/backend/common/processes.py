@@ -44,7 +44,6 @@ def check_supervisor(supervisor_retries, timeout):
 
         except Exception as ex:
             print(f'Waiting for Balena Supervisor to be ready. '
-                  f'{inspect.stack()[0][3] + " - " + str(ex)}.'
                   f'Retry {str(retry)}.')
 
             if retry == supervisor_retries:

@@ -10,11 +10,13 @@ services:
         volumes:
             - 'portainer_data:/app/portainer'
             - 'controller_db:/app/db'
-            - 'filestorage:/app/storage'
+            - 'file_storage:/app/storage'
         labels:
             io.balena.features.dbus: '1'
             io.balena.features.supervisor-api: '1'
             portainer: hidden
+        depends_on:
+            - "frontend"
         cap_add:
             - NET_ADMIN
         environment:
@@ -28,11 +30,9 @@ services:
         ports:
             - "80:8081"
         volumes:
-            - 'filestorage:/app/web/public/storage'
+            - 'file_storage:/app/public/storage'
         labels:
             portainer: hidden
-        depends_on:
-        - "controller"
         privileged: true
 
     portainer:
@@ -44,11 +44,13 @@ services:
         labels:
             portainer: hidden
             io.balena.features.balena-socket: '1'
+        depends_on:
+            - "controller"
         volumes:
             - 'portainer_data:/data'
         command: --admin-password=$2y$05$j4Gnyhud5p8W81VI7MCbJep1w/.ToYPn3KQEZerJNLqUaV2qKnvT.
 
 volumes:
     controller_db:
-    filestorage:
+    file_storage:
     portainer_data:

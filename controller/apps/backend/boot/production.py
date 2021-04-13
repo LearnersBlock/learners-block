@@ -94,7 +94,7 @@ def startup():
     # Stop portainer on boot
     try:
         portainer_exit = threading.Thread(target=container.stop,
-                                          args=(None, "portainer", 10),
+                                          args=(None, "portainer", 12),
                                           name='portainer_exit')
         portainer_exit.start()
 
