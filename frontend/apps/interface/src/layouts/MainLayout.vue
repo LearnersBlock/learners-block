@@ -64,7 +64,7 @@
 <script lang="ts">
 
 import { computed, defineComponent, onMounted, ref } from 'vue'
-import { useQuasar } from 'quasar'
+import { Quasar, useQuasar } from 'quasar'
 import { useStore } from '../store'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -79,6 +79,7 @@ export default defineComponent({
     const currentPath = $router.currentRoute.value
     const { locale } = useI18n({ useScope: 'global' })
     const languages = ref([
+      // Language updates must be changed here and in the webpackInclude magic comment below
       {
         label: 'English',
         value: 'en-US'
@@ -97,7 +98,7 @@ export default defineComponent({
       },
       {
         label: 'Português',
-        value: 'pt_BR'
+        value: 'pt-BR'
       }
     ])
 
@@ -106,26 +107,15 @@ export default defineComponent({
     })
 
     const changeLanguage = (value: string) => {
-      if (value === 'ar') {
-        import(
-        /* webpackInclude: /(de|en-US)\.js$/ */
-          'quasar/lang/' + 'he'
-        ).then(() => {
-          locale.value = value
-          $q.cookies.set('lang', value, { sameSite: 'Lax', path: '/', expires: 365 })
-          localStorage.setItem('lang', value)
-        })
-      } else {
-        import(
-        /* webpackInclude: /(de|en-US)\.js$/ */
-          'quasar/lang/' + 'en-US'
-        ).then(() => {
-          locale.value = value
-          $q.cookies.set('lang', value, { sameSite: 'Lax', path: '/', expires: 365 })
-          localStorage.setItem('lang', value)
-        })
-      }
-      $q.lang.isoName = value
+      import(
+        /* webpackInclude: /(de|en-US|ar|fr|pt-BR|es)\.js$/ */
+        'quasar/lang/' + value
+      ).then((lang) => {
+        locale.value = value
+        Quasar.lang.set(lang.default)
+        $q.cookies.set('lang', value, { sameSite: 'Lax', path: '/', expires: 365 })
+        localStorage.setItem('lang', value)
+      })
     }
 
     const logout = async () => {
@@ -155,14 +145,12 @@ export default defineComponent({
 
       const langCookie = ref<any>($q.localStorage.getItem('lang'))
       if (langCookie.value) {
-        locale.value = langCookie.value
+        changeLanguage(langCookie.value)
       }
 
       const usersLocale = $q.lang.getLocale()
       if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
-        locale.value = usersLocale
-        $q.cookies.set('lang', usersLocale, { sameSite: 'Lax', path: '/', expires: 365 })
-        localStorage.setItem('lang', usersLocale)
+        changeLanguage(langCookie.value)
       }
       $q.loading.hide()
     })
