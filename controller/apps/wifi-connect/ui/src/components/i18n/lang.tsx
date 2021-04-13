@@ -3,8 +3,8 @@ import de from './de.json';
 import en from './en.json';
 import es from './es.json';
 import fr from './fr.json';
-import nb_NO from './nb_NO.json';
-import pt_BR from './pt_BR.json';
+import nbNO from './nb-NO.json';
+import ptBR from './pt-BR.json';
 import tr from './tr.json';
 
 const queryString = window.location.search;
@@ -23,10 +23,10 @@ if (language === 'ar') {
 	setlang = fr;
 } else if (language === 'es') {
 	setlang = es;
-} else if (language === 'nb_NO') {
-	setlang = nb_NO;
-} else if (language === 'pt_BR') {
-	setlang = pt_BR;
+} else if (language === 'nb-NO') {
+	setlang = nbNO;
+} else if (language === 'pt-BR') {
+	setlang = ptBR;
 } else if (language === 'tr') {
 	setlang = tr;
 } else {
