@@ -23,7 +23,7 @@ class PathConfig extends IFM_Extensions {
                     'error_redirect_path'   => ''
                 ),
                 'config'    => array(
-                    'IFM_ROOT_DIR'          => '/app/web/public/storage/fileshare/',
+                    'IFM_ROOT_DIR'          => '/app/public/storage/fileshare/',
                     'IFM_ROOT_PUBLIC_URL'   => '/fileshare/'
                 )
             ),
@@ -33,7 +33,7 @@ class PathConfig extends IFM_Extensions {
                     'error_redirect_path'   => '/settings'
                 ),
                 'config'    => array(
-                    'IFM_ROOT_DIR'          => '/app/web/public/storage',
+                    'IFM_ROOT_DIR'          => '/app/public/storage',
                     'IFM_ROOT_PUBLIC_URL'   => '/storage/',
                     'IFM_API_COPYMOVE'      => '1',
                     'IFM_API_CREATEDIR'     => '1',
@@ -50,7 +50,7 @@ class PathConfig extends IFM_Extensions {
                     'error_redirect_path'   => '/settings'
                 ),
                 'config'    => array(
-                    'IFM_ROOT_DIR'          => '/app/web/public/storage/website',
+                    'IFM_ROOT_DIR'          => '/app/public/storage/website',
                     'IFM_ROOT_PUBLIC_URL'   => '/storage/website/',
                     'IFM_API_COPYMOVE'      => '1',
                     'IFM_API_CREATEDIR'     => '1',
@@ -67,7 +67,7 @@ class PathConfig extends IFM_Extensions {
                     'error_redirect_path'   => ''
                 ),
                 'config'    => array(
-                    'IFM_ROOT_DIR'          => '/app/web/public/storage/library',
+                    'IFM_ROOT_DIR'          => '/app/public/storage/library',
                     'IFM_ROOT_PUBLIC_URL'   => '/storage/library/'
                 )
             ),
@@ -77,7 +77,7 @@ class PathConfig extends IFM_Extensions {
                     'error_redirect_path'   => ''
                 ),
                 'config'    => array(
-                    'IFM_ROOT_DIR'          => '/app/web/public/storage/makerspace',
+                    'IFM_ROOT_DIR'          => '/app/public/storage/makerspace',
                     'IFM_ROOT_PUBLIC_URL'   => '/storage/makerspace/'
                 )
             )

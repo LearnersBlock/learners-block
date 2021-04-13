@@ -33,7 +33,7 @@ if [[ -z $ID_BUS || -z $ID_FS_TYPE || -z $ID_FS_UUID_ENC || -z $ID_FS_LABEL_ENC 
 fi
 
 # Construct the mount point path
-MOUNT_POINT=/app/web/public/storage/fileshare/USB-$ID_BUS-$ID_FS_LABEL_ENC-$ID_FS_UUID_ENC
+MOUNT_POINT=/app/public/storage/fileshare/USB-$ID_BUS-$ID_FS_LABEL_ENC-$ID_FS_UUID_ENC
 
 # Bail if file system is not supported by the kernel
 if ! grep -qw $ID_FS_TYPE /proc/filesystems; then

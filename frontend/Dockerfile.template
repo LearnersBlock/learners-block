@@ -18,17 +18,17 @@ RUN install_packages php7 php7-fpm php7-opcache php7-mysqli php7-json \
 RUN install_packages libbz2 libzip libcap openldap-dev php7-zip php7-ldap php7-bz2 \
     php7-fileinfo php7-posix
 
-# Create root directories #
-RUN mkdir -p /app/web/public/files && \
-    mkdir -p /app/web/public/storage && \
-    mkdir -p /app/web/public/storage/fileshare && \
-    mkdir -p /app/web/public/storage/library && \ 
-    mkdir -p /app/web/public/storage/makerspace && \ 
-    mkdir -p /app/web/public/storage/website
-    
 # Set application directory 
-WORKDIR /app/web/
+WORKDIR /app/
 
+# Create root directories #
+RUN mkdir -p public/files && \
+    mkdir -p public/storage && \
+    mkdir -p public/storage/fileshare && \
+    mkdir -p public/storage/library && \ 
+    mkdir -p public/storage/makerspace && \ 
+    mkdir -p public/storage/website
+    
 # Configure SupervisorD
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -45,24 +45,24 @@ COPY /config/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY /config/nginx/conf/ /etc/nginx/conf.d/
 
 # Insert website holding page
-COPY --chown=nginx /config/nginx/assets/index.html /app/web/public/storage/website/index.html
-COPY --chown=nginx /config/nginx/assets/web.png /app/web/public/storage/website/web.png
+COPY --chown=nginx /config/nginx/assets/index.html public/storage/website/index.html
+COPY --chown=nginx /config/nginx/assets/web.png public/storage/website/web.png
 
 # Insert File Manager source code
-COPY --chown=nginx /apps/file-manager/dist /app/web/public/files
+COPY --chown=nginx /apps/file-manager/dist public/files
 
 # Insert Library source code
-COPY --chown=nginx /apps/library/dist/spa /app/web/public/library
+COPY --chown=nginx /apps/library/dist/spa public/library
 
 # Insert interface source code
-COPY --chown=nginx /apps/interface/dist/spa /app/web/public/interface
+COPY --chown=nginx /apps/interface/dist/spa public/interface
 
 # Set file permissions 
 RUN chown -R nginx.nginx /run && \
-    chown -R nobody.nobody /app/web/public/storage/fileshare/ && \
-    chown -R nobody.nobody /app/web/public/storage/library/ && \
-    chown -R nobody.nobody /app/web/public/storage/makerspace/ && \
-    chown -R nobody.nobody /app/web/public/storage/website/
+    chown -R nobody.nobody public/storage/fileshare/ && \
+    chown -R nobody.nobody public/storage/library/ && \
+    chown -R nobody.nobody public/storage/makerspace/ && \
+    chown -R nobody.nobody public/storage/website/
 
 # Start SupervisorD to manage processes
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
