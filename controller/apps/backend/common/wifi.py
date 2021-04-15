@@ -80,7 +80,7 @@ class wifi:
         # Wait before trying to launch wifi-connect
         wifi_connect().start(wait=2)
 
-        print('Success, connection deleted.')
+        print('Connection deleted and WiFi-Connect Started.')
         return {'status': 200, 'message': 'ok'}, 200
 
     def forget_all(self):

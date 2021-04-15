@@ -55,7 +55,7 @@
                   </q-item-label>
                 </q-item-section>
                 <q-toggle
-                  v-if="!filesLoading && !wifiLoading"
+                  v-if="!filesLoading"
                   v-model="files"
                   icon="folder"
                   class="self-end"
@@ -64,7 +64,7 @@
                   @update:model-value="updateFiles"
                 />
                 <q-spinner
-                  v-if="filesLoading || wifiLoading"
+                  v-if="filesLoading"
                   color="primary"
                   size="2em"
                   class="mt-6 mr-6"
@@ -107,11 +107,11 @@
                   icon="import_contacts"
                   size="lg"
                   :disable="togglesLoading"
-                  v-if="!libraryLoading && !wifiLoading"
+                  v-if="!libraryLoading"
                   @update:model-value="updateLibrary"
                 />
                 <q-spinner
-                  v-if="libraryLoading || wifiLoading"
+                  v-if="libraryLoading"
                   color="primary"
                   size="2em"
                   class="mt-6 mr-6"
@@ -150,7 +150,7 @@
                   </q-item-label>
                 </q-item-section>
                 <q-toggle
-                  v-if="!makerspaceLoading && !wifiLoading"
+                  v-if="!makerspaceLoading"
                   v-model="makerspace"
                   icon="create"
                   size="lg"
@@ -158,7 +158,7 @@
                   @update:model-value="updateMakerspace"
                 />
                 <q-spinner
-                  v-if="makerspaceLoading || wifiLoading"
+                  v-if="makerspaceLoading"
                   color="primary"
                   size="2em"
                   class="mt-6 mr-6"
@@ -192,11 +192,11 @@
                   size="lg"
                   class="ml-auto"
                   :disable="togglesLoading"
-                  v-if="!websiteLoading && !wifiLoading"
+                  v-if="!websiteLoading"
                   @update:model-value="updateWebsite"
                 />
                 <q-spinner
-                  v-if="websiteLoading || wifiLoading"
+                  v-if="websiteLoading"
                   color="primary"
                   size="2em"
                   class="mt-6 mr-6"
@@ -320,12 +320,12 @@
                         v-model="portainer"
                         @update:model-value="updatePortainer"
                         :disable="portainerToggleLoading"
-                        v-if="!portainerLoading && !wifiLoading"
+                        v-if="!portainerLoading"
                         icon="widgets"
                         size="lg"
                       />
                       <q-spinner
-                        v-if="portainerLoading || wifiLoading"
+                        v-if="portainerLoading"
                         color="primary"
                         size="2em"
                         class="mt-6 mr-6"
@@ -427,31 +427,40 @@ export default defineComponent({
 
     onMounted(() => {
       apiCall()
+      apiCallStatus()
     })
 
     async function apiCall (): Promise<void> {
-      await Axios.all([fetchedSettings, fetchedPortainer, fetchedSysInfo,
-        fetchedConnectionStatus, fetchedInternetConnectionStatus,
-        fetchedHostName]).then(Axios.spread(function (res1, res2, res3, res4, res5, res6): void {
+      await Axios.all([fetchedSettings, fetchedSysInfo, fetchedInternetConnectionStatus,
+        fetchedHostName]).then(Axios.spread(function (res1, res2, res3, res4): void {
         // Get settings
         files.value = res1.data.files
         website.value = res1.data.website
         library.value = res1.data.library
         makerspace.value = res1.data.makerspace
         togglesLoading.value = false
-        // Get portainer status
-        portainer.value = res2.data.container_status === 'Running'
-        portainerToggleLoading.value = false
         // Get SystemInfo
-        sysInfo.value = res3.data
+        sysInfo.value = res2.data
         sysInfoLoading.value = false
-        // Get connection status
-        wifi.value = res4.data.running !== false
-        wifiLoading.value = false
         // Get internet connection status
-        internet.value = res5.data.connected !== false
+        internet.value = res3.data.connected !== false
         // Get hostname
-        hostname.value = res6.data.hostname
+        hostname.value = res4.data.hostname
+      })).catch(e => {
+        console.log(e.message)
+        $q.notify({ type: 'negative', message: t('error') })
+      })
+    }
+
+    async function apiCallStatus (): Promise<void> {
+      await Axios.all([fetchedPortainer,
+        fetchedConnectionStatus]).then(Axios.spread(function (res1, res2): void {
+        // Get portainer status
+        portainer.value = res1.data.container_status === 'Running'
+        portainerToggleLoading.value = false
+        // Get connection status
+        wifi.value = res2.data.running !== false
+        wifiLoading.value = false
       })).catch(e => {
         console.log(e.message)
         $q.notify({ type: 'negative', message: t('error') })
@@ -583,7 +592,7 @@ export default defineComponent({
       if (internet.value && !wifi.value) {
         $q.notify({ type: 'negative', message: t('internet_no_wifi') })
       } else if (wifi.value === false) {
-        window.open('http://' + window.location.hostname + `:8080/index.html?lang=${$q.lang.isoName}`)
+        window.open('http://' + window.location.hostname + ':8080/?lang=' + $q.lang.isoName)
       } else {
         $q.dialog({
           title: t('confirm'),

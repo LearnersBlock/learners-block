@@ -6,7 +6,7 @@ import time
 
 
 class container:
-    def status(self, container_name, sleep=0.1):
+    def status(self, container_name, sleep=0):
         time.sleep(sleep)
         response = curl(method="get",
                         path="/v2/state/status?apikey=")
