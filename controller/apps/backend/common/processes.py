@@ -58,7 +58,7 @@ def check_supervisor(supervisor_retries, timeout):
 
 
 def chown(path='/tmp', owner='65534:65534'):
-    subprocess.Popen(
+    subprocess.run(
         ['chown', '-R', owner, path],
         stdout=subprocess.PIPE,
         universal_newlines=True,

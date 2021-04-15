@@ -24,7 +24,7 @@ class PathConfig extends IFM_Extensions {
                 ),
                 'config'    => array(
                     'IFM_ROOT_DIR'          => '/app/public/storage/fileshare/',
-                    'IFM_ROOT_PUBLIC_URL'   => '/fileshare/'
+                    'IFM_ROOT_PUBLIC_URL'   => '/storage/fileshare/'
                 )
             ),
             '/upload-files/'    => array(
