@@ -1,4 +1,5 @@
 from common.processes import check_space
+from common.processes import chown
 import os
 import requests
 import subprocess
@@ -45,6 +46,9 @@ def download_start(url: str):
                 "progress": downloaded_percentage/total*100/100,
                 "MBytes": downloaded_percentage/1000000,
             }
+
+    chown(path=os.path.realpath('.') + '/storage/library/' +
+              url.split('/')[-1], owner='65534:65534')
 
     download_process_running = False
     print("Download complete")
@@ -108,6 +112,8 @@ def rsync_start(rsync_url):
             rsync_log = line
     except Exception:
         print("RSync Proc terminated. Ending logging")
+
+    chown(path=os.path.realpath('.') + '/storage/library/', owner='65534:65534')
 
     rsync_terminate(outcome="complete")
 

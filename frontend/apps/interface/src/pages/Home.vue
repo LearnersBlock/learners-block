@@ -2,7 +2,7 @@
   <q-page>
     <div class="flex flex-col items-center">
       <div class="max-w-5xl">
-        <div class="mt-10 text-4xl text-gray-600 mb-6 text-center">
+        <div class="mt-10 text-4xl text-gray-600 mb-6 text-center ml-2 mr-2">
           {{ $t('welcome_lb') }}
         </div>
         <q-separator />

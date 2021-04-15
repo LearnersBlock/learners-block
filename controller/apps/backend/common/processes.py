@@ -4,6 +4,7 @@ import os
 import requests
 import shutil
 import socket
+import subprocess
 import time
 
 
@@ -54,6 +55,16 @@ def check_supervisor(supervisor_retries, timeout):
             retry = retry + 1
 
     return {'status': 200, 'message': 'Supervisor up'}, 200
+
+
+def chown(path='/tmp', owner='65534:65534'):
+    subprocess.Popen(
+        ['chown', '-R', owner, path],
+        stdout=subprocess.PIPE,
+        universal_newlines=True,
+        bufsize=1,
+        start_new_session=True
+    )
 
 
 def curl(supervisor_retries=8, timeout=5, **cmd):
