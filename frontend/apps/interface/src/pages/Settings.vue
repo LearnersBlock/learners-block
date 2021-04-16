@@ -431,6 +431,10 @@ export default defineComponent({
     })
 
     async function apiCall (): Promise<void> {
+      filesLoading.value = true
+      libraryLoading.value = true
+      makerspaceLoading.value = true
+      websiteLoading.value = true
       await Axios.all([fetchedSettings, fetchedSysInfo, fetchedInternetConnectionStatus,
         fetchedHostName]).then(Axios.spread(function (res1, res2, res3, res4): void {
         // Get settings
@@ -450,6 +454,10 @@ export default defineComponent({
         console.log(e.message)
         $q.notify({ type: 'negative', message: t('error') })
       })
+      filesLoading.value = false
+      libraryLoading.value = false
+      makerspaceLoading.value = false
+      websiteLoading.value = false
     }
 
     async function apiCallStatus (): Promise<void> {
