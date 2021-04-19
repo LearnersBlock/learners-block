@@ -1,1 +1,25 @@
-{}
+{
+    "archive_invalid_format": "El format d’arxiu proporcionat no és vàlid.",
+    "file_new": "Fitxer nou",
+    "file_delete_success": "S’han suprimit els fitxers.",
+    "file_delete_error": "No s’han pogut suprimir els fitxers.",
+    "extract_error": "No s’ha pogut extreure l’arxiu.",
+    "error": "Error:",
+    "editor_options": "Opcions de l’editor",
+    "edit": "Edita",
+    "download": "Baixa",
+    "directoryname": "Nom del directori",
+    "delete": "Suprimeix",
+    "data": "Dades",
+    "create_archive": "Crea un arxiu",
+    "copylink": "Copia l’enllaç",
+    "copy_success": "S’han copiat els fitxers.",
+    "copy_error": "No s’han pogut copiar els fitxers següents:",
+    "copy": "Copia",
+    "close": "Tanca",
+    "cancel": "Cancel·la",
+    "archivename": "Nom de l’arxiu",
+    "archive_create_success": "S’ha creat l’arxiu.",
+    "archive_create_error": "No s’ha pogut crear l’arxiu.",
+    "ajax_request": "Sol·licitud AJAX"
+}
