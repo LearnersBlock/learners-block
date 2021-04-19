@@ -1,1 +1,8 @@
-{}
+{
+    "welcome": "Us donem la benvinguda…",
+    "loading": "S’està carregant…",
+    "are_you_sure": "Segur?",
+    "file_manager": "Gestor de fitxers",
+    "cancel": "Cancel·la",
+    "settings": "Paràmetres"
+}

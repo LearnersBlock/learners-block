@@ -79,7 +79,7 @@
     "path_content": "Conteúdo de",
     "pattern_error_slashes": "Padrão não deve conter barras.",
     "permission_change_error": "Não foi possível alterar as permissões:",
-    "permission_change_success": "Permissões alteradas com sucesso.",
+    "permission_change_success": "Permissões alteradas.",
     "permission_parse_error": "Não foi possível mapear as permissões corretamente.",
     "permissions": "Permissões",
     "refresh": "Atualizar",

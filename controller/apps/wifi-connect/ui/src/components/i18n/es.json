@@ -8,5 +8,6 @@
     "password": "Contraseña",
     "select_ssid": "Seleccionar red wifi",
     "user": "Usuario",
-    "wifi": "Wi-Fi"
+    "wifi": "Wifi",
+    "network_absent": "Si no puede ver su red, reinicie el dispositivo y vuelva a intentarlo."
 }

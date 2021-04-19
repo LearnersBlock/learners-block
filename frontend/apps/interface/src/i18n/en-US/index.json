@@ -19,7 +19,7 @@
     "error": "An error occurred.",
     "files": "Files",
     "files_description": "Browse files here.",
-    "files_settings_description": "Manage files on your Block. Only users logged in can delete them.",
+    "files_settings_description": "Manage files on your Block. Only logged in users can delete them.",
     "home": "Home",
     "hostname": "Hostname",
     "hostname_changed_notification": "Your hostname has been updated. Please restart the Block for this to take effect.",
@@ -29,7 +29,7 @@
     "library_description": "Browse downloaded library content here.",
     "library_settings_description": "Download content from the Learner's Block Library.",
     "login": "Login",
-    "login_disabled": "Login password has been disabled.",
+    "login_disabled": "Password has been disabled.",
     "login_successfull": "Login successful",
     "makerspace": "Makerspace",
     "makerspace_description": "Browse the Makerspace here.",
@@ -61,8 +61,8 @@
     "your_new_password": "Your new password",
     "are_you_sure": "Are you sure?",
     "loading": "Loading …",
-    "need_connection": "You need to connect to WiFi or Ethernet to use these features.",
-    "internet_no_wifi": "Are you connected to ethernet? To connect your Block to a Wi-Fi hotspot, you must first connect to your Block via Wi-Fi.",
+    "need_connection": "You need to connect to Wi-Fi or Ethernet to use these features.",
+    "internet_no_wifi": "Are you connected to Ethernet? To connect your Learner's Block to a Wi-Fi hotspot, you must connect to it via Wi-Fi first.",
     "file_manager": "File Manager",
     "portainer_unavailable": "Portainer is not currently available for your device."
 }
