@@ -58,7 +58,7 @@
     "library_settings_description": "Laden Sie Inhalte aus der Learner's Block-Bibliothek herunter.",
     "library_description": "Durchsuchen Sie die heruntergeladenen Bibliotheksinhalte hier.",
     "login_successfull": "Anmeldung erfolgreich",
-    "login_disabled": "Das Anmeldepasswort wurde deaktiviert.",
+    "login_disabled": "Das Passwort ist deaktiviert worden.",
     "change_hostname_warning": "Sind Sie sicher, dass Sie den Hostnamen ändern möchten?",
     "available_storage": "Verfügbarer Speicher",
     "api_down": "Die API ist nicht verfügbar. Versuchen Sie es erneut, oder erwägen Sie einen Neustart des Geräts.",

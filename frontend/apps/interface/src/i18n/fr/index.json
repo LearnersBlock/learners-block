@@ -27,7 +27,7 @@
     "set": "Définir",
     "password_set_success": "Votre mot de passe a été défini",
     "login_successfull": "Connexion réussie",
-    "login_disabled": "Le mot de passe de connexion à été désactivé.",
+    "login_disabled": "Le mot de passe a été désactivé.",
     "login": "Se connecter",
     "library_settings_description": "Téléchargez du contenu depuis la bibliothèque de Learner's Block.",
     "invalid_input": "Les noms d'hôtes doivent avoir : maximum 32 caractères ; des minuscules ; pas d'espace ; pas de caractères spéciaux autres que _ et -",

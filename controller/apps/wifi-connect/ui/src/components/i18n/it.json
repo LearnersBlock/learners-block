@@ -1,1 +1,13 @@
-{}
+{
+    "network_absent": "Se non riesci a vedere la tua rete, riavvia il dispositivo e riprova.",
+    "user": "Utente",
+    "select_ssid": "Seleziona la rete Wi-Fi",
+    "no_networks": "Nessuna rete Wi-Fi disponibile nel raggio d’azione. Assicurati che ci sia e riavvia il dispositivo.",
+    "network_fetch_fail": "Impossibile recuperare le reti disponibili.",
+    "network_connect_fail": "Impossibile connettersi alla rete.",
+    "connection_reset_request": "Il tuo Learner’s Block cercherà ora di connettersi alla rete Wi-Fi. Puoi connetterti alla stessa rete per usare il tuo Block. Se il tuo dispositivo non è disponibile dopo un minuto, riconnettiti al tuo Learner’s Block, controlla la tua password Wi-Fi e riprova.",
+    "applying_changes": "Applico i cambiamenti…",
+    "wifi": "Wi-Fi",
+    "password": "Password",
+    "connect": "Connetti"
+}
