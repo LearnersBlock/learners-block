@@ -76,7 +76,7 @@
     "options": "Options",
     "owner": "Propriétaire",
     "password": "Mot de passe",
-    "path_content": "Contenu de",
+    "path_content": "Répertoire actuel",
     "pattern_error_slashes": "Le motif ne peut pas contenir de slashes.",
     "permission_change_error": "Impossible de modifier les autorisations :",
     "permission_change_success": "Autorisations modifiées.",
