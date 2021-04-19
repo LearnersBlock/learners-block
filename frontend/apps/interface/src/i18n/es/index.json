@@ -48,5 +48,6 @@
     "loading": "Cargando…",
     "are_you_sure": "¿Lo confirma?",
     "file_manager": "Gestor de archivos",
-    "library_settings_description": "Descargue contenido de la Biblioteca Learner’s Block."
+    "library_settings_description": "Descargue contenido de la Biblioteca Learner’s Block.",
+    "portainer": "Portainer"
 }
