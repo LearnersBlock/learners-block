@@ -9,7 +9,7 @@
           filled
           v-model="chapter"
           :options="toc"
-          label="Chapter"
+          :label="$t('chapter')"
           dense
           option-value="href"
           option-label="label"
@@ -32,14 +32,14 @@
       <q-btn
         @click="previousPage()"
         icon="arrow_left"
-        label="Previous"
+        :label="$t('previous')"
         class="col"
         dense
       />
       <q-btn
         @click="nextPage()"
         icon-right="arrow_right"
-        label="Next"
+        :label="$t('next')"
         class="col"
         dense
       />
@@ -55,12 +55,11 @@
 
 <script>
 import ePub from 'epubjs'
-const URL_EPUB = 'https://devcan.mooo.com'
+
 export default {
   name: 'EpubReader',
   data () {
     return {
-      epub: `${URL_EPUB}/aliceDynamic.epub`,
       newEpub: [],
       show: false,
       book: {},
@@ -74,7 +73,11 @@ export default {
   },
   methods: {
     loadEpub (e) {
-      this.book = ePub(e ? e.target.result : this.epub)
+      const epub = this.$route.query.url
+      if (!epub) {
+        this.$q.notify({ type: 'negative', message: this.$t('error') })
+      }
+      this.book = ePub(e ? e.target.result : epub)
       this.book.loaded.navigation.then(({ toc }) => {
         this.toc = toc
       })
@@ -83,7 +86,7 @@ export default {
       })
       this.rendition = this.book.renderTo('epub-render', {
         height: '70vh',
-        width: '90vw'
+        width: '96vw'
       })
       this.rendition.display()
       document.getElementById('add')
@@ -102,8 +105,7 @@ export default {
       }
     },
     goToExcerpt () {
-      console.log(this.chapter.toLowerCase().indexOf('xhtml'))
-      if (this.chapter.toLowerCase().indexOf('xhtml') > 0) {
+      if (Number.isInteger(this.chapter.toLowerCase().indexOf('xhtml'))) {
         this.rendition.display(this.chapter)
       } else {
         this.rendition.display(`epubcfi(${this.chapter})`)
