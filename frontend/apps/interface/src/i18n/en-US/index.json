@@ -64,7 +64,7 @@
     "need_connection": "You need to connect to Wi-Fi or Ethernet to use these features.",
     "internet_no_wifi": "Are you connected to Ethernet? To connect your Learner's Block to a Wi-Fi hotspot, you must connect to it via Wi-Fi first.",
     "file_manager": "File Manager",
-    "portainer_unavailable": "Portainer is not currently available for your device.",
+    "portainer_unavailable": "Portainer is not available for your device.",
     "next": "Next",
     "previous": "Previous",
     "chapter": "Chapter"
