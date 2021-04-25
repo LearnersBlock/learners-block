@@ -150,7 +150,7 @@ export default defineComponent({
 
       const usersLocale = $q.lang.getLocale()
       if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
-        changeLanguage(langCookie.value)
+        changeLanguage(usersLocale)
       }
       $q.loading.hide()
     })
