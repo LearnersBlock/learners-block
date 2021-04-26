@@ -20,16 +20,32 @@
       />
     </div>
     <div>
+      <div>
+        <div
+          class="col-12"
+          v-touch-swipe.mouse.left.right.up="touchMoveToPage"
+          style="position: absolute;z-index: 2000 !important; height: 67vh; width: 96%"
+        />
+      </div>
       <div
-        class="col-12"
-        v-touch-swipe.mouse.left.right="touchMoveToPage"
-        style="position: absolute;z-index: 2000 !important; height: 67vh; width: 96%"
+        :style="'height: calc(100vh - ' + this.readerHeight + '); background-color: white;'"
+        id="epub-render"
       />
+      <q-page-sticky
+        position="bottom-right"
+        :offset="[18, 18]"
+      >
+        <q-btn
+          v-if="!this.$q.fullscreen.isActive"
+          rounded
+          color="white"
+          size="xs"
+          :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+          text-color="primary"
+          @click="toggle"
+        />
+      </q-page-sticky>
     </div>
-    <div
-      class="reader"
-      id="epub-render"
-    />
     <q-inner-loading :showing="!show">
       <q-spinner
         size="5rem"
@@ -41,11 +57,21 @@
 
 <script>
 import ePub from 'epubjs'
+import { watch } from 'vue'
 
 export default {
   name: 'EpubReader',
   data () {
+    const readerHeight = '145px'
+    watch(() => this.$q.fullscreen.isActive, val => {
+      if (val) {
+        this.readerHeight = '10px'
+      } else {
+        this.readerHeight = '145px'
+      }
+    })
     return {
+      readerHeight,
       newEpub: [],
       show: false,
       book: {},
@@ -63,6 +89,17 @@ export default {
     }
   },
   methods: {
+    toggle (e) {
+      const target = e.target.parentNode.parentNode.parentNode.parentNode.parentNode
+      this.$q.fullscreen.toggle(target)
+        .then(() => {
+          this.$q.notify({ type: 'info', multiLine: true, message: this.$t('swipe_up_exit') })
+        })
+        .catch((err) => {
+          alert(err)
+          console.error(err)
+        })
+    },
     loadEpub (e) {
       const epub = this.$route.query.url
       if (!epub) {
@@ -94,8 +131,10 @@ export default {
     touchMoveToPage ({ ...info }) {
       if (info.direction === 'left') {
         this.nextPage()
-      } else {
+      } else if (info.direction === 'right') {
         this.previousPage()
+      } else if (info.direction === 'up' && this.$q.fullscreen.isActive) {
+        this.$q.fullscreen.toggle()
       }
     },
     goToExcerpt () {
@@ -108,10 +147,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.reader {
-  height: calc(100vh - 145px);
-}
-
-</style>
