@@ -63,7 +63,7 @@ class journal_logs(Resource):
 class portainer_status(Resource):
     def get(self):
         global portainerstatus
-        time.sleep(3)
+        time.sleep(5)
         if portainerstatus is True:
             return {'status': 200, 'container_status': 'Running'}, 200
         else:

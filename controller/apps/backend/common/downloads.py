@@ -166,12 +166,11 @@ def rsync_terminate(outcome='complete'):
         rsync_proc.wait(timeout=None)
         subprocess.run(["killall", "-r", "rsync"])
         print("Terminated RSync")
-    except Exception as ex:
-        print("SIGTERM failed. Killing RSync" + str(ex))
+    except Exception:
         try:
             rsync_proc.kill()
         except Exception:
-            print("Could not kill")
+            pass
 
     global rsync_log
     rsync_log = ''
