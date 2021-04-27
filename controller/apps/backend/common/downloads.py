@@ -1,5 +1,5 @@
 from common.processes import check_space
-from common.processes import chown
+from common.processes import demote
 import os
 import requests
 import subprocess
@@ -19,20 +19,29 @@ def download_start(url: str):
     global download_terminated
     global download_process_running
 
+    # Store current UID
+    euid = os.geteuid()
+
     if download_process_running:
         download_terminate()
         return
 
     download_process_running = True
-
     download_log = {}
     downloaded_percentage = 0
     try:
+        # Set UID for this download
+        os.seteuid(65534)
         resp = requests.get(url, stream=True, timeout=5)
     except Exception:
+        # Restore original UID
+        os.seteuid(euid)
         download_log['progress'] = "error"
         download_process_running = False
         return
+
+    # Restore original UID
+    os.seteuid(euid)
 
     total = int(resp.headers.get('content-length', 0))
     with open(os.path.realpath('.') + '/storage/library/' +
@@ -46,9 +55,6 @@ def download_start(url: str):
                 "progress": downloaded_percentage/total*100/100,
                 "MBytes": downloaded_percentage/1000000,
             }
-
-    chown(path=os.path.realpath('.') + '/storage/library/' +
-              url.split('/')[-1], owner='65534:65534')
 
     download_process_running = False
     print("Download complete")
@@ -97,7 +103,8 @@ def rsync_start(rsync_url):
         stdout=subprocess.PIPE,
         universal_newlines=True,
         bufsize=1,
-        start_new_session=True
+        start_new_session=True,
+        preexec_fn=demote(65534, 65534)
     )
 
     time.sleep(4)
@@ -112,8 +119,6 @@ def rsync_start(rsync_url):
             rsync_log = line
     except Exception:
         print("RSync Proc terminated. Ending logging")
-
-    chown(path=os.path.realpath('.') + '/storage/library/', owner='65534:65534')
 
     rsync_terminate(outcome="complete")
 
