@@ -1,77 +1,97 @@
 <template>
-  <q-page padding>
-    <div
-      class="row col-12"
-      v-if="show"
-    >
-      <q-select
-        class="col mt-1 ml-1"
-        filled
-        v-model="chapter"
-        :options="toc"
-        :label="$t('chapter')"
-        dense
-        option-value="href"
-        option-label="label"
-        option-disable="inactive"
-        emit-value
-        map-options
-        @update:model-value="goToExcerpt"
-      />
-    </div>
-    <div>
-      <div>
-        <div
-          class="col-12"
-          v-touch-swipe.mouse.left.right.up="touchMoveToPage"
-          style="position: absolute;z-index: 2000 !important; height: 67vh; width: 96%"
-        />
-      </div>
+  <q-page>
+    <div v-if="show">
       <div
-        :style="'height: calc(100vh - ' + this.readerHeight + '); background-color: white;'"
+        v-touch-swipe.mouse.left.right.up="touchMoveToPage"
+        style="position: absolute;z-index: 2000 !important; height: 67vh; width: 96%"
+      />
+      <div
+        class="bg-white"
+        :style="'height: ' + this.$q.screen.height + 'px;'"
         id="epub-render"
       />
       <q-page-sticky
         position="bottom-right"
         :offset="[18, 18]"
       >
-        <q-btn
+        <q-fab
           v-if="!this.$q.fullscreen.isActive"
-          rounded
+          v-model="fabRight"
+          vertical-actions-align="right"
           color="white"
-          size="xs"
-          :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+          padding="xs"
+          icon="keyboard_arrow_up"
           text-color="primary"
-          @click="toggle"
-        />
+          direction="up"
+        >
+          <q-fab-action
+            label-position="left"
+            v-if="this.$q.fullscreen.isCapable"
+            color="primary"
+            :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+            text-color="white"
+            @click="toggle"
+            :label="$t('full_screen')"
+          />
+          <q-fab-action
+            label-position="left"
+            @click="redirect"
+            color="primary"
+            text-color="white"
+            class="material-icons"
+            icon="arrow_back_ios"
+            :label="$t('back')"
+          />
+          <q-select
+            filled
+            v-model="chapter"
+            :options="toc"
+            rounded
+            dense
+            option-value="href"
+            option-label="label"
+            option-disable="inactive"
+            emit-value
+            bg-color="primary"
+            map-options
+            @update:model-value="goToExcerpt"
+          >
+            <template #prepend>
+              <q-icon
+                name="menu_book"
+                color="white"
+              />
+            </template>
+          </q-select>
+        </q-fab>
       </q-page-sticky>
+      <q-inner-loading :showing="!show">
+        <q-spinner
+          size="5em"
+          color="primary"
+        />
+      </q-inner-loading>
     </div>
-    <q-inner-loading :showing="!show">
-      <q-spinner
-        size="5rem"
-        color="primary"
-      />
-    </q-inner-loading>
   </q-page>
 </template>
 
 <script>
 import ePub from 'epubjs'
-import { watch } from 'vue'
+import { watch, ref } from 'vue'
 
 export default {
   name: 'EpubReader',
   data () {
-    const readerHeight = '145px'
     watch(() => this.$q.fullscreen.isActive, val => {
+      // Fix for Safari where first page is not stored on load
       if (val) {
-        this.readerHeight = '10px'
-      } else {
-        this.readerHeight = '145px'
+        if (!this.rendition.location) {
+          this.rendition.display()
+        }
       }
     })
     return {
-      readerHeight,
+      fabRight: ref(true),
       newEpub: [],
       show: false,
       book: {},
@@ -89,9 +109,8 @@ export default {
     }
   },
   methods: {
-    toggle (e) {
-      const target = e.target.parentNode.parentNode.parentNode.parentNode.parentNode
-      this.$q.fullscreen.toggle(target)
+    toggle () {
+      this.$q.fullscreen.toggle()
         .then(() => {
           this.$q.notify({ type: 'info', multiLine: true, message: this.$t('swipe_up_exit') })
         })
@@ -103,7 +122,7 @@ export default {
     loadEpub (e) {
       const epub = this.$route.query.url
       if (!epub) {
-        this.$q.notify({ type: 'negative', message: this.$t('error') })
+        this.$q.notify({ type: 'negative', message: `${this.$t('error')} Did you pass a URL to a file?` })
         this.show = true
         return
       }
@@ -121,6 +140,9 @@ export default {
       })
       this.rendition.display()
       document.getElementById('add')
+    },
+    redirect () {
+      location.href = '/settings'
     },
     nextPage () {
       this.rendition.next()
