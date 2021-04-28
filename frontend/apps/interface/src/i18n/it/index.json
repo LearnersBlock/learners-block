@@ -4,7 +4,7 @@
     "files_settings_description": "Gestisci i file sul tuo Block. Solo gli utenti connessi possono eliminarli.",
     "makerspace_settings_description": "Scarica i contenuti dal tuo account Makerspace.",
     "makerspace_description": "Sfoglia il Makerspace qui.",
-    "portainer_unavailable": "Portainer non è attualmente disponibile per il tuo dispositivo.",
+    "portainer_unavailable": "Portainer non è disponibile per il tuo dispositivo.",
     "file_manager": "Gestore di file",
     "loading": "Caricamento…",
     "are_you_sure": "Sei sicuro/a?",
@@ -64,5 +64,10 @@
     "api_down": "L’API non è disponibile. Prova ad aggiornare questa pagina.",
     "advanced": "Avanzato",
     "404": "La pagina che hai cercato di raggiungere non esiste.",
-    "401": "Non autorizzato. Si prega di provare ad accedere di nuovo."
+    "401": "Non autorizzato. Si prega di provare ad accedere di nuovo.",
+    "chapter": "Capitolo",
+    "previous": "Precedente",
+    "next": "Successivo",
+    "swipe_up_exit": "Scorri verso l'alto per uscire.",
+    "full_screen": "Schermo intero"
 }

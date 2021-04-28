@@ -8,7 +8,7 @@
     "internet_no_wifi": "Sind Sie mit dem Ethernet verbunden? Um Ihren Learner’s Block mit einem WLAN-Hotspot zu verbinden, müssen Sie sich zunächst über WLAN mit ihm verbinden.",
     "need_connection": "Sie müssen eine Wi-Fi- oder Ethernet-Verbindung herstellen, um diese Funktionen nutzen zu können.",
     "files_settings_description": "Verwalten Sie Dateien auf Ihrem Block. Nur angemeldete Benutzer können sie löschen.",
-    "portainer_unavailable": "Portainer ist derzeit für Ihr Gerät nicht verfügbar.",
+    "portainer_unavailable": "Portainer ist für Ihr Gerät nicht verfügbar.",
     "file_manager": "Dateiverwaltung",
     "loading": "Wird geladen …",
     "are_you_sure": "Sind Sie sicher?",
@@ -64,5 +64,12 @@
     "api_down": "Die API ist nicht verfügbar. Versuchen Sie es erneut, oder erwägen Sie einen Neustart des Geräts.",
     "advanced": "Erweitert",
     "404": "Die Seite, die Sie erreichen wollten, existiert nicht.",
-    "401": "Nicht autorisiert. Bitte versuchen Sie, sich erneut anzumelden."
+    "401": "Nicht autorisiert. Bitte versuchen Sie, sich erneut anzumelden.",
+    "chapter": "Kapitel",
+    "previous": "Vorherige",
+    "next": "Nächste",
+    "swipe_up_exit": "Wischen Sie zum Beenden nach oben.",
+    "click_swipe_instruction": "Klicken und wischen Sie, um die Seite umzublättern.",
+    "swipe_instruction": "Wischen Sie nach links oder rechts, um die Seite umzublättern.",
+    "full_screen": "Vollbild"
 }
