@@ -11,8 +11,10 @@
         id="epub-render"
       />
       <q-page-sticky
+        style="z-index: 2001;"
         position="bottom-right"
-        :offset="[18, 18]"
+        :offset="fabPos"
+        v-if="this.showMenu"
       >
         <q-fab
           v-if="!this.$q.fullscreen.isActive"
@@ -23,16 +25,9 @@
           icon="keyboard_arrow_up"
           text-color="primary"
           direction="up"
+          :disable="draggingFab"
+          v-touch-pan.prevent.mouse="moveFab"
         >
-          <q-fab-action
-            label-position="left"
-            v-if="this.$q.fullscreen.isCapable"
-            color="primary"
-            :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
-            text-color="white"
-            @click="toggle"
-            :label="$t('full_screen')"
-          />
           <q-fab-action
             label-position="left"
             @click="redirect"
@@ -41,28 +36,51 @@
             class="material-icons"
             icon="arrow_back_ios"
             :label="$t('back')"
+            :disable="draggingFab"
           />
-          <q-select
-            filled
-            v-model="chapter"
-            :options="toc"
+          <q-fab-action
+            label-position="left"
+            color="primary"
+            icon="minimize"
+            text-color="white"
+            @click="hideMenu"
+            :label="$t('hide_button')"
+            :disable="draggingFab"
+          />
+          <q-fab-action
+            v-if="this.$q.fullscreen.isCapable"
+            label-position="left"
+            color="primary"
+            :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+            text-color="white"
+            @click="toggle"
+            :label="$t('full_screen')"
+            :disable="draggingFab"
+          />
+          <q-btn
+            no-caps
+            fab-mini
+            no-wrap
+            color="primary"
+            icon-right="menu_book"
+            :label="$t('chapter')"
+            :disable="draggingFab"
             rounded
-            dense
-            option-value="href"
-            option-label="label"
-            option-disable="inactive"
-            emit-value
-            bg-color="primary"
-            map-options
-            @update:model-value="goToExcerpt"
           >
-            <template #prepend>
-              <q-icon
-                name="menu_book"
-                color="white"
-              />
-            </template>
-          </q-select>
+            <q-menu>
+              <q-list>
+                <q-item
+                  clickable
+                  v-close-popup
+                  v-for="i in toc"
+                  :key="i['href']"
+                  @click="goToExcerpt(i)"
+                >
+                  <q-item-section>{{ i['label'] }}</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-fab>
       </q-page-sticky>
       <q-inner-loading :showing="!show">
@@ -91,13 +109,16 @@ export default {
       }
     })
     return {
-      fabRight: ref(true),
+      fabRight: ref(false),
       newEpub: [],
       show: false,
       book: {},
       rendition: {},
       chapter: '',
-      toc: []
+      toc: [],
+      fabPos: [7, 7],
+      draggingFab: false,
+      showMenu: true
     }
   },
   mounted () {
@@ -109,6 +130,10 @@ export default {
     }
   },
   methods: {
+    hideMenu () {
+      this.showMenu = false
+      this.$q.notify({ type: 'info', multiLine: true, message: this.$t('swipe_up_for_menu') })
+    },
     toggle () {
       this.$q.fullscreen.toggle()
         .then(() => {
@@ -118,6 +143,14 @@ export default {
           alert(err)
           console.error(err)
         })
+    },
+    moveFab (ev) {
+      this.draggingFab = ev.isFirst !== true && ev.isFinal !== true
+
+      this.fabPos = [
+        this.fabPos[0] - ev.delta.x,
+        this.fabPos[1] - ev.delta.y
+      ]
     },
     loadEpub (e) {
       const epub = this.$route.query.url
@@ -142,7 +175,7 @@ export default {
       document.getElementById('add')
     },
     redirect () {
-      location.href = '/settings'
+      location.href = '/'
     },
     nextPage () {
       this.rendition.next()
@@ -157,14 +190,12 @@ export default {
         this.previousPage()
       } else if (info.direction === 'up' && this.$q.fullscreen.isActive) {
         this.$q.fullscreen.toggle()
+      } else if (info.direction === 'up' && !this.$q.fullscreen.isActive) {
+        this.showMenu = true
       }
     },
-    goToExcerpt () {
-      if (Number.isInteger(this.chapter.toLowerCase().indexOf('xhtml'))) {
-        this.rendition.display(this.chapter)
-      } else {
-        this.rendition.display(`epubcfi(${this.chapter})`)
-      }
+    goToExcerpt (i) {
+      this.rendition.display(i.href)
     }
   }
 }
