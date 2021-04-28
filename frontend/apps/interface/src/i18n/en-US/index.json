@@ -67,5 +67,11 @@
     "portainer_unavailable": "Portainer is not available for your device.",
     "next": "Next",
     "previous": "Previous",
-    "chapter": "Chapter"
+    "chapter": "Chapter",
+    "swipe_instruction": "Swipe left or right to turn the page.",
+    "swipe_up_exit": "Swipe up to exit.",
+    "click_swipe_instruction": "Click and swipe to turn the page.",
+    "full_screen": "Full Screen",
+    "hide_button": "Hide Button",
+    "swipe_up_for_menu": "Swipe up to get the menu back."
 }
