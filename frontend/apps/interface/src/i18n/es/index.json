@@ -34,11 +34,11 @@
     "available_storage": "Almacenamiento disponible",
     "api_down": "La API no está disponible. Pruebe a actualizar la página.",
     "advanced": "Avanzado",
-    "401": "No está autorizado. Por favor intenta loguear de nuevo.",
+    "401": "Sin autorización. Intente acceder a su cuenta nuevamente.",
     "makerspace_settings_description": "Descargue contenido desde su cuenta de Makerspace.",
     "makerspace_description": "Explore el Makerspace aquí.",
     "makerspace": "Makerspace",
-    "portainer_unavailable": "Por ahora, Portainer no está disponible para su dispositivo.",
+    "portainer_unavailable": "Portainer no está disponible para su dispositivo.",
     "internet_no_wifi": "¿Se ha conectado por Ethernet? Para conectar el Learner’s Block a un punto de acceso inalámbrico, primero debe conectarse con este vía wifi.",
     "need_connection": "Debe conectarse mediante wifi o Ethernet para utilizar estas funciones.",
     "website_settings_description": "Cargue los archivos de su sitio web para que otros puedan utilizar el sitio sin conexión.",
@@ -61,5 +61,12 @@
     "set": "Establecer",
     "password_set_success": "Se ha definido su contraseña",
     "login_successfull": "Acceso correcto",
-    "login_disabled": "Se desactivó la contraseña."
+    "login_disabled": "Se desactivó la contraseña.",
+    "chapter": "Capítulo",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "visit_to_begin": "Para comenzar a utilizar el Block, visite Learner’s Block a través del navegador.",
+    "swipe_up_exit": "Deslice hacia arriba para salir.",
+    "click_swipe_instruction": "Pulse y deslice para pasar la página.",
+    "swipe_instruction": "Deslice a la izquierda o a la derecha para pasar la página."
 }

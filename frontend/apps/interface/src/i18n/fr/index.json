@@ -53,7 +53,7 @@
     "401": "Non autorisé. Essayez de vous reconnecter.",
     "internet_no_wifi": "Êtes-vous connecté(e) à Ethernet ? Pour connecter votre Learner’s Block à un point d’accès Wi-Fi, vous devez d’abord vous y connecter via le Wi-Fi.",
     "files_settings_description": "Gérez les fichiers de votre Block. Seuls les utilisateurs connectés peuvent les supprimer.",
-    "portainer_unavailable": "Portainer n'est actuellement pas disponible pour votre appareil.",
+    "portainer_unavailable": "Portainer n'est pas disponible pour votre appareil.",
     "welcome_lb": "Bienvenue dans le Learner's Block",
     "visit_to_begin": "Visitez le Learner's Block dans votre navigateur pour commencer à utiliser votre Block.",
     "portainer_starting_at": "Portainer à partir de",
@@ -64,5 +64,12 @@
     "library_description": "Parcourez les contenus téléchargés de la bibliothèque ici.",
     "makerspace": "Makerspace",
     "hostname_changed_notification": "Votre nom d'hôte a été mis à jour. Veuillez redémarrer le Block pour que ceci prenne effet.",
-    "click_toggle": "Cliquez sur un élément ci-dessous pour ouvrir l'administration. Utilisez les boutons commutateurs sur la droite pour afficher ou masquer les composants de la page d'accueil."
+    "click_toggle": "Cliquez sur un élément ci-dessous pour ouvrir l'administration. Utilisez les boutons commutateurs sur la droite pour afficher ou masquer les composants de la page d'accueil.",
+    "chapter": "Chapitre",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "swipe_up_exit": "Balayez vers le haut pour sortir.",
+    "click_swipe_instruction": "Cliquez et balayez pour tourner la page.",
+    "swipe_instruction": "Balayez vers la gauche ou la droite pour tourner la page.",
+    "full_screen": "Plein écran"
 }

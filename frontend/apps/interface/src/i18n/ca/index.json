@@ -30,5 +30,8 @@
     "confirm": "Confirma",
     "components": "Components",
     "change_hostname_warning": "Segur que voleu canviar el nom d’amfitrió?",
-    "available_storage": "Emmagatzematge disponible"
+    "available_storage": "Emmagatzematge disponible",
+    "chapter": "Capítol",
+    "previous": "Anterior",
+    "next": "Següent"
 }
