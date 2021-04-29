@@ -22,8 +22,11 @@ RUN install_packages libdbus-glib-1-dev libgirepository1.0-dev && \
     pip install -r /tmp/requirements.txt --upgrade --no-deps --force-reinstall --no-cache-dir && \
     apt-get purge --auto-remove libdbus-glib-1-dev libgirepository1.0-dev -y
 
-# Download Wi-Fi connect based on system architecture 
+# Make required directories
 RUN mkdir -p common/wifi-connect
+RUN mkdir -p db
+
+# Download Wi-Fi connect based on system architecture 
 
 ARG VERSION="4.4.4"
 

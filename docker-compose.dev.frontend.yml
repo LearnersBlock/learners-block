@@ -24,6 +24,7 @@ services:
             - './frontend/apps/interface:/app/public/interface_dev:cached'
             - './frontend/apps/library:/app/public/library:cached'
             - './frontend/apps/file-manager/dist:/app/public/files'
+            - './controller/apps/backend/storage/library:/app/public/storage/library'            
             - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
 
 volumes:

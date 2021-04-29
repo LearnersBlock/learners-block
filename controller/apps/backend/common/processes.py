@@ -4,7 +4,6 @@ import os
 import requests
 import shutil
 import socket
-import subprocess
 import time
 
 
@@ -55,16 +54,6 @@ def check_supervisor(supervisor_retries, timeout):
             retry = retry + 1
 
     return {'status': 200, 'message': 'Supervisor up'}, 200
-
-
-def chown(path='/tmp', owner='65534:65534'):
-    subprocess.run(
-        ['chown', '-R', owner, path],
-        stdout=subprocess.PIPE,
-        universal_newlines=True,
-        bufsize=1,
-        start_new_session=True
-    )
 
 
 def curl(supervisor_retries=8, timeout=5, **cmd):
@@ -136,6 +125,15 @@ def database_recover():
         os.remove(os.path.realpath('.') + "/db/sqlite.db")
     except Exception:
         print("Failed to delete the database file. May be missing.")
+
+
+def demote(user_uid, user_gid):
+    # Demote the user to pass UID/GID for one subprocess only
+    def set_ids():
+        os.setgid(user_gid)
+        os.setuid(user_uid)
+
+    return set_ids
 
 
 def human_size(nbytes):

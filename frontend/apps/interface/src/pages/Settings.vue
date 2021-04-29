@@ -314,12 +314,11 @@
                           {{ $t('portainer_settings_description') }}
                         </q-item-label>
                       </q-item-section>
-
                       <q-toggle
                         class="mt-3 self-end"
                         v-model="portainer"
                         @update:model-value="updatePortainer"
-                        :disable="portainerToggleLoading"
+                        :disable="portainerLoading"
                         v-if="!portainerLoading"
                         icon="widgets"
                         size="lg"
@@ -394,8 +393,7 @@ export default defineComponent({
     const makerspaceLoading = ref<boolean>(false)
     const newHostname = ref<string>('')
     const portainer = ref<boolean>(false)
-    const portainerLoading = ref<boolean>(false)
-    const portainerToggleLoading = ref<boolean>(true)
+    const portainerLoading = ref<boolean>(true)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
@@ -465,14 +463,14 @@ export default defineComponent({
         fetchedConnectionStatus]).then(Axios.spread(function (res1, res2): void {
         // Get portainer status
         portainer.value = res1.data.container_status === 'Running'
-        portainerToggleLoading.value = false
         // Get connection status
         wifi.value = res2.data.running !== false
-        wifiLoading.value = false
       })).catch(e => {
         console.log(e.message)
         $q.notify({ type: 'negative', message: t('error') })
       })
+      wifiLoading.value = false
+      portainerLoading.value = false
     }
 
     const connectDisconnectWifi = async () => {
@@ -633,7 +631,6 @@ export default defineComponent({
       newHostname,
       portainer,
       portainerLoading,
-      portainerToggleLoading,
       redirect,
       regexp,
       sysInfo,

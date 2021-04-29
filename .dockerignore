@@ -3,6 +3,7 @@
 .DS_Store
 **/node_modules/
 **/.quasar/
+.gitkeep
 
 # Cordova related directories and files
 **/src-cordova/node_modules/
@@ -41,4 +42,3 @@ yarn-error.log*
 # Applications
 /controller/apps/backend/db/*
 /controller/apps/backend/storage/library/*
-!.gitkeep

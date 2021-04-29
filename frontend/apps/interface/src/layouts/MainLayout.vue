@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar v-if="currentPath.path !== '/captive_portal'">
+      <q-toolbar v-if="!(currentPath.path == '/captive_portal' || currentPath.path == '/epub_reader')">
         <div class="ml-1">
           <router-link to="/">
             <img
