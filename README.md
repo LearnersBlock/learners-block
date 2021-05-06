@@ -1,7 +1,5 @@
 [![learnersblock.org](https://learnersblock.org/images/lb-logo-full.svg)](https://learnersblock.org)
 
-Learner’s Block is still under development and not yet ready for stable production. Check back here for updates on progress or follow our [pre-deployment project list](https://github.com/LearnersBlock/learners-block/projects/3). 
-
 ## Description
 
 An open-source project that lets individuals and organisations provide their educational resources, websites and apps to users offline.
