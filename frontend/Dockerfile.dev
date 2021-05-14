@@ -11,28 +11,57 @@ RUN apk add supervisor
 # ----------- 'install_packages' switched for 'apk add' --------- #
 
 # Add mount dependencies
-RUN apk add findmnt util-linux grep
+RUN apk add \
+  findmnt \
+  grep \
+  util-linux 
+  
 
 # Install Nginx and PHP-FPM
-RUN apk add php7 php7-fpm php7-opcache php7-mysqli php7-json \
-    php7-openssl php7-curl php7-zlib php7-xml php7-phar php7-intl php7-dom \
-    php7-xmlreader php7-ctype php7-session php7-mbstring php7-gd nginx curl && \
-    rm /etc/nginx/conf.d/default.conf
+RUN install_packages \
+  curl \
+  nginx \
+  php7 \
+  php7-ctype \
+  php7-curl \
+  php7-dom \
+  php7-fpm \
+  php7-gd \
+  php7-intl \
+  php7-json \
+  php7-mbstring \
+  php7-mysqli \
+  php7-opcache \
+  php7-openssl \
+  php7-phar \
+  php7-session \
+  php7-xml \
+  php7-xmlreader \
+  php7-zlib \
+  && rm /etc/nginx/conf.d/default.conf
 
 # Install File Manager dependencies
-RUN apk add libbz2 libzip libcap openldap-dev php7-zip php7-ldap php7-bz2 \
-    php7-fileinfo php7-posix
+RUN install_packages \
+  libbz2 \
+  libzip \
+  libcap \
+  openldap-dev \
+  php7-bz2 \
+  php7-fileinfo \
+  php7-ldap \
+  php7-posix \
+  php7-zip
 
 # Set application directory 
 WORKDIR /app/
 
 # Create root directories #
 RUN mkdir -p public/files && \
-    mkdir -p public/storage && \
-    mkdir -p public/storage/fileshare && \
-    mkdir -p public/storage/library && \ 
-    mkdir -p public/storage/makerspace && \ 
-    mkdir -p public/storage/website
+  mkdir -p public/storage && \
+  mkdir -p public/storage/fileshare && \
+  mkdir -p public/storage/library && \ 
+  mkdir -p public/storage/makerspace && \ 
+  mkdir -p public/storage/website
     
 # Configure SupervisorD
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -64,10 +93,10 @@ COPY --chown=nginx /apps/interface/dist/spa public/interface
 
 # Set file permissions 
 RUN chown -R nginx.nginx /run && \
-    chown -R nobody.nobody public/storage/fileshare/ && \
-    chown -R nobody.nobody public/storage/library/ && \
-    chown -R nobody.nobody public/storage/makerspace/ && \
-    chown -R nobody.nobody public/storage/website/
+  chown -R nobody.nobody public/storage/fileshare/ && \
+  chown -R nobody.nobody public/storage/library/ && \
+  chown -R nobody.nobody public/storage/makerspace/ && \
+  chown -R nobody.nobody public/storage/website/
 
 # --------------- ## End mirror of production file ## -------------- #
 
@@ -85,5 +114,5 @@ COPY /config/nginx/nginx.dev.conf /etc/nginx/nginx.conf
 
 # Start services
 CMD yarn install --cwd /app/public/interface_dev/ && \
-    yarn install --cwd /app/public/library/ && \ 
-    supervisord -c /etc/supervisor/conf.d/supervisord.conf
+  yarn install --cwd /app/public/library/ && \ 
+  supervisord -c /etc/supervisor/conf.d/supervisord.conf

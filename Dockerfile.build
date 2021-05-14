@@ -19,7 +19,7 @@ FROM node:14.16.0-alpine3.13 AS interface-buildstep
 
 # Instal Quasar
 RUN yarn global add @quasar/cli && \
-    export PATH="$(yarn global bin):$PATH"
+  export PATH="$(yarn global bin):$PATH"
 
 WORKDIR /build-context
 
@@ -65,7 +65,7 @@ ENV ONDEVICE=TRUE
 
 # Instal Dependencies
 RUN yarn global add @quasar/cli && \
-    export PATH="$(yarn global bin):$PATH"
+  export PATH="$(yarn global bin):$PATH"
 
 WORKDIR /build-context
 
@@ -99,8 +99,8 @@ COPY --from=controller-wifi-buildstep /build-context/build /build/controller
 # On start of the container, copy the content into the mounted directoies
 
 CMD rm -rf /export/filemanager/* && \
-    rm -rf /export/interface/* && \
-    rm -rf /export/library/* && \
-    rm -rf /export/controller/* && \
-    cp -Rf /build/* /export/ && \  
-    echo "Build complete and files added to directories. Check the logs above for build errors."
+  rm -rf /export/interface/* && \
+  rm -rf /export/library/* && \
+  rm -rf /export/controller/* && \
+  cp -Rf /build/* /export/ && \  
+  echo "Build complete and files added to directories. Check the logs above for build errors."

@@ -1,31 +1,31 @@
 version: '2.1'
 
 services:
-    controller:
-        build:
-            context: ./controller
-            dockerfile: Dockerfile.dev.controller
-        ports: 
-            - "9090:9090"
-        labels:
-            portainer: hidden
-        volumes:
-            - './controller/apps/backend:/app'
+  controller:
+    build:
+      context: ./controller
+      dockerfile: Dockerfile.dev.controller
+    ports: 
+      - "9090:9090"
+    labels:
+      portainer: hidden
+    volumes:
+      - './controller/apps/backend:/app'
 
-    frontend:
-        build:
-            context: ./frontend
-            dockerfile: Dockerfile.dev
-        ports: 
-            - "8081:8081"
-        labels:
-            portainer: hidden
-        volumes:
-            - './frontend/apps/interface:/app/public/interface_dev:cached'
-            - './frontend/apps/library:/app/public/library:cached'
-            - './frontend/apps/file-manager/dist:/app/public/files'
-            - './controller/apps/backend/storage/library:/app/public/storage/library'            
-            - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports: 
+      - "8081:8081"
+    labels:
+      portainer: hidden
+    volumes:
+      - './frontend/apps/interface:/app/public/interface_dev:cached'
+      - './frontend/apps/library:/app/public/library:cached'
+      - './frontend/apps/file-manager/dist:/app/public/files'
+      - './controller/apps/backend/storage/library:/app/public/storage/library'            
+      - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
 
 volumes:
-    yarn_cache_frontend:
+  yarn_cache_frontend:

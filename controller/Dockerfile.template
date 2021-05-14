@@ -9,18 +9,22 @@ WORKDIR /app
 
 # Install Wi-Fi connect dependencies
 RUN install_packages \
-    dnsmasq \
-    iw \
-    psmisc \
-    rsync \
-    wireless-tools
+  dnsmasq \
+  iw \
+  psmisc \
+  rsync \
+  wireless-tools
 
 # Install package dependencies
 COPY apps/backend/requirements.txt /tmp/
 
-RUN install_packages libdbus-glib-1-dev libgirepository1.0-dev && \
-    pip install -r /tmp/requirements.txt --upgrade --no-deps --force-reinstall --no-cache-dir && \
-    apt-get purge --auto-remove libdbus-glib-1-dev libgirepository1.0-dev -y
+RUN install_packages \
+  libdbus-glib-1-dev \
+  libgirepository1.0-dev  \
+  && pip install -r /tmp/requirements.txt --upgrade --no-deps --force-reinstall --no-cache-dir \
+  && apt-get purge --auto-remove \
+  libdbus-glib-1-dev \
+  libgirepository1.0-dev -y
 
 # Make required directories
 RUN mkdir -p common/wifi-connect
