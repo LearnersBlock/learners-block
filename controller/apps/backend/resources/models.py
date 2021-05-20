@@ -45,10 +45,6 @@ class User(db.Model):
                         server_default=expression.true(),
                         nullable=False)
 
-    makerspace = db.Column(db.Boolean, unique=False,
-                           server_default=expression.true(),
-                           nullable=False)
-
     website = db.Column(db.Boolean, unique=False,
                         server_default=expression.true(),
                         nullable=False)

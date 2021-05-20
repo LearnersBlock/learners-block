@@ -54,7 +54,6 @@ RUN mkdir -p public/files && \
   mkdir -p public/storage && \
   mkdir -p public/storage/fileshare && \
   mkdir -p public/storage/library && \ 
-  mkdir -p public/storage/makerspace && \ 
   mkdir -p public/storage/website
     
 # Configure SupervisorD
@@ -89,7 +88,6 @@ COPY --chown=nginx /apps/interface/dist/spa public/interface
 RUN chown -R nginx.nginx /run && \
   chown -R nobody.nobody public/storage/fileshare/ && \
   chown -R nobody.nobody public/storage/library/ && \
-  chown -R nobody.nobody public/storage/makerspace/ && \
   chown -R nobody.nobody public/storage/website/
 
 # Start SupervisorD to manage processes
