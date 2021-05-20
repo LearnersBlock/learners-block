@@ -89,6 +89,10 @@ export default defineComponent({
         value: 'ar'
       },
       {
+        label: 'Deutsche',
+        value: 'de'
+      },
+      {
         label: 'Español',
         value: 'es'
       },
@@ -97,8 +101,16 @@ export default defineComponent({
         value: 'fr'
       },
       {
+        label: 'Italiana',
+        value: 'it'
+      },
+      {
         label: 'Português',
         value: 'pt-BR'
+      },
+      {
+        label: 'Türk',
+        value: 'tr'
       }
     ])
 
@@ -108,7 +120,7 @@ export default defineComponent({
 
     const changeLanguage = (value: string) => {
       import(
-        /* webpackInclude: /(de|en-US|ar|fr|pt-BR|es)\.js$/ */
+        /* webpackInclude: /(en-US|ar|de|es|fr|it|tr|pt-BR)\.js$/ */
         'quasar/lang/' + value
       ).then((lang) => {
         locale.value = value
