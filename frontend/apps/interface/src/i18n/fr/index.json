@@ -71,5 +71,10 @@
     "swipe_up_exit": "Balayez vers le haut pour sortir.",
     "click_swipe_instruction": "Cliquez et balayez pour tourner la page.",
     "swipe_instruction": "Balayez vers la gauche ou la droite pour tourner la page.",
-    "full_screen": "Plein écran"
+    "full_screen": "Plein écran",
+    "swipe_up_for_menu": "Balayez vers le haut pour retrouver le menu.",
+    "hide_button": "Masquer le bouton",
+    "login_again": "Vous avez été déconnecté·e. Veuillez essayer de vous reconnecter.",
+    "select_chapter": "Sélectionner un chapitre",
+    "download": "Télécharger"
 }
