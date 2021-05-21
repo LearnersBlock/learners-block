@@ -70,5 +70,8 @@
     "next": "Successivo",
     "swipe_up_exit": "Scorri verso l'alto per uscire.",
     "full_screen": "Schermo intero",
-    "hide_button": "Nascondi il pulsante"
+    "hide_button": "Nascondi il pulsante",
+    "swipe_up_for_menu": "Scorri verso l'alto per tornare al menu.",
+    "click_swipe_instruction": "Clicca e scorri per sfogliare la pagina.",
+    "swipe_instruction": "Scorri a sinistra o destra per sfogliare la pagina."
 }
