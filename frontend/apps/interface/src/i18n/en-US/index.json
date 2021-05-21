@@ -73,5 +73,8 @@
     "click_swipe_instruction": "Click and swipe to turn the page.",
     "full_screen": "Full Screen",
     "hide_button": "Hide Button",
-    "swipe_up_for_menu": "Swipe up to get the menu back."
+    "swipe_up_for_menu": "Swipe up to get the menu back.",
+    "select_chapter": "Select a Chapter",
+    "download": "Download",
+    "login_again": "You have been logged out. Please try logging in again."
 }
