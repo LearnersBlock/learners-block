@@ -19,7 +19,6 @@ assets:
 data:
   defaultDeviceType: orange-pi-zero
   supportedDeviceTypes:
-    - etcher-pro
     - fincm3
     - orange-pi-zero
     - raspberry-pi
