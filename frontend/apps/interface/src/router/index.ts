@@ -8,7 +8,8 @@ import {
 } from 'vue-router'
 import { StateInterface } from '../store'
 import routes from './routes'
-import { Loading } from 'quasar'
+import { Loading, Notify } from 'quasar'
+import { i18n } from '../boot/i18n'
 
 /*
  * If not building with SSR mode, you can
@@ -65,6 +66,19 @@ export default route<StateInterface>(function ({ store }) {
       })
     }
     next()
+  })
+
+  axios.interceptors.response.use(function (response) {
+    return response
+  }, function (error) {
+    if (error.response) {
+      if (error.response.status === 401 || error.response.status === 422 || error.code === 'ECONNABORTED') {
+        store.dispatch('LOGOUT')
+        Router.push('/login')
+        Notify.create({ type: 'negative', message: i18n.global.t('login_again') })
+      }
+    }
+    return Promise.reject(error)
   })
 
   return Router

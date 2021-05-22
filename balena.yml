@@ -1,0 +1,28 @@
+name: Learner's Block
+description: >-
+  An open-source project that lets individuals and organisations provide their educational resources, websites and apps to users offline.
+  
+  More info at: https://learnersblock.org
+post-provisioning: >-
+  ## Usage instructions
+  Flash the image to your SD card, plug in your device, and you are ready to go. More details can be found on https://docs.learnersblock.org/how-to-build-one/quickstart
+type: sw.application
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/LearnersBlock/learners-block'
+  logo:
+    type: blob.asset
+    data:
+      url: 'https://learnersblock.org/images/logo-512.png'
+data:
+  defaultDeviceType: orange-pi-zero
+  supportedDeviceTypes:
+    - fincm3
+    - orange-pi-zero
+    - raspberry-pi
+    - raspberry-pi2
+    - raspberrypi3-64
+    - raspberrypi4-64
+version: 0.0.1

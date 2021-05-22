@@ -1,33 +1,118 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python:3.8.6
+## Build File Manager
+FROM composer:2.0.11 AS filemanager-buildstep
+
+# Install required build dependencies
+RUN apk add ncurses
+
+# Set workdir to the build folder
+WORKDIR /build-context
+
+# Copy content to prepare
+COPY apps/file-manager/ .
+
+# Run the build process
+RUN composer run build
+
+
+## Build interface
+FROM node:14.17.0-alpine3.13 AS interface-buildstep
+
+# Instal Quasar
+RUN yarn global add @quasar/cli && \
+  export PATH="$(yarn global bin):$PATH"
+
+WORKDIR /build-context
+
+# Install node_modules
+COPY apps/interface/ .
+
+RUN yarn install
+
+RUN yarn run lint
+
+RUN quasar build
+
+
+## Build library
+FROM node:14.17.0-alpine3.13 AS library-buildstep
+
+# Add enviroment variable for OnDevice build
+ENV ONDEVICE=TRUE
+
+# Instal Dependencies
+RUN yarn global add @quasar/cli && \
+  export PATH="$(yarn global bin):$PATH"
+
+WORKDIR /build-context
+
+# Install node_modules
+COPY apps/library/ .
+
+RUN yarn install
+
+RUN yarn run lint
+
+RUN quasar build
+
+
+## Compile container
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python:3.8.6-3.13
 
 # Install packages #
+
+# Add mount dependencies
+RUN install_packages \
+  findmnt \
+  grep \
+  util-linux
 
 # Install SupervisorD
 RUN pip install supervisor==4.2.1 --no-deps --no-cache-dir
 
-# Add mount dependencies
-RUN install_packages findmnt util-linux grep
-
 # Install Nginx and PHP-FPM
-RUN install_packages php7 php7-fpm php7-opcache php7-mysqli php7-json \
-    php7-openssl php7-curl php7-zlib php7-xml php7-phar php7-intl php7-dom \
-    php7-xmlreader php7-ctype php7-session php7-mbstring php7-gd nginx curl && \
-    rm /etc/nginx/conf.d/default.conf
+RUN install_packages \
+  curl \
+  nginx \
+  php7 \
+  php7-ctype \
+  php7-curl \
+  php7-dom \
+  php7-fpm \
+  php7-gd \
+  php7-intl \
+  php7-json \
+  php7-mbstring \
+  php7-mysqli \
+  php7-opcache \
+  php7-openssl \
+  php7-phar \
+  php7-session \
+  php7-xml \
+  php7-xmlreader \
+  php7-zlib \
+  && rm /etc/nginx/conf.d/default.conf
 
 # Install File Manager dependencies
-RUN install_packages libbz2 libzip libcap openldap-dev php7-zip php7-ldap php7-bz2 \
-    php7-fileinfo php7-posix
+RUN install_packages \
+  libbz2 \
+  libzip \
+  libcap \
+  openldap-dev \
+  php7-bz2 \
+  php7-fileinfo \
+  php7-ldap \
+  php7-posix \
+  php7-zip
 
 # Set application directory 
 WORKDIR /app/
 
 # Create root directories #
 RUN mkdir -p public/files && \
-    mkdir -p public/storage && \
-    mkdir -p public/storage/fileshare && \
-    mkdir -p public/storage/library && \ 
-    mkdir -p public/storage/makerspace && \ 
-    mkdir -p public/storage/website
+  mkdir -p public/storage && \
+  mkdir -p public/storage/fileshare && \
+  mkdir -p public/storage/library && \ 
+  mkdir -p public/storage/website
     
 # Configure SupervisorD
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -49,20 +134,19 @@ COPY --chown=nginx /config/nginx/assets/index.html public/storage/website/index.
 COPY --chown=nginx /config/nginx/assets/web.png public/storage/website/web.png
 
 # Insert File Manager source code
-COPY --chown=nginx /apps/file-manager/dist public/files
-
-# Insert Library source code
-COPY --chown=nginx /apps/library/dist/spa public/library
+COPY --chown=nginx --from=filemanager-buildstep /build-context/dist public/files
 
 # Insert interface source code
-COPY --chown=nginx /apps/interface/dist/spa public/interface
+COPY --chown=nginx --from=interface-buildstep /build-context/dist/spa public/interface
+
+# Insert Library source code
+COPY --chown=nginx --from=library-buildstep /build-context/dist/spa public/library
 
 # Set file permissions 
 RUN chown -R nginx.nginx /run && \
-    chown -R nobody.nobody public/storage/fileshare/ && \
-    chown -R nobody.nobody public/storage/library/ && \
-    chown -R nobody.nobody public/storage/makerspace/ && \
-    chown -R nobody.nobody public/storage/website/
+  chown -R nobody.nobody public/storage/fileshare/ && \
+  chown -R nobody.nobody public/storage/library/ && \
+  chown -R nobody.nobody public/storage/website/
 
 # Start SupervisorD to manage processes
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

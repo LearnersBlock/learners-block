@@ -62,33 +62,6 @@
           <q-separator v-if="settings.library" />
 
           <q-item
-            v-if="settings.makerspace"
-            class="cursor-pointer py-3"
-            tag="a"
-            href="/makerspace/"
-            target="_self"
-          >
-            <q-item-section
-              side
-              middle
-            >
-              <q-icon
-                name="create"
-                color="blue"
-              />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label class="josefin text-2xl pr-12">
-                {{ $t('makerspace') }}
-              </q-item-label>
-              <q-item-label class="text-lg text-gray-500">
-                {{ $t('makerspace_description') }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-separator v-if="settings.makerspace" />
-
-          <q-item
             v-if="settings.website"
             class="cursor-pointer py-3"
             tag="a"
@@ -123,7 +96,7 @@
           {{ $t('loading') }}
         </div>
         <div
-          v-else-if="!settings.website && !settings.files && !settings.makerspace && !settings.library"
+          v-else-if="!settings.website && !settings.files && !settings.library"
           class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
         >
           {{ $t('enable_components_in') }}
@@ -149,8 +122,7 @@ export default defineComponent({
     // Check to see if everything is disabled
     const allIsDisabled = !!(settings.value.files === false &&
                           settings.value.library === false &&
-                          settings.value.website === false &&
-                          settings.value.makerspace === false)
+                          settings.value.website === false)
     // Get API from Store
     const api = computed(() => {
       return $store.getters.GET_API
