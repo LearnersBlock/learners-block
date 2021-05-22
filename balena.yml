@@ -25,3 +25,4 @@ data:
     - raspberry-pi2
     - raspberrypi3-64
     - raspberrypi4-64
+version: 0.0.0
