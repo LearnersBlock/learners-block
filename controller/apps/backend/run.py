@@ -1,3 +1,4 @@
+from common.processes import curl
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
@@ -53,11 +54,32 @@ def create_app():
     return app
 
 
+# Check if first launch
+def first_launch():
+    # Check first launch PID
+    pid = str(os.getpid())
+    pidfile = "/app/db/run.pid"
+    if not os.path.isfile(pidfile):
+        # Run tasks on first launch
+        # Set hostname to 'lb'
+        response = curl(method="patch",
+                        path="/v1/device/host-config?apikey=",
+                        string='{"network": {"hostname": "%s"}}' %
+                        ('lb'))
+        open(pidfile, 'w').write(pid)
+
+        print('Set hostname on first boot: ' + response["status_code"])
+
+
+# Create Flask app instance
 app = create_app()
 
 
 # Startup process
 if __name__ == '__main__':
+    # Check if first launch
+    first_launch()
+
     # Initialise database
     with app.app_context():
         from resources.auth_routes import login, logout, set_password, \
