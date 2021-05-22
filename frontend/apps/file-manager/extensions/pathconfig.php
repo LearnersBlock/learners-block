@@ -70,16 +70,6 @@ class PathConfig extends IFM_Extensions {
                     'IFM_ROOT_DIR'          => '/app/public/storage/library',
                     'IFM_ROOT_PUBLIC_URL'   => '/storage/library/'
                 )
-            ),
-            '/makerspace/' => array(
-                'auth'      => array(
-                    'required'              => false,
-                    'error_redirect_path'   => ''
-                ),
-                'config'    => array(
-                    'IFM_ROOT_DIR'          => '/app/public/storage/makerspace',
-                    'IFM_ROOT_PUBLIC_URL'   => '/storage/makerspace/'
-                )
             )
         );
 

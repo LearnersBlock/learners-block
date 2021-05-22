@@ -30,21 +30,21 @@
         >
           <q-fab-action
             label-position="left"
-            @click="redirect"
-            color="primary"
-            text-color="white"
-            class="material-icons"
-            icon="arrow_back_ios"
-            :label="$t('back')"
-            :disable="draggingFab"
-          />
-          <q-fab-action
-            label-position="left"
             color="primary"
             icon="minimize"
             text-color="white"
             @click="hideMenu"
             :label="$t('hide_button')"
+            :disable="draggingFab"
+          />
+          <q-fab-action
+            label-position="left"
+            @click="download"
+            color="primary"
+            text-color="white"
+            class="material-icons"
+            icon="file_download"
+            :label="$t('download')"
             :disable="draggingFab"
           />
           <q-fab-action
@@ -63,7 +63,7 @@
             no-wrap
             color="primary"
             icon-right="menu_book"
-            :label="$t('chapter')"
+            :label="$t('select_chapter')"
             :disable="draggingFab"
             rounded
           >
@@ -174,8 +174,8 @@ export default {
       this.rendition.display()
       document.getElementById('add')
     },
-    redirect () {
-      location.href = '/'
+    download () {
+      location.href = this.$route.query.url
     },
     nextPage () {
       this.rendition.next()

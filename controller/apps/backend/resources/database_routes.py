@@ -30,11 +30,6 @@ class set_ui(Resource):
                     lb_database.library = True
                 else:
                     lb_database.library = False
-            if "makerspace" in content:
-                if content["makerspace"].lower() == "true":
-                    lb_database.makerspace = True
-                else:
-                    lb_database.makerspace = False
             if "website" in content:
                 if content["website"].lower() == "true":
                     lb_database.website = True
@@ -53,5 +48,4 @@ class settings_ui(Resource):
         lb_database = User.query.filter_by(username='lb').first()
         return {'files': lb_database.files,
                 'library': lb_database.library,
-                'makerspace': lb_database.makerspace,
                 'website': lb_database.website}, 200

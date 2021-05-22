@@ -121,53 +121,6 @@
               <q-item
                 clickable
                 v-ripple
-                :disable="!internet"
-                tag="a"
-                target="_self"
-                to="/upload_makerspace"
-              >
-                <q-tooltip
-                  v-if="!internet"
-                  style="font-size: 16px"
-                  anchor="top middle"
-                  self="center middle"
-                  :offset="[10, 10]"
-                >
-                  {{ $t('need_connection') }}
-                </q-tooltip>
-                <q-icon
-                  name="create"
-                  color="blue"
-                  style="font-size: 2em"
-                  class="mr-3"
-                />
-                <q-item-section>
-                  <q-item-label class="josefin text-xl">
-                    {{ $t('makerspace') }}
-                  </q-item-label>
-                  <q-item-label class="text-base pr-1 text-gray-500">
-                    {{ $t('makerspace_settings_description') }}
-                  </q-item-label>
-                </q-item-section>
-                <q-toggle
-                  v-if="!makerspaceLoading"
-                  v-model="makerspace"
-                  icon="create"
-                  size="lg"
-                  :disable="togglesLoading"
-                  @update:model-value="updateMakerspace"
-                />
-                <q-spinner
-                  v-if="makerspaceLoading"
-                  color="primary"
-                  size="2em"
-                  class="mt-6 mr-6"
-                />
-              </q-item>
-
-              <q-item
-                clickable
-                v-ripple
                 tag="a"
                 target="_self"
                 href="/upload-website/"
@@ -389,8 +342,6 @@ export default defineComponent({
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
     const loading = ref<boolean>(false)
-    const makerspace = ref<boolean>(false)
-    const makerspaceLoading = ref<boolean>(false)
     const newHostname = ref<string>('')
     const portainer = ref<boolean>(false)
     const portainerLoading = ref<boolean>(true)
@@ -431,7 +382,6 @@ export default defineComponent({
     async function apiCall (): Promise<void> {
       filesLoading.value = true
       libraryLoading.value = true
-      makerspaceLoading.value = true
       websiteLoading.value = true
       await Axios.all([fetchedSettings, fetchedSysInfo, fetchedInternetConnectionStatus,
         fetchedHostName]).then(Axios.spread(function (res1, res2, res3, res4): void {
@@ -439,7 +389,6 @@ export default defineComponent({
         files.value = res1.data.files
         website.value = res1.data.website
         library.value = res1.data.library
-        makerspace.value = res1.data.makerspace
         togglesLoading.value = false
         // Get SystemInfo
         sysInfo.value = res2.data
@@ -454,7 +403,6 @@ export default defineComponent({
       })
       filesLoading.value = false
       libraryLoading.value = false
-      makerspaceLoading.value = false
       websiteLoading.value = false
     }
 
@@ -545,16 +493,6 @@ export default defineComponent({
       }, 1)
     }
 
-    const updateMakerspace = async () => {
-      makerspaceLoading.value = true
-      await Axios.post(`${api.value}/v1/setui`, {
-        makerspace: makerspace.value ? 'TRUE' : 'FALSE'
-      })
-      setTimeout(() => {
-        makerspaceLoading.value = false
-      }, 1)
-    }
-
     const updatePortainer = async () => {
       portainerLoading.value = true
       if (portainer.value) {
@@ -626,8 +564,6 @@ export default defineComponent({
       library,
       libraryLoading,
       loading,
-      makerspace,
-      makerspaceLoading,
       newHostname,
       portainer,
       portainerLoading,
@@ -638,7 +574,6 @@ export default defineComponent({
       togglesLoading,
       updateFiles,
       updateLibrary,
-      updateMakerspace,
       updatePortainer,
       website,
       websiteLoading,
