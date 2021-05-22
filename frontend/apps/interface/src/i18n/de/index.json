@@ -71,5 +71,10 @@
     "swipe_up_exit": "Wischen Sie zum Beenden nach oben.",
     "click_swipe_instruction": "Klicken und wischen Sie, um die Seite umzublättern.",
     "swipe_instruction": "Wischen Sie nach links oder rechts, um die Seite umzublättern.",
-    "full_screen": "Vollbild"
+    "full_screen": "Vollbild",
+    "swipe_up_for_menu": "Wischen Sie nach oben, um das Menü wieder anzuzeigen.",
+    "hide_button": "Schaltfläche ausblenden",
+    "login_again": "Sie sind abgemeldet worden. Bitte versuchen Sie, sich erneut anzumelden.",
+    "select_chapter": "Kapitel auswählen",
+    "download": "Herunterladen"
 }

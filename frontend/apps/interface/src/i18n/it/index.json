@@ -69,5 +69,12 @@
     "previous": "Precedente",
     "next": "Successivo",
     "swipe_up_exit": "Scorri verso l'alto per uscire.",
-    "full_screen": "Schermo intero"
+    "full_screen": "Schermo intero",
+    "hide_button": "Nascondi il pulsante",
+    "swipe_up_for_menu": "Scorri verso l'alto per tornare al menu.",
+    "click_swipe_instruction": "Clicca e scorri per sfogliare la pagina.",
+    "swipe_instruction": "Scorri a sinistra o destra per sfogliare la pagina.",
+    "login_again": "Sei stato disconnesso/a. Prova ad accedere di nuovo.",
+    "select_chapter": "Seleziona un capitolo",
+    "download": "Scarica"
 }
