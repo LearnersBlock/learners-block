@@ -18,52 +18,28 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 ### Development Notes
 
-All development is currently done on the 'develop' branch. It is this branch that users should fork and where pull requests should be submitted. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built for deployment. 
-
-On the GitHub releases page you will find a 'pre-release' tagged 'development' which contains all the latest commits from the 'develop' branch. These images are still linked to our servers for automatic updates but will forever receive the latest commits in real-time from the 'develop' branch. Pre-releases will also provide real-time logs to our servers for debugging and are not recommended for production use.
+On the GitHub release page you will find a 'pre-release' tagged 'development' which contains all the latest commits from the 'main' branch. These images are not linked to our servers for automatic updates. They do however, allow a user to connect to the running containers [using SSH](https://www.balena.io/docs/learn/develop/local-mode/#ssh-into-the-running-app-container-or-host-os). 
 
 ### Development Instructions
 
-When cloning this repository, the following command is required to ensure submodules are included:
-
-`git clone --recursive https://github.com/LearnersBlock/learners-block.git`
-
-If you have already cloned the repository and need to fetch submodules:
-
-`git submodule update --remote`
-
-A Docker based development environment is available. There are two development docker compose files, one for the primary frontend interface and one for WiFi Connect.
+A Docker based development environment is available. 
 
 #### Frontend
 
-Build the required components:
-
-`docker-compose -f docker-compose.build.yml up --build`
-
 Start the development environment:
 
-`docker-compose -f docker-compose.dev.frontend.yml up --build`
+`docker-compose -f docker-compose.dev.yml up --build`
 
 _Ports:_
 ```
 Frontend interface (hot-reload): 8081
 Controller (hot-reload): 9090
-```
-
-#### Wi-Fi Connect
-
-Start the environment:
-
-`docker-compose -f docker-compose.dev.wifi.yml up --build`
-
-_Ports:_
-```
 WiFi-Connect (hot-reload): 8080
 ```
 
 #### Library
 
-Development of the Library interface takes place on a [separate repository](https://github.com/LearnersBlock/library), which is included in this repository as a submodule located at `/frontend/apps/library`. By default, it points to the `develop` branch. The Library will be served as part of the main interface in the Docker development environment with hot-reload enabled. 
+Development of the Library interface takes place on a [separate repository](https://github.com/LearnersBlock/library), which is mirrored in this repository at `/frontend/apps/library`. By default, it points to the `main` branch. The Library is served as part of the Docker development environment with hot-reload enabled although pull requests should be made to the [Library repository](https://github.com/LearnersBlock/library). 
 
 #### Using the environments
 
@@ -71,29 +47,26 @@ After the containers start, required Node modules will be installed and developm
 
 Changing files in the folders on your system will trigger the reload on hot-reload components.
 
-All development changes will require testing through the Balena OS and relevant hardware before being deployed to the fleet of devices. We will do our best to help with this but encourage as thorough testing as possible before submitting Pull Requests. Follow the [Balena local deployment](https://www.balena.io/docs/learn/develop/local-mode/) documentation on how to deploy to a local device.
+All development changes will require testing through the Balena OS and relevant hardware before being deployed to our public fleet of devices. We will do our best to help with this but encourage as thorough testing as possible before submitting Pull Requests. Follow the [Balena local deployment](https://www.balena.io/docs/learn/develop/local-mode/) documentation on how to deploy to a local device.
 
 ### Production 
 
 #### Pre-built
 
-Learner’s Block software is provided as a complete package ready to flash to an SD card, including an operating system with pre-defined keys that allow for automatic updates. To benefit from these automatic updates download the image files from our [downloads page](https://downloads.learnersblock.org).
+Learner’s Block software is provided as a complete package ready to flash to an SD card, including an operating system with automatic updates. To benefit from these automatic updates download the image files from our [downloads page](https://downloads.learnersblock.org).
 
-Alternatively, you can download these images from the GitHub releases page. 
+Alternatively, you can find these images from the GitHub releases page. 
 
 Release names follow the following formats:
 
 **Releases:**
 ```
-# Source code with built and minified assets.
-Learners-Block-Dist-v%%version-number%%.tar.gz 
-
-# Image which runs production code from 'master' branch.
+# Image which runs production code from 'main' branch when submitted with a version tag.
 Learners-Block-%%device-type%%-v%%version-number%%.tar.gz 
 ```
 **Pre-releases:**
 ```
-## Image which runs latest commits from the 'develop' branch. 
+## Image which runs latest commits from the 'main' branch. 
 Learners-Block-Dev-%%device-type%%-develop.zip 
 ```
 
@@ -105,7 +78,6 @@ In order to prepare the code from this repository for deployment to a device:
 
 2. Download the [OS for your device](https://www.balena.io/os/) and flash it to your memory card. 
 1. Clone this repository.
-2. Execute `docker-compose -f docker-compose.build.yml up --build` to build the required components.
 3. After installing the [Balena CLI](https://github.com/balena-io/balena-cli), run `balena push hostname-of-your-device.local` to deploy. 
 
 More information on local deployments is available from Balena:
@@ -128,8 +100,6 @@ We thrive to ensure the features developed are those most in line with the commu
 We welcome contributions, they are what keep the Block alive! For pull requests we suggest discussing the changes through a ticket first. This is for your own sake in case there are already changes ongoing that will affect your contribution. 
 
 If you are looking to contribute but do not have a specific feature or goal in mind, please check the list of [Good First Issues](https://github.com/LearnersBlock/learners-block/contribute) and our [voting platform](https://vote.learnersblock.org), which contains a list of features prioritised by the community.
-
-All development is currently done on the 'develop' branch. It is this branch that users should fork and where pull requests should be submitted. When it's time for a release the 'develop' branch is merged into the 'master' branch where it is built and deployed to our servers. 
 
 ### Bug reports
 
