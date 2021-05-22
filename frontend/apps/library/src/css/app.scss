@@ -1,0 +1,18 @@
+// app global css in SCSS form
+body {
+    font-family: sans-serif,'josefin sans';
+}
+
+.josefin {
+    font-family: 'josefin sans';
+}
+
+.w-90 {
+    width: 90%;
+}
+.w-15 {
+    width: 13rem;
+    @media only screen and (max-width: 677px) {
+        display: none;
+    }
+}
