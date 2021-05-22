@@ -28,11 +28,12 @@ A Docker based development environment is available.
 
 Start the development environment:
 
-`docker-compose -f docker-compose.dev.yml up --build`
+`docker-compose -f docker-compose-dev.yml up --build`
 
 _Ports:_
 ```
 Frontend interface (hot-reload): 8081
+Library interface (hot-reload): 8083
 Controller (hot-reload): 9090
 WiFi-Connect (hot-reload): 8080
 ```
