@@ -34,7 +34,7 @@ jobs:
           author_name: Learner's Block
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
           message: 'Update version files'
-          branch: master
+          branch: main
           add: './controller/apps/backend/.version'
 
       - name: Create build context
