@@ -64,8 +64,8 @@ def first_launch():
         # Set hostname to 'lb'
         response = curl(method="patch",
                         path="/v1/device/host-config?apikey=",
-                        string='{"network": {"hostname": "%s"}}' %
-                        ('lb'))
+                        string='{"network": {"hostname": "lb"}',
+                        supervisor_retries=20)
         open(pidfile, 'w').write(pid)
 
         print('Set hostname on first boot: ' + response["status_code"])
