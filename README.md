@@ -115,7 +115,7 @@ As with all community projects, we do incur costs. You can see everything we hav
 
 ## License
 
-Learner’s Block is released under the [GPL-3.0 License](https://github.com/LearnersBlock/learners-block/blob/master/LICENSE)
+Learner’s Block is released under the [GPL-3.0 License](https://github.com/LearnersBlock/learners-block/blob/main/LICENSE)
 
 ## Attribution
 

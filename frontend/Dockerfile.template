@@ -56,7 +56,7 @@ RUN quasar build
 
 
 ## Compile container
-FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python:3.8.6-3.13
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python:3.8.6
 
 # Install packages #
 
