@@ -1,4 +1,4 @@
-FROM node:14.16.0-alpine3.13
+FROM node:14.17.0-alpine3.13
 
 # Install development dependencies
 RUN apk add python3
@@ -16,9 +16,8 @@ RUN apk add \
   grep \
   util-linux 
   
-
 # Install Nginx and PHP-FPM
-RUN install_packages \
+RUN apk add \
   curl \
   nginx \
   php7 \
@@ -41,7 +40,7 @@ RUN install_packages \
   && rm /etc/nginx/conf.d/default.conf
 
 # Install File Manager dependencies
-RUN install_packages \
+RUN apk add \
   libbz2 \
   libzip \
   libcap \
@@ -81,22 +80,13 @@ COPY /config/nginx/conf/ /etc/nginx/conf.d/
 COPY --chown=nginx /config/nginx/assets/index.html public/storage/website/index.html
 COPY --chown=nginx /config/nginx/assets/web.png public/storage/website/web.png
 
-# Insert File Manager source code
-COPY --chown=nginx /apps/file-manager/dist public/files
-
-# Insert Library source code
-COPY --chown=nginx /apps/library/dist/spa public/library
-
-# Insert interface source code
-COPY --chown=nginx /apps/interface/dist/spa public/interface
+# --------------- ## End mirror of production file ## -------------- #
 
 # Set file permissions 
 RUN chown -R nginx.nginx /run && \
   chown -R nobody.nobody public/storage/fileshare/ && \
   chown -R nobody.nobody public/storage/library/ && \
   chown -R nobody.nobody public/storage/website/
-
-# --------------- ## End mirror of production file ## -------------- #
 
 # Enable Library OnDevice mode
 ENV ONDEVICE=TRUE

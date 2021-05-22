@@ -4,7 +4,7 @@ services:
   controller:
     build:
       context: ./controller
-      dockerfile: Dockerfile.dev.controller
+      dockerfile: Dockerfile.dev.backend
     ports: 
       - "9090:9090"
     labels:
@@ -12,10 +12,19 @@ services:
     volumes:
       - './controller/apps/backend:/app'
 
+  filemanager-builder:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev.filemanager
+    labels:
+      portainer: hidden
+    volumes:
+      - './frontend/apps/file-manager/dist:/export/filemanager'
+
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.dev.interface
     ports: 
       - "8081:8081"
     labels:
@@ -27,5 +36,19 @@ services:
       - './controller/apps/backend/storage/library:/app/public/storage/library'            
       - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
 
+  wifi_connect:
+    build:
+      context: ./controller
+      dockerfile: Dockerfile.dev.wifi-connect
+    stdin_open: true
+    ports: 
+      - "8080:8080"
+    labels:
+      portainer: hidden
+    volumes:
+      - './controller/apps/wifi-connect/ui:/app/wifi-connect/ui:cached'
+      - 'yarn_cache_wifi:/usr/local/share/.cache/yarn/'
+
 volumes:
   yarn_cache_frontend:
+  yarn_cache_wifi:

@@ -1,3 +1,61 @@
+## Build File Manager
+FROM composer:2.0.11 AS filemanager-buildstep
+
+# Install required build dependencies
+RUN apk add ncurses
+
+# Set workdir to the build folder
+WORKDIR /build-context
+
+# Copy content to prepare
+COPY apps/file-manager/ .
+
+# Run the build process
+RUN composer run build
+
+
+## Build interface
+FROM node:14.17.0-alpine3.13 AS interface-buildstep
+
+# Instal Quasar
+RUN yarn global add @quasar/cli && \
+  export PATH="$(yarn global bin):$PATH"
+
+WORKDIR /build-context
+
+# Install node_modules
+COPY apps/interface/ .
+
+RUN yarn install
+
+RUN yarn run lint
+
+RUN quasar build
+
+
+## Build library
+FROM node:14.17.0-alpine3.13 AS library-buildstep
+
+# Add enviroment variable for OnDevice build
+ENV ONDEVICE=TRUE
+
+# Instal Dependencies
+RUN yarn global add @quasar/cli && \
+  export PATH="$(yarn global bin):$PATH"
+
+WORKDIR /build-context
+
+# Install node_modules
+COPY apps/library/ .
+
+RUN yarn install
+
+RUN yarn run lint
+
+RUN quasar build
+
+
+## Compile container
 FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python:3.8.6-3.13
 
 # Install packages #
@@ -76,13 +134,13 @@ COPY --chown=nginx /config/nginx/assets/index.html public/storage/website/index.
 COPY --chown=nginx /config/nginx/assets/web.png public/storage/website/web.png
 
 # Insert File Manager source code
-COPY --chown=nginx /apps/file-manager/dist public/files
-
-# Insert Library source code
-COPY --chown=nginx /apps/library/dist/spa public/library
+COPY --chown=nginx --from=filemanager-buildstep /build-context/dist public/files
 
 # Insert interface source code
-COPY --chown=nginx /apps/interface/dist/spa public/interface
+COPY --chown=nginx --from=interface-buildstep /build-context/dist/spa public/interface
+
+# Insert Library source code
+COPY --chown=nginx --from=library-buildstep /build-context/dist/spa public/library
 
 # Set file permissions 
 RUN chown -R nginx.nginx /run && \
