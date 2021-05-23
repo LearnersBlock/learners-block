@@ -18,7 +18,7 @@ This project is made possible by Balena OS, an operating system designed for IoT
 
 ### Development Notes
 
-On the GitHub release page you will find a 'pre-release' tagged 'development' which contains all the latest commits from the 'main' branch. These images are not linked to our servers for automatic updates. They do however, allow a user to connect to the running containers [using SSH](https://www.balena.io/docs/learn/develop/local-mode/#ssh-into-the-running-app-container-or-host-os). 
+On the GitHub release page you will find a 'pre-release' tagged 'development' which contains all the latest commits from the 'main' branch. These images are linked to our servers for automatic updates but receive all updates as soon as they are pushed to the 'main' branch.
 
 ### Development Instructions
 
@@ -68,7 +68,7 @@ Learners-Block-%%device-type%%-v%%version-number%%.tar.gz
 **Pre-releases:**
 ```
 ## Image which runs latest commits from the 'main' branch. 
-Learners-Block-Dev-%%device-type%%-develop.zip 
+Learners-Block-%%device-type%%-dev.zip 
 ```
 
 #### Deploy locally
