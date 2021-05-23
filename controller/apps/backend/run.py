@@ -64,11 +64,11 @@ def first_launch():
         # Set hostname to 'lb'
         response = curl(method="patch",
                         path="/v1/device/host-config?apikey=",
-                        string='{"network": {"hostname": "lb"}',
+                        string='{"network": {"hostname": "lb"}}',
                         supervisor_retries=20)
         open(pidfile, 'w').write(pid)
 
-        print('Set hostname on first boot: ' + response["status_code"])
+        print('Set hostname on first boot: ' + str(response["status_code"]))
 
 
 # Create Flask app instance
@@ -77,9 +77,6 @@ app = create_app()
 
 # Startup process
 if __name__ == '__main__':
-    # Check if first launch
-    first_launch()
-
     # Initialise database
     with app.app_context():
         from resources.auth_routes import login, logout, set_password, \
@@ -107,6 +104,9 @@ if __name__ == '__main__':
         signal.signal(signal.SIGTERM, handle_exit)
         signal.signal(signal.SIGINT, handle_exit)
         signal.signal(signal.SIGHUP, handle_exit)
+
+        # Check if first launch
+        first_launch()
 
         # Execute startup processes
         try:
