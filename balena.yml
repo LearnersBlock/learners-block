@@ -5,6 +5,7 @@ description: >-
   More info at: https://learnersblock.org
 post-provisioning: >-
   ## Usage instructions
+  
   Flash the image to your SD card, plug in your device, and you are ready to go. More details can be found on https://docs.learnersblock.org/how-to-build-one/quickstart
 type: sw.application
 assets:
