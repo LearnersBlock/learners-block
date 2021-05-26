@@ -40,7 +40,7 @@ jobs:
           add: './controller/apps/backend/.version'
 
       - if: startsWith(github.ref, 'refs/tags/v') != true
-        name: Remove balena.yml from development environment
+        name: Remove 'version' line from balena.yml in development environment
         run: sed -i '/version/,+1 d' ${GITHUB_WORKSPACE}/balena.yml
 
       - name: Create build context

@@ -30,13 +30,9 @@ Start the development environment:
 
 `docker-compose -f docker-compose-dev.yml up --build`
 
-_Ports:_
-```
-Frontend interface (hot-reload): 8081
-Library interface (hot-reload): 8083
-Controller (hot-reload): 9090
-WiFi-Connect (hot-reload): 8080
-```
+The development environment is accessible through:
+
+`http://0.0.0.0:8081`
 
 #### Library
 

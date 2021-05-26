@@ -96,6 +96,7 @@ def rsync_start(rsync_url):
         pass
 
     print("Starting Download")
+
     rsync_proc = subprocess.Popen(
         ['rsync', '-azh', '--info=progress2', '--no-i-r', '--inplace',
             rsync_url,
