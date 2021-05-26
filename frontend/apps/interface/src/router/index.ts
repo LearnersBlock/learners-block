@@ -72,7 +72,7 @@ export default route<StateInterface>(function ({ store }) {
     return response
   }, function (error) {
     if (error.response) {
-      if (error.response.status === 401 || error.response.status === 422 || error.code === 'ECONNABORTED') {
+      if (error.response.status === 401 || error.response.status === 422) {
         store.dispatch('LOGOUT')
         Router.push('/login')
         Notify.create({ type: 'negative', message: i18n.global.t('login_again') })
