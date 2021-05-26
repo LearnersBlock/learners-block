@@ -61,7 +61,9 @@ class IFM {
 		"disable_mime_detection" => 0,
 		"showrefresh" => 0,
 		"forceproxy" => 0,
-		"confirmoverwrite" => 1
+		"confirmoverwrite" => 1,
+ 		"epub_reader" => 0,
+ 		"epub_reader_url" => '/epub_reader/?url='
 	);
 
 	private $config = array();
@@ -112,6 +114,7 @@ class IFM {
 		$this->config['showrefresh'] =  getenv('IFM_GUI_REFRESH') !== false ? intval( getenv('IFM_GUI_REFRESH') ) : $this->config['showrefresh'] ;
 		$this->config['forceproxy'] =  getenv('IFM_GUI_FORCEPROXY') !== false ? intval( getenv('IFM_GUI_FORCEPROXY') ) : $this->config['forceproxy'] ;
 		$this->config['confirmoverwrite'] =  getenv('IFM_GUI_CONFIRMOVERWRITE') !== false ? intval( getenv('IFM_GUI_CONFIRMOVERWRITE') ) : $this->config['confirmoverwrite'] ;
+		$this->config['epub_reader'] =  getenv('IFM_EPUB_READER') !== false ? intval( getenv('IFM_EPUB_READER') ) : $this->config['epub_reader'] ;
 
 		// optional settings
 		if( getenv('IFM_SESSION_LIFETIME') !== false )

@@ -24,7 +24,8 @@ class PathConfig extends IFM_Extensions {
                 ),
                 'config'    => array(
                     'IFM_ROOT_DIR'          => '/app/public/storage/fileshare/',
-                    'IFM_ROOT_PUBLIC_URL'   => '/storage/fileshare/'
+                    'IFM_ROOT_PUBLIC_URL'   => '/storage/fileshare/',
+                    'IFM_EPUB_READER'   => '1'
                 )
             ),
             '/upload-files/'    => array(
@@ -68,7 +69,8 @@ class PathConfig extends IFM_Extensions {
                 ),
                 'config'    => array(
                     'IFM_ROOT_DIR'          => '/app/public/storage/library',
-                    'IFM_ROOT_PUBLIC_URL'   => '/storage/library/'
+                    'IFM_ROOT_PUBLIC_URL'   => '/storage/library/',
+                    'IFM_EPUB_READER'   => '1'
                 )
             )
         );
