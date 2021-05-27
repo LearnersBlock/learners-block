@@ -1,17 +1,23 @@
-## Build File Manager
-FROM composer:2.0.11 AS filemanager-buildstep
+## Build library
+FROM node:14.17.0-alpine3.13 AS library-buildstep
 
-# Install required build dependencies
-RUN apk add ncurses
+# Add enviroment variable for OnDevice build
+ENV ONDEVICE=TRUE
 
-# Set workdir to the build folder
+# Instal Dependencies
+RUN yarn global add @quasar/cli && \
+  export PATH="$(yarn global bin):$PATH"
+
 WORKDIR /build-context
 
-# Copy content to prepare
-COPY apps/file-manager/ .
+# Install node_modules
+COPY apps/library/ .
 
-# Run the build process
-RUN composer run build
+RUN yarn install
+
+RUN yarn run lint
+
+RUN quasar build
 
 
 ## Build interface
@@ -33,26 +39,20 @@ RUN yarn run lint
 RUN quasar build
 
 
-## Build library
-FROM node:14.17.0-alpine3.13 AS library-buildstep
+## Build File Manager
+FROM composer:2.0.11 AS filemanager-buildstep
 
-# Add enviroment variable for OnDevice build
-ENV ONDEVICE=TRUE
+# Install required build dependencies
+RUN apk add ncurses
 
-# Instal Dependencies
-RUN yarn global add @quasar/cli && \
-  export PATH="$(yarn global bin):$PATH"
-
+# Set workdir to the build folder
 WORKDIR /build-context
 
-# Install node_modules
-COPY apps/library/ .
+# Copy content to prepare
+COPY apps/file-manager/ .
 
-RUN yarn install
-
-RUN yarn run lint
-
-RUN quasar build
+# Run the build process
+RUN composer run build
 
 
 ## Compile container
