@@ -108,7 +108,7 @@ We encourage translations and adjustments to current translations on all our com
 
 ### Donations
 
-As with all community projects, we do incur costs. You can see everything we have spent, everything we have been donated and you can donate through our [funding page](https://docs.learnersblock.org/about-us#how-we-are-funded). 
+As with all community projects, we do incur costs. You can see everything we have spent, everything we have been donated and you can donate through our [funding page](https://docs.learnersblock.org/about-us/how-we-are-funded). 
 
 ## License
 
@@ -118,10 +118,9 @@ Learner’s Block is released under the [GPL-3.0 License](https://github.com/Lea
 
 Many great open-source projects provide the foundation to make this possible, and we would like to thank and recognise them all:
 
-* [Open Balena](https://www.balena.io/open/)
+* [Balena](https://www.balena.io/)
 * [IFM](https://github.com/misterunknown/ifm/)
-* [Book Stack](https://www.bookstackapp.com/)
 * [GitBook](http://gitbook.com)
 * [Weblate](https://weblate.org)
-* [Feature UpVote](https://featureupvote.com/lp/powered_by_feature_upvote/?product=Learner%27s%20Block&utm_source=live_button&utm_medium=powered-link)
+* [Feature UpVote](https://featureupvote.com/)
 * [Strapi](https://strapi.io)
