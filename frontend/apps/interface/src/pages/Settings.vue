@@ -244,7 +244,7 @@
                       && regexp.test(val)
                       || $t('invalid_input')]"
                     v-model="newHostname"
-                    :label="$t('hostname')"
+                    :label="$t('your_new_name')"
                   />
                   <q-btn
                     outline
