@@ -381,19 +381,19 @@ export default defineComponent({
     const $q = useQuasar()
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
+
+    const currentStartPage = ref<any>()
+    const customStartPageInput = ref<boolean>(false)
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(false)
     const hostname = ref<string>('')
-    const internet = ref<boolean>(false)
-    const customStartPageInput = ref<boolean>(false)
     const hostnameValid = ref()
-    const startPathValid = ref()
+    const internet = ref<boolean>(false)
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
     const loading = ref<boolean>(false)
     const newHostname = ref<string>('')
     const newStartPath = ref<string>('')
-    const currentStartPage = ref<any>()
     const pages = [
       t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('custom_start_page')
     ]
@@ -403,6 +403,7 @@ export default defineComponent({
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
     const startPage = ref<string>('-')
+    const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
     const togglesLoading = ref<boolean>(true)
@@ -441,10 +442,10 @@ export default defineComponent({
       await Axios.all([fetchedSettings, fetchedSysInfo, fetchedInternetConnectionStatus,
         fetchedHostName]).then(Axios.spread(function (res1, res2, res3, res4): void {
         // Get settings
+        currentStartPage.value = res1.data.start_page
         files.value = res1.data.files
         website.value = res1.data.website
         library.value = res1.data.library
-        currentStartPage.value = res1.data.start_page
         togglesLoading.value = false
         // Get SystemInfo
         sysInfo.value = res2.data
@@ -490,80 +491,6 @@ export default defineComponent({
       portainerLoading.value = false
     }
 
-    const connectDisconnectWifi = async () => {
-      await Axios.get(`${api.value}/v1/wifi/forget`)
-    }
-
-    const disableLogin = async () => {
-      const response = await Axios.post(`${api.value}/v1/setpassword`, { password: ' ' })
-      if (response.status === 200) {
-        $q.notify({ type: 'positive', message: t('login_disabled') })
-      } else {
-        $q.notify({ type: 'negative', message: t('error') })
-      }
-    }
-
-    function disableLoginWarn () {
-      $q.dialog({
-        title: t('confirm'),
-        message: t('are_you_sure'),
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        disableLogin()
-      })
-    }
-
-    function hostnameWarn () {
-      if (hostnameValid.value.validate() && newHostname.value !== '') {
-        $q.dialog({
-          title: t('confirm'),
-          message: t('change_hostname_warning'),
-          cancel: true,
-          persistent: true
-        }).onOk(() => {
-          updateHostname()
-
-          $q.dialog({
-            title: t('success'),
-            message: t('hostname_changed_notification')
-          })
-        }).onCancel(() => {
-          // console.log('>>>> Cancel')
-        }).onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
-        })
-      } else {
-        $q.notify({ type: 'negative', message: t('invalid_hostname') })
-      }
-    }
-
-    function newStartPathWarn () {
-      if (startPathValid.value.validate() && newStartPath.value !== '') {
-        $q.dialog({
-          title: t('confirm'),
-          message: t('change_path_warning'),
-          cancel: true,
-          persistent: true
-        }).onOk(() => {
-          Axios.post(`${api.value}/v1/setui`, {
-            start_page: newStartPath.value
-          })
-
-          $q.dialog({
-            title: t('success'),
-            message: `${t('path_changed_to')} '/${newStartPath.value}'`
-          })
-        })
-      } else {
-        $q.notify({ type: 'negative', message: t('invalid_path_input') })
-      }
-    }
-
-    function redirect () {
-      location.href = '/upload-library/'
-    }
-
     const changeStartPage = async () => {
       if (startPage.value === t('lb_welcome_page')) {
         currentStartPage.value = '/'
@@ -602,6 +529,76 @@ export default defineComponent({
           })
         })
       }
+    }
+
+    const connectDisconnectWifi = async () => {
+      await Axios.get(`${api.value}/v1/wifi/forget`)
+    }
+
+    const disableLogin = async () => {
+      const response = await Axios.post(`${api.value}/v1/setpassword`, { password: ' ' })
+      if (response.status === 200) {
+        $q.notify({ type: 'positive', message: t('login_disabled') })
+      } else {
+        $q.notify({ type: 'negative', message: t('error') })
+      }
+    }
+
+    function disableLoginWarn () {
+      $q.dialog({
+        title: t('confirm'),
+        message: t('are_you_sure'),
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        disableLogin()
+      })
+    }
+
+    function hostnameWarn () {
+      if (hostnameValid.value.validate() && newHostname.value !== '') {
+        $q.dialog({
+          title: t('confirm'),
+          message: t('change_hostname_warning'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          updateHostname()
+
+          $q.dialog({
+            title: t('success'),
+            message: t('hostname_changed_notification')
+          })
+        })
+      } else {
+        $q.notify({ type: 'negative', message: t('invalid_hostname') })
+      }
+    }
+
+    function newStartPathWarn () {
+      if (startPathValid.value.validate() && newStartPath.value !== '') {
+        $q.dialog({
+          title: t('confirm'),
+          message: t('change_path_warning'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          Axios.post(`${api.value}/v1/setui`, {
+            start_page: newStartPath.value
+          })
+
+          $q.dialog({
+            title: t('success'),
+            message: `${t('path_changed_to')} '/${newStartPath.value}'`
+          })
+        })
+      } else {
+        $q.notify({ type: 'negative', message: t('invalid_path_input') })
+      }
+    }
+
+    function redirect () {
+      location.href = '/upload-library/'
     }
 
     const updateFiles = async () => {
@@ -677,8 +674,6 @@ export default defineComponent({
         }).onOk(() => {
           connectDisconnectWifi()
           wifi.value = false
-        }).onCancel(() => {
-          // console.log('>>>> Cancel')
         })
       }
     }
@@ -693,13 +688,13 @@ export default defineComponent({
       hostname,
       hostnameValid,
       hostnameWarn,
-      newStartPath,
-      newStartPathWarn,
       internet,
       library,
       libraryLoading,
       loading,
       newHostname,
+      newStartPath,
+      newStartPathWarn,
       pages,
       portainer,
       portainerLoading,
@@ -713,13 +708,13 @@ export default defineComponent({
       updateFiles,
       updateLibrary,
       updatePortainer,
+      updateWebsite,
       website,
       websiteLoading,
       wifi,
       wifiLoading,
       wifiWarn,
-      windowHostname,
-      updateWebsite
+      windowHostname
     }
   }
 })
