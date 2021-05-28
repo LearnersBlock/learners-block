@@ -81,5 +81,11 @@
     "custom_start_page": "Benutzerdefinierte Startseite",
     "lb_welcome_page": "Learner’s Block Willkommensseite",
     "start_page_desc": "Wählen Sie, welche Seite die Benutzer sehen sollen, wenn sie zum ersten Mal auf Ihr Gerät zugreifen.",
-    "choose_start_page": "Eine Startseite wählen"
+    "choose_start_page": "Eine Startseite wählen",
+    "path_changed_to": "Ihre Startseite wurde geändert auf",
+    "change_path_warning": "Sie sind dabei, die Startseite Ihres Geräts zu ändern. Um nach dieser Änderung wieder Zugriff auf die Einstellungsseite zu erhalten, besuchen Sie in Ihrem Browser http://your-device-url/settings.",
+    "set_custom_startpage": "Benutzerdefinierte Startseite festlegen",
+    "invalid_path_input": "Ihr Pfad darf nicht mit einem / beginnen oder enden und darf keine Leerzeichen enthalten.",
+    "your_new_path": "Ihr/neuer-Pfad",
+    "choose_new_path": "Einen neuen Pfad wählen"
 }

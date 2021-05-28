@@ -81,5 +81,11 @@
     "custom_start_page": "Page d’accueil personnalisée",
     "lb_welcome_page": "Page d’accueil du Learner’s Block",
     "start_page_desc": "Choisissez la page que vous voulez que les utilisateurs voient lorsqu’ils accèdent pour la première fois à votre appareil.",
-    "choose_start_page": "Choisir une page d’accueil"
+    "choose_start_page": "Choisir une page d’accueil",
+    "path_changed_to": "Votre page de démarrage a été changée pour",
+    "change_path_warning": "Vous êtes sur le point de changer la page de démarrage de votre appareil. Pour accéder à nouveau à la page des paramètres après ce changement, rendez-vous sur http://your-device-url/settings dans votre navigateur.",
+    "set_custom_startpage": "Définir une page de démarrage personnalisée",
+    "invalid_path_input": "Votre chemin ne doit pas commencer ou se terminer par un / et ne peut pas contenir d’espaces.",
+    "your_new_path": "votre/nouveau-chemin",
+    "choose_new_path": "Choisir un nouveau chemin"
 }
