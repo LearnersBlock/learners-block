@@ -77,5 +77,15 @@
     "select_chapter": "Select a Chapter",
     "download": "Download",
     "login_again": "You have been logged out. Please try logging in again.",
-    "your_new_name": "your-new-name"
+    "your_new_name": "your-new-name",
+    "start_page_desc": "Choose which page you want users to see when they first access your device.",
+    "choose_start_page": "Choose a start page",
+    "change_path_warning": "You are about to change the start page of your device. Are you sure?",
+    "set_custom_startpage": "Set Custom Startpage",
+    "invalid_path_input": "Your path must not start or end with a '/' and cannot contain spaces.",
+    "your_new_path": "Your new path",
+    "choose_new_path": "Choose a new path",
+    "custom_start_page": "Custom Start Page",
+    "lb_welcome_page": "Learner's Block Welcome Page",
+    "path_changed_to": "Your start page has been changed to"
 }
