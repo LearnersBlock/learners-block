@@ -76,5 +76,7 @@
     "swipe_up_for_menu": "Swipe up to get the menu back.",
     "select_chapter": "Select a Chapter",
     "download": "Download",
-    "login_again": "You have been logged out. Please try logging in again."
+    "login_again": "You have been logged out. Please try logging in again.",
+    "new_name": "new-name",
+    "your_new_name": "your-new-name"
 }
