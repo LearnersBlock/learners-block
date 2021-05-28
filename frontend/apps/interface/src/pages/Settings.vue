@@ -226,79 +226,88 @@
             >
               <q-card>
                 <q-card-section>
-                  <div class="text-lg">
-                    {{ $t('choose_start_page') }}
+                  <div class="mr-3 ml-3">
+                    <div class="text-2xl text-gray-700">
+                      {{ $t('choose_start_page') }}
+                    </div>
+                    <div class="text-base text-gray-500">
+                      {{ $t('start_page_desc') }}
+                    </div>
+                    <q-select
+                      v-if="!filesLoading"
+                      rounded
+                      outlined
+                      v-model="startPage"
+                      :options="pages"
+                      class="mb-4"
+                      @update:model-value="changeStartPage"
+                    />
+                    <div
+                      class="text-lg"
+                      v-if="customStartPageInput"
+                    >
+                      {{ $t('choose_new_path') }}
+                    </div>
+                    <q-input
+                      v-if="customStartPageInput"
+                      ref="startPathValid"
+                      filled
+                      :placeholder="$t('your_new_path')"
+                      class="ml-1 mr-1 text-lowercase"
+                      :rules="[(value) =>
+                        !value.substr(0,1).includes('/') &&
+                        !value.substr(-1).includes('/') &&
+                        !value.includes(' ') &&
+                        !value.includes('\\')
+                        || $t('invalid_path_input')]"
+                      v-model="newStartPath"
+                    />
+                    <q-btn
+                      v-if="customStartPageInput"
+                      outline
+                      rounded
+                      no-caps
+                      color="primary"
+                      @click="newStartPathWarn"
+                      :label="$t('set_custom_startpage')"
+                      class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
+                    />
+                    <q-separator spaced />
+                    <div class="text-2xl text-gray-700 mt-5 mb-1">
+                      {{ $t('set_hostname_desc') }}
+                    </div>
+                    <q-input
+                      ref="hostnameValid"
+                      filled
+                      class="ml-1 mr-1 text-lowercase"
+                      :rules="[(val) =>
+                        !val.includes(' ') &&
+                        val.length <= 32
+                        && val === val.toLowerCase()
+                        && regexp.test(val)
+                        || $t('invalid_input')]"
+                      v-model="newHostname"
+                      :placeholder="$t('your_new_name')"
+                    />
+                    <q-btn
+                      outline
+                      rounded
+                      :disable="newHostname"
+                      no-caps
+                      color="primary"
+                      @click="hostnameWarn"
+                      :label="$t('set_hostname')"
+                      class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
+                    />
                   </div>
-                  <div class="text-base text-gray-500">
-                    {{ $t('start_page_desc') }}
-                  </div>
-                  <q-select
-                    v-if="!filesLoading"
-                    filled
-                    v-model="startPage"
-                    :options="pages"
-                    class="mb-4"
-                    @update:model-value="changeStartPage"
+                  <q-separator
+                    class="mr-3 ml-3"
+                    spaced
                   />
-                  <div
-                    class="text-lg"
-                    v-if="customStartPageInput"
-                  >
-                    {{ $t('choose_new_path') }}
-                  </div>
-                  <q-input
-                    v-if="customStartPageInput"
-                    ref="startPathValid"
-                    filled
-                    class="ml-1 mr-1 text-lowercase"
-                    :rules="[(value) =>
-                      !value.includes(' ') &&
-                      !value.includes('/')
-                      || $t('invalid_path_input')]"
-                    v-model="newStartPath"
-                    :label="$t('your_new_path')"
-                  />
-                  <q-btn
-                    v-if="customStartPageInput"
-                    outline
-                    rounded
-                    no-caps
-                    color="primary"
-                    @click="newStartPathWarn"
-                    :label="$t('set_custom_startpage')"
-                    class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
-                  />
-                  <q-separator spaced />
-                  <div class="text-lg">
-                    {{ $t('set_hostname_desc') }}
-                  </div>
-                  <q-input
-                    ref="hostnameValid"
-                    filled
-                    class="ml-1 mr-1 text-lowercase"
-                    :rules="[(val) =>
-                      !val.includes(' ') &&
-                      val.length <= 32
-                      && val === val.toLowerCase()
-                      && regexp.test(val)
-                      || $t('invalid_input')]"
-                    v-model="newHostname"
-                    :label="$t('your_new_name')"
-                  />
-                  <q-btn
-                    outline
-                    rounded
-                    no-caps
-                    color="primary"
-                    @click="hostnameWarn"
-                    :label="$t('set_hostname')"
-                    class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
-                  />
-                  <q-separator spaced />
                   <div>
                     <q-item class="flex">
                       <q-item-section>
-                        <q-item-label class="text-lg">
+                        <q-item-label class="text-2xl text-gray-700">
                           {{ $t('portainer') }}
                         </q-item-label>
                         <q-item-label class="text-base pr-1 text-gray-500">
@@ -543,12 +552,8 @@ export default defineComponent({
 
           $q.dialog({
             title: t('success'),
-            message: `${t('path_changed_to')} ${newStartPath.value}`
+            message: `${t('path_changed_to')} '/${newStartPath.value}'`
           })
-        }).onCancel(() => {
-          // console.log('>>>> Cancel')
-        }).onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
         })
       } else {
         $q.notify({ type: 'negative', message: t('invalid_path_input') })
@@ -573,13 +578,30 @@ export default defineComponent({
         return
       }
 
-      await Axios.post(`${api.value}/v1/setui`, {
-        start_page: currentStartPage.value
-      })
-      $q.dialog({
-        title: t('success'),
-        message: `${t('path_changed_to')} ${startPage.value}`
-      })
+      if (startPage.value === t('lb_welcome_page')) {
+        await Axios.post(`${api.value}/v1/setui`, {
+          start_page: currentStartPage.value
+        })
+        $q.dialog({
+          title: t('success'),
+          message: `${t('path_changed_to')} ${startPage.value}`
+        })
+      } else {
+        $q.dialog({
+          title: t('confirm'),
+          message: t('change_path_warning'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          Axios.post(`${api.value}/v1/setui`, {
+            start_page: currentStartPage.value
+          })
+          $q.dialog({
+            title: t('success'),
+            message: `${t('path_changed_to')} ${startPage.value}`
+          })
+        })
+      }
     }
 
     const updateFiles = async () => {
