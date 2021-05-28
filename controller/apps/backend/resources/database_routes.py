@@ -35,6 +35,8 @@ class set_ui(Resource):
                     lb_database.website = True
                 else:
                     lb_database.website = False
+            if "start_page" in content:
+                lb_database.start_page = content["start_page"]
 
             lb_database.save_to_db()
             return {'response': 'done'}, 200
@@ -48,4 +50,5 @@ class settings_ui(Resource):
         lb_database = User.query.filter_by(username='lb').first()
         return {'files': lb_database.files,
                 'library': lb_database.library,
-                'website': lb_database.website}, 200
+                'website': lb_database.website,
+                'start_page': lb_database.start_page}, 200

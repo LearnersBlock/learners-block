@@ -136,6 +136,9 @@ export default defineComponent({
 
       Axios.get(`${api.value}/v1/settingsui`).then(res => {
         settings.value = res.data
+        if (settings.value.start_page !== '/') {
+          location.href = `/${settings.value.start_page}/`
+        }
         settingsLoading.value = false
       }).catch(e => {
         console.log(e.message)

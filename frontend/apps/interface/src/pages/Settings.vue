@@ -157,14 +157,12 @@
               </q-item>
             </q-list>
             <q-separator spaced />
-
             <q-item-label
               header
               class="text-2xl"
             >
               {{ $t('login') }}
             </q-item-label>
-
             <q-btn
               outline
               rounded
@@ -174,7 +172,6 @@
               :label="$t('set_password')"
               class="ml-3 mr-3 mb-2 text-lg"
             />
-
             <q-btn
               outline
               rounded
@@ -184,7 +181,6 @@
               :label="$t('disable_password')"
               class="ml-3 mr-3 mb-2 text-lg"
             />
-
             <q-separator spaced />
             <q-item-label
               header
@@ -220,7 +216,7 @@
           </div>
           <q-list
             bordered
-            class="rounded-borders mt-5 "
+            class="rounded-borders mt-2"
           >
             <q-expansion-item
               expand-separator
@@ -228,39 +224,90 @@
               :label="$t('advanced')"
               class="w-full"
             >
-              <div class="text-lg ml-6 mt-6">
-                {{ $t('set_hostname_desc') }}
-              </div>
               <q-card>
                 <q-card-section>
-                  <q-input
-                    ref="hostnameValid"
-                    filled
-                    class="ml-1 mr-1 text-lowercase"
-                    :rules="[(val) =>
-                      !val.includes(' ') &&
-                      val.length <= 32
-                      && val === val.toLowerCase()
-                      && regexp.test(val)
-                      || $t('invalid_input')]"
-                    v-model="newHostname"
-                    :label="$t('your_new_name')"
+                  <div class="mr-3 ml-3">
+                    <div class="text-2xl text-gray-700">
+                      {{ $t('choose_start_page') }}
+                    </div>
+                    <div class="text-base text-gray-500">
+                      {{ $t('start_page_desc') }}
+                    </div>
+                    <q-select
+                      v-if="!filesLoading"
+                      rounded
+                      outlined
+                      v-model="startPage"
+                      :options="pages"
+                      class="mb-4"
+                      @update:model-value="changeStartPage"
+                    />
+                    <div
+                      class="text-lg"
+                      v-if="customStartPageInput"
+                    >
+                      {{ $t('choose_new_path') }}
+                    </div>
+                    <q-input
+                      v-if="customStartPageInput"
+                      ref="startPathValid"
+                      filled
+                      :placeholder="$t('your_new_path')"
+                      class="ml-1 mr-1 text-lowercase"
+                      :rules="[(value) =>
+                        !value.substr(0,1).includes('/') &&
+                        !value.substr(-1).includes('/') &&
+                        !value.includes(' ') &&
+                        !value.includes('\\')
+                        || $t('invalid_path_input')]"
+                      v-model="newStartPath"
+                    />
+                    <q-btn
+                      v-if="customStartPageInput"
+                      outline
+                      rounded
+                      no-caps
+                      color="primary"
+                      @click="newStartPathWarn"
+                      :label="$t('set_custom_startpage')"
+                      class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
+                    />
+                    <q-separator spaced />
+                    <div class="text-2xl text-gray-700 mt-5 mb-1">
+                      {{ $t('set_hostname_desc') }}
+                    </div>
+                    <q-input
+                      ref="hostnameValid"
+                      filled
+                      class="ml-1 mr-1 text-lowercase"
+                      :rules="[(val) =>
+                        !val.includes(' ') &&
+                        val.length <= 32
+                        && val === val.toLowerCase()
+                        && regexp.test(val)
+                        || $t('invalid_input')]"
+                      v-model="newHostname"
+                      :placeholder="$t('your_new_name')"
+                    />
+                    <q-btn
+                      outline
+                      rounded
+                      :disable="newHostname"
+                      no-caps
+                      color="primary"
+                      @click="hostnameWarn"
+                      :label="$t('set_hostname')"
+                      class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
+                    />
+                  </div>
+                  <q-separator
+                    class="mr-3 ml-3"
+                    spaced
                   />
-                  <q-btn
-                    outline
-                    rounded
-                    no-caps
-                    color="primary"
-                    @click="hostnameWarn"
-                    :label="$t('set_hostname')"
-                    class="full-width ml-3 mr-3 mt-6 sm:mt-1 mb-4 text-lg"
-                  />
-                  <q-separator spaced />
-
                   <div>
                     <q-item class="flex">
                       <q-item-section>
-                        <q-item-label class="josefin text-xl mt-3">
+                        <q-item-label class="text-2xl text-gray-700">
                           {{ $t('portainer') }}
                         </q-item-label>
                         <q-item-label class="text-base pr-1 text-gray-500">
@@ -280,7 +327,7 @@
                         v-if="portainerLoading"
                         color="primary"
                         size="2em"
-                        class="mt-6 mr-6"
+                        class="mt-4 mr-6"
                       />
                     </q-item>
                   </div>
@@ -334,20 +381,29 @@ export default defineComponent({
     const $q = useQuasar()
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
+
+    const currentStartPage = ref<any>()
+    const customStartPageInput = ref<boolean>(false)
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(false)
     const hostname = ref<string>('')
-    const internet = ref<boolean>(false)
     const hostnameValid = ref()
+    const internet = ref<boolean>(false)
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
     const loading = ref<boolean>(false)
     const newHostname = ref<string>('')
+    const newStartPath = ref<string>('')
+    const pages = [
+      t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('custom_start_page')
+    ]
     const portainer = ref<boolean>(false)
     const portainerLoading = ref<boolean>(true)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
+    const startPage = ref<string>('-')
+    const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
     const togglesLoading = ref<boolean>(true)
@@ -386,6 +442,7 @@ export default defineComponent({
       await Axios.all([fetchedSettings, fetchedSysInfo, fetchedInternetConnectionStatus,
         fetchedHostName]).then(Axios.spread(function (res1, res2, res3, res4): void {
         // Get settings
+        currentStartPage.value = res1.data.start_page
         files.value = res1.data.files
         website.value = res1.data.website
         library.value = res1.data.library
@@ -399,8 +456,20 @@ export default defineComponent({
         hostname.value = res4.data.hostname
       })).catch(e => {
         console.log(e.message)
-        $q.notify({ type: 'negative', message: t('error') })
       })
+
+      if (currentStartPage.value === '/') {
+        startPage.value = t('lb_welcome_page')
+      } else if (currentStartPage.value === 'files') {
+        startPage.value = t('file_manager')
+      } else if (currentStartPage.value === 'library') {
+        startPage.value = t('library')
+      } else if (currentStartPage.value === 'website') {
+        startPage.value = t('website')
+      } else {
+        startPage.value = currentStartPage.value
+      }
+
       filesLoading.value = false
       libraryLoading.value = false
       websiteLoading.value = false
@@ -415,10 +484,49 @@ export default defineComponent({
         wifi.value = res2.data.running !== false
       })).catch(e => {
         console.log(e.message)
-        $q.notify({ type: 'negative', message: t('error') })
       })
       wifiLoading.value = false
       portainerLoading.value = false
+    }
+
+    const changeStartPage = async () => {
+      if (startPage.value === t('lb_welcome_page')) {
+        currentStartPage.value = '/'
+      } else if (startPage.value === t('file_manager')) {
+        currentStartPage.value = 'files'
+      } else if (startPage.value === t('library')) {
+        currentStartPage.value = 'library'
+      } else if (startPage.value === t('website')) {
+        currentStartPage.value = 'website'
+      } else if (startPage.value === t('custom_start_page')) {
+        customStartPageInput.value = true
+        return
+      }
+
+      if (startPage.value === t('lb_welcome_page')) {
+        await Axios.post(`${api.value}/v1/setui`, {
+          start_page: currentStartPage.value
+        })
+        $q.dialog({
+          title: t('success'),
+          message: `${t('path_changed_to')} ${startPage.value}`
+        })
+      } else {
+        $q.dialog({
+          title: t('confirm'),
+          message: t('change_path_warning'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          Axios.post(`${api.value}/v1/setui`, {
+            start_page: currentStartPage.value
+          })
+          $q.dialog({
+            title: t('success'),
+            message: `${t('path_changed_to')} ${startPage.value}`
+          })
+        })
+      }
     }
 
     const connectDisconnectWifi = async () => {
@@ -459,13 +567,31 @@ export default defineComponent({
             title: t('success'),
             message: t('hostname_changed_notification')
           })
-        }).onCancel(() => {
-          // console.log('>>>> Cancel')
-        }).onDismiss(() => {
-          // console.log('I am triggered on both OK and Cancel')
         })
       } else {
         $q.notify({ type: 'negative', message: t('invalid_hostname') })
+      }
+    }
+
+    function newStartPathWarn () {
+      if (startPathValid.value.validate() && newStartPath.value !== '') {
+        $q.dialog({
+          title: t('confirm'),
+          message: t('change_path_warning'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          Axios.post(`${api.value}/v1/setui`, {
+            start_page: newStartPath.value
+          })
+
+          $q.dialog({
+            title: t('success'),
+            message: `${t('path_changed_to')} '/${newStartPath.value}'`
+          })
+        })
+      } else {
+        $q.notify({ type: 'negative', message: t('invalid_path_input') })
       }
     }
 
@@ -546,13 +672,13 @@ export default defineComponent({
         }).onOk(() => {
           connectDisconnectWifi()
           wifi.value = false
-        }).onCancel(() => {
-          // console.log('>>>> Cancel')
         })
       }
     }
 
     return {
+      changeStartPage,
+      customStartPageInput,
       disableLogin,
       disableLoginWarn,
       files,
@@ -565,23 +691,28 @@ export default defineComponent({
       libraryLoading,
       loading,
       newHostname,
+      newStartPath,
+      newStartPathWarn,
+      pages,
       portainer,
       portainerLoading,
       redirect,
       regexp,
+      startPage,
+      startPathValid,
       sysInfo,
       sysInfoLoading,
       togglesLoading,
       updateFiles,
       updateLibrary,
       updatePortainer,
+      updateWebsite,
       website,
       websiteLoading,
       wifi,
       wifiLoading,
       wifiWarn,
-      windowHostname,
-      updateWebsite
+      windowHostname
     }
   }
 })
