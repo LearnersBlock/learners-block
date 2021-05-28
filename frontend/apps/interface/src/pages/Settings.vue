@@ -456,7 +456,6 @@ export default defineComponent({
         hostname.value = res4.data.hostname
       })).catch(e => {
         console.log(e.message)
-        $q.notify({ type: 'negative', message: t('error') })
       })
 
       if (currentStartPage.value === '/') {
@@ -485,7 +484,6 @@ export default defineComponent({
         wifi.value = res2.data.running !== false
       })).catch(e => {
         console.log(e.message)
-        $q.notify({ type: 'negative', message: t('error') })
       })
       wifiLoading.value = false
       portainerLoading.value = false
