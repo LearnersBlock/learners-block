@@ -41,7 +41,7 @@
     "portainer_starting_at": "Portainer starting at",
     "set": "Set",
     "set_hostname": "Set hostname and Wi-Fi SSID",
-    "set_hostname_desc": "Set a new hostname",
+    "set_hostname_desc": "Set a new hostname and Wi-Fi SSID",
     "set_password": "Set password",
     "settings": "Settings",
     "status": "Status",
@@ -77,6 +77,5 @@
     "select_chapter": "Select a Chapter",
     "download": "Download",
     "login_again": "You have been logged out. Please try logging in again.",
-    "new_name": "new-name",
     "your_new_name": "your-new-name"
 }
