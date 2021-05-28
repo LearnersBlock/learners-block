@@ -54,7 +54,7 @@ class User(db.Model):
                                      nullable=False)
 
     start_page = db.Column(db.String(80), unique=False,
-                           server_default=str('menu'),
+                           server_default=str('/'),
                            nullable=False)
 
     wifi_password = db.Column(db.String(128), unique=False,

@@ -157,14 +157,12 @@
               </q-item>
             </q-list>
             <q-separator spaced />
-
             <q-item-label
               header
               class="text-2xl"
             >
               {{ $t('login') }}
             </q-item-label>
-
             <q-btn
               outline
               rounded
@@ -174,7 +172,6 @@
               :label="$t('set_password')"
               class="ml-3 mr-3 mb-2 text-lg"
             />
-
             <q-btn
               outline
               rounded
@@ -184,7 +181,6 @@
               :label="$t('disable_password')"
               class="ml-3 mr-3 mb-2 text-lg"
             />
-
             <q-separator spaced />
             <q-item-label
               header
@@ -220,7 +216,7 @@
           </div>
           <q-list
             bordered
-            class="rounded-borders mt-5 "
+            class="rounded-borders mt-2"
           >
             <q-expansion-item
               expand-separator
@@ -228,11 +224,54 @@
               :label="$t('advanced')"
               class="w-full"
             >
-              <div class="text-lg ml-6 mt-6">
-                {{ $t('set_hostname_desc') }}
-              </div>
               <q-card>
                 <q-card-section>
+                  <div class="text-lg">
+                    {{ $t('choose_start_page') }}
+                  </div>
+                  <div class="text-base text-gray-500">
+                    {{ $t('start_page_desc') }}
+                  </div>
+                  <q-select
+                    v-if="!filesLoading"
+                    filled
+                    v-model="startPage"
+                    :options="pages"
+                    class="mb-4"
+                    @update:model-value="changeStartPage"
+                  />
+                  <div
+                    class="text-lg"
+                    v-if="customStartPageInput"
+                  >
+                    {{ $t('choose_new_path') }}
+                  </div>
+                  <q-input
+                    v-if="customStartPageInput"
+                    ref="startPathValid"
+                    filled
+                    class="ml-1 mr-1 text-lowercase"
+                    :rules="[(value) =>
+                      !value.includes(' ') &&
+                      !value.includes('/')
+                      || $t('invalid_path_input')]"
+                    v-model="newStartPath"
+                    :label="$t('your_new_path')"
+                  />
+                  <q-btn
+                    v-if="customStartPageInput"
+                    outline
+                    rounded
+                    no-caps
+                    color="primary"
+                    @click="newStartPathWarn"
+                    :label="$t('set_custom_startpage')"
+                    class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
+                  />
+                  <q-separator spaced />
+                  <div class="text-lg">
+                    {{ $t('set_hostname_desc') }}
+                  </div>
                   <q-input
                     ref="hostnameValid"
                     filled
@@ -253,14 +292,13 @@
                     color="primary"
                     @click="hostnameWarn"
                     :label="$t('set_hostname')"
-                    class="full-width ml-3 mr-3 mt-6 sm:mt-1 mb-4 text-lg"
+                    class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
                   />
                   <q-separator spaced />
-
                   <div>
                     <q-item class="flex">
                       <q-item-section>
-                        <q-item-label class="josefin text-xl mt-3">
+                        <q-item-label class="text-lg">
                           {{ $t('portainer') }}
                         </q-item-label>
                         <q-item-label class="text-base pr-1 text-gray-500">
@@ -280,7 +318,7 @@
                         v-if="portainerLoading"
                         color="primary"
                         size="2em"
-                        class="mt-6 mr-6"
+                        class="mt-4 mr-6"
                       />
                     </q-item>
                   </div>
@@ -338,16 +376,24 @@ export default defineComponent({
     const filesLoading = ref<boolean>(false)
     const hostname = ref<string>('')
     const internet = ref<boolean>(false)
+    const customStartPageInput = ref<boolean>(false)
     const hostnameValid = ref()
+    const startPathValid = ref()
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
     const loading = ref<boolean>(false)
     const newHostname = ref<string>('')
+    const newStartPath = ref<string>('')
+    const currentStartPage = ref<any>()
+    const pages = [
+      t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('custom_start_page')
+    ]
     const portainer = ref<boolean>(false)
     const portainerLoading = ref<boolean>(true)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
+    const startPage = ref<string>('-')
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
     const togglesLoading = ref<boolean>(true)
@@ -389,6 +435,7 @@ export default defineComponent({
         files.value = res1.data.files
         website.value = res1.data.website
         library.value = res1.data.library
+        currentStartPage.value = res1.data.start_page
         togglesLoading.value = false
         // Get SystemInfo
         sysInfo.value = res2.data
@@ -401,6 +448,19 @@ export default defineComponent({
         console.log(e.message)
         $q.notify({ type: 'negative', message: t('error') })
       })
+
+      if (currentStartPage.value === '/') {
+        startPage.value = t('lb_welcome_page')
+      } else if (currentStartPage.value === 'files') {
+        startPage.value = t('file_manager')
+      } else if (currentStartPage.value === 'library') {
+        startPage.value = t('library')
+      } else if (currentStartPage.value === 'website') {
+        startPage.value = t('website')
+      } else {
+        startPage.value = currentStartPage.value
+      }
+
       filesLoading.value = false
       libraryLoading.value = false
       websiteLoading.value = false
@@ -469,8 +529,57 @@ export default defineComponent({
       }
     }
 
+    function newStartPathWarn () {
+      if (startPathValid.value.validate() && newStartPath.value !== '') {
+        $q.dialog({
+          title: t('confirm'),
+          message: t('change_path_warning'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          Axios.post(`${api.value}/v1/setui`, {
+            start_page: newStartPath.value
+          })
+
+          $q.dialog({
+            title: t('success'),
+            message: `${t('path_changed_to')} ${newStartPath.value}`
+          })
+        }).onCancel(() => {
+          // console.log('>>>> Cancel')
+        }).onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        })
+      } else {
+        $q.notify({ type: 'negative', message: t('invalid_path_input') })
+      }
+    }
+
     function redirect () {
       location.href = '/upload-library/'
+    }
+
+    const changeStartPage = async () => {
+      if (startPage.value === t('lb_welcome_page')) {
+        currentStartPage.value = '/'
+      } else if (startPage.value === t('file_manager')) {
+        currentStartPage.value = 'files'
+      } else if (startPage.value === t('library')) {
+        currentStartPage.value = 'library'
+      } else if (startPage.value === t('website')) {
+        currentStartPage.value = 'website'
+      } else if (startPage.value === t('custom_start_page')) {
+        customStartPageInput.value = true
+        return
+      }
+
+      await Axios.post(`${api.value}/v1/setui`, {
+        start_page: currentStartPage.value
+      })
+      $q.dialog({
+        title: t('success'),
+        message: `${t('path_changed_to')} ${startPage.value}`
+      })
     }
 
     const updateFiles = async () => {
@@ -553,6 +662,8 @@ export default defineComponent({
     }
 
     return {
+      changeStartPage,
+      customStartPageInput,
       disableLogin,
       disableLoginWarn,
       files,
@@ -560,15 +671,20 @@ export default defineComponent({
       hostname,
       hostnameValid,
       hostnameWarn,
+      newStartPath,
+      newStartPathWarn,
       internet,
       library,
       libraryLoading,
       loading,
       newHostname,
+      pages,
       portainer,
       portainerLoading,
       redirect,
       regexp,
+      startPage,
+      startPathValid,
       sysInfo,
       sysInfoLoading,
       togglesLoading,
