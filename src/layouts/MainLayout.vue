@@ -30,21 +30,27 @@
             target="_self"
           />
         </q-toolbar-title>
-        <q-select
+        <q-item
           v-if="!onDevice"
-          class="w-15 q-mx-auto q-pa-sm"
-          filled
-          square
-          color="dark"
-          bg-color="grey-3"
-          v-model="selectedLanguage"
-          :label="$t('switch_language')"
-          :options="languages"
-          :option-value="(lang) => lang.name"
-          emit-value
-          map-options
-          @input="switchLanguage"
-        />
+          clickable
+        >
+          <span class="material-icons">
+            translate
+          </span>
+          <q-menu>
+            <q-list style="min-width: 100px">
+              <q-item
+                @click="changeLanguage(language.value)"
+                v-for="language in languages"
+                :key="language.value"
+                clickable
+                v-close-popup
+              >
+                <q-item-section>{{ language.label }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-item>
       </q-toolbar>
     </q-header>
 
@@ -53,7 +59,7 @@
       show-if-above
       v-if="isInIndex"
       bordered
-      content-class="bg-white"
+      class="bg-white"
     >
       <q-list>
         <q-item-label
@@ -81,30 +87,30 @@
           :option-label="(lang) => lang.language"
           :option-value="(lang) => lang.id"
           :options="fetchedLanguages.languages"
-          @input="searchResources"
+          @update:model-value="searchResources"
           multiple
           map-options
           emit-value
         >
-          <template #option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+          <template #option="{ itemProps, opt, selected, toggleOption }">
             <q-item
               v-bind="itemProps"
-              v-on="itemEvents"
+              v-on="itemProps"
             >
               <q-item-section>
                 <q-item-label v-html="opt.language" />
               </q-item-section>
               <q-item-section side>
                 <q-toggle
-                  :value="selected"
-                  @input="toggleOption(opt)"
+                  :model-value="selected"
+                  @update:model-value="toggleOption(opt)"
                 />
               </q-item-section>
             </q-item>
           </template>
         </q-select>
 
-<q-select
+        <q-select
           class="w-90 q-mx-auto q-mt-md"
           outlined
           v-model="selectedLevels"
@@ -113,23 +119,23 @@
           :option-label="(level) => level.level"
           :option-value="(level) => level.id"
           :label="$t('level')"
-          @input="searchResources"
+          @update:model-value="searchResources"
           multiple
           emit-value
           map-options
         >
-          <template #option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+          <template #option="{ itemProps, opt, selected, toggleOption }">
             <q-item
               v-bind="itemProps"
-              v-on="itemEvents"
+              v-on="itemProps"
             >
               <q-item-section>
                 <q-item-label v-html="opt.level" />
               </q-item-section>
               <q-item-section side>
                 <q-toggle
-                  :value="selected"
-                  @input="toggleOption(opt)"
+                  :model-value="selected"
+                  @update:model-value="toggleOption(opt)"
                 />
               </q-item-section>
             </q-item>
@@ -145,23 +151,23 @@
           :option-label="(tag) => tag.tag"
           :option-value="(tag) => tag.id"
           :label="$t('tags')"
-          @input="searchResources"
+          @update:model-value="searchResources"
           multiple
           emit-value
           map-options
         >
-          <template #option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+          <template #option="{ itemProps, opt, selected, toggleOption }">
             <q-item
               v-bind="itemProps"
-              v-on="itemEvents"
+              v-on="itemProps"
             >
               <q-item-section>
                 <q-item-label v-html="opt.tag" />
               </q-item-section>
               <q-item-section side>
                 <q-toggle
-                  :value="selected"
-                  @input="toggleOption(opt)"
+                  :model-value="selected"
+                  @update:model-value="toggleOption(opt)"
                 />
               </q-item-section>
             </q-item>
@@ -177,23 +183,23 @@
           :option-label="(format) => format.type"
           :option-value="(format) => format.id"
           :label="$t('formats')"
-          @input="searchResources"
+          @update:model-value="searchResources"
           multiple
           emit-value
           map-options
         >
-          <template #option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+          <template #option="{ itemProps, opt, selected, toggleOption }">
             <q-item
               v-bind="itemProps"
-              v-on="itemEvents"
+              v-on="itemProps"
             >
               <q-item-section>
                 <q-item-label v-html="opt.type" />
               </q-item-section>
               <q-item-section side>
                 <q-toggle
-                  :value="selected"
-                  @input="toggleOption(opt)"
+                  :model-value="selected"
+                  @update:model-value="toggleOption(opt)"
                 />
               </q-item-section>
             </q-item>
@@ -217,35 +223,47 @@
 
     <q-page-container>
       <router-view
-        ref="view"
+        v-slot="{ Component, route }"
         :keyword="keyword"
         :formats="selectedFormats"
         :tags="selectedTags"
         :levels="selectedLevels"
         :languages="selectedLanguages"
-      />
+      >
+        <component
+          :is="Component"
+          :key="route.meta.usePathKey ? route.path : undefined"
+          ref="view"
+        />
+      </router-view>
     </q-page-container>
   </q-layout>
 </template>
 
 <script lang="ts">
 
-import { computed, defineComponent, onMounted, ref, watch } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { GET_LANGUAGES } from '../gql/language/queries'
 import { GET_FORMATS } from '../gql/format/queries'
 import { GET_TAGS } from '../gql/tag/queries'
 import { GET_LEVELS } from '../gql/level/queries'
 import { GET_RESOURCES_LENGTH } from '../gql/resource/queries'
+import { Quasar, useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'MainLayout',
-  setup (_, { root }) {
+  setup () {
+    const $q = useQuasar()
+    const { locale } = useI18n({ useScope: 'global' })
+    const $router = useRouter()
     // Drawer toggle
     const leftDrawerOpen = ref(false)
     // Keyword input
     const keyword = ref<string>('')
-    // Router view refference in order call method from parent to child
+    // Router view reference in order to call method from parent to child
     const view = ref<any>(null)
     // Selected languages for select dropdown - IDs
     const selectedLanguages = ref<string[]>([])
@@ -262,30 +280,41 @@ export default defineComponent({
     // Languages for i18n
     const languages = ref<[]>([
       {
-        name: 'en-us',
-        label: 'English'
-      }, {
-        name: 'ar',
-        label: 'اَلْعَرَبِيَّةُ'
-      }, {
-        name: 'es',
-        label: 'Español'
-      }, {
-        name: 'fr',
-        label: 'Français'
+        label: 'English',
+        value: 'en-US'
       },
       {
-        name: 'ptBR',
-        label: 'Português'
+        label: 'اَلْعَرَبِيَّةُ',
+        value: 'ar'
       },
       {
-        name: 'tr',
-        label: 'Türkçe'
+        label: 'Deutsche',
+        value: 'de'
+      },
+      {
+        label: 'Español',
+        value: 'es'
+      },
+      {
+        label: 'Français',
+        value: 'fr'
+      },
+      {
+        label: 'Italiana',
+        value: 'it'
+      },
+      {
+        label: 'Português',
+        value: 'pt-BR'
+      },
+      {
+        label: 'Türk',
+        value: 'tr'
       }
 
     ] as any)
     // Selected language for i18n
-    const selectedLanguage = ref<string>('en-us')
+    const selectedLanguage = ref(locale)
     // Fetch languages query
     const { result: fetchedLanguages, loading: fetchLanguagesLoading, refetch: fetchLanguages } = useQuery(GET_LANGUAGES)
     // Fetch formats query
@@ -295,7 +324,7 @@ export default defineComponent({
     // Fetch level query
     const { result: fetchedLevels, loading: fetchLevelsLoading, refetch: fetchLevels } = useQuery(GET_LEVELS)
     // Fetch language cookie
-    const langCookie = ref<any>(root.$q.localStorage.getItem('lang'))
+    const langCookie = ref<any>($q.localStorage.getItem('lang'))
     // Fetch resources query
     const {
       result: fetchedResourcesLength
@@ -303,7 +332,8 @@ export default defineComponent({
 
     onMounted(async () => {
       if (langCookie.value) {
-        root.$i18n.locale = langCookie.value
+        locale.value = langCookie.value
+        Quasar.lang.set(langCookie.value)
       }
 
       await fetchLanguages()
@@ -324,7 +354,7 @@ export default defineComponent({
 
     // Used to disable the drawer once the user goes to a specific resource
     const isInIndex = computed(() => {
-      return root.$route.path === '/'
+      return $router.currentRoute.value.path === '/'
     })
 
     // Method to call fetchFilteredResources from parent to child
@@ -343,24 +373,14 @@ export default defineComponent({
     }
 
     // Switch i18n language according to selectedLanguage input
-    const switchLanguage = () => {
-      if (selectedLanguage.value === 'ar') {
-        import(
-        /* webpackInclude: /(de|en-us)\.js$/ */
-          'quasar/lang/' + 'he'
-        ).then(lang => {
-          root.$q.lang.set(lang.default)
-        })
-      } else {
-        import(
-        /* webpackInclude: /(de|en-us)\.js$/ */
-          'quasar/lang/' + 'en-us'
-        ).then(lang => {
-          root.$q.lang.set(lang.default)
-        })
-      }
-
-      root.$i18n.locale = selectedLanguage.value
+    const changeLanguage = (value: string) => {
+      import(
+        /* webpackInclude: /(en-US|ar|de|es|fr|it|tr|pt-BR)\.js$/ */
+        'quasar/lang/' + value
+      ).then((lang) => {
+        locale.value = value
+        Quasar.lang.set(lang.default)
+      })
     }
 
     const resetInputs = () => {
@@ -373,6 +393,7 @@ export default defineComponent({
     }
 
     return {
+      changeLanguage,
       fetchedLanguages,
       fetchFormatsLoading,
       fetchLanguagesLoading,
@@ -395,7 +416,6 @@ export default defineComponent({
       selectedLanguage,
       searchResources,
       searchResourcesString,
-      switchLanguage,
       view
     }
   }

@@ -1,5 +1,5 @@
 {
-    "rsync": "Copiar URL RSync para a área de transferência",
+    "rsync": "Copiar URL Rsync para a área de transferência",
     "rsync_url": "URL Rsync",
     "url": "URL para download",
     "reset": "Restaurar",
@@ -26,7 +26,6 @@
     "uid": "UID",
     "transferred": "Transferido",
     "total_entries": "Total de entradas na base de dados",
-    "sample_url": "URL de exemplo",
     "sample": "Exemplo",
     "rsync_url_copied": "URL RSync copiado para o Clipboard",
     "resource_not_available": "Este recurso não está disponível para download.",
@@ -50,5 +49,6 @@
     "Burmese": "Birmanês",
     "Bengali": "Bengali",
     "Arabic": "Árabe",
-    "Afrikaans": "Africano"
+    "Afrikaans": "Africano",
+    "level": "Nível"
 }
