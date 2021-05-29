@@ -1,10 +1,12 @@
-# Learner's Block Library
+[![learnersblock.org](https://learnersblock.org/images/lb-logo-full.svg)](https://learnersblock.org)
+
+# Library
 
 This code and repository provides for https://library.learnersblock.org as well as the source code for Library access on the [Learner's Block](https://github.com/LearnersBlock/learners-block).
 
-Contributions are welcome, please see the open issues and Good First Issues tag for guidance. 
+It is maintained through the [Learner's Block Library repository](https://github.com/LearnersBlock/library) and all pull requests should be submitted there. 
 
-Resources stored on this database are not managed through this repository, they are maintained through a seperate backend. Resources submissions can be made through our [contact page](https://learnersblock.org/contact) until a submissions page is added. 
+Resources stored in the database are not managed through this repository, they are maintained through a separate backend. Resource submissions can be made through our [contact page](https://learnersblock.org/contact) until a submissions page is added. 
 
 # Development
 
@@ -21,18 +23,12 @@ The code will build for use on the Learner's Block when the `ONDEVICE=TRUE` vari
 `quasar dev`
 
 ### Lint the files
-yarn run lint
+`yarn run lint`
 
 ### Build the app for production
 The code will build for use on the Learner's Block when the `ONDEVICE=TRUE` variable exists in the build environment. If the variable is missing, it will start in web mode for library.learnersblock.org.
 
 `quasar build`
-
-### Customize the configuration
-See [configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
-
-## Add Languages
-To add languages for i18n, go src/layouts/MainLayout, add the language to const languages and name it. Then go to src/i18n and mimic all the files and content from en-US folder. Then go to src/i18n/index.ts and add the import to the file created there.
 
 ## Bug reports
 

@@ -1,5 +1,8 @@
 <template ref="indexPage">
   <q-page class="row items-center justify-evenly">
+    <div v-if="!apiIsUp">
+      {{ $t('under_maintenance') }}
+    </div>
     <q-spinner
       color="primary"
       size="10%"
@@ -29,7 +32,7 @@
         class="resource_box q-mt-lg q-mb-xl"
       >
         <router-link
-          class="resource q-mt-md items-center"
+          class="resource q-mt-md items-center text-black "
           tag="div"
           :to="'/resource/' + resource.id"
           v-for="resource in fetchedResources.resources"
@@ -93,7 +96,7 @@
       >
         <q-btn
           v-if="fetchedResources.resources.length && !fetchResourcesLoading && fetchedResourcesLength"
-          :disabled="fetchedResources.resources.length >= fetchedResourcesLength.resourcesConnection.aggregate.totalCount"
+          :disable="fetchedResources.resources.length >= fetchedResourcesLength.resourcesConnection.aggregate.totalCount"
           color="grey-6"
           @click="loadMore"
           class="resource_button q-mb-xl"
@@ -106,8 +109,9 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable vue/require-default-prop */
 import { useQuery } from '@vue/apollo-composable'
-import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from 'vue'
 import { GET_RESOURCES, GET_RESOURCES_LENGTH } from '../gql/resource/queries'
 import { Loading } from 'quasar'
 
@@ -131,9 +135,14 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const apiIsUp = ref<boolean>(true)
+    const { onError } = useQuery(GET_RESOURCES, { limit: 1 })
+    onError(() => {
+      apiIsUp.value = false
+    })
     // Read envs for page state
     const onDevice = ref<any>(process.env.ONDEVICE)
-    // Loading boolean in case the api is very fast, the UI still loads for a lil bit - better User Experience
+    // Loading boolean in case the api is very fast, the UI still loads for a bit - better User Experience
     const limit = ref<number>(250)
     const disableButton = ref<boolean>(true)
     // Fetch resources query
@@ -142,7 +151,6 @@ export default defineComponent({
       loading: fetchResourcesLoading,
       refetch: fetchResources
     } = useQuery(GET_RESOURCES, { limit: 250 })
-
     const {
       result: fetchedResourcesLength,
       loading: fetchResourcesLengthLoading,
@@ -192,6 +200,7 @@ export default defineComponent({
     }
 
     return {
+      apiIsUp,
       disableButton,
       fetchedResources,
       fetchFilteredResources,
@@ -207,7 +216,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .resource {
   box-shadow: 0 .3rem 1rem .1rem rgba(0,0,0,.2);
   padding: 2rem;
@@ -216,6 +225,7 @@ export default defineComponent({
   cursor: pointer;
   border-radius: .3rem;
   transition: all .15s ease-in-out;
+  text-decoration: none;
   @media only screen and (max-width: 960px) {
     flex-direction: column;
     text-align: center;

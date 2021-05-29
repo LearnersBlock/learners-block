@@ -1,16 +1,20 @@
+import enUS from './en-US.json'
 import ar from './ar.json'
-import enUS from './enUS.json'
+import de from './de.json'
 import es from './es.json'
 import fr from './fr.json'
-import ptBR from './pt_BR.json'
+import it from './it.json'
+import ptBR from './pt-BR.json'
 import tr from './tr.json'
 
 // Here you can define additional languages
 export default {
+  'en-US': enUS,
   ar: ar,
-  'en-us': enUS,
+  de: de,
   es: es,
   fr: fr,
-  ptBR: ptBR,
-  tr: tr
+  it: it,
+  tr: tr,
+  'pt-BR': ptBR
 }

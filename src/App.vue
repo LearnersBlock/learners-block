@@ -1,33 +1,15 @@
 <template>
-  <div id="q-app row items-center justify-evenly">
-    <router-view v-if="apiIsUp" />
-    <div
-      v-else
-      class="text-h2 q-mt-xl q-ml-xl"
-    >
-      {{ $t('under_maintenance') }}
-    </div>
-  </div>
+  <router-view />
 </template>
 <script lang="ts">
-import { useQuery } from '@vue/apollo-composable'
-import { defineComponent, ref } from '@vue/composition-api'
-import { GET_RESOURCES } from './gql/resource/queries'
+import { ApolloClients } from '@vue/apollo-composable'
+import { apolloClients } from 'src/extensions/apollo/boot'
+import { defineComponent, provide } from 'vue'
 
 export default defineComponent({
   name: 'App',
   setup () {
-    const apiIsUp = ref<boolean>(true)
-    const { onError } = useQuery(GET_RESOURCES)
-
-    onError(() => {
-      setTimeout(() => {
-        apiIsUp.value = false
-      }, 1000)
-    })
-    return {
-      apiIsUp
-    }
+    provide(ApolloClients, apolloClients)
   }
 })
 </script>
