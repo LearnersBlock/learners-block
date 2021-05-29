@@ -4,7 +4,7 @@
 
 This code and repository provides for https://library.learnersblock.org as well as the source code for Library access on the [Learner's Block](https://github.com/LearnersBlock/learners-block).
 
-It is maintained through in the [Learner's Block Library repository](https://github.com/LearnersBlock/library) and all pull requests should be submitted there. 
+It is maintained through the [Learner's Block Library repository](https://github.com/LearnersBlock/library) and all pull requests should be submitted there. 
 
 Resources stored in the database are not managed through this repository, they are maintained through a separate backend. Resource submissions can be made through our [contact page](https://learnersblock.org/contact) until a submissions page is added. 
 
