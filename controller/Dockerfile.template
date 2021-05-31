@@ -1,4 +1,4 @@
-## Build Wi-Fi Connect
+## Build Wi-Fi Connect UI
 FROM node:14.17.0-alpine3.13 AS controller-wifi-buildstep
 
 WORKDIR /build-context
@@ -13,12 +13,23 @@ RUN yarn install
 RUN yarn build
 
 
+## Build Python packages
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian-python:3.8.6-buster-build AS python-buildstep
+
+# Copy Python requirements file
+COPY apps/backend/requirements.txt /tmp/
+
+#Install packages into one directory
+RUN pip install --user -r /tmp/requirements.txt --upgrade --no-warn-script-location
+
+
 ## Compile container
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian-python:3.8.6-buster
 
 # Set env variables
 ENV FLASK_ENV=production
 ENV FLASK_APP=run
+ENV PATH=/root/.local/bin:$PATH
 
 # Set working directory 
 WORKDIR /app
@@ -27,28 +38,20 @@ WORKDIR /app
 RUN install_packages \
   dnsmasq \
   iw \
+  libglib2.0-0 \
   psmisc \
   rsync \
   wireless-tools
 
-# Install package dependencies
-COPY apps/backend/requirements.txt /tmp/
-
-RUN install_packages \
-  libdbus-glib-1-dev \
-  libgirepository1.0-dev  \
-  && pip install -r /tmp/requirements.txt --upgrade --no-deps --force-reinstall --no-cache-dir \
-  && apt-get purge --auto-remove \
-  libdbus-glib-1-dev \
-  libgirepository1.0-dev -y
+# Copy built Python packages from build container
+COPY --from=python-buildstep /root/.local /root/.local
 
 # Make required directories
 RUN mkdir -p common/wifi-connect
 RUN mkdir -p db
 
 # Download Wi-Fi connect based on system architecture 
-
-ARG VERSION="4.4.4"
+ARG VERSION="4.4.5"
 
 RUN curl -Ls "https://github.com/balena-io/wifi-connect/releases/download/v$VERSION/wifi-connect-v$VERSION-linux-%%BALENA_ARCH%%.tar.gz" \
   | tar -xvz -C common/wifi-connect && rm -Rf common/wifi-connect/ui/*
