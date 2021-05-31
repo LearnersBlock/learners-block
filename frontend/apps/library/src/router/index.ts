@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { route } from 'quasar/wrappers'
 import {
   createMemoryHistory,
@@ -5,9 +6,9 @@ import {
   createWebHashHistory,
   createWebHistory
 } from 'vue-router'
-import routes from './routes'
 import { SessionStorage } from 'quasar'
-import axios from 'axios'
+import routes from './routes'
+import { ref } from 'vue'
 
 /*
  * If not building with SSR mode, you can
@@ -19,6 +20,8 @@ import axios from 'axios'
  */
 
 export default route(function (/* { store, ssrContext } */) {
+  const currentScrollLocation = ref<any>(0)
+
   const createHistory =
     process.env.SERVER
       ? createMemoryHistory
@@ -27,7 +30,7 @@ export default route(function (/* { store, ssrContext } */) {
         : createWebHashHistory
 
   const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
+    scrollBehavior: () => ({ left: 0, top: currentScrollLocation.value }),
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!
@@ -37,6 +40,10 @@ export default route(function (/* { store, ssrContext } */) {
       // eslint-disable-next-line no-void
       process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
     )
+  })
+
+  Router.afterEach(() => {
+    currentScrollLocation.value = SessionStorage.getItem('position')
   })
 
   axios.defaults.withCredentials = true

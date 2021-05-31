@@ -3,7 +3,6 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
-
           flat
           dense
           round
@@ -12,7 +11,6 @@
           v-if="isInIndex"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-
         <div class="q-ml-md q-mt-sm">
           <a href="/">
             <img
@@ -21,7 +19,6 @@
             >
           </a>
         </div>
-
         <q-toolbar-title class="josefin text-h5 q-mt-xs">
           <a
             class="text-white"
@@ -53,7 +50,6 @@
         </q-item>
       </q-toolbar>
     </q-header>
-
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
@@ -69,7 +65,6 @@
           {{ $t('search_options') }}
         </q-item-label>
         <q-separator class="q-mt-md" />
-
         <q-input
           outlined
           class="q-mt-lg q-mx-auto w-90"
@@ -109,7 +104,6 @@
             </q-item>
           </template>
         </q-select>
-
         <q-select
           class="w-90 q-mx-auto q-mt-md"
           outlined
@@ -141,7 +135,6 @@
             </q-item>
           </template>
         </q-select>
-
         <q-select
           class="w-90 q-mx-auto q-mt-md"
           outlined
@@ -173,7 +166,6 @@
             </q-item>
           </template>
         </q-select>
-
         <q-select
           class="w-90 q-mx-auto q-mt-md"
           outlined
@@ -220,7 +212,6 @@
         </div>
       </q-list>
     </q-drawer>
-
     <q-page-container>
       <router-view
         v-slot="{ Component, route }"
@@ -242,7 +233,6 @@
 
 <script lang="ts">
 
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { GET_LANGUAGES } from '../gql/language/queries'
 import { GET_FORMATS } from '../gql/format/queries'
@@ -250,12 +240,14 @@ import { GET_TAGS } from '../gql/tag/queries'
 import { GET_LEVELS } from '../gql/level/queries'
 import { GET_RESOURCES_LENGTH } from '../gql/resource/queries'
 import { Quasar, useQuasar } from 'quasar'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'MainLayout',
   setup () {
+    // Import required features
     const $q = useQuasar()
     const { locale } = useI18n({ useScope: 'global' })
     const $router = useRouter()
@@ -311,7 +303,6 @@ export default defineComponent({
         label: 'Türk',
         value: 'tr'
       }
-
     ] as any)
     // Selected language for i18n
     const selectedLanguage = ref(locale)
@@ -335,12 +326,12 @@ export default defineComponent({
         locale.value = langCookie.value
         Quasar.lang.set(langCookie.value)
       }
-
       await fetchLanguages()
       await fetchFormats()
       await fetchTags()
       await fetchLevels()
     })
+
     // If keyword input is cleared, then execute the query
     watch(() => keyword.value, (newValue) => {
       if (newValue === null) {
@@ -360,6 +351,8 @@ export default defineComponent({
     // Method to call fetchFilteredResources from parent to child
     const searchResources = async () => {
       view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedLanguages.value, selectedTags.value, selectedLevels.value)
+      window.scrollTo(0, 0)
+      $q.sessionStorage.set('position', 0)
     }
 
     // Method to call fetchFilteredResources from parent to child
@@ -368,6 +361,8 @@ export default defineComponent({
         searching.value = true
         await delay(1000)
         view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedLanguages.value, selectedTags.value, selectedLevels.value)
+        window.scrollTo(0, 0)
+        $q.sessionStorage.set('position', 0)
         searching.value = false
       }
     }
@@ -384,6 +379,8 @@ export default defineComponent({
     }
 
     const resetInputs = () => {
+      window.scrollTo(0, 0)
+      $q.sessionStorage.set('position', 0)
       keyword.value = ''
       selectedLanguages.value = []
       selectedFormats.value = []
@@ -420,4 +417,5 @@ export default defineComponent({
     }
   }
 })
+
 </script>
