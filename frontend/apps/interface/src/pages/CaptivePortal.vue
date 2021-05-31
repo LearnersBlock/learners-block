@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
 import { copyToClipboard } from 'quasar'
 import { useStore } from '../store'
@@ -41,6 +41,10 @@ export default defineComponent({
       return $store.getters.GET_API
     })
 
+    onMounted(() => {
+      fetchHostname()
+    })
+
     const copyUrl = () => {
       copyToClipboard('http://' + hostname.value + '.local')
     }
@@ -49,8 +53,6 @@ export default defineComponent({
       const fetchedHostName = await Axios.get(`${api.value}/v1/hostname`)
       hostname.value = fetchedHostName.data.hostname
     }
-
-    fetchHostname()
 
     return {
       copyUrl,
