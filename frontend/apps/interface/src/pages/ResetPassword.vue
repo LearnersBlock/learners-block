@@ -43,11 +43,13 @@ import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup () {
+    // Import required features
     const $router = useRouter()
     const $store = useStore()
     const $q = useQuasar()
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
+
     // New password
     const newPassword = ref<string>('')
     const api = computed(() => {

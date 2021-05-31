@@ -27,17 +27,22 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
 import { copyToClipboard } from 'quasar'
 import { useStore } from '../store'
 
 export default defineComponent({
   setup () {
+    // Import required features
     const $store = useStore()
     const hostname = ref<string>('')
     const api = computed(() => {
       return $store.getters.GET_API
+    })
+
+    onMounted(() => {
+      fetchHostname()
     })
 
     const copyUrl = () => {
@@ -48,8 +53,6 @@ export default defineComponent({
       const fetchedHostName = await Axios.get(`${api.value}/v1/hostname`)
       hostname.value = fetchedHostName.data.hostname
     }
-
-    fetchHostname()
 
     return {
       copyUrl,

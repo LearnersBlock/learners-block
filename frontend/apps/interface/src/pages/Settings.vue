@@ -253,7 +253,7 @@
                       ref="startPathValid"
                       filled
                       :placeholder="$t('your_new_path')"
-                      class="ml-1 mr-1 text-lowercase"
+                      class="ml-1 mr-1"
                       :rules="[(value) =>
                         !value.substr(0,1).includes('/') &&
                         !value.substr(-1).includes('/') &&
@@ -279,7 +279,7 @@
                     <q-input
                       ref="hostnameValid"
                       filled
-                      class="ml-1 mr-1 text-lowercase"
+                      class="ml-1 mr-1"
                       :rules="[(val) =>
                         !val.includes(' ') &&
                         val.length <= 32
@@ -377,6 +377,7 @@ import { useI18n } from 'vue-i18n'
 export default defineComponent({
   name: 'Settings',
   setup () {
+    // Import required features
     const $store = useStore()
     const $q = useQuasar()
     // eslint-disable-next-line @typescript-eslint/unbound-method
