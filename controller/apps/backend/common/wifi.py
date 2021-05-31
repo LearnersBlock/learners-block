@@ -1,3 +1,4 @@
+from dbus.mainloop.glib import DBusGMainLoop
 from flask_restful import abort
 from resources.system_routes import rsync_terminate
 import NetworkManager
@@ -6,6 +7,8 @@ import subprocess
 import time
 import requests
 import sys
+
+DBusGMainLoop(set_as_default=True)
 
 
 def handle_exit(*args):
