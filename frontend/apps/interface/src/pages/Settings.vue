@@ -253,7 +253,7 @@
                       ref="startPathValid"
                       filled
                       :placeholder="$t('your_new_path')"
-                      class="ml-1 mr-1 text-lowercase"
+                      class="ml-1 mr-1"
                       :rules="[(value) =>
                         !value.substr(0,1).includes('/') &&
                         !value.substr(-1).includes('/') &&
@@ -279,7 +279,7 @@
                     <q-input
                       ref="hostnameValid"
                       filled
-                      class="ml-1 mr-1 text-lowercase"
+                      class="ml-1 mr-1"
                       :rules="[(val) =>
                         !val.includes(' ') &&
                         val.length <= 32
