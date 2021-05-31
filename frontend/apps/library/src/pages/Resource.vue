@@ -16,20 +16,14 @@
           position="top-left"
           :offset="[18, 18]"
         >
-          <router-link
-            color="secondary"
-            class="back text-h6 cursor-pointer"
-            tag="div"
-            to="/"
+          <q-btn
+            color="white"
+            text-color="primary"
+            class="text-subtitle2 text-weight-bold"
+            @click="$router.go(-1)"
           >
-            <q-btn
-              color="white"
-              text-color="primary"
-              class="text-subtitle2 text-weight-bold"
-            >
-              {{ $t('back') }}
-            </q-btn>
-          </router-link>
+            {{ $t('back') }}
+          </q-btn>
         </q-page-sticky>
       </q-item>
       <div v-if="fetchedResource.resource.logo && fetchedResource.resource.logo.formats && fetchedResource.resource.logo.formats.thumbnail && fetchedResource.resource.logo.formats.thumbnail.url">
@@ -218,7 +212,6 @@
         size="3em"
         v-if="!exitLoop"
       />
-
       <div v-if="onDevice">
         <q-btn
           class="q-mt-lg q-mb-lg"
@@ -230,7 +223,6 @@
           :label="exitLoop ? $t('download'): $t('cancel')"
           @click="downloadToBlock"
         />
-
         <q-tooltip
           v-if="!fetchedResource.resource.rsync && !fetchedResource.resource.download_url"
           anchor="top middle"
@@ -240,7 +232,6 @@
         >
           {{ $t('resource_not_available') }}
         </q-tooltip>
-
         <q-btn
           class="q-mt-lg q-ml-sm q-mb-lg"
           v-if="fetchedResource.resource.sample"
@@ -283,7 +274,6 @@
               text-color="black"
               :label="$t('download_complete')"
             />
-
             <q-badge
               v-if="checkingFiles"
               color="white"
@@ -293,7 +283,6 @@
           </div>
         </q-linear-progress>
       </div>
-
       <div
         v-else
         class="q-mt-lg "
@@ -349,9 +338,11 @@ import { useRoute } from 'vue-router'
 
 export default defineComponent({
   setup () {
+    // Import required features
     const $q = useQuasar()
     const { t } = useI18n()
     const route = useRoute()
+
     // Fetch resources
     const { result: fetchedResource, loading: fetchResourceLoading } = useQuery(GET_RESOURCE, { id: route.params.id })
 
@@ -399,7 +390,6 @@ export default defineComponent({
           while (exitLoop.value === false) {
             await delay(1500)
             const response = await Axios.get(`http://${hostname.value}:9090/v1/download/status`)
-
             if (response.data.progress === 'space-error') {
               $q.notify({ type: 'negative', message: t('no_space') })
               stopDownload()
@@ -500,7 +490,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .resource {
-
     &_image {
         width: 15rem;
         margin-bottom: 1rem;
