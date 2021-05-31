@@ -1,5 +1,6 @@
 <template ref="indexPage">
   <q-page class="row items-center justify-evenly">
+    <q-scroll-observer @scroll="onScroll" />
     <div v-if="!apiIsUp">
       {{ $t('under_maintenance') }}
     </div>
@@ -111,9 +112,9 @@
 <script lang="ts">
 /* eslint-disable vue/require-default-prop */
 import { useQuery } from '@vue/apollo-composable'
-import { defineComponent, onMounted, ref } from 'vue'
 import { GET_RESOURCES, GET_RESOURCES_LENGTH } from '../gql/resource/queries'
-import { Loading } from 'quasar'
+import { Loading, useQuasar } from 'quasar'
+import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -135,8 +136,11 @@ export default defineComponent({
     }
   },
   setup (props) {
+    // Import required features
+    const $q = useQuasar()
     const apiIsUp = ref<boolean>(true)
     const { onError } = useQuery(GET_RESOURCES, { limit: 1 })
+
     onError(() => {
       apiIsUp.value = false
     })
@@ -159,7 +163,11 @@ export default defineComponent({
 
     // On mount, enable loading and fetch resources
     onMounted(async () => {
-      await fetchResources()
+      if (props.keyword?.length || props.formats?.length || props.languages?.length || props.tags?.length || props.levels?.length) {
+        await fetchFilteredResources()
+      } else {
+        await fetchResources()
+      }
     })
 
     const loadMore = async () => {
@@ -169,7 +177,7 @@ export default defineComponent({
 
     // Enable loading and filter resources according to all inputs
     const fetchFilteredResources = async (
-      keyword:string = props.keyword!,
+      keyword: string = props.keyword!,
       formats: string[] = props.formats! as string[],
       languages: string[] = props.languages as string[],
       tags: string[] = props.tags as string[],
@@ -184,15 +192,20 @@ export default defineComponent({
           levels
         }
       )
-      await fetchResources({
-        keyword,
-        languages,
-        formats,
-        tags,
-        levels,
-        limit: limit.value
-      } as any)
+      await fetchResources(
+        {
+          keyword,
+          languages,
+          formats,
+          tags,
+          levels,
+          limit: limit.value
+        } as any)
       Loading.hide()
+    }
+
+    function onScroll (scrollLocation) {
+      $q.sessionStorage.set('position', scrollLocation.position.top)
     }
 
     function redirect () {
@@ -210,6 +223,7 @@ export default defineComponent({
       limit,
       loadMore,
       onDevice,
+      onScroll,
       redirect
     }
   }
@@ -299,7 +313,6 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     justify-content: center;
-
   }
 
   &_container {
