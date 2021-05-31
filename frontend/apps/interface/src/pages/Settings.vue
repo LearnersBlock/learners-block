@@ -377,6 +377,7 @@ import { useI18n } from 'vue-i18n'
 export default defineComponent({
   name: 'Settings',
   setup () {
+    // Import required features
     const $store = useStore()
     const $q = useQuasar()
     // eslint-disable-next-line @typescript-eslint/unbound-method

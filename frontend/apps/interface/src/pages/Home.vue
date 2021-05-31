@@ -114,8 +114,10 @@ import { useStore } from '../store'
 
 export default defineComponent({
   setup () {
+    // Import required features
     const $store = useStore()
     const $q = useQuasar()
+
     // Settings for the ui
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)

@@ -44,11 +44,13 @@ import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup () {
+    // Import required features
     const $store = useStore()
     const $router = useRouter()
     const $q = useQuasar()
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
+
     // Username
     const username = ref<string>('lb')
     // Password
