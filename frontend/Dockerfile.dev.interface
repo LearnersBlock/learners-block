@@ -1,9 +1,5 @@
 FROM node:14.17.0-alpine3.13
 
-# Install development dependencies
-RUN apk add python3
-RUN yarn global add @quasar/cli && export PATH="$(yarn global bin):$PATH"
-
 # Install SupervisorD
 RUN apk add supervisor
 

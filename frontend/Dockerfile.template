@@ -4,10 +4,7 @@ FROM node:14.17.0-alpine3.13 AS library-buildstep
 # Add enviroment variable for OnDevice build
 ENV ONDEVICE=TRUE
 
-# Instal Dependencies
-RUN yarn global add @quasar/cli && \
-  export PATH="$(yarn global bin):$PATH"
-
+#Set work directory
 WORKDIR /build-context
 
 # Install node_modules
@@ -17,15 +14,11 @@ RUN yarn install
 
 RUN yarn run lint
 
-RUN quasar build
+RUN yarn build
 
 
 ## Build interface
 FROM node:14.17.0-alpine3.13 AS interface-buildstep
-
-# Instal Quasar
-RUN yarn global add @quasar/cli && \
-  export PATH="$(yarn global bin):$PATH"
 
 WORKDIR /build-context
 
@@ -36,7 +29,7 @@ RUN yarn install
 
 RUN yarn run lint
 
-RUN quasar build
+RUN yarn build
 
 
 ## Build File Manager
