@@ -12,7 +12,7 @@
     <div class="text-xl text-center text-gray-500 ml-2 mr-2">
       {{ $t('visit_to_begin') }}
       <br><br>
-      http://{{ hostname }}.local
+      {{ hostname }}
       <span
         @click="copyUrl();$q.notify($t('url_copied'));"
         class="material-icons text-h6 mb-1 q-ml-sm cursor-pointer clipboard-sampleUrl"
@@ -46,12 +46,12 @@ export default defineComponent({
     })
 
     const copyUrl = () => {
-      copyToClipboard('http://' + hostname.value + '.local')
+      copyToClipboard(hostname.value)
     }
 
     const fetchHostname = async () => {
       const fetchedHostName = await Axios.get(`${api.value}/v1/hostname`)
-      hostname.value = fetchedHostName.data.hostname
+      hostname.value = `http://${fetchedHostName.data.hostname}.local`
     }
 
     return {
