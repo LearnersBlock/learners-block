@@ -3,7 +3,7 @@ import de from './de.json';
 import en from './en.json';
 import es from './es.json';
 import fr from './fr.json';
-import nbNO from './nb-NO.json';
+import it from './it.json';
 import ptBR from './pt-BR.json';
 import tr from './tr.json';
 
@@ -23,8 +23,8 @@ if (language === 'ar') {
 	setlang = fr;
 } else if (language === 'es') {
 	setlang = es;
-} else if (language === 'nb-NO') {
-	setlang = nbNO;
+} else if (language === 'it') {
+	setlang = it;
 } else if (language === 'pt-BR') {
 	setlang = ptBR;
 } else if (language === 'tr') {
