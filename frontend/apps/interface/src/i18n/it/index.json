@@ -81,5 +81,11 @@
     "custom_start_page": "Pagina iniziale personalizzata",
     "lb_welcome_page": "Pagina di benvenuto del Learner’s Block",
     "start_page_desc": "Scegli quale pagina vuoi che gli utenti vedano quando accedono per la prima volta al tuo dispositivo.",
-    "choose_start_page": "Scegli una pagina iniziale"
+    "choose_start_page": "Scegli una pagina iniziale",
+    "path_changed_to": "La tua pagina iniziale è stata cambiata in",
+    "change_path_warning": "Stai per cambiare la pagina iniziale del tuo dispositivo. Per riottenere l’accesso alla pagina delle impostazioni dopo questo cambiamento, visita http://your-device-url/settings nel tuo browser.",
+    "set_custom_startpage": "Imposta una pagina iniziale personalizzata",
+    "invalid_path_input": "Il tuo percorso non deve iniziare o finire con una / e non può contenere spazi.",
+    "your_new_path": "tuo/nuovo-percorso",
+    "choose_new_path": "Scegli un nuovo percorso"
 }
