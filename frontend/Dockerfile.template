@@ -60,7 +60,7 @@ RUN install_packages \
   util-linux
 
 # Install SupervisorD
-RUN pip install supervisor==4.2.1 --no-deps --no-cache-dir
+RUN pip install supervisor==4.2.2 --no-deps --no-cache-dir
 
 # Install Nginx and PHP-FPM
 RUN install_packages \
