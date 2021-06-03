@@ -66,23 +66,23 @@ RUN pip install supervisor==4.2.1 --no-deps --no-cache-dir
 RUN install_packages \
   curl \
   nginx \
-  php7 \
-  php7-ctype \
-  php7-curl \
-  php7-dom \
-  php7-fpm \
-  php7-gd \
-  php7-intl \
-  php7-json \
-  php7-mbstring \
-  php7-mysqli \
-  php7-opcache \
-  php7-openssl \
-  php7-phar \
-  php7-session \
-  php7-xml \
-  php7-xmlreader \
-  php7-zlib \
+  php8 \
+  php8-ctype \
+  php8-curl \
+  php8-dom \
+  php8-fpm \
+  php8-gd \
+  php8-intl \
+  php8-json \
+  php8-mbstring \
+  php8-mysqli \
+  php8-opcache \
+  php8-openssl \
+  php8-phar \
+  php8-session \
+  php8-xml \
+  php8-xmlreader \
+  php8-zlib \
   && rm /etc/nginx/conf.d/default.conf
 
 # Install File Manager dependencies
@@ -91,11 +91,11 @@ RUN install_packages \
   libzip \
   libcap \
   openldap-dev \
-  php7-bz2 \
-  php7-fileinfo \
-  php7-ldap \
-  php7-posix \
-  php7-zip
+  php8-bz2 \
+  php8-fileinfo \
+  php8-ldap \
+  php8-posix \
+  php8-zip
 
 # Set application directory 
 WORKDIR /app/
@@ -117,8 +117,8 @@ COPY config/usb/scripts /usr/src/scripts
 RUN chmod +x /usr/src/scripts/*
 
 # Configure PHP-FPM and NGINX
-COPY config/php/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY config/php/php.ini /etc/php7/conf.d/custom.ini
+COPY config/php/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
+COPY config/php/php.ini /etc/php8/conf.d/custom.ini
 COPY /config/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY /config/nginx/conf/ /etc/nginx/conf.d/
 
