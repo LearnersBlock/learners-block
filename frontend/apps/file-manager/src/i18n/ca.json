@@ -23,5 +23,6 @@
     "archive_create_error": "No s’ha pogut crear l’arxiu.",
     "ajax_request": "Sol·licitud AJAX",
     "username": "Nom d’usuari",
-    "password": "Contrasenya"
+    "password": "Contrasenya",
+    "size": "Mida"
 }
