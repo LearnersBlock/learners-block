@@ -49,7 +49,7 @@ RUN composer run build
 
 
 ## Compile container
-FROM balenalib/%%BALENA_ARCH%%-alpine-python:3.8.10-3.13
+FROM balenalib/%%BALENA_ARCH%%-alpine-python:3.8.10-3.13-20210506
 
 # Install packages #
 

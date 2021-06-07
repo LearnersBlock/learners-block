@@ -16,13 +16,14 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "epubjs": "^0.3.88",
-    "quasar": "^2.0.0-beta.19",
-    "vue-i18n": "^9.1.0"
+    "quasar": "^2.0.0-rc.1",
+    "vue-i18n": "^9.1.0",
+    "vuex": "4"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.0.0",
-    "@quasar/app": "^3.0.0-beta.28",
-    "@types/node": "^14.14.33",
+    "@quasar/app": "^3.0.0-rc.1",
+    "@types/node": "^15.12.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
     "autoprefixer": "^10.2.6",
