@@ -13,50 +13,53 @@
 error_reporting( E_ALL );
 ini_set( 'display_errors', 'OFF' );
 
+// load custom learnersblock extensions
+require_once (dirname(__FILE__) . '/extensions/bootstrap.php');
+
 class IFM {
 	private $defaultconfig = array(
 		// general config
 		"auth" => 0,
 		"auth_source" => 'inline;admin:$2y$10$0Bnm5L4wKFHRxJgNq.oZv.v7yXhkJZQvinJYR2p6X1zPvzyDRUVRC',
-		"root_dir" => "",
-		"root_public_url" => "",
+		"root_dir" => "/app/public/storage/fileshare/",
+		"root_public_url" => "/fileshare/",
 		"tmp_dir" => "",
 		"timezone" => "",
 		"forbiddenChars" => array(),
 		"dateLocale" => "en-US",
-		"language" => "@@@vars:default_lang@@@",
+		"language" => "en",
 		"selfoverwrite" => 0,
 
 		// api controls
-		"ajaxrequest" => 1,
+		"ajaxrequest" => 0,
 		"chmod" => 1,
-		"copymove" => 1,
-		"createdir" => 1,
-		"createfile" => 1,
-		"edit" => 1,
-		"delete" => 1,
+		"copymove" => 0,
+		"createdir" => 0,
+		"createfile" => 0,
+		"edit" => 0,
+		"delete" => 0,
 		"download" => 1,
-		"extract" => 1,
-		"upload" => 1,
-		"remoteupload" => 1,
-		"rename" => 1,
+		"extract" => 0,
+		"upload" => 0,
+		"remoteupload" => 0,
+		"rename" => 0,
 		"zipnload" => 1,
-		"createarchive" => 1,
+		"createarchive" => 0,
 		"search" => 1,
-		"pagination" => 0,
+		"pagination" => 1,
 
 		// gui controls
 		"showlastmodified" => 0,
 		"showfilesize" => 1,
-		"showowner" => 1,
-		"showgroup" => 1,
-		"showpermissions" => 2,
+		"showowner" => 0,
+		"showgroup" => 0,
+		"showpermissions" => 0,
 		"showhtdocs" => 0,
-		"showhiddenfiles" => 1,
+		"showhiddenfiles" => 0,
 		"showpath" => 0,
 		"contextmenu" => 1,
 		"disable_mime_detection" => 0,
-		"showrefresh" => 1,
+		"showrefresh" => 0,
 		"forceproxy" => 0,
 		"confirmoverwrite" => 1
 	);
@@ -222,7 +225,7 @@ IFM_ASSETS
 		print '<!DOCTYPE HTML>
 		<html>
 			<head>
-				<title>IFM - improved file manager</title>
+				<title>LB - File Manager</title>
 				<meta charset="utf-8">
 				<meta http-equiv="X-UA-Compatible" content="IE=edge">
 				<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, shrink-to-fit=no">';
