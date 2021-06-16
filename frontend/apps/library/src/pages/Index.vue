@@ -1,14 +1,8 @@
 <template ref="indexPage">
   <q-page class="row items-center justify-evenly">
-    <q-scroll-observer @scroll="onScroll" />
     <div v-if="!apiIsUp">
       {{ $t('under_maintenance') }}
     </div>
-    <q-spinner
-      color="primary"
-      size="10%"
-      v-if="fetchResourcesLoading"
-    />
     <div
       v-if="fetchedResources && !fetchResourcesLoading"
       class="resource_container"
@@ -32,78 +26,89 @@
         v-if="fetchedResources.resources"
         class="resource_box q-mt-lg q-mb-xl"
       >
-        <router-link
-          class="resource q-mt-md items-center text-black "
-          tag="div"
-          :to="'/resource/' + resource.id"
-          v-for="resource in fetchedResources.resources"
-          :key="resource.id"
+        <q-infinite-scroll
+          @load="loadMore"
+          :offset="2000"
         >
-          <div v-if="resource.logo && resource.logo.formats && resource.logo.formats.thumbnail && resource.logo.formats.thumbnail.url">
-            <img
-              class="resource_image"
-              :src="'https://library-api.learnersblock.org' + resource.logo.formats.thumbnail.url"
-            >
-          </div>
-          <div v-else>
-            <img
-              class="resource_image"
-              :src="resource.logo ? 'https://library-api.learnersblock.org' + resource.logo.url : require('../assets/default.jpg')"
-            >
-          </div>
-          <div class="resource_info">
-            <div
-              dir="auto"
-              class="text-h3 resource_name josefin sans"
-            >
-              {{ resource.name }}
+          <router-link
+            class="resource q-mt-md items-center text-black "
+            tag="div"
+            :to="'/resource/' + resource.id"
+            v-for="resource in fetchedResources.resources"
+            :key="resource.id"
+          >
+            <div v-if="resource.logo && resource.logo.formats && resource.logo.formats.thumbnail && resource.logo.formats.thumbnail.url">
+              <q-img
+                :src="'https://library-api.learnersblock.org' + resource.logo.formats.thumbnail.url"
+                loading="lazy"
+                spinner-color="grey"
+                height="140px"
+                class="resource_image"
+              />
             </div>
-            <div
-              dir="auto"
-              class="text-h6 q-mt-md resource_description"
-            >
-              {{ resource.description }}
+            <div v-else>
+              <img
+                class="resource_image"
+                :src="resource.logo ? 'https://library-api.learnersblock.org' + resource.logo.url : require('../assets/default.jpg')"
+              >
             </div>
-            <div class="resource_languages">
-              <div>
-                <q-badge
-                  class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
-                  color="primary"
-                  v-for="language in resource.languages"
-                  :key="language.id"
-                >
-                  {{ $t(language.language) }}
-                </q-badge>
+            <div class="resource_info">
+              <div
+                dir="auto"
+                class="text-h3 resource_name josefin sans"
+              >
+                {{ resource.name }}
+              </div>
+              <div
+                dir="auto"
+                class="text-h6 q-mt-md resource_description"
+              >
+                {{ resource.description }}
+              </div>
+              <div class="resource_languages">
+                <div>
+                  <q-badge
+                    class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
+                    color="primary"
+                    v-for="language in resource.languages"
+                    :key="language.id"
+                  >
+                    {{ $t(language.language) }}
+                  </q-badge>
+                </div>
+              </div>
+              <div
+                v-if="resource.size"
+                class="text-subtitle1 resource_size"
+              >
+                {{ $t('size') }}: {{ resource.size }} GB
               </div>
             </div>
-            <div
-              v-if="resource.size"
-              class="text-subtitle1 resource_size"
-            >
-              {{ $t('size') }}: {{ resource.size }} GB
-            </div>
+          </router-link>
+          <div
+            v-if="endOfResults"
+            class="text-h3 text-center text-grey q-mt-lg"
+          >
+            <q-icon name="done_outline" />
           </div>
-        </router-link>
+          <template
+            #loading
+            v-if="!endOfResults"
+          >
+            <div class="row justify-center q-my-md">
+              <q-spinner-dots
+                color="primary"
+                size="40px"
+              />
+            </div>
+          </template>
+        </q-infinite-scroll>
       </div>
       <div
         v-if="fetchedResources.resources == '' && !fetchResourcesLoading"
         class="text-h3 text-center text-grey"
       >
         {{ $t('no_results_found') }}
-      </div>
-      <div
-        v-if="!disableButton"
-        class="text-center"
-      >
-        <q-btn
-          v-if="fetchedResources.resources.length && !fetchResourcesLoading && fetchedResourcesLength"
-          :disable="fetchedResources.resources.length >= fetchedResourcesLength.resourcesConnection.aggregate.totalCount"
-          color="grey-6"
-          @click="loadMore"
-          class="resource_button q-mb-xl"
-        >
-          {{ $t('load_more') }}
-        </q-btn>
       </div>
     </div>
   </q-page>
@@ -112,9 +117,10 @@
 <script lang="ts">
 /* eslint-disable vue/require-default-prop */
 import { useQuery } from '@vue/apollo-composable'
-import { GET_RESOURCES, GET_RESOURCES_LENGTH } from '../gql/resource/queries'
-import { Loading, useQuasar } from 'quasar'
+import { GET_RESOURCES } from '../gql/resource/queries'
 import { defineComponent, onMounted, ref } from 'vue'
+import { useStore } from 'vuex'
+import { Loading } from 'quasar'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -137,43 +143,38 @@ export default defineComponent({
   },
   setup (props) {
     // Import required features
-    const $q = useQuasar()
     const apiIsUp = ref<boolean>(true)
     const { onError } = useQuery(GET_RESOURCES, { limit: 1 })
+    const $store = useStore()
+
+    // Constants for resource fetching
+    const endOfResults = ref<boolean>(false)
 
     onError(() => {
       apiIsUp.value = false
     })
     // Read envs for page state
     const onDevice = ref<any>(process.env.ONDEVICE)
-    // Loading boolean in case the api is very fast, the UI still loads for a bit - better User Experience
-    const limit = ref<number>(250)
-    const disableButton = ref<boolean>(true)
     // Fetch resources query
     const {
       result: fetchedResources,
       loading: fetchResourcesLoading,
       refetch: fetchResources
-    } = useQuery(GET_RESOURCES, { limit: 250 })
-    const {
-      result: fetchedResourcesLength,
-      loading: fetchResourcesLengthLoading,
-      refetch: fetchResourcesLength
-    } = useQuery(GET_RESOURCES_LENGTH, {})
+    } = useQuery(GET_RESOURCES, { limit: 30 })
 
     // On mount, enable loading and fetch resources
     onMounted(async () => {
       if (props.keyword?.length || props.formats?.length || props.languages?.length || props.tags?.length || props.levels?.length) {
+        Loading.show()
         await fetchFilteredResources()
+        Loading.hide()
+      } else if ($store.state.savedResources.resources) {
+        fetchedResources.value = $store.state.savedResources.resources
       } else {
-        await fetchResources()
+        $store.commit('savedResources/resourceLimit', 30)
+        await $store.commit('savedResources/updateResources', fetchedResources)
       }
     })
-
-    const loadMore = async () => {
-      limit.value = limit.value + 30
-      await fetchFilteredResources()
-    }
 
     // Enable loading and filter resources according to all inputs
     const fetchFilteredResources = async (
@@ -182,16 +183,6 @@ export default defineComponent({
       languages: string[] = props.languages as string[],
       tags: string[] = props.tags as string[],
       levels: string[] = props.levels as string[]) => {
-      Loading.show()
-      await fetchResourcesLength(
-        {
-          keyword,
-          languages,
-          formats,
-          tags,
-          levels
-        }
-      )
       await fetchResources(
         {
           keyword,
@@ -199,13 +190,30 @@ export default defineComponent({
           formats,
           tags,
           levels,
-          limit: limit.value
+          limit: $store.state.savedResources.limit
         } as any)
-      Loading.hide()
+      $store.commit('savedResources/updateResources', fetchedResources)
+      endOfResults.value = false
     }
 
-    function onScroll (scrollLocation) {
-      $q.sessionStorage.set('position', scrollLocation.position.top)
+    // Load more resources when reaching bottom of results
+    async function loadMore (_index, done) {
+      if (endOfResults.value) {
+        setTimeout(() => {
+          done()
+        }, 2000)
+      } else if ($store.state.savedResources.limit > $store.state.savedResources.resources.resources.length) {
+        endOfResults.value = true
+        done()
+      } else {
+        $store.commit('savedResources/resourceLimit', $store.state.savedResources.limit + 30)
+        await fetchFilteredResources().then(() => {
+          $store.commit('savedResources/updateResources', fetchedResources)
+        })
+        setTimeout(() => {
+          done()
+        }, 2000)
+      }
     }
 
     function redirect () {
@@ -214,16 +222,12 @@ export default defineComponent({
 
     return {
       apiIsUp,
-      disableButton,
+      endOfResults,
       fetchedResources,
       fetchFilteredResources,
       fetchResourcesLoading,
-      fetchedResourcesLength,
-      fetchResourcesLengthLoading,
-      limit,
       loadMore,
       onDevice,
-      onScroll,
       redirect
     }
   }
@@ -252,10 +256,11 @@ export default defineComponent({
 
   &_image {
     height: auto;
-    margin-right: 2rem;
+    margin-right: 2.5rem;
     width: 10rem;
      @media only screen and (max-width: 960px) {
        margin: auto;
+       margin-right: 0;
        width: 10rem;
        height: auto;
        margin-bottom: 2rem;

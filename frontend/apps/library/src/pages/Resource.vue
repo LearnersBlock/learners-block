@@ -217,6 +217,7 @@
           class="q-mt-lg q-mb-lg"
           glossy
           rounded
+          unelevated
           :disable="!fetchedResource.resource.rsync && !fetchedResource.resource.download_url"
           color="primary"
           icon="download"
@@ -224,11 +225,11 @@
           @click="downloadToBlock"
         />
         <q-tooltip
+          class="text-caption"
           v-if="!fetchedResource.resource.rsync && !fetchedResource.resource.download_url"
           anchor="top middle"
           self="center middle"
           :offset="[10, 10]"
-          style="font-size: 16px"
         >
           {{ $t('resource_not_available') }}
         </q-tooltip>
@@ -236,8 +237,8 @@
           class="q-mt-lg q-ml-sm q-mb-lg"
           v-if="fetchedResource.resource.sample"
           glossy
-          split
           rounded
+          unelevated
           color="primary"
           icon="visibility"
           :label="$t('sample')"
@@ -291,6 +292,7 @@
           v-if="fetchedResource.resource.download_url || fetchedResource.resource.rsync"
           glossy
           split
+          unelevated
           @click="downloadZip"
           color="primary"
           icon="download"
@@ -315,8 +317,8 @@
           class="q-ml-sm"
           v-if="fetchedResource.resource.sample"
           glossy
-          split
           rounded
+          unelevated
           color="primary"
           icon="visibility"
           :label="$t('sample')"
