@@ -14,7 +14,7 @@ RUN yarn build
 
 
 ## Build Python packages
-FROM balenalib/%%BALENA_ARCH%%-debian-python:3.8.10-buster-build-20210506 AS python-buildstep
+FROM balenalib/rpi-debian-python:3.8.10-buster-build-20210506 AS python-buildstep
 
 # Copy Python requirements file
 COPY apps/backend/requirements.txt /tmp/
@@ -24,7 +24,7 @@ RUN pip install --user -r /tmp/requirements.txt --upgrade --no-warn-script-locat
 
 
 ## Compile container
-FROM balenalib/%%BALENA_ARCH%%-debian-python:3.8.10-buster-20210506
+FROM balenalib/rpi-debian-python:3.8.10-buster-20210506
 
 # Set env variables
 ENV FLASK_ENV=production

@@ -84,7 +84,7 @@
                   anchor="top middle"
                   self="center middle"
                   :offset="[10, 10]"
-                  style="font-size: 16px"
+                  class="text-caption text-center"
                 >
                   {{ $t('need_connection') }}
                 </q-tooltip>

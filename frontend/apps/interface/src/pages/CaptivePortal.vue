@@ -18,8 +18,8 @@
         class="material-icons text-h6 mb-1 q-ml-sm cursor-pointer clipboard-sampleUrl"
       >
         content_copy
-        <q-tooltip>
-          <span class="text-subtitle1">Copy to clipboard</span>
+        <q-tooltip class="text-caption text-center">
+          Copy to clipboard
         </q-tooltip>
       </span>
     </div>
