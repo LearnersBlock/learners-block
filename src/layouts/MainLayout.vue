@@ -30,10 +30,25 @@
         <q-item
           v-if="!onDevice"
           clickable
+          @click="redirect('https://airtable.com/shrkg3MkzXLd7hBts')"
+        >
+          <span class="material-icons">
+            send
+          </span>
+          <q-tooltip class="text-caption text-center">
+            {{ $t('submit_resource') }}
+          </q-tooltip>
+        </q-item>
+        <q-item
+          v-if="!onDevice"
+          clickable
         >
           <span class="material-icons">
             translate
           </span>
+          <q-tooltip class="text-caption text-center">
+            {{ $t('switch_language') }}
+          </q-tooltip>
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item
@@ -239,10 +254,11 @@ import { GET_FORMATS } from '../gql/format/queries'
 import { GET_TAGS } from '../gql/tag/queries'
 import { GET_LEVELS } from '../gql/level/queries'
 import { GET_RESOURCES_LENGTH } from '../gql/resource/queries'
-import { Quasar, useQuasar } from 'quasar'
+import { Loading, Quasar, useQuasar } from 'quasar'
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -251,6 +267,7 @@ export default defineComponent({
     const $q = useQuasar()
     const { locale } = useI18n({ useScope: 'global' })
     const $router = useRouter()
+    const $store = useStore()
     // Drawer toggle
     const leftDrawerOpen = ref(false)
     // Keyword input
@@ -322,6 +339,7 @@ export default defineComponent({
     } = useQuery(GET_RESOURCES_LENGTH, {})
 
     onMounted(async () => {
+      Loading.show()
       if (langCookie.value) {
         locale.value = langCookie.value
         Quasar.lang.set(langCookie.value)
@@ -330,6 +348,7 @@ export default defineComponent({
       await fetchFormats()
       await fetchTags()
       await fetchLevels()
+      Loading.hide()
     })
 
     // If keyword input is cleared, then execute the query
@@ -338,34 +357,6 @@ export default defineComponent({
         searchResources()
       }
     })
-
-    function delay (ms: number) {
-      return new Promise(resolve => setTimeout(resolve, ms))
-    }
-
-    // Used to disable the drawer once the user goes to a specific resource
-    const isInIndex = computed(() => {
-      return $router.currentRoute.value.path === '/'
-    })
-
-    // Method to call fetchFilteredResources from parent to child
-    const searchResources = async () => {
-      view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedLanguages.value, selectedTags.value, selectedLevels.value)
-      window.scrollTo(0, 0)
-      $q.sessionStorage.set('position', 0)
-    }
-
-    // Method to call fetchFilteredResources from parent to child
-    const searchResourcesString = async () => {
-      if (!searching.value) {
-        searching.value = true
-        await delay(1000)
-        view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedLanguages.value, selectedTags.value, selectedLevels.value)
-        window.scrollTo(0, 0)
-        $q.sessionStorage.set('position', 0)
-        searching.value = false
-      }
-    }
 
     // Switch i18n language according to selectedLanguage input
     const changeLanguage = (value: string) => {
@@ -378,15 +369,52 @@ export default defineComponent({
       })
     }
 
-    const resetInputs = () => {
+    function delay (ms: number) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+
+    // Used to disable the drawer once the user goes to a specific resource
+    const isInIndex = computed(() => {
+      return $router.currentRoute.value.path === '/'
+    })
+
+    // Method to call fetchFilteredResources from parent to child
+    const searchResources = async () => {
+      Loading.show()
       window.scrollTo(0, 0)
-      $q.sessionStorage.set('position', 0)
+      $store.commit('savedResources/resourceLimit', 30)
+      await view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedLanguages.value, selectedTags.value, selectedLevels.value)
+      Loading.hide()
+    }
+
+    // Method to call fetchFilteredResources from parent to child
+    const searchResourcesString = async () => {
+      if (!searching.value) {
+        searching.value = true
+        await delay(1000)
+        Loading.show()
+        window.scrollTo(0, 0)
+        $store.commit('savedResources/resourceLimit', 30)
+        await view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedLanguages.value, selectedTags.value, selectedLevels.value)
+        Loading.hide()
+        searching.value = false
+      }
+    }
+
+    function redirect (url) {
+      window.open(url, '_blank')
+    }
+
+    const resetInputs = async () => {
+      Loading.show()
+      window.scrollTo(0, 0)
       keyword.value = ''
       selectedLanguages.value = []
       selectedFormats.value = []
       selectedTags.value = []
       selectedLevels.value = []
-      view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedLanguages.value, selectedTags.value, selectedLevels.value)
+      await view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedLanguages.value, selectedTags.value, selectedLevels.value)
+      Loading.hide()
     }
 
     return {
@@ -405,6 +433,7 @@ export default defineComponent({
       languages,
       leftDrawerOpen,
       onDevice,
+      redirect,
       resetInputs,
       selectedLanguages,
       selectedFormats,

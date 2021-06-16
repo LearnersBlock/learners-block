@@ -50,5 +50,6 @@
     "home": "Accueil",
     "level": "Niveau",
     "uid": "UID",
-    "no_space": "Votre Block n’a plus d’espace."
+    "no_space": "Votre Block n’a plus d’espace.",
+    "submit_resource": "Soumettre une ressource"
 }

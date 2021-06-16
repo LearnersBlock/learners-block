@@ -50,5 +50,6 @@
     "rsync_url_copied": "Se copió el URL de RSync en el portapapeles",
     "rsync_url": "URL de RSync",
     "rsync": "Copiar URL de Rsync en portapapeles",
-    "resource_not_available": "Este recurso no está disponible para descargar."
+    "resource_not_available": "Este recurso no está disponible para descargar.",
+    "submit_resource": "Enviar un recurso"
 }
