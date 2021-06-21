@@ -19,8 +19,9 @@ import atexit
 import inspect
 import os
 import signal
+import subprocess
 
-# Import .env file
+# Import .env file to make env vars available from os.environ
 load_dotenv()
 
 # Load extensions
@@ -59,7 +60,11 @@ def first_launch():
     # Check first launch PID
     pid = str(os.getpid())
     pidfile = "/app/db/run.pid"
-    if not os.path.isfile(pidfile):
+    container_hostname = subprocess.run(["hostname"],
+                                        capture_output=True,
+                                        check=True,
+                                        text=True).stdout.rstrip()
+    if not os.path.isfile(pidfile) and container_hostname != 'lb':
         # Run tasks on first launch
         # Set hostname to 'lb'
         response = curl(method="patch",
@@ -69,6 +74,12 @@ def first_launch():
         open(pidfile, 'w').write(pid)
 
         print('Set hostname on first boot: ' + str(response["status_code"]))
+
+        response = curl(method="post-json",
+                        path="/v1/reboot?apikey=",
+                        supervisor_retries=20)
+
+        print('Restarting device: ' + str(response))
 
 
 # Create Flask app instance

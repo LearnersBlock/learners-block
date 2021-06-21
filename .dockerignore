@@ -4,6 +4,7 @@
 **/node_modules
 **/.quasar
 .gitkeep
+.gitignore
 
 # Cordova related directories and files
 **/src-cordova/node_modules
