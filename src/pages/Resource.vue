@@ -14,14 +14,19 @@
       <q-item class="back q-mt-md q-mr-sm">
         <q-page-sticky
           position="top-left"
-          :offset="[18, 18]"
+          :offset="[25, 20]"
         >
           <q-btn
             color="white"
             text-color="primary"
             class="text-subtitle2 text-weight-bold"
             @click="$router.go(-1)"
+            rounded
+            outline
           >
+            <span class="material-icons mr-1 mb-.5">
+              arrow_back_ios
+            </span>
             {{ $t('back') }}
           </q-btn>
         </q-page-sticky>
