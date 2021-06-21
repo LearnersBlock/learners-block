@@ -11,6 +11,7 @@
         v-if="onDevice"
         @click="redirect"
         rounded
+        outline
         color="white"
         text-color="primary"
         class="ml-3 mt-9 text-subtitle2 text-weight-bold"

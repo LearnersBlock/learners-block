@@ -15,13 +15,13 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "node-fetch": "^2.6.1",
-    "quasar": "^2.0.0-rc.3",
+    "quasar": "^2.0.0",
     "vue-i18n": "^9.1.4",
     "vuex": "4"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.0.0",
-    "@quasar/app": "^3.0.0-rc.3",
+    "@quasar/app": "^3.0.0",
     "@quasar/quasar-app-extension-apollo": "^2.0.0-beta.1",
     "@types/node": "^15.12.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
