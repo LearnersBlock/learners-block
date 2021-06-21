@@ -20,17 +20,20 @@
         class="mt-4"
         type="submit"
         color="white"
+        rounded
+        outline
         :loading="submitting"
         text-color="primary"
       />
       <q-btn
+        :label="$t('cancel')"
         color="primary"
         text-color="white"
         class="mt-4"
+        rounded
+        unelevated
         @click="$router.replace('/')"
-      >
-        {{ $t('cancel') }}
-      </q-btn>
+      />
     </q-form>
   </q-page>
 </template>

@@ -20,15 +20,18 @@
         type="submit"
         color="white"
         text-color="primary"
+        rounded
+        outline
       />
       <q-btn
+        :label="$t('cancel')"
         color="primary"
         text-color="white"
         class="mt-4"
         @click="$router.replace('/settings')"
-      >
-        {{ $t('cancel') }}
-      </q-btn>
+        rounded
+        unelevated
+      />
     </q-form>
   </q-page>
 </template>

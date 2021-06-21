@@ -9,6 +9,7 @@
             color="white"
             text-color="primary"
             class="ml-3 mt-9 text-subtitle2 text-weight-bold"
+            outline
           >
             <span class="material-icons mr-1 mb-.5">
               arrow_back_ios
