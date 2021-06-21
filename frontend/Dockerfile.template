@@ -7,10 +7,10 @@ ENV ONDEVICE=TRUE
 # Set work directory
 WORKDIR /build-context
 
-# Install node_modules
+# Install node modules with long network timeout to resolve slow disk I/O on local builds
 COPY apps/library/ .
 
-RUN yarn install
+RUN yarn install --network-timeout 600000
 
 RUN yarn run lint
 
@@ -22,10 +22,10 @@ FROM node:14.17.0-alpine3.13 AS interface-buildstep
 
 WORKDIR /build-context
 
-# Install node_modules
+# Install node modules with long network timeout to resolve slow disk I/O on local builds
 COPY apps/interface/ .
 
-RUN yarn install
+RUN yarn install --network-timeout 600000
 
 RUN yarn run lint
 
