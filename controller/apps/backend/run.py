@@ -75,11 +75,12 @@ def first_launch():
 
         print('Set hostname on first boot: ' + str(response["status_code"]))
 
+        print('Restarting device: ' + str(response))
+
         response = curl(method="post-json",
                         path="/v1/reboot?apikey=",
+                        string='("force", "false")',
                         supervisor_retries=20)
-
-        print('Restarting device: ' + str(response))
 
 
 # Create Flask app instance
