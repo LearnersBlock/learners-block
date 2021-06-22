@@ -79,7 +79,7 @@ def first_launch():
 
         response = curl(method="post-json",
                         path="/v1/reboot?apikey=",
-                        string='("force", "false")',
+                        string='("force", "true")',
                         supervisor_retries=20)
 
 
