@@ -33,5 +33,22 @@
     "available_storage": "Emmagatzematge disponible",
     "chapter": "Capítol",
     "previous": "Anterior",
-    "next": "Següent"
+    "next": "Següent",
+    "select_chapter": "Seleccioneu un capítol",
+    "full_screen": "Pantalla completa",
+    "download": "Baixa",
+    "portainer_unavailable": "El Portainer no està disponible per al vostre dispositiu.",
+    "website_settings_description": "Pugeu els fitxers del vostre lloc web perquè els altres puguin fer-lo servir sense connexió.",
+    "makerspace_description": "Exploreu el Makerspace aquí.",
+    "makerspace": "Makerspace",
+    "portainer_settings_description": "Activeu o desactiveu el Portainer.",
+    "portainer": "Portainer",
+    "welcome_lb": "Us donem la benvinguda al Learner’s Block",
+    "your_new_password": "La vostra contrasenya nova",
+    "visit_to_begin": "Visiteu el Learner’s Block al navegador per a començar a fer servir el vostre Block.",
+    "404": "La pàgina a la qual heu intentat arribar no existeix.",
+    "files_description": "Exploreu els fitxers aquí.",
+    "enable_components_in": "Podeu activar components als Paràmetres.",
+    "set": "Defineix",
+    "portainer_starting_at": "El Portainer ha iniciat a"
 }

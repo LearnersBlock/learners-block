@@ -1,5 +1,5 @@
 {
-    "applying_changes": "Applying changes…",
+    "applying_changes": "Applying changes.",
     "connect": "Connect",
     "connection_reset_request": "Your Learner's Block will now try to connect to the Wi-Fi network. You can connect to the same network to use your Block. If your device is not available after a minute, reconnect to your Learner's Block, check your Wi-Fi password and try again.",
     "network_connect_fail": "Failed to connect to the network.",

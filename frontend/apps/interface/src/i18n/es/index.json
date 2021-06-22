@@ -86,5 +86,6 @@
     "set_custom_startpage": "Establecer página de inicio personalizada",
     "change_path_warning": "Está a punto de cambiar la página de inicio del dispositivo. Para volver a acceder a la configuración luego de efectuar este cambio, visite «http://url-de-su-dispositivo/settings» en el navegador.",
     "choose_start_page": "Elija una página de inicio",
-    "start_page_desc": "Elija la página que los usuarios verán al acceder por vez primera a su dispositivo."
+    "start_page_desc": "Elija la página que los usuarios verán al acceder por vez primera a su dispositivo.",
+    "portainer_starting_at": "El Portainer ha iniciado en"
 }
