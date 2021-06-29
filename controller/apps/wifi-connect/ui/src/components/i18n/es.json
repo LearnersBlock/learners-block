@@ -1,5 +1,5 @@
 {
-    "applying_changes": "Aplicando cambios…",
+    "applying_changes": "Aplicando cambios.",
     "connect": "Conectar",
     "connection_reset_request": "El Learner’s Block intentará conectarse ahora con la red wifi. Puede conectarse a la misma red para utilizarlo. Si transcurrido un minuto el dispositivo aún no está disponible, reconéctese al Learner’s Block, compruebe la contraseña de la red y vuelva a intentarlo.",
     "network_connect_fail": "No se pudo conectar a la red.",
