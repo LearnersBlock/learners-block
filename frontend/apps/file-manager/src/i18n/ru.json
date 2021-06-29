@@ -65,7 +65,7 @@
     "load_config_error": "Ошибка загрузки конфигурации.",
     "load_template_error": "Ошибка загрузки шаблона.",
     "load_text_error": "Ошибка загрузки текста.",
-    "login": "Вход",
+    "login": "Логин",
     "login_failed": "Ошибка входа.",
     "logout": "Выйти",
     "method": "Метод",
