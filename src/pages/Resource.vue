@@ -19,7 +19,6 @@
           <q-btn
             color="white"
             text-color="primary"
-            class="text-subtitle2 text-weight-bold"
             @click="$router.go(-1)"
             rounded
             outline
@@ -51,18 +50,18 @@
       </div>
       <div
         dir="auto"
-        class="text-h6 q-mt-md resource_description"
+        class="text-body1 q-mt-md"
       >
         {{ fetchedResource.resource.description }}
       </div>
       <q-separator class="q-mt-md" />
       <div class="resource_info q-mt-lg text-left">
-        <div class="text-h6 q-mt-sm resource_info-label">
+        <div class="text-body1 q-mt-sm">
           {{ $t('author') }}:
         </div>
         <div
           v-if="fetchedResource.resource.author"
-          class="text-h6 q-mt-sm"
+          class="text-body1 q-mt-sm"
         >
           <a
             :href="fetchedResource.resource.author_website"
@@ -76,7 +75,7 @@
         >
           {{ '--' }}
         </div>
-        <div class="text-h6 q-mt-sm resource_info-label">
+        <div class="text-body1 q-mt-sm">
           {{ $t('languages') }}:
         </div>
         <div
@@ -97,7 +96,7 @@
         >
           {{ '--' }}
         </div>
-        <div class="text-h6 q-mt-sm resource_info-label">
+        <div class="text-body1 q-mt-sm">
           {{ $t('formats') }}:
         </div>
         <div
@@ -118,12 +117,12 @@
         >
           {{ '--' }}
         </div>
-        <div class="text-h6 q-mt-sm resource_info-label">
+        <div class="text-body1 q-mt-sm">
           {{ $t('size') }}:
         </div>
         <div
           v-if="fetchedResource.resource.size"
-          class="text-h6 q-mt-sm"
+          class="text-body1 q-mt-sm"
         >
           {{ fetchedResource.resource.size }} GB
         </div>
@@ -133,12 +132,12 @@
         >
           {{ '--' }}
         </div>
-        <div class="text-h6 q-mt-sm resource_info-label">
+        <div class="text-body1 q-mt-sm">
           {{ $t('host') }}:
         </div>
         <div
           v-if="fetchedResource.resource.host"
-          class="text-h6 q-mt-sm"
+          class="text-body1 q-mt-sm"
         >
           {{ fetchedResource.resource.host }}
         </div>
@@ -148,7 +147,7 @@
         >
           {{ '--' }}
         </div>
-        <div class="text-h6 q-mt-sm resource_info-label">
+        <div class="text-body1 q-mt-sm">
           {{ $t('tags') }}:
         </div>
         <div
@@ -169,7 +168,7 @@
         >
           {{ '--' }}
         </div>
-        <div class="text-h6 q-mt-sm resource_info-label">
+        <div class="text-body1 q-mt-sm">
           {{ $t('level') }}:
         </div>
         <div
@@ -190,7 +189,7 @@
         >
           {{ '--' }}
         </div>
-        <div class="text-h6 q-mt-sm resource_info-label">
+        <div class="text-body1 q-mt-sm">
           {{ $t('licenses') }}:
         </div>
         <div
@@ -293,10 +292,9 @@
         v-else
         class="q-mt-lg "
       >
-        <q-btn-dropdown
+        <q-btn
           v-if="fetchedResource.resource.download_url || fetchedResource.resource.rsync"
           glossy
-          split
           unelevated
           @click="downloadZip"
           color="primary"
@@ -305,19 +303,7 @@
           :label="$t('download')"
           :disable-main-btn="!fetchedResource.resource.download_url"
           :disable-dropdown="!fetchedResource.resource.rsync"
-        >
-          <q-list>
-            <q-item
-              clickable
-              v-close-popup
-              @click="copyRsync();$q.notify($t('rsync_url_copied'));"
-            >
-              <q-item-section>
-                <q-item-label>{{ $t('rsync') }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+        />
         <q-btn
           class="q-ml-sm"
           v-if="fetchedResource.resource.sample"
@@ -520,12 +506,6 @@ export default defineComponent({
             text-align: center;
             grid-template-columns: .5fr .5fr;
         }
-
-      &-label {
-         @media only screen and (max-width: 470px) {
-            font-size: 1.2rem;
-        }
-      }
     }
 
     &_name {
@@ -534,12 +514,6 @@ export default defineComponent({
       }
        @media only screen and (max-width: 1050px) {
         font-size: 2.6rem;
-      }
-    }
-
-    &_description {
-      @media only screen and (max-width: 1300px) {
-        font-size: 1.2rem;
       }
     }
 

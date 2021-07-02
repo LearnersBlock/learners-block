@@ -1,3 +1,22 @@
 {
-    "cancel": "Отменить"
+    "cancel": "Отмена",
+    "no_results_found": "Результаты не найдены",
+    "load_more": "Загрузить ещё",
+    "licenses": "Лицензии",
+    "languages": "Языки",
+    "keywords": "Ключевые слова",
+    "formats": "Форматы",
+    "enable_rtl": "Включить слева-на-право",
+    "download_speed": "Скорость скачивания",
+    "download_complete": "Скачивание завершено",
+    "download": "Скачать",
+    "copy_to_clipboard": "Скопировать в буфер",
+    "back": "Назад",
+    "Chinese": "Китайский",
+    "English": "Английский",
+    "German": "Немецкий",
+    "French": "Французский",
+    "error": "Что-то пошло не так",
+    "settings": "Настройки",
+    "home": "Главная"
 }
