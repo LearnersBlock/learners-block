@@ -1,8 +1,11 @@
-import type { ApolloClientOptions } from '@apollo/client'
-import { createHttpLink, InMemoryCache } from '@apollo/client'
-/* import type { BootFileParams } from '@quasar/app' */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { ApolloClientOptions } from '@apollo/client/core'
+import { createHttpLink, InMemoryCache } from '@apollo/client/core'
+import type { BootFileParams } from '@quasar/app'
 
-export /* async */ function getClientOptions (/* {app, router, ...}: Partial<BootFileParams<unknown>> */) {
+export /* async */ function getClientOptions (
+  /* {app, router, ...} */ options?: Partial<BootFileParams<any>>
+) {
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     <ApolloClientOptions<unknown>>{
@@ -13,7 +16,7 @@ export /* async */ function getClientOptions (/* {app, router, ...}: Partial<Boo
           'https://library-api.learnersblock.org/graphql'
       }),
 
-      cache: new InMemoryCache({})
+      cache: new InMemoryCache()
     },
 
     // Specific Quasar mode options.

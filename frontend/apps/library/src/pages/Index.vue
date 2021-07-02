@@ -56,13 +56,13 @@
             <div class="resource_info">
               <div
                 dir="auto"
-                class="text-h3 resource_name josefin sans"
+                class="text-h4 resource_name josefin sans"
               >
                 {{ resource.name }}
               </div>
               <div
                 dir="auto"
-                class="text-h6 q-mt-md resource_description"
+                class="text-body1 q-mt-md"
               >
                 {{ resource.description }}
               </div>
@@ -121,7 +121,6 @@ import { useQuery } from '@vue/apollo-composable'
 import { GET_RESOURCES } from '../gql/resource/queries'
 import { defineComponent, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
-import { Loading } from 'quasar'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -150,6 +149,7 @@ export default defineComponent({
 
     // Constants for resource fetching
     const endOfResults = ref<boolean>(false)
+    const numberOfResults = ref<number>(40)
 
     onError(() => {
       apiIsUp.value = false
@@ -161,18 +161,15 @@ export default defineComponent({
       result: fetchedResources,
       loading: fetchResourcesLoading,
       refetch: fetchResources
-    } = useQuery(GET_RESOURCES, { limit: 30 })
+    } = useQuery(GET_RESOURCES, { limit: numberOfResults.value })
 
     // On mount, enable loading and fetch resources
     onMounted(async () => {
-      if (props.keyword?.length || props.formats?.length || props.languages?.length || props.tags?.length || props.levels?.length) {
-        Loading.show()
-        await fetchFilteredResources()
-        Loading.hide()
-      } else if ($store.state.savedResources.resources) {
+      if ($store.state.savedResources.resources) {
+        $store.state.savedResources.limit = $store.state.savedResources.resources.resources.length
         fetchedResources.value = $store.state.savedResources.resources
       } else {
-        $store.commit('savedResources/resourceLimit', 30)
+        $store.commit('savedResources/resourceLimit', numberOfResults.value)
         await $store.commit('savedResources/updateResources', fetchedResources)
       }
     })
@@ -207,13 +204,9 @@ export default defineComponent({
         endOfResults.value = true
         done()
       } else {
-        $store.commit('savedResources/resourceLimit', $store.state.savedResources.limit + 30)
-        await fetchFilteredResources().then(() => {
-          $store.commit('savedResources/updateResources', fetchedResources)
-        })
-        setTimeout(() => {
-          done()
-        }, 2000)
+        $store.commit('savedResources/resourceLimit', $store.state.savedResources.limit + numberOfResults.value)
+        await fetchFilteredResources()
+        done()
       }
     }
 
@@ -290,12 +283,6 @@ export default defineComponent({
   &_name {
       @media only screen and (max-width: 800px) {
       font-size: 1.7rem;
-    }
-  }
-
-   &_description {
-      @media only screen and (max-width: 800px) {
-      font-size: 1.2rem;
     }
   }
 
