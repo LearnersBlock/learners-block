@@ -45,7 +45,7 @@ class download_status(Resource):
     def get(self):
         status = download_get_status()
 
-        print(status, flush=True)
+        print(status)
 
         # Return current download progress
         return status, 200
@@ -103,7 +103,7 @@ class rsync_status(Resource):
 
         status = rsync_get_status()
 
-        print(status, flush=True)
+        print(status)
 
         return status
 

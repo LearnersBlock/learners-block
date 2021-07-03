@@ -1,6 +1,9 @@
 # Build File Manager
 FROM composer:2.0.11 AS filemanager-buildstep
 
+# Provide TERM for TPUT
+ENV TERM=xterm
+
 # Install required build dependencies
 RUN apk add ncurses
 

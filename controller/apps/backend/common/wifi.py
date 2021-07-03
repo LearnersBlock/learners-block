@@ -140,7 +140,17 @@ class wifi_connect:
         except Exception:
             current_hostname = os.environ['DEFAULT_HOSTNAME']
 
-        # Decide whether to use default SSID or match hostname
+        try:
+            # Refresh networks in area before launch
+            print("Refreshing network points")
+            subprocess.run(
+                ["iw", "wlan0", "scan"],
+                capture_output=True,
+                text=True).stdout.rstrip()
+        except Exception:
+            print("Error refreshing network points.")
+
+        # Decide om SSID then start wifi-connect
         if current_hostname == os.environ['DEFAULT_HOSTNAME']:
             cmd = (f'/app/common/wifi-connect/wifi-connect -s '
                    f'{os.environ["DEFAULT_SSID"]} -o 8080 '
@@ -166,11 +176,11 @@ class wifi_connect:
         try:
             wifi_poll = wifi_process.poll()
         except Exception:
-            print("wifi-connect not started")
+            print("Wifi-Connect not started")
             return 1
 
         if wifi_poll is not None:
-            print("wifi-connect already stopped")
+            print("Wifi-Connect already stopped")
             return 1
 
         try:

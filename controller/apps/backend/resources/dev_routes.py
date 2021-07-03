@@ -15,11 +15,11 @@ def wifi_toggle():
     global wifistatus
 
     if wifistatus is False:
-        print("WiFi is now up", flush=True)
+        print("WiFi is now up")
         wifistatus = True
 
     elif wifistatus is True:
-        print("WiFi is now down", flush=True)
+        print("WiFi is now down")
         wifistatus = False
 
     return "This is a dev function, not for production. " \

@@ -24,13 +24,6 @@ def launch_wifi(self):
     # If not connected, start Wi-Fi-Connect
     if not connected:
         try:
-            # Refresh networks in area before launch
-            print("Refreshing network points")
-            subprocess.run(
-                ["iw", "wlan0", "scan"],
-                capture_output=True,
-                text=True).stdout.rstrip()
-
             # Launch Wi-Fi Connect
             wifi_connect().start()
             response = "Api-v1 - API Started - Launched wifi-connect."
