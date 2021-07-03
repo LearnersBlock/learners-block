@@ -141,7 +141,7 @@ class wifi_connect:
             current_hostname = os.environ['DEFAULT_HOSTNAME']
 
         try:
-            # Refresh networks in area before launch
+            # Refresh networks list before launch
             print("Refreshing network points")
             subprocess.run(
                 ["iw", "wlan0", "scan"],

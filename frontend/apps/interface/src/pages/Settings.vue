@@ -192,13 +192,13 @@
             <div>
               <div class="text-lg ml-4">
                 <div v-if="wifiLoading">
-                  {{ $t('status') }}: {{ $t('loading') }}
+                  {{ $t('status') }} {{ $t('loading') }}
                 </div>
                 <div v-else-if="!wifi">
-                  {{ $t('status') }}: {{ $t('disconnected') }}
+                  {{ $t('status') }} {{ $t('disconnected') }}
                 </div>
                 <div v-else>
-                  {{ $t('status') }}: {{ $t('connected') }}
+                  {{ $t('status') }} {{ $t('connected') }}
                 </div>
               </div>
             </div>
@@ -336,7 +336,7 @@
                     class="pl-6"
                     v-if="portainer"
                   >
-                    {{ $t('portainer_starting_at') }}: <a
+                    {{ $t('portainer_starting_at') }} <a
                       href="/portainer/"
                       target="_blank"
                     >http://{{ windowHostname }}/portainer/</a>
@@ -352,9 +352,9 @@
             v-if="!sysInfoLoading"
             class="flex flex-col text-center text-gray pb-5"
           >
-            <span class="text-gray-600"><span>{{ $t('total_storage') }}: </span>{{ sysInfo.storage.total }}</span>
-            <span class="text-gray-600"><span>{{ $t('available_storage') }}: </span> {{ sysInfo.storage.available }}</span>
-            <span class="text-gray-600"><span>{{ $t('version') }}: </span>{{ sysInfo.versions.lb }}</span>
+            <span class="text-gray-600"><span>{{ $t('total_storage') }} </span>{{ sysInfo.storage.total }}</span>
+            <span class="text-gray-600"><span>{{ $t('available_storage') }} </span> {{ sysInfo.storage.available }}</span>
+            <span class="text-gray-600"><span>{{ $t('version') }} </span>{{ sysInfo.versions.lb }}</span>
           </div>
           <div
             v-else
