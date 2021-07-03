@@ -352,9 +352,9 @@
             v-if="!sysInfoLoading"
             class="flex flex-col text-center text-gray pb-5"
           >
-            <span class="text-gray-600"><span>{{ $t('total_storage') }} </span>{{ sysInfo.storage.total }}</span>
+            <span class="text-gray-600"><span>{{ $t('total_storage') }} </span> {{ sysInfo.storage.total }}</span>
             <span class="text-gray-600"><span>{{ $t('available_storage') }} </span> {{ sysInfo.storage.available }}</span>
-            <span class="text-gray-600"><span>{{ $t('version') }} </span>{{ sysInfo.versions.lb }}</span>
+            <span class="text-gray-600"><span>{{ $t('version') }} </span> {{ sysInfo.versions.lb }}</span>
           </div>
           <div
             v-else
