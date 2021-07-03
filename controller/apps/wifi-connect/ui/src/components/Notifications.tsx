@@ -1,4 +1,4 @@
-import * as React from 'react';
+/* eslint-disable react/jsx-pascal-case */
 import { Txt, Alert } from 'rendition';
 import setlang from './i18n/lang';
 
