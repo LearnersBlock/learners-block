@@ -137,11 +137,14 @@ export default defineComponent({
       })
 
       Axios.get(`${api.value}/v1/settingsui`).then(res => {
-        settings.value = res.data
-        if (settings.value.start_page !== '/') {
-          location.href = `/${settings.value.start_page}/`
+        if (res.data.start_page !== '/') {
+          setTimeout(() => {
+            location.href = `/${res.data.start_page}/`
+          }, 2000)
+        } else {
+          settings.value = res.data
+          settingsLoading.value = false
         }
-        settingsLoading.value = false
       }).catch(e => {
         console.log(e.message)
       })
