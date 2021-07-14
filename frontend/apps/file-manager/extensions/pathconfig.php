@@ -24,7 +24,8 @@ class PathConfig extends IFM_Extensions {
                 ),
                 'config'    => array(
                     'IFM_ROOT_DIR'          => '/app/public/storage/fileshare/',
-                    'IFM_ROOT_PUBLIC_URL'   => '/storage/fileshare/'
+                    'IFM_ROOT_PUBLIC_URL'   => '/storage/fileshare/',
+                    'IFM_EPUB_READER'   => '1'
                 )
             ),
             '/upload-files/'    => array(
@@ -40,7 +41,7 @@ class PathConfig extends IFM_Extensions {
                     'IFM_API_DELETE'        => '1',
                     'IFM_API_EXTRACT'       => '1',
                     'IFM_API_UPLOAD'        => '1',
-                    'IFM_API_REMOTEUPLOAD'  => '1',
+                    // 'IFM_API_REMOTEUPLOAD'  => '1',
                     'IFM_API_RENAME'        => '1'
                 )
             ),
@@ -57,7 +58,7 @@ class PathConfig extends IFM_Extensions {
                     'IFM_API_DELETE'        => '1',
                     'IFM_API_EXTRACT'       => '1',
                     'IFM_API_UPLOAD'        => '1',
-                    'IFM_API_REMOTEUPLOAD'  => '1',
+                    // 'IFM_API_REMOTEUPLOAD'  => '1',
                     'IFM_API_RENAME'        => '1'
                 )
             ),
@@ -68,7 +69,8 @@ class PathConfig extends IFM_Extensions {
                 ),
                 'config'    => array(
                     'IFM_ROOT_DIR'          => '/app/public/storage/library',
-                    'IFM_ROOT_PUBLIC_URL'   => '/storage/library/'
+                    'IFM_ROOT_PUBLIC_URL'   => '/storage/library/',
+                    'IFM_EPUB_READER'   => '1'
                 )
             )
         );
