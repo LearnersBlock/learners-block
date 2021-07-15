@@ -220,7 +220,7 @@ export default defineComponent({
           if (availableApps.data[i].status.toLowerCase() === 'installed') {
             slides.value[entry] = availableApps.data[i]
             jsonKey.value = Object.keys(availableApps.data[i].ports)
-            slides.value[entry].ports = slides.value[entry].ports[jsonKey.value]
+            slides.value[entry].ports = slides.value[entry].ports[jsonKey.value[0]]
 
             entry = entry + 1
           }
