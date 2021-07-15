@@ -78,7 +78,7 @@
                 tag="a"
                 target="_self"
                 :disable="!internet"
-                @click="redirect"
+                @click="redirect('/upload-library/')"
               >
                 <q-tooltip
                   v-if="!internet"
@@ -221,6 +221,115 @@
           >
             <q-expansion-item
               expand-separator
+              icon="storefront"
+              :label="$t('app_store')"
+              class="w-full"
+            >
+              <q-table
+                v-if="rows"
+                :title="$t('available_applications')"
+                flat
+                bordered
+                :grid="$q.screen.xs"
+                :rows-per-page-options="[5, 10]"
+                :rows="rows"
+                :table-class="!visible ? 'text-black': 'text-white'"
+                :columns="columns"
+                row-key="application"
+                :no-data-label="$t('no_apps_to_display')"
+              >
+                <template #top-right>
+                  <q-btn
+                    round
+                    size="xs"
+                    icon="refresh"
+                    @click="internet ? refreshApps(): $q.notify({ type: 'negative', message: $t('need_connection') })"
+                  />
+                </template>
+                <template
+                  #body-cell-author_site="props"
+                  v-if="!visible"
+                >
+                  <q-td :props="props">
+                    <div>
+                      <a
+                        :href="'http://'+ props.row.author_site"
+                        target="_blank"
+                      >{{ props.row.author_site }}</a>
+                    </div>
+                  </q-td>
+                </template>
+                <template
+                  #body-cell-status="props"
+                  v-if="!visible"
+                >
+                  <q-td :props="props">
+                    <div>
+                      <q-btn
+                        size="xs"
+                        unelevated
+                        color="primary"
+                        :label="props.value"
+                        @click="toggleApp(props.row)"
+                      />
+                    </div>
+                  </q-td>
+                </template>
+
+                <!-- Mobile templates -->
+                <template #item="props">
+                  <div
+                    class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4"
+                    :class="!visible ? 'text-black': 'text-white'"
+                  >
+                    <q-card>
+                      <q-card-section class="text-center">
+                        <strong>{{ props.row.name }}</strong>
+                      </q-card-section>
+                      <q-separator />
+                      <q-list
+                        dense
+                        class="text-center"
+                      >
+                        <div>
+                          {{ $t('author') }} <a
+                            :href="'http://'+ props.row.author_site"
+                            target="_blank"
+                          >{{ props.row.author_site }}</a>
+                        </div>
+
+                        <div>{{ $t('version') }} {{ props.row.version }}</div>
+                        <q-btn
+                          v-if="!visible"
+                          class="mb-1"
+                          size="xs"
+                          unelevated
+                          color="primary"
+                          :label="props.row.status"
+                          @click="toggleApp(props.row)"
+                        />
+                      </q-list>
+                    </q-card>
+                  </div>
+                </template>
+              </q-table>
+              <q-inner-loading :showing="visible">
+                <q-spinner-gears
+                  size="50px"
+                  color="primary"
+                />
+                <div class="mt-1 text-base text-center text-gray-800">
+                  {{ $t('this_may_take_time') }}
+                </div>
+              </q-inner-loading>
+            </q-expansion-item>
+          </q-list>
+          <q-list
+            bordered
+            class="rounded-borders mt-4"
+          >
+            <q-expansion-item
+              expand-separator
               icon="build"
               :label="$t('advanced')"
               class="w-full"
@@ -238,6 +347,7 @@
                       v-if="!filesLoading"
                       rounded
                       outlined
+                      transition-duration="1"
                       v-model="startPage"
                       :options="pages"
                       class="mb-4"
@@ -249,30 +359,118 @@
                     >
                       {{ $t('choose_new_path') }}
                     </div>
-                    <q-input
-                      v-if="customStartPageInput"
-                      ref="startPathValid"
-                      filled
-                      :placeholder="$t('your_new_path')"
-                      class="ml-1 mr-1"
-                      :rules="[(value) =>
-                        !value.substr(0,1).includes('/') &&
-                        !value.substr(-1).includes('/') &&
-                        !value.includes(' ') &&
-                        !value.includes('\\')
-                        || $t('invalid_path_input')]"
-                      v-model="newStartPath"
-                    />
-                    <q-btn
-                      v-if="customStartPageInput"
-                      outline
-                      rounded
-                      no-caps
-                      color="primary"
-                      @click="newStartPathWarn"
-                      :label="$t('set_custom_startpage')"
-                      class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
-                    />
+
+                    <q-dialog
+                      v-model="appStorePageInput"
+                      persistent
+                    >
+                      <q-card>
+                        <q-card-section class="row items-center">
+                          <q-table
+                            v-if="rows"
+                            :title="$t('available_applications')"
+                            flat
+                            separator="cell"
+                            :grid="$q.screen.xs"
+                            :rows-per-page-options="[5, 10]"
+                            :rows="rows"
+                            :table-class="!visible ? 'text-black': 'text-white'"
+                            :columns="columns"
+                            :visible-columns="visibleColumns"
+                            filter="installed"
+                            row-key="application"
+                            :no-data-label="$t('no_apps_to_display')"
+                          >
+                            <template
+                              #body-cell-status="props"
+                              v-if="!visible"
+                            >
+                              <q-td :props="props">
+                                <div>
+                                  <q-btn
+                                    size="xs"
+                                    unelevated
+                                    color="primary"
+                                    :label="$t('set_custom_startpage')"
+                                    v-close-popup
+                                    @click="storeStartPage(props.row)"
+                                  />
+                                </div>
+                              </q-td>
+                            </template>
+
+                            <!-- Mobile templates -->
+                            <template #item="props">
+                              <div class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4">
+                                <q-card>
+                                  <q-card-section class="text-center">
+                                    <strong>{{ props.row.name }}</strong>
+                                  </q-card-section>
+                                  <q-separator />
+                                  <q-list
+                                    dense
+                                    class="text-center"
+                                  >
+                                    <div>
+                                      {{ $t('author') }} {{ props.row.author_site }}
+                                    </div>
+                                    <q-btn
+                                      class="mb-1"
+                                      size="xs"
+                                      unelevated
+                                      color="primary"
+                                      v-close-popup
+                                      :label="$t('set_custom_startpage')"
+                                      @click="storeStartPage(props.row)"
+                                    />
+                                  </q-list>
+                                </q-card>
+                              </div>
+                            </template>
+                          </q-table>
+                        </q-card-section>
+                        <q-card-actions align="right">
+                          <q-btn
+                            flat
+                            :label="$t('cancel')"
+                            color="primary"
+                            v-close-popup
+                            @click="setStartPage"
+                          />
+                        </q-card-actions>
+                      </q-card>
+                    </q-dialog>
+
+                    <q-slide-transition :duration="2000">
+                      <div v-show="customStartPageInput">
+                        <q-input
+                          v-if="customStartPageInput"
+                          ref="startPathValid"
+                          filled
+                          :placeholder="$t('your_new_path')"
+                          class="ml-1 mr-1"
+                          :rules="[(value) =>
+                            !value.substr(0,1).includes('/') &&
+                            !value.substr(-1).includes('/') &&
+                            !value.includes(' ') &&
+                            !value.includes('\\')
+                            || $t('invalid_path_input')]"
+                          v-model="newStartPath"
+                        >
+                          <template #after>
+                            <q-btn
+                              class="mt-1"
+                              round
+                              dense
+                              flat
+                              color="primary"
+                              icon="check_circle_outline"
+                              @click="newStartPathWarn"
+                            />
+                          </template>
+                        </q-input>
+                      </div>
+                    </q-slide-transition>
                     <q-separator spaced />
                     <div class="text-2xl text-gray-700 mt-5 mb-1">
                       {{ $t('set_hostname_desc') }}
@@ -289,17 +487,20 @@
                         || $t('invalid_input')]"
                       v-model="newHostname"
                       :placeholder="$t('your_new_name')"
-                    />
-                    <q-btn
-                      outline
-                      rounded
-                      :disable="newHostname"
-                      no-caps
-                      color="primary"
-                      @click="hostnameWarn"
-                      :label="$t('set_hostname')"
-                      class="full-width ml-3 mr-3 sm:mt-1 mb-3 text-lg"
-                    />
+                    >
+                      <template #after>
+                        <q-btn
+                          class="mt-1"
+                          round
+                          dense
+                          flat
+                          color="primary"
+                          icon="check_circle_outline"
+                          :disable="newHostname"
+                          @click="hostnameWarn"
+                        />
+                      </template>
+                    </q-input>
                   </div>
                   <q-separator
                     class="mr-3 ml-3"
@@ -385,6 +586,7 @@ export default defineComponent({
     const { t } = useI18n()
 
     const currentStartPage = ref<any>()
+    const appStorePageInput = ref<boolean>(false)
     const customStartPageInput = ref<boolean>(false)
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(false)
@@ -394,10 +596,12 @@ export default defineComponent({
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
     const loading = ref<boolean>(false)
+    // App Store loading indicator
+    const visible = ref(false)
     const newHostname = ref<string>('')
     const newStartPath = ref<string>('')
     const pages = [
-      t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('custom_start_page')
+      t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('app_store_app'), t('custom_start_page')
     ]
     const portainer = ref<boolean>(false)
     const portainerLoading = ref<boolean>(true)
@@ -420,6 +624,25 @@ export default defineComponent({
       return $store.getters.GET_API
     })
 
+    // App Store database
+    const columns = [
+      {
+        name: 'name',
+        required: true,
+        label: t('application'),
+        align: 'left',
+        field: row => row.long_name,
+        format: val => `${val}`,
+        sortable: true
+      },
+      { name: 'author_site', label: t('author'), field: 'author_site', sortable: true },
+      { name: 'version', label: t('version'), field: 'version', sortable: true },
+      { name: 'ports', field: 'ports', sortable: true },
+      { name: 'status', field: 'status', sortable: true }
+    ]
+
+    const rows = ref<any>(null)
+
     // API calls for onMounted
     const fetchedSettings = Axios.get(`${api.value}/v1/settingsui`)
     const fetchedPortainer = Axios.get(`${api.value}/v1/portainer/status`, {
@@ -435,6 +658,7 @@ export default defineComponent({
     onMounted(() => {
       apiCall()
       apiCallStatus()
+      fetchApps()
     })
 
     async function apiCall (): Promise<void> {
@@ -460,17 +684,7 @@ export default defineComponent({
         console.log(e.message)
       })
 
-      if (currentStartPage.value === '/') {
-        startPage.value = t('lb_welcome_page')
-      } else if (currentStartPage.value === 'files') {
-        startPage.value = t('file_manager')
-      } else if (currentStartPage.value === 'library') {
-        startPage.value = t('library')
-      } else if (currentStartPage.value === 'website') {
-        startPage.value = t('website')
-      } else {
-        startPage.value = currentStartPage.value
-      }
+      setStartPage()
 
       filesLoading.value = false
       libraryLoading.value = false
@@ -491,20 +705,36 @@ export default defineComponent({
       portainerLoading.value = false
     }
 
-    const changeStartPage = async () => {
+    const changeStartPage = () => {
       if (startPage.value === t('lb_welcome_page')) {
         currentStartPage.value = '/'
+        customStartPageInput.value = false
+        appStorePageInput.value = false
       } else if (startPage.value === t('file_manager')) {
         currentStartPage.value = 'files'
+        customStartPageInput.value = false
+        appStorePageInput.value = false
       } else if (startPage.value === t('library')) {
         currentStartPage.value = 'library'
+        customStartPageInput.value = false
+        appStorePageInput.value = false
       } else if (startPage.value === t('website')) {
         currentStartPage.value = 'website'
+        customStartPageInput.value = false
+        appStorePageInput.value = false
+      } else if (startPage.value === t('app_store_app')) {
+        customStartPageInput.value = false
+        appStorePageInput.value = true
+        return
       } else if (startPage.value === t('custom_start_page')) {
+        appStorePageInput.value = false
         customStartPageInput.value = true
         return
       }
+      storeStartPage(null)
+    }
 
+    async function storeStartPage (rows) {
       if (startPage.value === t('lb_welcome_page')) {
         await Axios.post(`${api.value}/v1/setui`, {
           start_page: currentStartPage.value
@@ -520,13 +750,25 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          Axios.post(`${api.value}/v1/setui`, {
-            start_page: currentStartPage.value
-          })
-          $q.dialog({
-            title: t('success'),
-            message: `${t('path_changed_to')} ${startPage.value}`
-          })
+          if (rows) {
+            Axios.post(`${api.value}/v1/setui`, {
+              start_page: rows.name
+            })
+            currentStartPage.value = rows.name
+            $q.dialog({
+              title: t('success'),
+              message: `${t('path_changed_to')} ${rows.long_name}`
+            })
+          } else {
+            Axios.post(`${api.value}/v1/setui`, {
+              start_page: currentStartPage.value
+            })
+            $q.dialog({
+              title: t('success'),
+              message: `${t('path_changed_to')} ${startPage.value}`
+            })
+          }
+          setStartPage()
         })
       }
     }
@@ -553,6 +795,15 @@ export default defineComponent({
       }).onOk(() => {
         disableLogin()
       })
+    }
+
+    async function fetchApps () {
+      visible.value = true
+      await Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
+        rows.value = availableApps.data
+        visible.value = false
+      }
+      )
     }
 
     function hostnameWarn () {
@@ -589,7 +840,7 @@ export default defineComponent({
 
           $q.dialog({
             title: t('success'),
-            message: `${t('path_changed_to')} '/${newStartPath.value}'`
+            message: `${t('path_changed_to')} '${newStartPath.value}'`
           })
         })
       } else {
@@ -597,8 +848,142 @@ export default defineComponent({
       }
     }
 
-    function redirect () {
-      location.href = '/upload-library/'
+    function redirect (path) {
+      location.href = path
+    }
+    async function refreshApps () {
+      visible.value = true
+      await Axios.get(`${api.value}/v1/appstore/set`)
+      Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
+        rows.value = availableApps.data
+        setTimeout(() => {
+          visible.value = false
+        }, 1000)
+      }
+      )
+    }
+
+    function setStartPage () {
+      if (currentStartPage.value === '/') {
+        startPage.value = t('lb_welcome_page')
+      } else if (currentStartPage.value === 'files') {
+        startPage.value = t('file_manager')
+      } else if (currentStartPage.value === 'library') {
+        startPage.value = t('library')
+      } else if (currentStartPage.value === 'website') {
+        startPage.value = t('website')
+      } else {
+        startPage.value = currentStartPage.value
+
+        for (let i = 0; i < rows.value.length; i++) {
+          if (rows.value[i].name === currentStartPage.value) {
+            startPage.value = rows.value[i].long_name
+          }
+        }
+      }
+    }
+
+    function toggleApp (row) {
+      if (row.status.toLowerCase() === 'install') {
+        if (!internet.value) {
+          $q.notify({ type: 'negative', message: t('need_connection') })
+          return
+        }
+        $q.dialog({
+          title: `${t('install')} ${row.long_name}`,
+          message: t('are_you_sure'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          visible.value = true
+          // Install app
+          Axios.post(`${api.value}/v1/docker/run`, {
+            image: row.image,
+            name: row.name,
+            ports: row.ports,
+            volumes: row.volumes
+          }).then(function (response) {
+            if (response.status === 200) {
+              $q.notify({ type: 'positive', message: t('success') })
+            } else {
+              $q.notify({ type: 'negative', message: t('error') })
+            }
+            fetchApps()
+            visible.value = false
+          }).catch(function (error) {
+            if (error.response) {
+              console.log(error.response.data)
+              $q.notify({ type: 'negative', message: t('error') })
+            }
+            fetchApps()
+            visible.value = false
+          })
+        })
+      } else if (row.status.toLowerCase() === 'installed') {
+        $q.dialog({
+          title: `${t('uninstall')} ${row.long_name}`,
+          message: t('are_you_sure'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          visible.value = true
+          // Uninstall app
+          Axios.post(`${api.value}/v1/docker/remove`, {
+            image: row.image,
+            name: row.name
+          }).then(function (response) {
+            if (response.status === 200) {
+              $q.notify({ type: 'positive', message: t('success') })
+            } else {
+              $q.notify({ type: 'negative', message: t('error') })
+            }
+            fetchApps()
+            visible.value = false
+          }).catch(function (error) {
+            if (error.response) {
+              console.log(error.response.data)
+              $q.notify({ type: 'negative', message: t('error') })
+            }
+            fetchApps()
+            visible.value = false
+          })
+        })
+      } else if (row.status.toLowerCase() === 'update available') {
+        if (!internet.value) {
+          $q.notify({ type: 'negative', message: t('need_connection') })
+          return
+        }
+        $q.dialog({
+          title: `${t('update')} ${row.long_name}`,
+          message: t('are_you_sure'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          visible.value = true
+          // Update app
+          Axios.post(`${api.value}/v1/docker/pull`, {
+            image: row.image,
+            name: row.name,
+            ports: row.ports,
+            volumes: row.volumes
+          }).then(function (response) {
+            if (response.status === 200) {
+              $q.notify({ type: 'positive', message: t('success') })
+            } else {
+              $q.notify({ type: 'negative', message: t('error') })
+            }
+            fetchApps()
+            visible.value = false
+          }).catch(function (error) {
+            if (error.response) {
+              console.log(error.response.data)
+              $q.notify({ type: 'negative', message: t('error') })
+            }
+            fetchApps()
+            visible.value = false
+          })
+        })
+      }
     }
 
     const updateFiles = async () => {
@@ -679,7 +1064,9 @@ export default defineComponent({
     }
 
     return {
+      appStorePageInput,
       changeStartPage,
+      columns,
       customStartPageInput,
       disableLogin,
       disableLoginWarn,
@@ -699,16 +1086,23 @@ export default defineComponent({
       portainer,
       portainerLoading,
       redirect,
+      refreshApps,
       regexp,
+      rows,
+      setStartPage,
       startPage,
       startPathValid,
+      storeStartPage,
       sysInfo,
       sysInfoLoading,
+      toggleApp,
       togglesLoading,
       updateFiles,
       updateLibrary,
       updatePortainer,
       updateWebsite,
+      visible,
+      visibleColumns: ref(['author_site', 'status', 'ports']),
       website,
       websiteLoading,
       wifi,

@@ -1,4 +1,4 @@
-from common.containers import container
+from common.supervisor_containers import container
 from common.processes import curl
 from flask import request
 from flask_jwt_extended import jwt_required

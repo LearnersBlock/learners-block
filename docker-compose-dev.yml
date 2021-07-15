@@ -11,6 +11,7 @@ services:
       portainer: hidden
     volumes:
       - './controller/apps/backend:/app'
+      - '/var/run/docker.sock:/var/run/docker.sock'
 
   filemanager-builder:
     build:

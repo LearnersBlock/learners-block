@@ -26,7 +26,7 @@ def init_database():
         database_recover()
 
 
-# Set database content
+# Set user database content
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True,
@@ -73,3 +73,47 @@ class User(db.Model):
 
     def verify_password(password, hashed_password):
         return bcrypt.checkpw(password.encode('utf8'), hashed_password)
+
+
+# Set App Store database content
+class App_Store(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80),
+                     unique=True,
+                     nullable=False)
+
+    long_name = db.Column(db.String(100),
+                          unique=False,
+                          nullable=False)
+
+    image = db.Column(db.String(80),
+                      unique=False,
+                      nullable=False)
+
+    ports = db.Column(db.Integer,
+                      unique=False,
+                      nullable=False)
+
+    volumes = db.Column(db.String(1000),
+                        unique=False,
+                        nullable=False)
+
+    version = db.Column(db.Integer,
+                        unique=False,
+                        nullable=False)
+
+    author_site = db.Column(db.String(100),
+                            unique=False,
+                            nullable=False)
+
+    status = db.Column(db.String(80),
+                       unique=False,
+                       server_default='Install',
+                       nullable=False)
+
+    def __repr__(self):
+        return '<App_Store %r>' % self.name
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
