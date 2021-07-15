@@ -162,6 +162,7 @@ export default defineComponent({
     const $q = useQuasar()
 
     // App Store
+    const jsonKey = ref<any>()
     const slide = ref<any>()
     const slides = ref<any>({})
     const windowHostname = ref<string>(window.location.hostname)
@@ -218,7 +219,8 @@ export default defineComponent({
         for (let i = 0; i < availableApps.data.length; i++) {
           if (availableApps.data[i].status.toLowerCase() === 'installed') {
             slides.value[entry] = availableApps.data[i]
-            slides.value[entry].ports = Object.keys(availableApps.data[i].ports)
+            jsonKey.value = Object.keys(availableApps.data[i].ports)
+            slides.value[entry].ports = slides.value[entry].ports[jsonKey.value]
 
             entry = entry + 1
           }
