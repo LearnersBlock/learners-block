@@ -89,10 +89,8 @@
     "lb_welcome_page": "Learner's Block Welcome Page",
     "path_changed_to": "Your start page has been changed to",
     "no_apps_to_display": "There are no applications to display. Try refreshing your application database with the icon above.",
-    "installation_status": "Installation Status",
     "application": "Application",
     "app_store": "Application Store",
     "available_applications": "Available Applications",
-    "Installed": "Installed",
-    "urls": "URLs"
+    "Installed": "Installed"
 }
