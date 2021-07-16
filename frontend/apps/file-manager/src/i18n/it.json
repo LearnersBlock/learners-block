@@ -101,7 +101,7 @@
     "archive_create_success": "Archivio creato.",
     "archive_create_error": "Impossibile creare un archivio.",
     "ajax_request": "richiesta AJAX",
-    "size": "Dimensione",
+    "size": "Dimensione:",
     "download": "Scarica",
     "username": "Nome utente",
     "password": "Password",
