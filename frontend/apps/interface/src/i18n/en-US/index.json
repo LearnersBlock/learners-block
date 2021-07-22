@@ -99,5 +99,6 @@
     "installed": "Installed",
     "description": "Description",
     "author": "Author",
-    "this_may_take_time": "This may take some time depending on your connection speed. Please be patient."
+    "this_may_take_time": "This may take some time depending on your connection speed. Please be patient.",
+    "app_store_app": "Application Store App"
 }
