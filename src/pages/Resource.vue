@@ -23,7 +23,7 @@
             rounded
             outline
           >
-            <span class="material-icons mr-1 mb-.5">
+            <span class="material-icons">
               arrow_back_ios
             </span>
             {{ $t('back') }}
@@ -32,32 +32,32 @@
       </q-item>
       <div v-if="fetchedResource.resource.logo && fetchedResource.resource.logo.formats && fetchedResource.resource.logo.formats.thumbnail && fetchedResource.resource.logo.formats.thumbnail.url">
         <img
-          class="resource_image q-mt-xl"
+          class="resource_image"
           :src="'https://library-api.learnersblock.org' + fetchedResource.resource.logo.formats.thumbnail.url"
         >
       </div>
       <div v-else>
         <img
-          class="resource_image q-mt-xl"
+          class="resource_image"
           :src="fetchedResource.resource.logo ? 'https://library-api.learnersblock.org' + fetchedResource.resource.logo.url : require('../assets/default.jpg')"
         >
       </div>
       <div
+        class="text-h2 resource_name"
         dir="auto"
-        class="text-h2 josefin sans resource_name"
       >
         {{ fetchedResource.resource.name }}
       </div>
       <div
+        class="text-body1 q-pa-sm"
         dir="auto"
-        class="text-body1 q-mt-md"
       >
         {{ fetchedResource.resource.description }}
       </div>
-      <q-separator class="q-mt-md" />
-      <div class="resource_info q-mt-lg text-left">
+      <q-separator class="q-mt-sm" />
+      <div class="resource_info q-mt-md text-left">
         <div class="text-body1 q-mt-sm">
-          {{ $t('author') }}:
+          {{ $t('author') }}
         </div>
         <div
           v-if="fetchedResource.resource.author"
@@ -76,7 +76,7 @@
           {{ '--' }}
         </div>
         <div class="text-body1 q-mt-sm">
-          {{ $t('languages') }}:
+          {{ $t('languages') }}
         </div>
         <div
           v-if="fetchedResource.resource.languages && fetchedResource.resource.languages.length"
@@ -97,7 +97,7 @@
           {{ '--' }}
         </div>
         <div class="text-body1 q-mt-sm">
-          {{ $t('formats') }}:
+          {{ $t('formats') }}
         </div>
         <div
           v-if="fetchedResource.resource.formats && fetchedResource.resource.formats.length"
@@ -118,7 +118,7 @@
           {{ '--' }}
         </div>
         <div class="text-body1 q-mt-sm">
-          {{ $t('size') }}:
+          {{ $t('size') }}
         </div>
         <div
           v-if="fetchedResource.resource.size"
@@ -133,7 +133,7 @@
           {{ '--' }}
         </div>
         <div class="text-body1 q-mt-sm">
-          {{ $t('host') }}:
+          {{ $t('host') }}
         </div>
         <div
           v-if="fetchedResource.resource.host"
@@ -148,7 +148,7 @@
           {{ '--' }}
         </div>
         <div class="text-body1 q-mt-sm">
-          {{ $t('tags') }}:
+          {{ $t('tags') }}
         </div>
         <div
           v-if="fetchedResource.resource.tags && fetchedResource.resource.tags.length"
@@ -169,7 +169,7 @@
           {{ '--' }}
         </div>
         <div class="text-body1 q-mt-sm">
-          {{ $t('level') }}:
+          {{ $t('level') }}
         </div>
         <div
           v-if="fetchedResource.resource.levels && fetchedResource.resource.levels.length"
@@ -190,7 +190,7 @@
           {{ '--' }}
         </div>
         <div class="text-body1 q-mt-sm">
-          {{ $t('licenses') }}:
+          {{ $t('licenses') }}
         </div>
         <div
           v-if="fetchedResource.resource.licenses && fetchedResource.resource.licenses.length"
@@ -218,6 +218,19 @@
       />
       <div v-if="onDevice">
         <q-btn
+          v-if="fetchedResource.resource.no_direct_download"
+          class="q-mt-lg q-mb-lg"
+          glossy
+          rounded
+          unelevated
+          :disable="!fetchedResource.resource.rsync && !fetchedResource.resource.download_url"
+          color="primary"
+          icon="pageview"
+          :label="$t('explore')"
+          @click="downloadZip"
+        />
+        <q-btn
+          v-else
           class="q-mt-lg q-mb-lg"
           glossy
           rounded
@@ -298,9 +311,9 @@
           unelevated
           @click="downloadZip"
           color="primary"
-          icon="download"
+          :icon="fetchedResource.resource.no_direct_download ? 'pageview': 'download'"
           rounded
-          :label="$t('download')"
+          :label="fetchedResource.resource.no_direct_download ? $t('explore'): $t('download')"
           :disable-main-btn="!fetchedResource.resource.download_url"
           :disable-dropdown="!fetchedResource.resource.rsync"
         />
@@ -484,7 +497,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .resource {
     &_image {
-        width: 15rem;
+        width: 11rem;
         margin-bottom: 1rem;
         @media only screen and (max-width: 1050px) {
             width: 15rem;
