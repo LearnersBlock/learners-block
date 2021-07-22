@@ -4,8 +4,11 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
-from resources.models import db
-from resources.models import migrate
+from common.models import db
+from common.models import migrate
+from resources.system_routes import docker_pull
+from resources.system_routes import docker_remove
+from resources.system_routes import docker_run
 from resources.system_routes import download_fetch
 from resources.system_routes import download_status
 from resources.system_routes import download_stop
@@ -93,8 +96,9 @@ if __name__ == '__main__':
     with app.app_context():
         from resources.auth_routes import login, logout, set_password, \
              verify_login
-        from resources.database_routes import set_ui, settings_ui
-        from resources.models import init_database
+        from resources.database_routes import app_store_set, \
+            app_store_status, set_ui, settings_ui
+        from common.models import init_database
 
         init_database()
 
@@ -135,7 +139,12 @@ if __name__ == '__main__':
         print("Api-v1 - Starting API (Development)...")
 
     # Configure endpoints
+    api.add_resource(app_store_set, '/v1/appstore/set')
+    api.add_resource(app_store_status, '/v1/appstore/status')
     api.add_resource(device, '/v1/device')
+    api.add_resource(docker_pull, '/v1/docker/pull')
+    api.add_resource(docker_remove, '/v1/docker/remove')
+    api.add_resource(docker_run, '/v1/docker/run')
     api.add_resource(download_fetch, '/v1/download/fetch')
     api.add_resource(download_status, '/v1/download/status')
     api.add_resource(download_stop, '/v1/download/stop')

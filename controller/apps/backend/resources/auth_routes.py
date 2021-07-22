@@ -12,7 +12,7 @@ from flask_jwt_extended import set_access_cookies
 from flask_jwt_extended import unset_jwt_cookies
 from flask_jwt_extended import verify_jwt_in_request
 from flask_restful import Resource
-from resources.models import User
+from common.models import User
 
 
 # Refresh token on each authorised request
@@ -25,10 +25,11 @@ def refresh_expiring_jwts(response):
         if target_timestamp > exp_timestamp:
             access_token = create_access_token(identity=get_jwt_identity())
             set_access_cookies(response, access_token)
-        return response
     except (RuntimeError, KeyError):
         # Case where there is not a valid JWT. Just return the original respone
         return response
+
+    return response
 
 
 class login(Resource):
@@ -86,18 +87,20 @@ class set_password(Resource):
             hashed_password = User.hash_password(content["password"])
             lb_database.password = hashed_password
             lb_database.save_to_db()
-            return {'response': 'done'}, 200
         except Exception as ex:
             print(self.__class__.__name__ + " - " + str(ex))
             return {'database error': self.__class__.__name__ + " - " +
                     str(ex)}, 500
+
+        return {'response': 'done'}, 200
 
 
 class verify_login(Resource):
     def get(self):
         try:
             verify_jwt_in_request()
-            return {'logged_in': True, 'user': get_jwt_identity()}
         except Exception as ex:
             print(self.__class__.__name__ + " - " + str(ex))
             return {'logged_in': False}
+
+        return {'logged_in': True, 'user': get_jwt_identity()}

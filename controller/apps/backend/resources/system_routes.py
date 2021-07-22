@@ -1,4 +1,6 @@
 from dotenv import dotenv_values
+from common.docker import docker
+from common.database import update_container_db_status
 from common.downloads import download_get_status
 from common.downloads import download_start
 from common.downloads import download_terminate
@@ -29,16 +31,80 @@ def log_request(self, *args, **kwargs):
     parent_log_request(self, *args, **kwargs)
 
 
+class docker_pull(Resource):
+    @jwt_required()
+    def post(self):
+        try:
+            content = request.get_json()
+        except AttributeError:
+            return {'response': 'Error: Must pass valid string.'}, 403
+
+        response = docker.pull(image=content["image"],
+                               name=content["name"],
+                               ports=content["ports"],
+                               volumes=content["volumes"],
+                               detach=True)
+
+        update_container_db_status(content["name"], 'Installed')
+
+        print(response["response"])
+
+        return {"response": response["response"]}, response["status_code"]
+
+
+class docker_remove(Resource):
+    @jwt_required()
+    def post(self):
+        try:
+            content = request.get_json()
+        except AttributeError:
+            return {'response': 'Error: Must pass valid string.'}, 403
+
+        response = docker.remove(image=content["image"],
+                                 name=content["name"])
+
+        update_container_db_status(content["name"], 'Install')
+
+        if response["status_code"] == 200:
+            print('docker_remove: container removed')
+        else:
+            print(response["response"])
+
+        return {"response": response["response"]}, response["status_code"]
+
+
+class docker_run(Resource):
+    @jwt_required()
+    def post(self):
+        try:
+            content = request.get_json()
+        except AttributeError:
+            return {'response': 'Error: Must pass valid string.'}, 403
+
+        response = docker.run(image=content["image"],
+                              name=content["name"],
+                              ports=content["ports"],
+                              volumes=content["volumes"],
+                              detach=True)
+
+        update_container_db_status(content["name"], 'Installed')
+
+        print(response["response"])
+
+        return {"response": response["response"]}, response["status_code"]
+
+
 class download_fetch(Resource):
     @jwt_required()
     def post(self):
         try:
             content = request.get_json()
-            download_start(content["download_url"])
         except AttributeError:
             return {'response': 'Error: Must pass valid string.'}, 403
 
-        return {'response': 'Process complete.'}, 200
+        download_start(content["download_url"])
+
+        return {'response': 'process complete'}, 200
 
 
 class download_status(Resource):
@@ -55,7 +121,7 @@ class download_stop(Resource):
     def get(self):
         download_terminate()
 
-        return {'status': 200, 'message': 'Terminate request sent'}, 200
+        return {'status': 200, 'message': 'terminate request sent'}, 200
 
 
 class health_check(Resource):
@@ -91,11 +157,12 @@ class rsync_fetch(Resource):
     def post(self):
         try:
             content = request.get_json()
-            rsync_start(content["rsync_url"])
         except AttributeError:
             return {'response': 'Error: Must pass valid string.'}, 403
 
-        return {'response': 'Process complete'}, 200
+        rsync_start(content["rsync_url"])
+
+        return {'response': 'process complete'}, 200
 
 
 class rsync_status(Resource):
@@ -112,7 +179,7 @@ class rsync_stop(Resource):
     def get(self):
         rsync_terminate()
 
-        return {'status': 200, 'message': 'Terminate request sent'}, 200
+        return {'status': 200, 'message': 'terminate request sent'}, 200
 
 
 class system_info(Resource):

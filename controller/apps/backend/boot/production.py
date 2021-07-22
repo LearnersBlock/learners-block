@@ -2,7 +2,7 @@ from common.processes import check_internet
 from common.processes import curl
 from common.wifi import wifi
 from common.wifi import wifi_connect
-from common.containers import container
+from common.supervisor_containers import container
 from resources.supervisor_routes import update
 import inspect
 import subprocess
