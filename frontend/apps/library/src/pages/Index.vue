@@ -14,25 +14,24 @@
         outline
         color="white"
         text-color="primary"
-        class="ml-3 mt-9 text-subtitle2 text-weight-bold"
+        class="q-mb-md text-subtitle2 text-weight-bold"
       >
-        <span class="material-icons mr-1 mb-.5">
+        <span class="material-icons">
           arrow_back_ios
         </span>
-        <div class="mt-0.5">
+        <div>
           {{ $t('settings') }}
         </div>
       </q-btn>
       <div
         v-if="fetchedResources.resources"
-        class="resource_box q-mt-lg q-mb-xl"
       >
         <q-infinite-scroll
           @load="loadMore"
           :offset="2000"
         >
           <router-link
-            class="resource q-mt-md items-center text-black "
+            class="resource q-mb-md items-center text-black"
             tag="div"
             :to="'/resource/' + resource.id"
             v-for="resource in fetchedResources.resources"
@@ -43,7 +42,6 @@
                 :src="'https://library-api.learnersblock.org' + resource.logo.formats.thumbnail.url"
                 loading="lazy"
                 spinner-color="grey"
-                height="140px"
                 class="resource_image"
               />
             </div>
@@ -55,21 +53,21 @@
             </div>
             <div class="resource_info">
               <div
+                class="text-h4 resource_name"
                 dir="auto"
-                class="text-h4 resource_name josefin sans"
               >
                 {{ resource.name }}
               </div>
               <div
+                class="text-body1"
                 dir="auto"
-                class="text-body1 q-mt-md"
               >
                 {{ resource.description }}
               </div>
               <div class="resource_languages">
                 <div>
                   <q-badge
-                    class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
+                    class="q-pa-sm q-mr-sm q-mt-md multi-line text-body2 text-weight-large"
                     color="primary"
                     v-for="language in resource.languages"
                     :key="language.id"
@@ -82,7 +80,7 @@
                 v-if="resource.size"
                 class="text-subtitle1 resource_size"
               >
-                {{ $t('size') }}: {{ resource.size }} GB
+                {{ $t('size') }} {{ resource.size }} GB
               </div>
             </div>
           </router-link>
@@ -90,16 +88,19 @@
             v-if="endOfResults"
             class="text-h3 text-center text-grey q-mt-lg"
           >
-            <q-icon name="done_outline" />
+            <q-icon
+              name="done_outline"
+              class="q-mb-lg"
+            />
           </div>
           <template
             #loading
             v-if="!endOfResults"
           >
-            <div class="row justify-center q-my-md">
+            <div class="row justify-center q-my-md q-mb-xl">
               <q-spinner-dots
                 color="primary"
-                size="40px"
+                size="60px"
               />
             </div>
           </template>
@@ -249,15 +250,14 @@ export default defineComponent({
   }
 
   &_image {
-    height: auto;
     margin-right: 2.5rem;
-    width: 10rem;
+    width: 8rem;
      @media only screen and (max-width: 960px) {
        margin: auto;
        margin-right: 0;
        width: 10rem;
        height: auto;
-       margin-bottom: 2rem;
+       margin-bottom: 1.5rem;
 
       }
       @media screen and (max-width: 1680px) {
@@ -289,16 +289,16 @@ export default defineComponent({
   &_size {
     position: absolute;
     right: 2.25rem;
-    bottom: 1.5rem;
+    bottom: .1rem;
     @media only screen and (max-width: 960px) {
       position: relative;
       right: .3rem;
-      margin-top: 3rem;
+      margin-top: 1.5rem;
     }
     @media only screen and (max-width: 800px) {
       position: relative;
       right: .3rem;
-      margin-top: 3rem;
+      margin-top: 1rem;
     }
   }
 
@@ -311,7 +311,7 @@ export default defineComponent({
   &_container {
     position: absolute;
     top: 2rem;
-    width: 70%;
+    width: 90%;
   }
 }
 </style>

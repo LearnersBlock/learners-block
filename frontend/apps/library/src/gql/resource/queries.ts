@@ -35,6 +35,7 @@ export const GET_RESOURCE = gql`
           author
           author_website
           host
+          no_direct_download
           sample
           rsync
           formats {
