@@ -1102,7 +1102,7 @@ export default defineComponent({
       updatePortainer,
       updateWebsite,
       visible,
-      visibleColumns: ref(['author_site', 'status', 'ports']),
+      visibleColumns: ref(['author_site', 'status']),
       website,
       websiteLoading,
       wifi,
