@@ -19,6 +19,7 @@ module.exports = {
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
     sourceType: 'module' // Allows for the use of imports
   },
+  ignorePatterns: [".eslintrc.js"],
 
   env: {
     browser: true
@@ -88,6 +89,7 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
+    'vue/script-setup-uses-vars': 'off',
 
     // TypeScript
     quotes: ['warn', 'single', { avoidEscape: true }],
