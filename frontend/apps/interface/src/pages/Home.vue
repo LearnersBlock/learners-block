@@ -205,7 +205,8 @@ export default defineComponent({
               if (availableApps.data[i].name === res.data.start_page) {
                 setTimeout(() => {
                   const appPort = Object.keys(availableApps.data[i].ports)
-                  location.href = `http://${window.location.hostname}:${appPort}`
+                  const forwardUrl = availableApps.data[i].ports[appPort[0]]
+                  location.href = `http://${window.location.hostname}:${forwardUrl}`
                 }, 2000)
                 return
               }
