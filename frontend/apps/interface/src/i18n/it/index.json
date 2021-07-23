@@ -99,5 +99,6 @@
     "no_apps_to_display": "Non ci sono applicazioni da visualizzare. Prova ad aggiornare la banca dati delle applicazioni con l’icona qui sopra.",
     "author": "Autore",
     "description": "Descrizione",
-    "this_may_take_time": "Questo potrebbe richiedere un po’ di tempo a seconda della velocità della tua connessione. Per favore, sii paziente."
+    "this_may_take_time": "Questo potrebbe richiedere un po’ di tempo a seconda della velocità della tua connessione. Per favore, sii paziente.",
+    "app_store_app": "Negozio di applicazioni"
 }
