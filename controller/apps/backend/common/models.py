@@ -78,7 +78,7 @@ class User(db.Model):
 # Set App Store database content
 class App_Store(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80),
+    name = db.Column(db.String,
                      unique=True,
                      nullable=False)
 
@@ -110,7 +110,7 @@ class App_Store(db.Model):
                      unique=False,
                      nullable=False)
 
-    status = db.Column(db.String(80),
+    status = db.Column(db.String,
                        unique=False,
                        server_default='Install',
                        nullable=False)
