@@ -88,7 +88,7 @@
           </q-item>
           <q-separator v-if="settings.website" />
         </q-list>
-        <div v-if="slides[0]">
+        <div v-if="slides[0] && !settingsLoading">
           <q-item-label
             header
             class="text-2xl"
@@ -186,7 +186,7 @@ export default defineComponent({
     })
 
     // Get settings
-    onMounted((): void => {
+    onMounted(() => {
       $q.loading.show({
         delay: 300 // ms
       })
