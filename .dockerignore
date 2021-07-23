@@ -43,3 +43,5 @@ yarn-error.log*
 # Applications
 /controller/apps/backend/db/**
 /controller/apps/backend/storage/library/**
+/controller/apps/backend/lb_share
+/frontend/apps/interface/public/lb_share

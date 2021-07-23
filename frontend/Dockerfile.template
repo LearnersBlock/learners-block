@@ -108,7 +108,8 @@ RUN mkdir -p public/files && \
   mkdir -p public/storage && \
   mkdir -p public/storage/fileshare && \
   mkdir -p public/storage/library && \ 
-  mkdir -p public/storage/website
+  mkdir -p public/storage/website && \
+  mkdir -p public/interface/lb_share/assets
     
 # Configure SupervisorD
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -142,7 +143,8 @@ COPY --chown=nginx --from=library-buildstep /build-context/dist/spa public/libra
 RUN chown -R nginx.nginx /run && \
   chown -R nobody.nobody public/storage/fileshare/ && \
   chown -R nobody.nobody public/storage/library/ && \
-  chown -R nobody.nobody public/storage/website/
+  chown -R nobody.nobody public/storage/website/ && \
+  chown -R nobody.nobody public/interface/lb_share/
 
 # Start SupervisorD to manage processes
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

@@ -1,9 +1,12 @@
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
+from common.docker import docker
 from common.models import User
 from common.models import App_Store
+from pkg_resources import packaging
 import json
+import os
 import requests
 
 
@@ -20,18 +23,34 @@ class app_store_set(Resource):
 
         for i in App_Store.query.all():
             try:
-                if not image_list.json()[i.name]:
-                    print('Entry deleted from database. Removing...')
+                if i.name not in image_list.json():
+                    print('An entry in the local database has been deleted '
+                          'online. Removing local entry...')
                     App_Store.query.filter_by(name=i.name).delete()
+
+                    try:
+                        docker_response = docker.remove(name=i.name,
+                                                        image=i.image)
+                        print(str(docker_response))
+                    except Exception as ex:
+                        print('Failed to uninstall ' + str(i.name) + ' - ' +
+                              str(ex) + ' - maybe it was not installed')
+
+                    if i.logo and os.path.exists(os.path.realpath('.') +
+                                                 i.logo):
+                        os.remove(os.path.realpath('.') + i.logo)
+
                     continue
 
-            except Exception:
-                App_Store.query.filter_by(name=i.name).delete()
+            except Exception as ex:
+                print(str(ex))
                 continue
 
             try:
-                if (image_list.json()[i.name]['version'] > i.version and
-                        i.status.lower() == "installed"):
+                if i.status.lower() == "installed" and \
+                   packaging.version.parse(i.version) < \
+                   packaging.version.parse(image_list.json()
+                                           [i.name]['version']):
                     print('Update available for ' + str(i.name))
                     lb_database = App_Store.query.filter_by(
                                   name=i.name).first()
@@ -60,7 +79,26 @@ class app_store_set(Resource):
                                             version=image_list.json()[i]
                                             ['version'],
                                             author_site=image_list.json()[i]
-                                            ['author_site'])
+                                            ['author_site'],
+                                            logo='')
+
+                    if image_list.json()[i]['logo']:
+                        lb_database.logo = '/lb_share/assets/' + \
+                                           image_list.json()[i]['logo'] \
+                                           .split('/')[-1]
+
+                    try:
+                        if image_list.json()[i]['logo']:
+                            r = requests.get(image_list.json()[i]['logo'],
+                                             stream=True,
+                                             timeout=5)
+
+                            if r.status_code == 200:
+                                with open('.' + lb_database.logo, 'wb') as f:
+                                    for chunk in r:
+                                        f.write(chunk)
+                    except Exception as ex:
+                        print(str(ex))
                 else:
                     lb_database.name = i
                     lb_database.long_name = image_list.json()[i]['long_name']
@@ -96,6 +134,7 @@ class app_store_status(Resource):
                         "volumes": json.loads(i.volumes),
                         "version": i.version,
                         "author_site": i.author_site,
+                        "logo": i.logo,
                         'status': i.status
                     }
 

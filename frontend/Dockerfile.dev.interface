@@ -55,7 +55,8 @@ RUN mkdir -p public/files && \
   mkdir -p public/storage && \
   mkdir -p public/storage/fileshare && \
   mkdir -p public/storage/library && \ 
-  mkdir -p public/storage/website
+  mkdir -p public/storage/website && \
+  mkdir -p public/interface/lb_share/assets
     
 # Configure SupervisorD
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -78,11 +79,15 @@ COPY --chown=nginx /config/nginx/assets/web.png public/storage/website/web.png
 
 # --------------- ## End mirror of production file ## -------------- #
 
+# Create dev-env lb_share
+RUN mkdir -p public/interface_dev/public/lb_share/assets
+
 # Set file permissions 
 RUN chown -R nginx.nginx /run && \
   chown -R nobody.nobody public/storage/fileshare/ && \
   chown -R nobody.nobody public/storage/library/ && \
-  chown -R nobody.nobody public/storage/website/
+  chown -R nobody.nobody public/storage/website/ && \
+  chown -R nobody.nobody public/interface/lb_share/
 
 # Enable Library OnDevice mode
 ENV ONDEVICE=TRUE

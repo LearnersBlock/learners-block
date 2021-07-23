@@ -25,6 +25,7 @@ class docker():
                                   ports=ports,
                                   volumes=volumes)
         except Exception as ex:
+            print(str(ex))
             return {"status_code": 500,
                     "response": str(ex)}
 
@@ -38,6 +39,7 @@ class docker():
             container.remove()
             response = client.images.remove(image=image)
         except Exception as ex:
+            print(str(ex))
             return {"status_code": 500,
                     "response": str(ex)}
 
@@ -53,6 +55,7 @@ class docker():
                                              volumes=volumes,
                                              restart_policy={"Name": "always"})
         except Exception as ex:
+            print(str(ex))
             return {"status_code": 500,
                     "response": str(ex)}
 

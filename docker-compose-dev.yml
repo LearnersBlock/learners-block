@@ -5,6 +5,7 @@ services:
     build:
       context: ./controller
       dockerfile: Dockerfile.dev.backend
+    restart: always
     ports: 
       - "9090:9090"
     labels:
@@ -12,6 +13,9 @@ services:
     volumes:
       - './controller/apps/backend:/app'
       - '/var/run/docker.sock:/var/run/docker.sock'
+      - 'lb_share:/app/lb_share'
+    depends_on:
+      - "frontend"
 
   filemanager-builder:
     build:
@@ -36,6 +40,7 @@ services:
       - './frontend/apps/file-manager/dist:/app/public/files'
       - './controller/apps/backend/storage/library:/app/public/storage/library'            
       - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
+      - 'lb_share:/app/public/interface_dev/public/lb_share'
 
   wifi_connect:
     build:
@@ -51,5 +56,6 @@ services:
       - 'yarn_cache_wifi:/usr/local/share/.cache/yarn/'
 
 volumes:
+  lb_share:
   yarn_cache_frontend:
   yarn_cache_wifi:

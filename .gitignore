@@ -43,5 +43,7 @@ yarn-error.log*
 # Applications
 /controller/apps/backend/storage/**
 /controller/apps/backend/db/**
+/controller/apps/backend/lb_share
+/frontend/apps/interface/public/lb_share
 /frontend/apps/library/**
 !.gitkeep
