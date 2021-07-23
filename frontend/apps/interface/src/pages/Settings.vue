@@ -714,20 +714,7 @@ export default defineComponent({
     }
 
     const changeStartPage = () => {
-      if (startPage.value === t('lb_welcome_page')) {
-        currentStartPage.value = '/'
-        customStartPageInput.value = false
-        appStorePageInput.value = false
-      } else if (startPage.value === t('file_manager')) {
-        currentStartPage.value = 'files'
-        customStartPageInput.value = false
-        appStorePageInput.value = false
-      } else if (startPage.value === t('library')) {
-        currentStartPage.value = 'library'
-        customStartPageInput.value = false
-        appStorePageInput.value = false
-      } else if (startPage.value === t('website')) {
-        currentStartPage.value = 'website'
+      if (startPage.value === t('lb_welcome_page') || startPage.value === t('file_manager') || startPage.value === t('library') || startPage.value === t('website')) {
         customStartPageInput.value = false
         appStorePageInput.value = false
       } else if (startPage.value === t('app_store_app')) {
@@ -745,8 +732,9 @@ export default defineComponent({
     async function storeStartPage (rows) {
       if (startPage.value === t('lb_welcome_page')) {
         await Axios.post(`${api.value}/v1/setui`, {
-          start_page: currentStartPage.value
+          start_page: '/'
         })
+        currentStartPage.value = '/'
         $q.dialog({
           title: t('success'),
           message: `${t('path_changed_to')} ${startPage.value}`
@@ -768,6 +756,14 @@ export default defineComponent({
               message: `${t('path_changed_to')} ${rows.long_name}`
             })
           } else {
+            if (startPage.value === t('file_manager')) {
+              currentStartPage.value = 'files'
+            } else if (startPage.value === t('library')) {
+              currentStartPage.value = 'library'
+            } else if (startPage.value === t('website')) {
+              currentStartPage.value = 'website'
+            }
+
             Axios.post(`${api.value}/v1/setui`, {
               start_page: currentStartPage.value
             })
@@ -776,6 +772,9 @@ export default defineComponent({
               message: `${t('path_changed_to')} ${startPage.value}`
             })
           }
+          setStartPage()
+        }).onDismiss(() => {
+          startPage.value = currentStartPage.value
           setStartPage()
         })
       }
