@@ -29,11 +29,11 @@ def init_database():
 # Set user database content
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True,
+    username = db.Column(db.String, unique=True,
                          server_default='lb',
                          nullable=False)
 
-    password = db.Column(db.String(128), unique=False,
+    password = db.Column(db.String, unique=False,
                          server_default=str(default_password),
                          nullable=False)
 
@@ -53,11 +53,11 @@ class User(db.Model):
                                      server_default=expression.true(),
                                      nullable=False)
 
-    start_page = db.Column(db.String(80), unique=False,
+    start_page = db.Column(db.String, unique=False,
                            server_default=str('/'),
                            nullable=False)
 
-    wifi_password = db.Column(db.String(128), unique=False,
+    wifi_password = db.Column(db.String, unique=False,
                               server_default=str(default_password),
                               nullable=False)
 
@@ -82,11 +82,11 @@ class App_Store(db.Model):
                      unique=True,
                      nullable=False)
 
-    long_name = db.Column(db.String(100),
+    long_name = db.Column(db.String,
                           unique=False,
                           nullable=False)
 
-    image = db.Column(db.String(80),
+    image = db.Column(db.String,
                       unique=False,
                       nullable=False)
 
@@ -94,19 +94,19 @@ class App_Store(db.Model):
                       unique=False,
                       nullable=False)
 
-    volumes = db.Column(db.String(1000),
+    volumes = db.Column(db.String,
                         unique=False,
                         nullable=False)
 
-    version = db.Column(db.String,
+    version = db.Column(db.Text,
                         unique=False,
                         nullable=False)
 
-    author_site = db.Column(db.String(100),
+    author_site = db.Column(db.String,
                             unique=False,
                             nullable=False)
 
-    logo = db.Column(db.String(1000),
+    logo = db.Column(db.String,
                      unique=False,
                      nullable=False)
 

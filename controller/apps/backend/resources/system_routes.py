@@ -61,8 +61,7 @@ class docker_remove(Resource):
             return {'response': 'Error: Must pass valid string.'}, 403
 
         response = docker.remove(name=content["name"],
-                                 image=content["image"]
-                                 )
+                                 image=content["image"])
 
         update_container_db_status(content["name"], 'Install')
 
