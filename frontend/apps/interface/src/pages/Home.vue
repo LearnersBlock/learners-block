@@ -118,7 +118,13 @@
                   class="column no-wrap flex-center cursor-pointer"
                   @click="redirect('http://' + windowHostname + ':' + slide.ports)"
                 >
+                  <q-img
+                    v-if="slide.logo"
+                    :src="slide.logo"
+                    style="max-width: 56px"
+                  />
                   <q-icon
+                    v-else
                     name="apps"
                     size="56px"
                     color="primary"
@@ -217,7 +223,7 @@ export default defineComponent({
       Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
         let entry = 0
         for (let i = 0; i < availableApps.data.length; i++) {
-          if (availableApps.data[i].status.toLowerCase() === 'installed') {
+          if (availableApps.data[i].status.toLowerCase() === 'installed' || availableApps.data[i].status.toLowerCase() === 'update available') {
             slides.value[entry] = availableApps.data[i]
             jsonKey.value = Object.keys(availableApps.data[i].ports)
             slides.value[entry].ports = slides.value[entry].ports[jsonKey.value[0]]

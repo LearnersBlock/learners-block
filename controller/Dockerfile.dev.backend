@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
 # Set env variables
 ENV FLASK_ENV=development
 ENV FLASK_APP=run
+ENV PYTHONUNBUFFERED=1
 
 # Install required packages
 COPY apps/backend/requirements-dev.txt /tmp/

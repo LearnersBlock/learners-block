@@ -284,6 +284,18 @@
                   >
                     <q-card>
                       <q-card-section class="text-center">
+                        <q-img
+                          v-if="props.row.logo"
+                          :src="props.row.logo"
+                          style="max-width: 56px"
+                        />
+                        <q-icon
+                          v-else
+                          name="apps"
+                          size="56px"
+                          color="primary"
+                        />
+                        <br>
                         <strong>{{ props.row.name }}</strong>
                       </q-card-section>
                       <q-separator />
@@ -645,11 +657,7 @@ export default defineComponent({
 
     // API calls for onMounted
     const fetchedSettings = Axios.get(`${api.value}/v1/settingsui`)
-    const fetchedPortainer = Axios.get(`${api.value}/v1/portainer/status`, {
-      validateStatus: function (status) {
-        return status < 500 // Resolve only if the status code is less than 500
-      }
-    })
+    const fetchedPortainer = Axios.get(`${api.value}/v1/portainer/status`)
     const fetchedSysInfo = Axios.get(`${api.value}/v1/system/info`)
     const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connectionstatus`)
     const fetchedInternetConnectionStatus = Axios.get(`${api.value}/v1/internet/connectionstatus`)
@@ -1009,11 +1017,7 @@ export default defineComponent({
     const updatePortainer = async () => {
       portainerLoading.value = true
       if (portainer.value) {
-        const portainerStarter = await Axios.get(`${api.value}/v1/portainer/start`, {
-          validateStatus: function (status) {
-            return status < 500 // Resolve only if the status code is less than 500
-          }
-        })
+        const portainerStarter = await Axios.get(`${api.value}/v1/portainer/start`)
         if (portainerStarter.status === 404) {
           $q.notify({ type: 'negative', message: t('portainer_unavailable') })
           portainer.value = false

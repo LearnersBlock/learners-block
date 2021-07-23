@@ -60,8 +60,9 @@ class docker_remove(Resource):
         except AttributeError:
             return {'response': 'Error: Must pass valid string.'}, 403
 
-        response = docker.remove(image=content["image"],
-                                 name=content["name"])
+        response = docker.remove(name=content["name"],
+                                 image=content["image"]
+                                 )
 
         update_container_db_status(content["name"], 'Install')
 

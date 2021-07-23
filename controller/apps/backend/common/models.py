@@ -98,13 +98,17 @@ class App_Store(db.Model):
                         unique=False,
                         nullable=False)
 
-    version = db.Column(db.Integer,
+    version = db.Column(db.String,
                         unique=False,
                         nullable=False)
 
     author_site = db.Column(db.String(100),
                             unique=False,
                             nullable=False)
+
+    logo = db.Column(db.String(1000),
+                     unique=False,
+                     nullable=False)
 
     status = db.Column(db.String(80),
                        unique=False,
