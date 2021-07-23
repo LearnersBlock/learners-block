@@ -28,38 +28,46 @@ def init_database():
 
 # Set user database content
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, unique=True,
+    id = db.Column(db.Integer,
+                   primary_key=True)
+    username = db.Column(db.String,
+                         unique=True,
                          server_default='lb',
                          nullable=False)
 
-    password = db.Column(db.String, unique=False,
+    password = db.Column(db.String,
+                         unique=False,
                          server_default=str(default_password),
                          nullable=False)
 
-    files = db.Column(db.Boolean, unique=False,
+    files = db.Column(db.Boolean,
+                      unique=False,
                       server_default=expression.true(),
                       nullable=False)
 
-    library = db.Column(db.Boolean, unique=False,
+    library = db.Column(db.Boolean,
+                        unique=False,
                         server_default=expression.true(),
                         nullable=False)
 
-    website = db.Column(db.Boolean, unique=False,
+    website = db.Column(db.Boolean,
+                        unique=False,
                         server_default=expression.true(),
                         nullable=False)
 
-    allow_password_reset = db.Column(db.Boolean, unique=False,
+    allow_password_reset = db.Column(db.Boolean,
+                                     unique=False,
                                      server_default=expression.true(),
                                      nullable=False)
 
-    start_page = db.Column(db.String, unique=False,
+    start_page = db.Column(db.String,
+                           unique=False,
                            server_default=str('/'),
                            nullable=False)
 
-    wifi_password = db.Column(db.String, unique=False,
-                              server_default=str(default_password),
-                              nullable=False)
+    wifi_password = db.Column(db.String,
+                              unique=False,
+                              nullable=True)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -96,7 +104,7 @@ class App_Store(db.Model):
 
     volumes = db.Column(db.String,
                         unique=False,
-                        nullable=False)
+                        nullable=True)
 
     version = db.Column(db.Text,
                         unique=False,
@@ -104,11 +112,11 @@ class App_Store(db.Model):
 
     author_site = db.Column(db.String,
                             unique=False,
-                            nullable=False)
+                            nullable=True)
 
     logo = db.Column(db.String,
                      unique=False,
-                     nullable=False)
+                     nullable=True)
 
     status = db.Column(db.String,
                        unique=False,
