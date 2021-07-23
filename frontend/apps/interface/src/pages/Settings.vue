@@ -376,7 +376,7 @@
                       v-model="appStorePageInput"
                       persistent
                     >
-                      <q-card>
+                      <q-card style="max-width: 80vw;">
                         <q-card-section class="row items-center">
                           <q-table
                             v-if="rows"
