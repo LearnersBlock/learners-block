@@ -99,5 +99,6 @@
     "no_apps_to_display": "Es sind keine Anwendungen zu sehen. Versuchen Sie, Ihre Anwendungsdatenbank mit dem obigen Symbol zu aktualisieren.",
     "author": "Autor/in",
     "description": "Beschreibung",
-    "this_may_take_time": "Dies kann je nach Ihrer Verbindungsgeschwindigkeit einige Zeit dauern. Bitte haben Sie etwas Geduld."
+    "this_may_take_time": "Dies kann je nach Ihrer Verbindungsgeschwindigkeit einige Zeit dauern. Bitte haben Sie etwas Geduld.",
+    "app_store_app": "App Store-Anwendung"
 }

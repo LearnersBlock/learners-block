@@ -99,5 +99,6 @@
     "no_apps_to_display": "Il n’y a aucune application à afficher. Essayez de rafraîchir votre base de données d’applications avec l’icône ci-dessus.",
     "author": "Auteur",
     "description": "Description",
-    "this_may_take_time": "Ceci peut prendre un certain temps en fonction de la vitesse de votre connexion. Veuillez être patient(e)."
+    "this_may_take_time": "Ceci peut prendre un certain temps en fonction de la vitesse de votre connexion. Veuillez patienter.",
+    "app_store_app": "Appli de magasin d’applications"
 }
