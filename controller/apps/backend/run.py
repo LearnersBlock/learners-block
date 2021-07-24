@@ -97,7 +97,7 @@ if __name__ == '__main__':
         from resources.auth_routes import login, logout, set_password, \
              verify_login
         from resources.database_routes import app_store_set, \
-            app_store_status, set_ui, settings_ui
+            app_store_status, set_ui, settings_ui, set_wifi
         from common.models import init_database
 
         init_database()
@@ -165,6 +165,7 @@ if __name__ == '__main__':
     api.add_resource(set_password, '/v1/setpassword')
     api.add_resource(settings_ui, '/v1/settingsui')
     api.add_resource(set_ui, '/v1/setui')
+    api.add_resource(set_wifi, '/v1/setwifi')
     api.add_resource(system_info, '/v1/system/info')
     api.add_resource(update, '/v1/update')
     api.add_resource(uuid, '/v1/uuid')

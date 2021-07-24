@@ -1,6 +1,8 @@
+from common.models import User
 from dbus.mainloop.glib import DBusGMainLoop
 from flask_restful import abort
 from resources.system_routes import rsync_terminate
+from run import app
 import NetworkManager
 import os
 import subprocess
@@ -38,7 +40,6 @@ def handle_exit(*args):
 
 class wifi:
     def check_connection(self):
-
         run = subprocess.run(["iwgetid", "-r"],
                              capture_output=True,
                              text=True).stdout.rstrip()
@@ -150,11 +151,23 @@ class wifi_connect:
         except Exception:
             print("Error refreshing network points.")
 
-        # Decide om SSID then start wifi-connect
+        # Check if default SSID
         if current_hostname == os.environ['DEFAULT_HOSTNAME']:
-            cmd = (f'/app/common/wifi-connect/wifi-connect -s '
-                   f'{os.environ["DEFAULT_SSID"]} -o 8080 '
-                   f'--ui-directory /app/common/wifi-connect/ui'.split())
+            current_hostname = os.environ["DEFAULT_SSID"]
+
+        # Fetch the wi-fi password
+        try:
+            with app.app_context():
+                lb_database = User.query.filter_by(username='lb').first()
+        except Exception as ex:
+            print(ex)
+
+        # Start wifi connect
+        if lb_database.wifi_password:
+            cmd = (f'/app/common/wifi-connect/wifi-connect '
+                   f'-p {lb_database.wifi_password} '
+                   f'-s {current_hostname} -o 8080 --ui-directory '
+                   f'/app/common/wifi-connect/ui'.split())
         else:
             cmd = (f'/app/common/wifi-connect/wifi-connect '
                    f'-s {current_hostname} -o 8080 --ui-directory '

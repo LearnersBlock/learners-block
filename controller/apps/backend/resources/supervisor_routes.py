@@ -55,8 +55,7 @@ class portainer_start(Resource):
         response = container().start(container_name="portainer")
 
         return {'status': response["status_code"],
-                'message': "OK",
-                'response': response["text"]}, response["status_code"]
+                'message': response["text"]}, response["status_code"]
 
 
 class portainer_stop(Resource):
@@ -65,8 +64,7 @@ class portainer_stop(Resource):
         response = container().stop(container_name="portainer")
 
         return {'status': response["status_code"],
-                'message': "OK",
-                'response': response["text"]}, response["status_code"]
+                'message': response["text"]}, response["status_code"]
 
 
 class update(Resource):

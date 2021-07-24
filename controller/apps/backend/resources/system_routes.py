@@ -37,7 +37,7 @@ class docker_pull(Resource):
         try:
             content = request.get_json()
         except AttributeError:
-            return {'response': 'Error: Must pass valid string.'}, 403
+            return {'message': 'Error: Must pass valid string.'}, 403
 
         response = docker.pull(image=content["image"],
                                name=content["name"],
@@ -58,7 +58,7 @@ class docker_remove(Resource):
         try:
             content = request.get_json()
         except AttributeError:
-            return {'response': 'Error: Must pass valid string.'}, 403
+            return {'message': 'Error: Must pass valid string.'}, 403
 
         response = docker.remove(name=content["name"],
                                  image=content["image"])
@@ -79,7 +79,7 @@ class docker_run(Resource):
         try:
             content = request.get_json()
         except AttributeError:
-            return {'response': 'Error: Must pass valid string.'}, 403
+            return {'message': 'Error: Must pass valid string.'}, 403
 
         response = docker.run(image=content["image"],
                               name=content["name"],
@@ -100,11 +100,11 @@ class download_fetch(Resource):
         try:
             content = request.get_json()
         except AttributeError:
-            return {'response': 'Error: Must pass valid string.'}, 403
+            return {'message': 'Error: Must pass valid string.'}, 403
 
         download_start(content["download_url"])
 
-        return {'response': 'process complete'}, 200
+        return {'message': 'process complete'}, 200
 
 
 class download_status(Resource):
@@ -158,11 +158,11 @@ class rsync_fetch(Resource):
         try:
             content = request.get_json()
         except AttributeError:
-            return {'response': 'Error: Must pass valid string.'}, 403
+            return {'message': 'Error: Must pass valid string.'}, 403
 
         rsync_start(content["rsync_url"])
 
-        return {'response': 'process complete'}, 200
+        return {'message': 'process complete'}, 200
 
 
 class rsync_status(Resource):

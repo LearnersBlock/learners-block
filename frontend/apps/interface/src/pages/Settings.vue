@@ -174,7 +174,7 @@
               class="ml-3 mr-3 mb-2 text-lg"
             />
             <q-btn
-              v-if="disablePasswordButton"
+              v-if="showPasswordButton"
               outline
               :loading="togglesLoading"
               rounded
@@ -215,6 +215,63 @@
               class="ml-3 mr-3 mt-1 mb-2 text-lg"
               :disable="wifiLoading"
               :label="!wifi ? $t('connect'): $t('disconnect')"
+            />
+            <q-btn
+              outline
+              rounded
+              no-caps
+              color="primary"
+              @click="setWifiPasswordDialog = true"
+              :label="$t('set_password')"
+              class="ml-3 mr-3 mb-2 text-lg"
+            />
+            <q-dialog
+              v-model="setWifiPasswordDialog"
+              persistent
+            >
+              <q-card style="max-width: 80vw;">
+                <q-card-section class="row items-center">
+                  <q-input
+                    ref="wifiPasswordValid"
+                    filled
+                    type="password"
+                    :placeholder="$t('password')"
+                    class="ml-1 mr-1"
+                    :rules="[(value) =>
+                      !value.includes(' ') &&
+                      value.length > 7
+                      || $t('invalid_wifi_entry')]"
+                    v-model="wifiPassword"
+                  />
+                </q-card-section>
+                <q-card-actions align="right">
+                  <q-btn
+                    flat
+                    :label="$t('cancel')"
+                    color="primary"
+                    v-close-popup
+                    @click="wifiPassword = ''"
+                  />
+                  <q-btn
+                    flat
+                    :label="$t('set_password')"
+                    color="primary"
+                    v-close-popup
+                    @click="wifiPasswordChange"
+                  />
+                </q-card-actions>
+              </q-card>
+            </q-dialog>
+            <q-btn
+              v-if="showWifiPasswordButton"
+              outline
+              :loading="togglesLoading"
+              rounded
+              no-caps
+              color="primary"
+              @click="disableWifiWarn"
+              :label="$t('disable_password')"
+              class="ml-3 mr-3 mb-2 text-lg"
             />
           </div>
           <q-list
@@ -602,7 +659,6 @@ export default defineComponent({
     const appStorePageInput = ref<boolean>(false)
     const currentStartPage = ref<any>()
     const customStartPageInput = ref<boolean>(false)
-    const disablePasswordButton = ref<boolean>(false)
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(false)
     const hostname = ref<string>('')
@@ -623,6 +679,9 @@ export default defineComponent({
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
+    const setWifiPasswordDialog = ref<boolean>(false)
+    const showPasswordButton = ref<boolean>(false)
+    const showWifiPasswordButton = ref<boolean>(false)
     const startPage = ref<string>('-')
     const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
@@ -631,6 +690,8 @@ export default defineComponent({
     const website = ref<boolean>(false)
     const websiteLoading = ref<boolean>(false)
     const wifi = ref<boolean>(false)
+    const wifiPassword = ref<string>('')
+    const wifiPasswordValid = ref()
     const wifiLoading = ref<boolean>(true)
     const windowHostname = ref<string>(window.location.hostname)
 
@@ -684,7 +745,10 @@ export default defineComponent({
         website.value = res1.data.website
         library.value = res1.data.library
         if (!res1.data.default_login_password_set) {
-          disablePasswordButton.value = true
+          showPasswordButton.value = true
+        }
+        if (res1.data.wifi_password_set) {
+          showWifiPasswordButton.value = true
         }
         togglesLoading.value = false
         // Get SystemInfo
@@ -735,68 +799,8 @@ export default defineComponent({
       storeStartPage(null)
     }
 
-    async function storeStartPage (rows) {
-      if (startPage.value === t('lb_welcome_page')) {
-        await Axios.post(`${api.value}/v1/setui`, {
-          start_page: '/'
-        })
-        currentStartPage.value = '/'
-        $q.dialog({
-          title: t('success'),
-          message: `${t('path_changed_to')} ${startPage.value}`
-        })
-      } else {
-        $q.dialog({
-          title: t('confirm'),
-          message: t('change_path_warning'),
-          cancel: true,
-          persistent: true
-        }).onOk(() => {
-          if (rows) {
-            Axios.post(`${api.value}/v1/setui`, {
-              start_page: rows.name
-            })
-            currentStartPage.value = rows.name
-            $q.dialog({
-              title: t('success'),
-              message: `${t('path_changed_to')} ${rows.long_name}`
-            })
-          } else {
-            if (startPage.value === t('file_manager')) {
-              currentStartPage.value = 'files'
-            } else if (startPage.value === t('library')) {
-              currentStartPage.value = 'library'
-            } else if (startPage.value === t('website')) {
-              currentStartPage.value = 'website'
-            }
-
-            Axios.post(`${api.value}/v1/setui`, {
-              start_page: currentStartPage.value
-            })
-            $q.dialog({
-              title: t('success'),
-              message: `${t('path_changed_to')} ${startPage.value}`
-            })
-          }
-          setStartPage()
-        }).onDismiss(() => {
-          startPage.value = currentStartPage.value
-          setStartPage()
-        })
-      }
-    }
-
     const connectDisconnectWifi = async () => {
       await Axios.get(`${api.value}/v1/wifi/forget`)
-    }
-
-    const disableLogin = async () => {
-      const response = await Axios.post(`${api.value}/v1/setpassword`, { password: ' ' })
-      if (response.status === 200) {
-        $q.notify({ type: 'positive', message: t('login_disabled') })
-      } else {
-        $q.notify({ type: 'negative', message: t('error') })
-      }
     }
 
     function disableLoginWarn () {
@@ -806,8 +810,32 @@ export default defineComponent({
         cancel: true,
         persistent: true
       }).onOk(() => {
-        disableLogin()
-        disablePasswordButton.value = false
+        Axios.post(`${api.value}/v1/setpassword`, { password: ' ' }).then((response) => {
+          if (response.status === 200) {
+            $q.notify({ type: 'positive', message: t('login_disabled') })
+          } else {
+            $q.notify({ type: 'negative', message: t('error') })
+          }
+          showPasswordButton.value = false
+        })
+      })
+    }
+
+    function disableWifiWarn () {
+      $q.dialog({
+        title: t('confirm'),
+        message: t('are_you_sure'),
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        Axios.post(`${api.value}/v1/setwifi`, { wifi_password: '' }).then((response) => {
+          if (response.status === 200) {
+            $q.notify({ type: 'positive', message: t('login_disabled') })
+          } else {
+            $q.notify({ type: 'negative', message: t('error') })
+          }
+          showWifiPasswordButton.value = false
+        })
       })
     }
 
@@ -894,6 +922,57 @@ export default defineComponent({
             startPage.value = rows.value[i].long_name
           }
         }
+      }
+    }
+
+    async function storeStartPage (rows) {
+      if (startPage.value === t('lb_welcome_page')) {
+        await Axios.post(`${api.value}/v1/setui`, {
+          start_page: '/'
+        })
+        currentStartPage.value = '/'
+        $q.dialog({
+          title: t('success'),
+          message: `${t('path_changed_to')} ${startPage.value}`
+        })
+      } else {
+        $q.dialog({
+          title: t('confirm'),
+          message: t('change_path_warning'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          if (rows) {
+            Axios.post(`${api.value}/v1/setui`, {
+              start_page: rows.name
+            })
+            currentStartPage.value = rows.name
+            $q.dialog({
+              title: t('success'),
+              message: `${t('path_changed_to')} ${rows.long_name}`
+            })
+          } else {
+            if (startPage.value === t('file_manager')) {
+              currentStartPage.value = 'files'
+            } else if (startPage.value === t('library')) {
+              currentStartPage.value = 'library'
+            } else if (startPage.value === t('website')) {
+              currentStartPage.value = 'website'
+            }
+
+            Axios.post(`${api.value}/v1/setui`, {
+              start_page: currentStartPage.value
+            })
+            $q.dialog({
+              title: t('success'),
+              message: `${t('path_changed_to')} ${startPage.value}`
+            })
+          }
+          setStartPage()
+        }).onDismiss(() => {
+          startPage.value = currentStartPage.value
+          setStartPage()
+        })
       }
     }
 
@@ -1055,6 +1134,30 @@ export default defineComponent({
       }
     }
 
+    function wifiPasswordChange () {
+      if (wifiPasswordValid.value.validate() && wifiPassword.value !== '') {
+        $q.dialog({
+          title: t('confirm'),
+          message: t('are_you_sure'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          Axios.post(`${api.value}/v1/setwifi`, {
+            wifi_password: wifiPassword.value
+          })
+          $q.dialog({
+            title: t('success'),
+            message: t('password_set_success')
+          })
+          wifiPassword.value = ''
+          showWifiPasswordButton.value = true
+        })
+      } else {
+        $q.notify({ type: 'negative', message: t('invalid_entry') })
+        wifiPassword.value = ''
+      }
+    }
+
     function wifiWarn () {
       if (internet.value && !wifi.value) {
         $q.notify({ type: 'negative', message: t('internet_no_wifi') })
@@ -1078,9 +1181,8 @@ export default defineComponent({
       changeStartPage,
       columns,
       customStartPageInput,
-      disableLogin,
       disableLoginWarn,
-      disablePasswordButton,
+      disableWifiWarn,
       files,
       filesLoading,
       hostname,
@@ -1101,6 +1203,9 @@ export default defineComponent({
       regexp,
       rows,
       setStartPage,
+      setWifiPasswordDialog,
+      showPasswordButton,
+      showWifiPasswordButton,
       startPage,
       startPathValid,
       storeStartPage,
@@ -1118,6 +1223,9 @@ export default defineComponent({
       websiteLoading,
       wifi,
       wifiLoading,
+      wifiPassword,
+      wifiPasswordChange,
+      wifiPasswordValid,
       wifiWarn,
       windowHostname
     }

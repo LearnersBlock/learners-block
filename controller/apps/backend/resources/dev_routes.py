@@ -28,7 +28,7 @@ def wifi_toggle():
 
 class device(Resource):
     def get(self):
-        return {'response': 'output'}, 200
+        return {'message': 'output'}, 200
 
 
 class host_config(Resource):
@@ -38,8 +38,7 @@ class host_config(Resource):
         print(f"Hostname changed to '{content['hostname']}'")
         return {
             'status': 200,
-            'message': "OK",
-            'response': f"Hostname changed to '{content['hostname']}'"
+            'message': f"Hostname changed to '{content['hostname']}'"
         }, 200
 
 
@@ -77,8 +76,7 @@ class portainer_start(Resource):
         time.sleep(3)
         portainerstatus = True
         return {'status': 200,
-                'message': "OK",
-                'response': "Supervisor responses here"}, 200
+                'message': "Supervisor responses here"}, 200
 
 
 class portainer_stop(Resource):
@@ -89,8 +87,7 @@ class portainer_stop(Resource):
         portainerstatus = False
 
         return {'status': 200,
-                'message': "OK",
-                'response': "Supervisor responses here"}, 200
+                'message': "Supervisor responses here"}, 200
 
 
 class update(Resource):

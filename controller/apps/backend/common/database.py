@@ -13,4 +13,4 @@ def update_container_db_status(name, status):
         print("update_container_db_status - " + str(ex))
         return {'message': "update_container_db_status - " + str(ex)}, 500
 
-    return {'response': 'done'}, 200
+    return {'message': 'done'}, 200

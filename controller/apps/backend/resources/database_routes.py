@@ -6,6 +6,7 @@ from common.models import User
 from common.models import App_Store
 from pkg_resources import packaging
 import json
+import inspect
 import os
 import requests
 
@@ -19,7 +20,7 @@ class app_store_set(Resource):
                                       "image_directory.json",
                                       timeout=8)
         except Exception:
-            return {'response': 'error'}, 408
+            return {'message': 'error'}, 408
 
         for i in App_Store.query.all():
             try:
@@ -116,7 +117,7 @@ class app_store_set(Resource):
             print(self.__class__.__name__ + " - " + str(ex))
             return {'message': self.__class__.__name__ + " - " + str(ex)}, 500
 
-        return {'response': 'done'}, 200
+        return {'message': 'done'}, 200
 
 
 class app_store_status(Resource):
@@ -150,13 +151,13 @@ class set_ui(Resource):
             lb_database = User.query.filter_by(username='lb').first()
         except Exception as ex:
             print(self.__class__.__name__ + " - " + str(ex))
-            return {'response': self.__class__.__name__ + " - " + str(ex)}, 403
+            return {'message': self.__class__.__name__ + " - " + str(ex)}, 403
 
         try:
             content = request.get_json()
         except AttributeError as ex:
             print(self.__class__.__name__ + " - " + str(ex))
-            return {'response': 'Error: Must pass valid string.'}, 403
+            return {'message': 'Error: Must pass valid string.'}, 403
 
         try:
             if "files" in content:
@@ -182,7 +183,7 @@ class set_ui(Resource):
             print(self.__class__.__name__ + " - " + str(ex))
             return {'message': self.__class__.__name__ + " - " + str(ex)}, 500
 
-        return {'response': 'done'}, 200
+        return {'message': 'done'}, 200
 
 
 class settings_ui(Resource):
@@ -192,8 +193,57 @@ class settings_ui(Resource):
         verified_password = User.verify_password(' ',
                                                  lb_database.password)
 
+        # Check if there is a wifi password set and return boolean
+        if lb_database.wifi_password:
+            wifi_password = True
+        else:
+            wifi_password = False
+
         return {'files': lb_database.files,
                 'library': lb_database.library,
                 'website': lb_database.website,
                 'start_page': lb_database.start_page,
-                'login_password_set': verified_password}, 200
+                'default_login_password_set': verified_password,
+                'wifi_password_set': wifi_password}, 200
+
+
+class set_wifi(Resource):
+    @jwt_required()
+    def post(self):
+        try:
+            lb_database = User.query.filter_by(username='lb').first()
+        except Exception as ex:
+            print(self.__class__.__name__ + " - " + str(ex))
+            return {'message': self.__class__.__name__ + " - " + str(ex)}, 403
+
+        try:
+            content = request.get_json()
+        except AttributeError as ex:
+            print(self.__class__.__name__ + " - " + str(ex))
+            return {'message': 'Error: Must pass valid string.'}, 403
+        try:
+            lb_database.wifi_password = content["wifi_password"]
+            lb_database.save_to_db()
+            response = 'success'
+        except Exception as ex:
+            print(self.__class__.__name__ + " - " + str(ex))
+            return {'message': self.__class__.__name__ + " - " + str(ex)}, 500
+
+        # If in production environment
+        if os.environ['FLASK_ENV'].lower() == "production":
+            from common.wifi import wifi
+            from common.wifi import wifi_connect
+            # If connected, restart Wi-Fi-Connect
+            connected = wifi().check_connection()
+
+            if not connected:
+                try:
+                    # Restart wifi-connect
+                    wifi_connect().stop()
+                    wifi_connect().start(wait=2)
+                except Exception as ex:
+                    response = ("Wifi-connect failed to launch. " +
+                                inspect.stack()[0][3] +
+                                " - " + str(ex))
+
+        return {'message': response}, 200

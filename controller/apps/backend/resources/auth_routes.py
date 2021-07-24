@@ -38,7 +38,7 @@ class login(Resource):
             lb_database = User.query.filter_by(username='lb').first()
         except Exception as ex:
             print(self.__class__.__name__ + " - " + str(ex))
-            return {'response': self.__class__.__name__ + " - " + str(ex)}, 500
+            return {'message': self.__class__.__name__ + " - " + str(ex)}, 500
 
         try:
             content = request.get_json()
@@ -47,7 +47,7 @@ class login(Resource):
             username = content["username"].lower()
         except AttributeError as ex:
             print(self.__class__.__name__ + " - " + str(ex))
-            return {'response': 'Error: Must pass valid string.'}, 200
+            return {'message': 'Error: Must pass valid string.'}, 200
 
         if username != lb_database.username or verify_password is not \
                 True:
@@ -75,13 +75,13 @@ class set_password(Resource):
             lb_database = User.query.filter_by(username='lb').first()
         except Exception as ex:
             print(self.__class__.__name__ + " - " + str(ex))
-            return {'response': self.__class__.__name__ + " - " + str(ex)}, 403
+            return {'message': self.__class__.__name__ + " - " + str(ex)}, 403
 
         try:
             content = request.get_json()
         except AttributeError as ex:
             print(self.__class__.__name__ + " - " + str(ex))
-            return {'response': 'Error: Must pass valid string.'}, 403
+            return {'message': 'Error: Must pass valid string.'}, 403
 
         try:
             hashed_password = User.hash_password(content["password"])
@@ -92,7 +92,7 @@ class set_password(Resource):
             return {'database error': self.__class__.__name__ + " - " +
                     str(ex)}, 500
 
-        return {'response': 'done'}, 200
+        return {'message': 'done'}, 200
 
 
 class verify_login(Resource):

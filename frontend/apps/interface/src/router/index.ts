@@ -76,10 +76,11 @@ export default route<StateInterface>(function ({ store }) {
         store.dispatch('LOGOUT')
         Router.push('/login')
         Notify.create({ type: 'negative', message: i18n.global.t('login_again') })
+      } else {
+        Notify.create({ type: 'negative', message: `${i18n.global.t('error')} ${error.response.message}` })
       }
     }
     return Promise.reject(error)
   })
-
   return Router
 })
