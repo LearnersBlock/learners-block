@@ -188,7 +188,12 @@ class set_ui(Resource):
 class settings_ui(Resource):
     def get(self):
         lb_database = User.query.filter_by(username='lb').first()
+
+        verified_password = User.verify_password(' ',
+                                                 lb_database.password)
+
         return {'files': lb_database.files,
                 'library': lb_database.library,
                 'website': lb_database.website,
-                'start_page': lb_database.start_page}, 200
+                'start_page': lb_database.start_page,
+                'login_password_set': verified_password}, 200

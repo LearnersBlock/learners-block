@@ -174,7 +174,9 @@
               class="ml-3 mr-3 mb-2 text-lg"
             />
             <q-btn
+              v-if="disablePasswordButton"
               outline
+              :loading="togglesLoading"
               rounded
               no-caps
               color="primary"
@@ -597,9 +599,10 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
 
-    const currentStartPage = ref<any>()
     const appStorePageInput = ref<boolean>(false)
+    const currentStartPage = ref<any>()
     const customStartPageInput = ref<boolean>(false)
+    const disablePasswordButton = ref<boolean>(false)
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(false)
     const hostname = ref<string>('')
@@ -680,6 +683,9 @@ export default defineComponent({
         files.value = res1.data.files
         website.value = res1.data.website
         library.value = res1.data.library
+        if (!res1.data.default_login_password_set) {
+          disablePasswordButton.value = true
+        }
         togglesLoading.value = false
         // Get SystemInfo
         sysInfo.value = res2.data
@@ -801,6 +807,7 @@ export default defineComponent({
         persistent: true
       }).onOk(() => {
         disableLogin()
+        disablePasswordButton.value = false
       })
     }
 
@@ -1073,6 +1080,7 @@ export default defineComponent({
       customStartPageInput,
       disableLogin,
       disableLoginWarn,
+      disablePasswordButton,
       files,
       filesLoading,
       hostname,
