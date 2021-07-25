@@ -3,6 +3,7 @@
     <div class="flex flex-col items-center">
       <div class="max-w-5xl">
         <div>
+          <!-- Home Button -->
           <q-btn
             @click="$router.replace('/')"
             rounded
@@ -18,10 +19,12 @@
               {{ $t('home') }}
             </div>
           </q-btn>
+          <!-- Settings label -->
           <div class="mt-9 pl-3 text-5xl text-gray-600">
             {{ $t('settings') }}
           </div>
           <hr class="mt-3">
+          <!-- Component toggles -->
           <div class="flex flex-col">
             <q-list>
               <q-item-label
@@ -30,7 +33,7 @@
               >
                 {{ $t('components') }}
               </q-item-label>
-
+              <!-- File Manager -->
               <div class="text-base ml-4 mb-4 text-gray-600">
                 {{ $t('click_toggle') }}
               </div>
@@ -71,7 +74,7 @@
                   class="mt-6 mr-6"
                 />
               </q-item>
-
+              <!-- Library -->
               <q-item
                 clickable
                 v-ripple
@@ -118,7 +121,7 @@
                   class="mt-6 mr-6"
                 />
               </q-item>
-
+              <!-- Website -->
               <q-item
                 clickable
                 v-ripple
@@ -158,6 +161,7 @@
               </q-item>
             </q-list>
             <q-separator spaced />
+            <!-- Login section -->
             <q-item-label
               header
               class="text-2xl"
@@ -185,6 +189,7 @@
               class="ml-3 mr-3 mb-2 text-lg"
             />
             <q-separator spaced />
+            <!-- Wi-Fi section -->
             <q-item-label
               header
               class="text-2xl"
@@ -221,6 +226,7 @@
               rounded
               no-caps
               color="primary"
+              :loading="settingWifiPassword || togglesLoading"
               @click="setWifiPasswordDialog = true"
               :label="$t('set_password')"
               class="ml-3 mr-3 mb-2 text-lg"
@@ -229,14 +235,15 @@
               v-model="setWifiPasswordDialog"
               persistent
             >
-              <q-card style="max-width: 80vw;">
+              <q-card style="width: 700px; max-width: 80vw;">
                 <q-card-section class="row items-center">
                   <q-input
+                    class="ml-1 mr-1"
+                    style="width: 700px; max-width: 80vw;"
                     ref="wifiPasswordValid"
                     filled
                     type="password"
                     :placeholder="$t('password')"
-                    class="ml-1 mr-1"
                     :rules="[(value) =>
                       !value.includes(' ') &&
                       value.length > 7
@@ -265,7 +272,7 @@
             <q-btn
               v-if="showWifiPasswordButton"
               outline
-              :loading="togglesLoading"
+              :loading="settingWifiPassword || togglesLoading"
               rounded
               no-caps
               color="primary"
@@ -274,6 +281,7 @@
               class="ml-3 mr-3 mb-2 text-lg"
             />
           </div>
+          <!-- Application Store -->
           <q-list
             bordered
             class="rounded-borders mt-2"
@@ -335,7 +343,7 @@
                   </q-td>
                 </template>
 
-                <!-- Mobile templates -->
+                <!-- Application Store Mobile templates -->
                 <template #item="props">
                   <div
                     class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4"
@@ -395,6 +403,7 @@
               </q-inner-loading>
             </q-expansion-item>
           </q-list>
+          <!-- Advanced Features -->
           <q-list
             bordered
             class="rounded-borders mt-4"
@@ -430,18 +439,19 @@
                     >
                       {{ $t('choose_new_path') }}
                     </div>
-
+                    <!-- Choose App as default path -->
                     <q-dialog
                       v-model="appStorePageInput"
                       persistent
                     >
-                      <q-card style="max-width: 80vw;">
+                      <q-card style="width: 700px; max-width: 80vw;">
                         <q-card-section class="row items-center">
                           <q-table
                             v-if="rows"
                             :title="$t('available_applications')"
                             flat
                             separator="cell"
+                            style="width: 700px; max-width: 80vw;"
                             :grid="$q.screen.xs"
                             :rows-per-page-options="[5, 10]"
                             :rows="rows"
@@ -511,7 +521,7 @@
                         </q-card-actions>
                       </q-card>
                     </q-dialog>
-
+                    <!-- Custom start page -->
                     <q-slide-transition :duration="2000">
                       <div v-show="customStartPageInput">
                         <q-input
@@ -543,6 +553,7 @@
                       </div>
                     </q-slide-transition>
                     <q-separator spaced />
+                    <!-- Set Hostname -->
                     <div class="text-2xl text-gray-700 mt-5 mb-1">
                       {{ $t('set_hostname_desc') }}
                     </div>
@@ -577,6 +588,7 @@
                     class="mr-3 ml-3"
                     spaced
                   />
+                  <!-- Portainer -->
                   <div>
                     <q-item class="flex">
                       <q-item-section>
@@ -617,6 +629,7 @@
               </q-card>
             </q-expansion-item>
           </q-list>
+          <!-- System Info -->
           <div class="text-center text-2xl mt-6 mb-4 text-gray-600">
             {{ $t('system_info') }}
           </div>
@@ -667,8 +680,6 @@ export default defineComponent({
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
     const loading = ref<boolean>(false)
-    // App Store loading indicator
-    const visible = ref(false)
     const newHostname = ref<string>('')
     const newStartPath = ref<string>('')
     const pages = [
@@ -679,6 +690,7 @@ export default defineComponent({
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
+    const settingWifiPassword = ref<boolean>(false)
     const setWifiPasswordDialog = ref<boolean>(false)
     const showPasswordButton = ref<boolean>(false)
     const showWifiPasswordButton = ref<boolean>(false)
@@ -687,6 +699,7 @@ export default defineComponent({
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
     const togglesLoading = ref<boolean>(true)
+    const visible = ref(false)
     const website = ref<boolean>(false)
     const websiteLoading = ref<boolean>(false)
     const wifi = ref<boolean>(false)
@@ -828,12 +841,14 @@ export default defineComponent({
         cancel: true,
         persistent: true
       }).onOk(() => {
+        settingWifiPassword.value = true
         Axios.post(`${api.value}/v1/setwifi`, { wifi_password: '' }).then((response) => {
           if (response.status === 200) {
             $q.notify({ type: 'positive', message: t('login_disabled') })
           } else {
             $q.notify({ type: 'negative', message: t('error') })
           }
+          settingWifiPassword.value = false
           showWifiPasswordButton.value = false
         })
       })
@@ -858,10 +873,7 @@ export default defineComponent({
         }).onOk(() => {
           updateHostname()
 
-          $q.dialog({
-            title: t('success'),
-            message: t('hostname_changed_notification')
-          })
+          $q.notify({ type: 'positive', message: t('hostname_changed_notification') })
         })
       } else {
         $q.notify({ type: 'negative', message: t('invalid_hostname') })
@@ -879,11 +891,7 @@ export default defineComponent({
           Axios.post(`${api.value}/v1/setui`, {
             start_page: newStartPath.value
           })
-
-          $q.dialog({
-            title: t('success'),
-            message: `${t('path_changed_to')} '${newStartPath.value}'`
-          })
+          $q.notify({ type: 'positive', message: `${t('path_changed_to')} '${newStartPath.value}'` })
         })
       } else {
         $q.notify({ type: 'negative', message: t('invalid_path_input') })
@@ -931,10 +939,7 @@ export default defineComponent({
           start_page: '/'
         })
         currentStartPage.value = '/'
-        $q.dialog({
-          title: t('success'),
-          message: `${t('path_changed_to')} ${startPage.value}`
-        })
+        $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${startPage.value}` })
       } else {
         $q.dialog({
           title: t('confirm'),
@@ -947,10 +952,7 @@ export default defineComponent({
               start_page: rows.name
             })
             currentStartPage.value = rows.name
-            $q.dialog({
-              title: t('success'),
-              message: `${t('path_changed_to')} ${rows.long_name}`
-            })
+            $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${rows.long_name}` })
           } else {
             if (startPage.value === t('file_manager')) {
               currentStartPage.value = 'files'
@@ -963,10 +965,7 @@ export default defineComponent({
             Axios.post(`${api.value}/v1/setui`, {
               start_page: currentStartPage.value
             })
-            $q.dialog({
-              title: t('success'),
-              message: `${t('path_changed_to')} ${startPage.value}`
-            })
+            $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${startPage.value}` })
           }
           setStartPage()
         }).onDismiss(() => {
@@ -1142,12 +1141,14 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
+          settingWifiPassword.value = true
           Axios.post(`${api.value}/v1/setwifi`, {
             wifi_password: wifiPassword.value
-          })
-          $q.dialog({
-            title: t('success'),
-            message: t('password_set_success')
+          }).then((response) => {
+            if (response.status === 200) {
+              $q.notify({ type: 'positive', message: t('password_set_success') })
+              settingWifiPassword.value = false
+            }
           })
           wifiPassword.value = ''
           showWifiPasswordButton.value = true
@@ -1203,6 +1204,7 @@ export default defineComponent({
       regexp,
       rows,
       setStartPage,
+      settingWifiPassword,
       setWifiPasswordDialog,
       showPasswordButton,
       showWifiPasswordButton,
