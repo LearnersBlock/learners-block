@@ -216,6 +216,7 @@
         size="3em"
         v-if="!exitLoop"
       />
+      <!-- Code for running on Learner's Block -->
       <div v-if="onDevice">
         <q-btn
           v-if="fetchedResource.resource.no_direct_download"
@@ -223,7 +224,7 @@
           glossy
           rounded
           unelevated
-          :disable="!fetchedResource.resource.rsync && !fetchedResource.resource.download_url"
+          :disable="!fetchedResource.resource.download_url"
           color="primary"
           icon="pageview"
           :label="$t('explore')"
@@ -235,15 +236,15 @@
           glossy
           rounded
           unelevated
-          :disable="!fetchedResource.resource.rsync && !fetchedResource.resource.download_url"
+          :disable="!fetchedResource.resource.download_url"
           color="primary"
           icon="download"
           :label="exitLoop ? $t('download'): $t('cancel')"
-          @click="downloadToBlock"
+          @click="downloadFiles"
         />
         <q-tooltip
           class="text-caption"
-          v-if="!fetchedResource.resource.rsync && !fetchedResource.resource.download_url"
+          v-if="!fetchedResource.resource.download_url"
           anchor="top middle"
           self="center middle"
           :offset="[10, 10]"
@@ -262,41 +263,25 @@
           @click="viewSample"
         />
         <q-linear-progress
-          v-if="downloadStarted"
-          size="25px"
+          v-if="!exitLoop"
+          size="30px"
           :value="downloadProgress"
           color="primary"
         >
           <div class="absolute-full flex flex-center">
             <q-badge
-              v-if="fetchedResource.resource.rsync && downloadTransferred && downloadSpeed && downloadProgress < 2"
+              class="q-mr-sm text-caption"
+              v-if="downloadProgress"
               color="white"
               text-color="black"
-              :label="$t('transferred') + ': ' + downloadTransferred + ' - ' + $t('download_speed') + ': ' + downloadSpeed"
+              :label="`${Number(downloadProgress).toFixed(2)*100} % `"
             />
             <q-badge
-              v-if="!fetchedResource.resource.rsync && downloadProgress < 2"
+              class="text-caption"
+              v-if="downloadProgress"
               color="white"
               text-color="black"
-              :label="(downloadProgress*100).toFixed(2) + '% '"
-            />
-            <q-badge
-              v-if="!fetchedResource.resource.rsync && downloadProgress < 2"
-              color="white"
-              text-color="black"
-              :label="(downloadedMb).toFixed(2) + 'Mb'"
-            />
-            <q-badge
-              v-if="downloadProgress == 2"
-              color="white"
-              text-color="black"
-              :label="$t('download_complete')"
-            />
-            <q-badge
-              v-if="checkingFiles"
-              color="white"
-              text-color="black"
-              :label="$t('checking_files')"
+              :label="`${Number(downloadedMb).toFixed(2)} Mb`"
             />
           </div>
         </q-linear-progress>
@@ -306,7 +291,7 @@
         class="q-mt-lg "
       >
         <q-btn
-          v-if="fetchedResource.resource.download_url || fetchedResource.resource.rsync"
+          v-if="fetchedResource.resource.download_url"
           glossy
           unelevated
           @click="downloadZip"
@@ -315,7 +300,6 @@
           rounded
           :label="fetchedResource.resource.no_direct_download ? $t('explore'): $t('download')"
           :disable-main-btn="!fetchedResource.resource.download_url"
-          :disable-dropdown="!fetchedResource.resource.rsync"
         />
         <q-btn
           class="q-ml-sm"
@@ -335,7 +319,7 @@
 
 <script lang="ts">
 import Axios from 'app/node_modules/axios'
-import { copyToClipboard, useQuasar } from 'quasar'
+import { useQuasar } from 'quasar'
 import { useQuery } from '@vue/apollo-composable'
 import { defineComponent, ref } from 'vue'
 import { GET_RESOURCE } from 'src/gql/resource/queries'
@@ -352,37 +336,16 @@ export default defineComponent({
     // Fetch resources
     const { result: fetchedResource, loading: fetchResourceLoading } = useQuery(GET_RESOURCE, { id: route.params.id })
 
-    // Fetch RSync hostname status
-    const checkingFiles = ref<boolean>(false)
-    const downloadedMb = ref<number>()
+    const downloadedMb = ref<any>()
     const downloadProgress = ref<any>()
-    const downloadStarted = ref<boolean>(false)
     const downloadSpeed = ref<any>()
     const downloadTransferred = ref<any>()
     const exitLoop = ref<boolean>(true)
     const hostname = ref<any>(window.location.hostname)
     const onDevice = ref<any>(process.env.ONDEVICE)
 
-    // Bottom button functions
-    const viewSample = () => {
-      window.open(fetchedResource.value.resource.sample)
-    }
-
     function delay (ms: number) {
       return new Promise(resolve => setTimeout(resolve, ms))
-    }
-
-    const downloadZip = () => {
-      window.open(fetchedResource.value.resource.download_url)
-    }
-
-    async function stopDownload () {
-      exitLoop.value = true
-      checkingFiles.value = false
-      downloadSpeed.value = 0
-      downloadTransferred.value = 0
-      await delay(1500)
-      downloadProgress.value = 2
     }
 
     async function downloadFiles () {
@@ -391,96 +354,73 @@ export default defineComponent({
           Axios.get(`http://${hostname.value}:9090/v1/download/stop`)
           stopDownload()
         } else {
-          Axios.post(`http://${hostname.value}:9090/v1/download/fetch`, { download_url: fetchedResource.value.resource.download_url })
+          const position = ref<any>(0)
+          const progress = ref<any>('')
+          const xhr = new XMLHttpRequest()
+          xhr.open('POST', `http://${hostname.value}:9090/v1/download/fetch`)
+          xhr.setRequestHeader('Content-Type', 'application/json')
+          xhr.send(JSON.stringify({
+            download_url: fetchedResource.value.resource.download_url
+          }))
+
           exitLoop.value = false
+
           while (exitLoop.value === false) {
-            await delay(1500)
-            const response = await Axios.get(`http://${hostname.value}:9090/v1/download/status`)
-            if (response.data.progress === 'space-error') {
-              $q.notify({ type: 'negative', message: t('no_space') })
+            const messages = xhr.responseText.split('\n\n')
+            messages.slice(position.value, -1).forEach(function (value) {
+              if (value) {
+                progress.value = JSON.parse(value)
+              }
+            })
+
+            // Handle errors
+            if (progress.value.error) {
+              if (progress.value.error === 'Out of disk space') {
+                $q.notify({ type: 'negative', message: `${t('error')} - ${t('no_space')}` })
+              } else {
+                $q.notify({ type: 'negative', message: `${t('error')} - ${progress.value.error}` })
+              }
               stopDownload()
               return
-            } else if (response.data.progress === 'error') {
-              $q.notify({ type: 'negative', message: t('error') })
-              stopDownload()
-              return
-            } else if (response.data.progress === 1) {
-              $q.notify({ type: 'positive', message: t('download_complete') })
-              downloadProgress.value = 2
-              stopDownload()
-              return
-            } else {
-              checkingFiles.value = false
-              downloadProgress.value = response.data.progress
-              downloadedMb.value = response.data.MBytes
             }
+
+            downloadedMb.value = progress.value.mbytes
+            downloadProgress.value = progress.value.progress
+            position.value = messages.length - 1
+
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+              $q.notify({ type: 'positive', message: t('download_complete') })
+              stopDownload()
+              return
+            }
+            await delay(1500)
           }
         }
       } catch (e) {
+        console.log(e)
         stopDownload()
       }
     }
 
-    async function rsyncFiles () {
-      try {
-        if (exitLoop.value === false) {
-          Axios.get(`http://${hostname.value}:9090/v1/rsync/stop`)
-          stopDownload()
-        } else {
-          Axios.post(`http://${hostname.value}:9090/v1/rsync/fetch`, { rsync_url: fetchedResource.value.resource.rsync })
-          exitLoop.value = false
-          while (exitLoop.value === false) {
-            await delay(1500)
-            const response = await Axios.get(`http://${hostname.value}:9090/v1/rsync/status`)
-            if (response.data.progress === 'space-error') {
-              $q.notify({ type: 'negative', message: t('no_space') })
-              stopDownload()
-              return
-            } else if (response.data.progress === 'error') {
-              stopDownload()
-              downloadFiles()
-              return
-            } else if (response.data.progress === 'checking-files') {
-              checkingFiles.value = true
-            } else if (response.data.progress === 'complete') {
-              $q.notify({ type: 'positive', message: t('download_complete') })
-              downloadProgress.value = 2
-              stopDownload()
-              return
-            } else {
-              checkingFiles.value = false
-              downloadProgress.value = response.data.progress
-              downloadSpeed.value = response.data.speed
-              downloadTransferred.value = response.data.transferred
-            }
-          }
-        }
-      } catch (e) {
-        stopDownload()
-      }
+    const downloadZip = () => {
+      window.open(fetchedResource.value.resource.download_url)
     }
 
-    const downloadToBlock = async () => {
-      downloadStarted.value = true
-      if (fetchedResource.value.resource.rsync) {
-        rsyncFiles()
-      } else {
-        downloadFiles()
-      }
+    async function stopDownload () {
+      exitLoop.value = true
+      downloadedMb.value = 0
+      downloadProgress.value = 0
     }
 
-    const copyRsync = () => {
-      copyToClipboard(fetchedResource.value.resource.rsync)
+    const viewSample = () => {
+      window.open(fetchedResource.value.resource.sample)
     }
 
     return {
-      checkingFiles,
-      copyRsync,
+      downloadFiles,
       downloadedMb,
       downloadProgress,
       downloadSpeed,
-      downloadStarted,
-      downloadToBlock,
       downloadTransferred,
       downloadZip,
       exitLoop,

@@ -37,7 +37,6 @@ export const GET_RESOURCE = gql`
           host
           no_direct_download
           sample
-          rsync
           formats {
             id
             type
