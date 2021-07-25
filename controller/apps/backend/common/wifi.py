@@ -1,7 +1,6 @@
 from common.models import User
 from dbus.mainloop.glib import DBusGMainLoop
 from flask_restful import abort
-from resources.system_routes import rsync_terminate
 from run import app
 import NetworkManager
 import os
@@ -27,12 +26,6 @@ def handle_exit(*args):
         print("Failed to terminate wifi-connect. Executing kill.")
         wifi_process.kill()
         sys.exit(0)
-
-    # Terminate all child processes
-    try:
-        rsync_terminate()
-    except Exception:
-        print("Processes already killed")
 
     print("Finshed the exit process")
     sys.exit(0)

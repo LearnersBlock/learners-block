@@ -12,7 +12,7 @@ RUN yarn install --network-timeout 600000
 RUN yarn build
 
 
-## Build Python packages
+## Build Python packages to avoid need for build installs in main image
 FROM balenalib/%%BALENA_ARCH%%-debian-python:3.8.10-buster-build-20210506 AS python-buildstep
 
 # Copy Python requirements file
@@ -40,7 +40,6 @@ RUN install_packages \
   iw \
   libglib2.0-0 \
   psmisc \
-  rsync \
   wireless-tools
 
 # Copy built Python packages from build container
