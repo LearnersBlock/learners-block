@@ -22,7 +22,7 @@
     "status": "Statut :",
     "settings": "Paramètres",
     "set_password": "Définir le mot de passe",
-    "set_hostname_desc": "Définir une nouvelle URL et un nouveau SSID Wi-Fi",
+    "set_hostname_desc": "Changer l’URL et le SSID Wi-Fi",
     "set_hostname": "Définir l’URL et le SSID Wi-Fi",
     "set": "Définir",
     "password_set_success": "Votre mot de passe a été défini",
@@ -100,5 +100,7 @@
     "author": "Auteur",
     "description": "Description",
     "this_may_take_time": "Ceci peut prendre un certain temps en fonction de la vitesse de votre connexion. Veuillez patienter.",
-    "app_store_app": "Appli de magasin d’applications"
+    "app_store_app": "Appli de magasin d’applications",
+    "invalid_wifi_entry": "Les mots de passe Wi-Fi doivent comporter 8 caractères ou plus et ne pas contenir d’espaces.",
+    "invalid_entry": "Entrée invalide."
 }
