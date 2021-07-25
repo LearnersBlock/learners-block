@@ -10,13 +10,9 @@ from resources.system_routes import docker_pull
 from resources.system_routes import docker_remove
 from resources.system_routes import docker_run
 from resources.system_routes import download_fetch
-from resources.system_routes import download_status
 from resources.system_routes import download_stop
 from resources.system_routes import health_check
 from resources.system_routes import internet_connection_status
-from resources.system_routes import rsync_fetch
-from resources.system_routes import rsync_status
-from resources.system_routes import rsync_stop
 from resources.system_routes import system_info
 import atexit
 import inspect
@@ -146,7 +142,6 @@ if __name__ == '__main__':
     api.add_resource(docker_remove, '/v1/docker/remove')
     api.add_resource(docker_run, '/v1/docker/run')
     api.add_resource(download_fetch, '/v1/download/fetch')
-    api.add_resource(download_status, '/v1/download/status')
     api.add_resource(download_stop, '/v1/download/stop')
     api.add_resource(health_check, '/')
     api.add_resource(host_config, '/v1/hostconfig')
@@ -159,9 +154,6 @@ if __name__ == '__main__':
     api.add_resource(portainer_status, '/v1/portainer/status')
     api.add_resource(portainer_start, '/v1/portainer/start')
     api.add_resource(portainer_stop, '/v1/portainer/stop')
-    api.add_resource(rsync_fetch, '/v1/rsync/fetch')
-    api.add_resource(rsync_status, '/v1/rsync/status')
-    api.add_resource(rsync_stop, '/v1/rsync/stop')
     api.add_resource(set_password, '/v1/setpassword')
     api.add_resource(settings_ui, '/v1/settingsui')
     api.add_resource(set_ui, '/v1/setui')

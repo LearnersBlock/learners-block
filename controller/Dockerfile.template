@@ -40,7 +40,6 @@ RUN install_packages \
   iw \
   libglib2.0-0 \
   psmisc \
-  rsync \
   wireless-tools
 
 # Copy built Python packages from build container
