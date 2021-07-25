@@ -97,7 +97,8 @@ class docker_run(Resource):
 class download_fetch(Resource):
     @jwt_required()
     def post(self):
-
+        global download_log
+        download_log = ''
         try:
             content = request.get_json()
         except AttributeError:
