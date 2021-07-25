@@ -25,7 +25,7 @@
     "status": "Stato:",
     "settings": "Impostazioni",
     "set_password": "Imposta la password",
-    "set_hostname_desc": "Imposta un nuovo URL e SSID Wi-Fi",
+    "set_hostname_desc": "Cambia l’URL e SSID Wi-Fi",
     "set_hostname": "Imposta URL e SSID Wi-Fi",
     "set": "Imposta",
     "portainer_starting_at": "Portainer a partire da:",
@@ -100,5 +100,7 @@
     "author": "Autore",
     "description": "Descrizione",
     "this_may_take_time": "Questo potrebbe richiedere un po’ di tempo a seconda della velocità della tua connessione. Per favore, sii paziente.",
-    "app_store_app": "Negozio di applicazioni"
+    "app_store_app": "Negozio di applicazioni",
+    "invalid_wifi_entry": "Le password Wi-Fi devono essere di 8 caratteri o più e non devono contenere spazi.",
+    "invalid_entry": "Voce non valida."
 }
