@@ -100,5 +100,7 @@
     "description": "Description",
     "author": "Author",
     "this_may_take_time": "This may take some time depending on your connection speed. Please be patient.",
-    "app_store_app": "Application Store App"
+    "app_store_app": "Application Store App",
+    "invalid_entry": "Invalid entry.",
+    "invalid_wifi_entry": "Wi-Fi passwords must be 8 characters or more, and contain no spaces."
 }
