@@ -41,7 +41,6 @@ class PathConfig extends IFM_Extensions {
                     'IFM_API_DELETE'        => '1',
                     'IFM_API_EXTRACT'       => '1',
                     'IFM_API_UPLOAD'        => '1',
-                    // 'IFM_API_REMOTEUPLOAD'  => '1',
                     'IFM_API_RENAME'        => '1'
                 )
             ),
@@ -58,7 +57,6 @@ class PathConfig extends IFM_Extensions {
                     'IFM_API_DELETE'        => '1',
                     'IFM_API_EXTRACT'       => '1',
                     'IFM_API_UPLOAD'        => '1',
-                    // 'IFM_API_REMOTEUPLOAD'  => '1',
                     'IFM_API_RENAME'        => '1'
                 )
             ),
