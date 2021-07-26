@@ -168,42 +168,40 @@ function IFM(params) {
 			}
 			item.download.link = self.api+"?api="+item.download.action+"&dir="+self.hrefEncode(self.currentDir)+"&filename="+self.hrefEncode(item.download.name);
 	
-			const isEpubFile = self.config.epub_reader && item.extension === "epub";
+			if (self.config.epub_reader && item.extension === "epub") {
+				var linkBasePath = self.pathCombine(window.location.origin, self.config.epub_reader_url);
 
-			if (self.config.isDocroot && !self.config.forceproxy) {
-				if (isEpubFile) {
-					var linkBasePath = self.pathCombine(window.location.origin, self.config.epub_reader_url);
+				if (self.config.isDocroot && !self.config.forceproxy) {
 					var epubFilePath = self.pathCombine(self.currentDir, item.name);
-					var epubFileUrl = self.hrefEncode(self.pathCombine(self.api.substring(0, self.api.lastIndexOf('/')), epubFilePath));
-					item.link = linkBasePath.concat(epubFileUrl);
-				} else {
-					item.link = self.hrefEncode( self.pathCombine( window.location.path, self.currentDir, item.name ) );
-				}
-			} else if (self.config.download && self.config.zipnload) {
-				if (self.config.root_public_url) {
-					if (self.config.root_public_url.charAt(0) == "/") {
-						if (isEpubFile) {
-							var linkBasePath = self.pathCombine(window.location.origin, self.config.epub_reader_url);
+					var epubFileUrl = self.pathCombine(self.api.substring(0, self.api.lastIndexOf('/')), epubFilePath);
+					item.link = self.hrefEncode(linkBasePath.concat(epubFileUrl));
+				} else if (self.config.download && self.config.zipnload) {
+					if (self.config.root_public_url) {
+						if (self.config.root_public_url.charAt(0) == "/") {
 							var epubFileUrl = self.hrefEncode(self.pathCombine(window.location.origin, self.config.root_public_url, self.currentDir, item.name));
 							item.link = linkBasePath.concat(epubFileUrl)
 						} else {
-							item.link = self.pathCombine(window.location.origin, self.config.root_public_url, self.hrefEncode(self.currentDir), self.hrefEncode(item.name) );
-						}
-					} else {
-						if (isEpubFile) {
-							var linkBasePath = self.pathCombine(window.location.origin, self.config.epub_reader_url);
 							var epubFileUrl = self.hrefEncode(self.pathCombine(self.config.root_public_url, self.currentDir, item.name));
 							item.link = linkBasePath.concat(epubFileUrl)
-						} else {
-							item.link = self.pathCombine(self.config.root_public_url, self.hrefEncode(self.currentDir), self.hrefEncode(item.name) );
 						}
 					}
-				} else {
-					item.link = self.api+"?api="+(item.download.action=="zipnload"?"zipnload":"proxy")+"&dir="+self.hrefEncode(self.currentDir)+"&filename="+self.hrefEncode(item.download.name);
 				}
-			} else {
-				item.link = '#';
 			} 
+
+			if (!item.link) {
+				if( self.config.isDocroot && !self.config.forceproxy )
+					item.link = self.hrefEncode( self.pathCombine( window.location.path, self.currentDir, item.name ) );
+				else if (self.config.download && self.config.zipnload) {
+					if (self.config.root_public_url) {
+						if (self.config.root_public_url.charAt(0) == "/")
+							item.link = self.pathCombine(window.location.origin, self.config.root_public_url, self.hrefEncode(self.currentDir), self.hrefEncode(item.name) );
+						else
+							item.link = self.pathCombine(self.config.root_public_url, self.hrefEncode(self.currentDir), self.hrefEncode(item.name) );
+					} else
+						item.link = self.api+"?api="+(item.download.action=="zipnload"?"zipnload":"proxy")+"&dir="+self.hrefEncode(self.currentDir)+"&filename="+self.hrefEncode(item.download.name);
+				} else
+					item.link = '#';
+			}
 
 			if( ! self.inArray( item.name, [".", ".."] ) ) {
 				item.dragdrop = 'draggable="true"';
