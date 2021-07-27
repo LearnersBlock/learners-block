@@ -55,7 +55,7 @@ class app_store_set(Resource):
                     print('Update available for ' + str(i.name))
                     lb_database = App_Store.query.filter_by(
                                   name=i.name).first()
-                    lb_database.status = 'Update available'
+                    lb_database.status = 'update_available'
                     lb_database.save_to_db()
             except Exception as ex:
                 print(self.__class__.__name__ + " - " + str(ex))

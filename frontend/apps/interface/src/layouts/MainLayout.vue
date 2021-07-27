@@ -118,6 +118,23 @@ export default defineComponent({
       return $store.getters.isAuthenticated
     })
 
+    onMounted(() => {
+      $q.loading.show({
+        delay: 300 // ms
+      })
+
+      const langCookie = ref<any>($q.localStorage.getItem('lang'))
+      if (langCookie.value) {
+        changeLanguage(langCookie.value)
+      }
+
+      const usersLocale = $q.lang.getLocale()
+      if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
+        changeLanguage(usersLocale)
+      }
+      $q.loading.hide()
+    })
+
     const changeLanguage = (value: string) => {
       import(
         /* webpackInclude: /(en-US|ar|de|es|fr|it|tr|pt-BR)\.js$/ */
@@ -150,24 +167,15 @@ export default defineComponent({
       $q.loading.hide()
     }
 
-    onMounted(() => {
-      $q.loading.show({
-        delay: 300 // ms
-      })
-
-      const langCookie = ref<any>($q.localStorage.getItem('lang'))
-      if (langCookie.value) {
-        changeLanguage(langCookie.value)
-      }
-
-      const usersLocale = $q.lang.getLocale()
-      if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
-        changeLanguage(usersLocale)
-      }
-      $q.loading.hide()
-    })
-
-    return { currentPath, leftDrawerOpen, languages, changeLanguage, logout, isAuthenticated, settings }
+    return {
+      currentPath,
+      leftDrawerOpen,
+      languages,
+      changeLanguage,
+      logout,
+      isAuthenticated,
+      settings
+    }
   }
 })
 </script>

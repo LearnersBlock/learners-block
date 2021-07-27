@@ -223,7 +223,7 @@ export default defineComponent({
         let entry = 0
         slides.value = res2
         for (let i = 0; i < res2.data.length; i++) {
-          if (res2.data[i].status.toLowerCase() === 'installed' || res2.data[i].status.toLowerCase() === 'update available') {
+          if (res2.data[i].status.toLowerCase() === 'installed' || res2.data[i].status.toLowerCase() === 'update_available') {
             slides.value[entry] = res2.data[i]
             jsonKey.value = Object.keys(res2.data[i].ports)
             slides.value[entry].ports = slides.value[entry].ports[jsonKey.value[0]]

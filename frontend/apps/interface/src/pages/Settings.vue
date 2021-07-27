@@ -336,7 +336,7 @@
                         size="xs"
                         unelevated
                         color="primary"
-                        :label="props.value"
+                        :label="$t(props.value)"
                         @click="toggleApp(props.row)"
                       />
                     </div>
@@ -384,7 +384,7 @@
                           size="xs"
                           unelevated
                           color="primary"
-                          :label="props.row.status"
+                          :label="$t(props.row.status)"
                           @click="toggleApp(props.row)"
                         />
                       </q-list>
@@ -654,7 +654,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import Axios from 'app/node_modules/axios'
 import { useQuasar } from 'quasar'
 import { useStore } from '../store'
@@ -677,14 +677,18 @@ export default defineComponent({
     const hostname = ref<string>('')
     const hostnameValid = ref()
     const internet = ref<boolean>(false)
+    const lang = computed(() => {
+      return ref($q.lang.isoName)
+    })
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
     const loading = ref<boolean>(false)
     const newHostname = ref<string>('')
     const newStartPath = ref<string>('')
-    const pages = [
+    const pagesString = [
       t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('app_store_app'), t('custom_start_page')
     ]
+    const pages = ref(pagesString)
     const portainer = ref<boolean>(false)
     const portainerLoading = ref<boolean>(true)
     // Regular expression for input validation
@@ -707,6 +711,17 @@ export default defineComponent({
     const wifiPasswordValid = ref()
     const wifiLoading = ref<boolean>(true)
     const windowHostname = ref<string>(window.location.hostname)
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    watch(lang, _val => {
+      pages.value = [
+        t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('app_store_app'), t('custom_start_page')
+      ]
+      // Prevent repeat of page setting before rows are populated on first load
+      if (rows.value) {
+        setStartPage()
+      }
+    })
 
     // Get api from store
     const api = computed(() => {
@@ -925,7 +940,7 @@ export default defineComponent({
         rows.value = availableApps.data
         setTimeout(() => {
           visible.value = false
-        }, 1000)
+        }, 500)
       }
       )
     }
@@ -1057,7 +1072,7 @@ export default defineComponent({
             visible.value = false
           })
         })
-      } else if (row.status.toLowerCase() === 'update available') {
+      } else if (row.status.toLowerCase() === 'update_available') {
         if (!internet.value) {
           $q.notify({ type: 'negative', message: t('need_connection') })
           return

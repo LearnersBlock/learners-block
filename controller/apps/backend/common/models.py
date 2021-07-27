@@ -120,7 +120,7 @@ class App_Store(db.Model):
 
     status = db.Column(db.String,
                        unique=False,
-                       server_default='Install',
+                       server_default='install',
                        nullable=False)
 
     def __repr__(self):

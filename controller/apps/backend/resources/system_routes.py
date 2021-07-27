@@ -45,7 +45,7 @@ class docker_pull(Resource):
                                volumes=content["volumes"],
                                detach=True)
 
-        update_container_db_status(content["name"], 'Installed')
+        update_container_db_status(content["name"], 'installed')
 
         print(response["response"])
 
@@ -63,7 +63,7 @@ class docker_remove(Resource):
         response = docker.remove(name=content["name"],
                                  image=content["image"])
 
-        update_container_db_status(content["name"], 'Install')
+        update_container_db_status(content["name"], 'install')
 
         if response["status_code"] == 200:
             print('docker_remove: container removed')
@@ -87,7 +87,7 @@ class docker_run(Resource):
                               volumes=content["volumes"],
                               detach=True)
 
-        update_container_db_status(content["name"], 'Installed')
+        update_container_db_status(content["name"], 'installed')
 
         print(response["response"])
 
