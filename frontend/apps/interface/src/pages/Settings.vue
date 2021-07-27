@@ -742,35 +742,66 @@ export default defineComponent({
 
     onMounted(() => {
       apiCall()
-      apiCallStatus()
+      apiCallAwait()
       fetchApps()
     })
 
-    async function apiCall (): Promise<void> {
+    function apiCall () {
+      // Set connection status
+      Axios.all([fetchedConnectionStatus]).then(Axios.spread(function (res1) {
+        wifi.value = res1.data.running !== false
+        wifiLoading.value = false
+      })).catch(e => {
+        console.log(e.message)
+      })
+
+      // Set Portainer status
+      Axios.all([fetchedPortainer]).then(Axios.spread(function (res1) {
+        portainer.value = res1.data.container_status === 'Running'
+        portainerLoading.value = false
+      })).catch(e => {
+        console.log(e.message)
+      })
+
+      // Set SysInfo status
+      Axios.all([fetchedSysInfo]).then(Axios.spread(function (res1) {
+        sysInfo.value = res1.data
+        sysInfoLoading.value = false
+      })).catch(e => {
+        console.log(e.message)
+      })
+    }
+
+    async function apiCallAwait () {
       filesLoading.value = true
       libraryLoading.value = true
       websiteLoading.value = true
-      await Axios.all([fetchedSettings, fetchedSysInfo, fetchedInternetConnectionStatus,
-        fetchedHostName]).then(Axios.spread(function (res1, res2, res3, res4): void {
-        // Get settings
+      await Axios.all([fetchedSettings, fetchedInternetConnectionStatus,
+        fetchedHostName]).then(Axios.spread(function (res1, res2, res3) {
+        // Set settings toggle status
         currentStartPage.value = res1.data.start_page
         files.value = res1.data.files
         website.value = res1.data.website
         library.value = res1.data.library
+
+        // Check if disable password button should be visible
         if (!res1.data.default_login_password_set) {
           showPasswordButton.value = true
         }
+
+        // Check if disable wifi password button should be visible
         if (res1.data.wifi_password_set) {
           showWifiPasswordButton.value = true
         }
+
+        // Set internet connection status
+        internet.value = res2.data.connected !== false
+
+        // Set hostname
+        hostname.value = res3.data.hostname
+
+        // Stop loading toggles
         togglesLoading.value = false
-        // Get SystemInfo
-        sysInfo.value = res2.data
-        sysInfoLoading.value = false
-        // Get internet connection status
-        internet.value = res3.data.connected !== false
-        // Get hostname
-        hostname.value = res4.data.hostname
       })).catch(e => {
         console.log(e.message)
       })
@@ -780,20 +811,6 @@ export default defineComponent({
       filesLoading.value = false
       libraryLoading.value = false
       websiteLoading.value = false
-    }
-
-    async function apiCallStatus (): Promise<void> {
-      await Axios.all([fetchedPortainer,
-        fetchedConnectionStatus]).then(Axios.spread(function (res1, res2): void {
-        // Get portainer status
-        portainer.value = res1.data.container_status === 'Running'
-        // Get connection status
-        wifi.value = res2.data.running !== false
-      })).catch(e => {
-        console.log(e.message)
-      })
-      wifiLoading.value = false
-      portainerLoading.value = false
     }
 
     const changeStartPage = () => {
