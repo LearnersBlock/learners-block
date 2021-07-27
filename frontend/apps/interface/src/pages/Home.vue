@@ -6,6 +6,18 @@
           {{ $t('welcome_lb') }}
         </div>
         <q-separator />
+        <div
+          v-if="settingsLoading"
+          class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
+        >
+          {{ $t('loading') }}
+        </div>
+        <div
+          v-else-if="!settings.website && !settings.files && !settings.library && !slides[0] && !settingsLoading"
+          class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
+        >
+          {{ $t('enable_components_in') }}
+        </div>
         <q-list v-if="!allIsDisabled">
           <q-item
             v-if="settings.files"
@@ -91,7 +103,7 @@
         <div v-if="slides[0] && !settingsLoading">
           <q-item-label
             header
-            class="text-2xl"
+            class="text-2xl mt-2"
           >
             {{ $t('app_store') }}
           </q-item-label>
@@ -137,19 +149,6 @@
             </div>
           </div>
         </div>
-
-        <div
-          v-if="settingsLoading"
-          class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
-        >
-          {{ $t('loading') }}
-        </div>
-        <div
-          v-else-if="!settings.website && !settings.files && !settings.library"
-          class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
-        >
-          {{ $t('enable_components_in') }}
-        </div>
       </div>
     </div>
   </q-page>
@@ -158,75 +157,75 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
-import { useQuasar } from 'quasar'
 import { useStore } from '../store'
 
 export default defineComponent({
   setup () {
     // Import required features
     const $store = useStore()
-    const $q = useQuasar()
+
+    // Get API from Store
+    const api = computed(() => {
+      return $store.getters.GET_API
+    })
 
     // App Store
+    const appStoreState = Axios.get(`${api.value}/v1/appstore/status`)
     const jsonKey = ref<any>()
     const slide = ref<any>()
     const slides = ref<any>({})
     const windowHostname = ref<string>(window.location.hostname)
 
     // Settings for the ui
+    const settingsState = Axios.get(`${api.value}/v1/settingsui`)
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
     // Check to see if everything is disabled
     const allIsDisabled = !!(settings.value.files === false &&
                           settings.value.library === false &&
                           settings.value.website === false)
-    // Get API from Store
-    const api = computed(() => {
-      return $store.getters.GET_API
-    })
 
     // Get settings
     onMounted(() => {
-      $q.loading.show({
-        delay: 300 // ms
-      })
+      apiCallAwait()
+    })
 
-      Axios.get(`${api.value}/v1/settingsui`).then(res => {
-        if (res.data.start_page === '/') {
-          settings.value = res.data
-          settingsLoading.value = false
-        } else if (res.data.start_page.substring(0, 1) === ':') {
+    async function apiCallAwait () {
+      await Axios.all([settingsState, appStoreState
+      ]).then(Axios.spread(function (res1, res2) {
+        // Redirect for Learner's Block Start Page
+        if (res1.data.start_page === '/') {
+          settings.value = res1.data
+        } else if (res1.data.start_page.substring(0, 1) === ':') {
+          // Redirect for ports
           setTimeout(() => {
-            location.href = `http://${window.location.hostname}${res.data.start_page}`
+            location.href = `http://${window.location.hostname}${res1.data.start_page}`
           }, 2000)
         } else {
-          slides.value = Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
-            for (let i = 0; i < availableApps.data.length; i++) {
-              if (availableApps.data[i].name === res.data.start_page) {
-                setTimeout(() => {
-                  const appPort = Object.keys(availableApps.data[i].ports)
-                  const forwardUrl = availableApps.data[i].ports[appPort[0]]
-                  location.href = `http://${window.location.hostname}:${forwardUrl}`
-                }, 2000)
-                return
-              }
+          // Redirect for App Store
+          for (let i = 0; i < res2.data.length; i++) {
+            if (res2.data[i].name === res1.data.start_page) {
               setTimeout(() => {
-                location.href = `/${res.data.start_page}/`
+                const appPort = Object.keys(res2.data[i].ports)
+                const forwardUrl = res2.data[i].ports[appPort[0]]
+                location.href = `http://${window.location.hostname}:${forwardUrl}`
               }, 2000)
+              return
             }
           }
-          )
+          // Redirect for custom path
+          setTimeout(() => {
+            location.href = `/${res1.data.start_page}/`
+          }, 2000)
         }
-      }).catch(e => {
-        console.log(e.message)
-      })
 
-      Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
+        // Populate app store data
         let entry = 0
-        for (let i = 0; i < availableApps.data.length; i++) {
-          if (availableApps.data[i].status.toLowerCase() === 'installed' || availableApps.data[i].status.toLowerCase() === 'update available') {
-            slides.value[entry] = availableApps.data[i]
-            jsonKey.value = Object.keys(availableApps.data[i].ports)
+        slides.value = res2
+        for (let i = 0; i < res2.data.length; i++) {
+          if (res2.data[i].status.toLowerCase() === 'installed' || res2.data[i].status.toLowerCase() === 'update available') {
+            slides.value[entry] = res2.data[i]
+            jsonKey.value = Object.keys(res2.data[i].ports)
             slides.value[entry].ports = slides.value[entry].ports[jsonKey.value[0]]
 
             entry = entry + 1
@@ -235,10 +234,9 @@ export default defineComponent({
         if (slides.value[0]) {
           slide.value = slides.value[0].name
         }
-      }
-      )
-      $q.loading.hide()
-    })
+        settingsLoading.value = false
+      }))
+    }
 
     function redirect (path) {
       location.href = path
