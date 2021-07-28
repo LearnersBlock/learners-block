@@ -122,10 +122,6 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      $q.loading.show({
-        delay: 300 // ms
-      })
-
       const langCookie = ref<any>($q.localStorage.getItem('lang'))
       if (langCookie.value) {
         changeLanguage(langCookie.value)
@@ -135,7 +131,6 @@ export default defineComponent({
       if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
         changeLanguage(usersLocale)
       }
-      $q.loading.hide()
     })
 
     const changeLanguage = (value: string) => {

@@ -157,11 +157,13 @@
 <script lang="ts">
 import Axios from 'app/node_modules/axios'
 import { useStore } from '../store'
+import { useQuasar } from 'quasar'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   setup () {
     // Import required features
+    const $q = useQuasar()
     const $store = useStore()
 
     // Get API from Store
@@ -187,6 +189,9 @@ export default defineComponent({
     })
 
     async function apiCallAwait () {
+      $q.loading.show({
+        delay: 500 // ms
+      })
       await Axios.all([settingsState, appStoreState]).then(Axios.spread(function (res1, res2) {
         // Redirect for Learner's Block Start Page
         if (res1.data.start_page === '/') {
@@ -230,8 +235,10 @@ export default defineComponent({
           slide.value = slides.value[0].name
         }
         settingsLoading.value = false
+        $q.loading.hide()
       })).catch(e => {
         console.log(e.message)
+        $q.loading.hide()
       })
     }
 
