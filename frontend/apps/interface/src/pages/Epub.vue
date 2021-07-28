@@ -1,202 +1,220 @@
 <template>
   <q-page>
-    <div v-if="show">
-      <div
-        v-touch-swipe.mouse.left.right.up="touchMoveToPage"
-        style="position: absolute;z-index: 2000 !important; height: 67vh; width: 96%"
-      />
-      <div
-        class="bg-white"
-        :style="'height: ' + this.$q.screen.height + 'px;'"
-        id="epub-render"
-      />
-      <q-page-sticky
-        style="z-index: 2001;"
-        position="bottom-right"
-        :offset="fabPos"
-        v-if="this.showMenu"
+    <div
+      v-touch-swipe.mouse.left.right.up="touchMoveToPage"
+      style="position: absolute;z-index: 2000 !important; height: 67vh; width: 96%"
+    />
+    <div
+      class="bg-white"
+      :style="'height: ' + $q.screen.height + 'px;'"
+      id="epub-render"
+    />
+    <q-page-sticky
+      v-if="showMenu && !loading"
+      style="z-index: 2001;"
+      position="bottom-right"
+      :offset="fabPos"
+    >
+      <q-fab
+        v-if="!$q.fullscreen.isActive"
+        v-model="fabRight"
+        vertical-actions-align="right"
+        color="white"
+        padding="xs"
+        icon="keyboard_arrow_up"
+        text-color="primary"
+        direction="up"
+        :disable="draggingFab"
+        v-touch-pan.prevent.mouse="moveFab"
       >
-        <q-fab
-          v-if="!this.$q.fullscreen.isActive"
-          v-model="fabRight"
-          vertical-actions-align="right"
-          color="white"
-          padding="xs"
-          icon="keyboard_arrow_up"
-          text-color="primary"
-          direction="up"
-          :disable="draggingFab"
-          v-touch-pan.prevent.mouse="moveFab"
-        >
-          <q-fab-action
-            label-position="left"
-            color="primary"
-            icon="minimize"
-            text-color="white"
-            @click="hideMenu"
-            :label="$t('hide_button')"
-            :disable="draggingFab"
-          />
-          <q-fab-action
-            label-position="left"
-            @click="download"
-            color="primary"
-            text-color="white"
-            class="material-icons"
-            icon="file_download"
-            :label="$t('download')"
-            :disable="draggingFab"
-          />
-          <q-fab-action
-            v-if="this.$q.fullscreen.isCapable"
-            label-position="left"
-            color="primary"
-            :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
-            text-color="white"
-            @click="toggle"
-            :label="$t('full_screen')"
-            :disable="draggingFab"
-          />
-          <q-btn
-            no-caps
-            fab-mini
-            no-wrap
-            color="primary"
-            icon-right="menu_book"
-            :label="$t('select_chapter')"
-            :disable="draggingFab"
-            rounded
-          >
-            <q-menu>
-              <q-list>
-                <q-item
-                  clickable
-                  v-close-popup
-                  v-for="i in toc"
-                  :key="i['href']"
-                  @click="goToExcerpt(i)"
-                >
-                  <q-item-section>{{ i['label'] }}</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
-        </q-fab>
-      </q-page-sticky>
-      <q-inner-loading :showing="!show">
-        <q-spinner
-          size="5em"
+        <q-fab-action
+          label-position="left"
           color="primary"
+          icon="minimize"
+          text-color="white"
+          @click="hideMenu"
+          :label="$t('hide_button')"
+          :disable="draggingFab"
         />
-      </q-inner-loading>
-    </div>
+        <q-fab-action
+          label-position="left"
+          @click="download"
+          color="primary"
+          text-color="white"
+          class="material-icons"
+          icon="file_download"
+          :label="$t('download')"
+          :disable="draggingFab"
+        />
+        <q-fab-action
+          v-if="$q.fullscreen.isCapable"
+          label-position="left"
+          color="primary"
+          :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+          text-color="white"
+          @click="toggle"
+          :label="$t('full_screen')"
+          :disable="draggingFab"
+        />
+        <q-btn
+          no-caps
+          fab-mini
+          no-wrap
+          color="primary"
+          icon-right="menu_book"
+          :label="$t('select_chapter')"
+          :disable="draggingFab"
+          rounded
+        >
+          <q-menu>
+            <q-list>
+              <q-item
+                clickable
+                v-close-popup
+                v-for="i in tableOfContents"
+                :key="i['href']"
+                @click="goToExcerpt(i)"
+              >
+                <q-item-section>{{ i['label'] }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-fab>
+    </q-page-sticky>
+    <q-inner-loading :showing="loading">
+      <q-spinner
+        size="5em"
+        color="primary"
+      />
+    </q-inner-loading>
   </q-page>
 </template>
 
-<script>
+<script lang="ts">
 import ePub from 'epubjs'
-import { watch, ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { defineComponent, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
-export default {
+export default defineComponent({
   name: 'EpubReader',
-  data () {
-    watch(() => this.$q.fullscreen.isActive, val => {
-      // Fix for Safari where first page is not stored on load
+  setup () {
+    // Import required features
+    const $q = useQuasar()
+    const route = useRoute()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { t } = useI18n()
+
+    // Import ePubJS
+    const ePubJs: any = ePub
+
+    // Set constants
+    const draggingFab = ref<boolean>(false)
+    const epubFile = ref<any>(route.query.url)
+    const fabPos = ref<any>([7, 7])
+    const fabRight = ref<boolean>(false)
+    const loading = ref<boolean>(true)
+    const showMenu = ref<boolean>(true)
+    const tableOfContents = ref<any>([])
+
+    // Fix for Safari where first page is not stored on load
+    watch(() => $q.fullscreen.isActive, val => {
       if (val) {
-        if (!this.rendition.location) {
-          this.rendition.display()
+        if (!ePubJs.rendition.location) {
+          ePubJs.rendition.display()
         }
       }
     })
-    return {
-      fabRight: ref(false),
-      newEpub: [],
-      show: false,
-      book: {},
-      rendition: {},
-      chapter: '',
-      toc: [],
-      fabPos: [7, 7],
-      draggingFab: false,
-      showMenu: true
-    }
-  },
-  mounted () {
-    this.loadEpub()
-    if (this.$q.platform.is.mobile) {
-      this.$q.notify({ type: 'info', multiLine: true, message: this.$t('swipe_instruction') })
-    } else {
-      this.$q.notify({ type: 'info', multiLine: true, message: this.$t('click_swipe_instruction') })
-    }
-  },
-  methods: {
-    hideMenu () {
-      this.showMenu = false
-      this.$q.notify({ type: 'info', multiLine: true, message: this.$t('swipe_up_for_menu') })
-    },
-    toggle () {
-      this.$q.fullscreen.toggle()
-        .then(() => {
-          this.$q.notify({ type: 'info', multiLine: true, message: this.$t('swipe_up_exit') })
-        })
-        .catch((err) => {
-          alert(err)
-          console.error(err)
-        })
-    },
-    moveFab (ev) {
-      this.draggingFab = ev.isFirst !== true && ev.isFinal !== true
 
-      this.fabPos = [
-        this.fabPos[0] - ev.delta.x,
-        this.fabPos[1] - ev.delta.y
-      ]
-    },
-    loadEpub (e) {
-      const epub = this.$route.query.url
-      if (!epub) {
-        this.$q.notify({ type: 'negative', message: `${this.$t('error')} Did you pass a URL to a file?` })
-        this.show = true
+    onMounted(() => {
+      loadEpub()
+    })
+
+    function download () {
+      location.href = epubFile.value
+    }
+
+    function goToExcerpt (i) {
+      ePubJs.rendition.display(i.href)
+    }
+
+    function hideMenu () {
+      showMenu.value = false
+      $q.notify({ type: 'info', multiLine: true, message: t('swipe_up_for_menu') })
+    }
+
+    function loadEpub () {
+      if (!epubFile.value) {
+        $q.notify({ type: 'negative', message: `${t('error')} Did you pass a URL to a file?` })
+        loading.value = false
         return
       }
-      this.book = ePub(e ? e.target.result : epub)
-      this.book.loaded.navigation.then(({ toc }) => {
-        this.toc = toc
+      ePubJs.book = ePubJs(epubFile.value)
+      ePubJs.book.loaded.navigation.then(({ toc }) => {
+        tableOfContents.value = toc
       })
-      this.book.ready.then(() => {
-        this.show = true
-      })
-      this.rendition = this.book.renderTo('epub-render', {
+      ePubJs.rendition = ePubJs.book.renderTo('epub-render', {
         method: 'default',
         height: '100%',
         width: '96vw'
       })
-      this.rendition.display()
-      document.getElementById('add')
-    },
-    download () {
-      location.href = this.$route.query.url
-    },
-    nextPage () {
-      this.rendition.next()
-    },
-    previousPage () {
-      this.rendition.prev()
-    },
-    touchMoveToPage ({ ...info }) {
+      ePubJs.rendition.display()
+      ePubJs.book.ready.then(() => {
+        loading.value = false
+        if ($q.platform.is.mobile) {
+          $q.notify({ type: 'info', multiLine: true, message: t('swipe_instruction') })
+        } else {
+          $q.notify({ type: 'info', multiLine: true, message: t('click_swipe_instruction') })
+        }
+      })
+    }
+
+    function moveFab (ev) {
+      draggingFab.value = ev.isFirst !== true && ev.isFinal !== true
+      fabPos.value = [
+        fabPos.value[0] - ev.delta.x,
+        fabPos.value[1] - ev.delta.y
+      ]
+    }
+
+    function toggle () {
+      $q.fullscreen.toggle()
+        .then(() => {
+          $q.notify({ type: 'info', multiLine: true, message: t('swipe_up_exit') })
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+
+    function touchMoveToPage ({ ...info }) {
       if (info.direction === 'left') {
-        this.nextPage()
+        ePubJs.rendition.next()
       } else if (info.direction === 'right') {
-        this.previousPage()
-      } else if (info.direction === 'up' && this.$q.fullscreen.isActive) {
-        this.$q.fullscreen.toggle()
-      } else if (info.direction === 'up' && !this.$q.fullscreen.isActive) {
-        this.showMenu = true
+        ePubJs.rendition.prev()
+      } else if (info.direction === 'up' && $q.fullscreen.isActive) {
+        $q.fullscreen.toggle()
+      } else if (info.direction === 'up' && !$q.fullscreen.isActive) {
+        showMenu.value = true
       }
-    },
-    goToExcerpt (i) {
-      this.rendition.display(i.href)
+    }
+
+    return {
+      download,
+      draggingFab,
+      fabPos,
+      fabRight,
+      goToExcerpt,
+      hideMenu,
+      loading,
+      moveFab,
+      showMenu,
+      tableOfContents,
+      toggle,
+      touchMoveToPage
     }
   }
-}
+})
 </script>
