@@ -13,12 +13,12 @@
           {{ $t('loading') }}
         </div>
         <div
-          v-else-if="!settings.website && !settings.files && !settings.library && !slides[0] && !settingsLoading"
+          v-else-if="!settings.website && !settings.files && !settings.library && !slides[0]"
           class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
         >
           {{ $t('enable_components_in') }}
         </div>
-        <q-list v-if="!allIsDisabled">
+        <q-list v-else>
           <q-item
             v-if="settings.files"
             class="cursor-pointer py-3"
@@ -181,11 +181,6 @@ export default defineComponent({
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
 
-    // Check to see if everything is disabled
-    const allIsDisabled = !!(settings.value.files === false &&
-                          settings.value.library === false &&
-                          settings.value.website === false)
-
     // Get settings
     onMounted(() => {
       apiCallAwait()
@@ -245,7 +240,6 @@ export default defineComponent({
     }
 
     return {
-      allIsDisabled,
       redirect,
       settings,
       settingsLoading,

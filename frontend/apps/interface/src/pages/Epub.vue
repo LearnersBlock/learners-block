@@ -108,7 +108,7 @@ export default defineComponent({
     const { t } = useI18n()
 
     // Import ePubJS
-    const ePubJs: any = ePub
+    const ePubJs = (ePub as any)
 
     // Set constants
     const draggingFab = ref<boolean>(false)

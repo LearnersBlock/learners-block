@@ -747,13 +747,10 @@ export default defineComponent({
 
     const rows = ref<any>(null)
 
-    // API calls for onMounted
-    const fetchedSettings = Axios.get(`${api.value}/v1/settingsui`)
-    const fetchedPortainer = Axios.get(`${api.value}/v1/portainer/status`)
-    const fetchedSysInfo = Axios.get(`${api.value}/v1/system/info`)
-    const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connectionstatus`)
-    const fetchedInternetConnectionStatus = Axios.get(`${api.value}/v1/internet/connectionstatus`)
+    // API calls for Axios Spread
     const fetchedHostName = Axios.get(`${api.value}/v1/hostname`)
+    const fetchedInternetConnectionStatus = Axios.get(`${api.value}/v1/internet/connectionstatus`)
+    const fetchedSettings = Axios.get(`${api.value}/v1/settingsui`)
 
     onMounted(() => {
       apiCall()
@@ -762,27 +759,32 @@ export default defineComponent({
     })
 
     function apiCall () {
-      Axios.all([fetchedConnectionStatus]).then(Axios.spread(function (res1) {
+      Axios.get(`${api.value}/v1/wifi/connectionstatus`).then((response) => {
         // Set connection status
-        wifi.value = res1.data.running !== false
+        if (response.data.running) {
+          wifi.value = true
+        }
+
         wifiLoading.value = false
-      })).catch(e => {
+      }).catch(e => {
         console.log(e.message)
       })
 
       // Set Portainer status
-      Axios.all([fetchedPortainer]).then(Axios.spread(function (res1) {
-        portainer.value = res1.data.container_status === 'Running'
+      Axios.get(`${api.value}/v1/portainer/status`).then((response) => {
+        if (response.data.container_status) {
+          portainer.value = true
+        }
         portainerLoading.value = false
-      })).catch(e => {
+      }).catch(e => {
         console.log(e.message)
       })
 
       // Set SysInfo status
-      Axios.all([fetchedSysInfo]).then(Axios.spread(function (res1) {
-        sysInfo.value = res1.data
+      Axios.get(`${api.value}/v1/system/info`).then((response) => {
+        sysInfo.value = response.data
         sysInfoLoading.value = false
-      })).catch(e => {
+      }).catch(e => {
         console.log(e.message)
       })
     }
@@ -810,7 +812,9 @@ export default defineComponent({
         }
 
         // Set internet connection status
-        internet.value = res2.data.connected !== false
+        if (res2.data.connected) {
+          internet.value = true
+        }
 
         // Set hostname
         hostname.value = res3.data.hostname

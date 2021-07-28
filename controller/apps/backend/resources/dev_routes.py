@@ -64,9 +64,9 @@ class portainer_status(Resource):
         global portainerstatus
         time.sleep(5)
         if portainerstatus is True:
-            return {'status': 200, 'container_status': 'Running'}, 200
+            return {'status': 200, 'container_status': True}, 200
         else:
-            return {'status': 200, 'container_status': 'Stopped'}, 200
+            return {'status': 200, 'container_status': False}, 200
 
 
 class portainer_start(Resource):
