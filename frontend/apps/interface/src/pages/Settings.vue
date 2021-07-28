@@ -654,18 +654,18 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import Axios from 'app/node_modules/axios'
 import { useQuasar } from 'quasar'
 import { useStore } from '../store'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'Settings',
   setup () {
     // Import required features
-    const $store = useStore()
     const $q = useQuasar()
+    const $store = useStore()
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
 
@@ -762,8 +762,8 @@ export default defineComponent({
     })
 
     function apiCall () {
-      // Set connection status
       Axios.all([fetchedConnectionStatus]).then(Axios.spread(function (res1) {
+        // Set connection status
         wifi.value = res1.data.running !== false
         wifiLoading.value = false
       })).catch(e => {

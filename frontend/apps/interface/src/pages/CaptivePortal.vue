@@ -27,8 +27,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { copyToClipboard } from 'quasar'
 import { useStore } from '../store'
 

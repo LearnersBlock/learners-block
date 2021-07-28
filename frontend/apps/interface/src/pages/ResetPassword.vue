@@ -37,19 +37,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
 import { useQuasar } from 'quasar'
 import { useStore } from '../store'
-import { useRouter } from 'vue-router'
+import { computed, defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup () {
     // Import required features
+    const $q = useQuasar()
     const $router = useRouter()
     const $store = useStore()
-    const $q = useQuasar()
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
 
@@ -58,6 +58,7 @@ export default defineComponent({
     const api = computed(() => {
       return $store.getters.GET_API
     })
+
     // Reset password
     const resetPassword = async () => {
       $q.loading.show({

@@ -72,12 +72,15 @@ import { useI18n } from 'vue-i18n'
 export default defineComponent({
   name: 'MainLayout',
   setup () {
-    const $router = useRouter()
+    // Import required features
     const $q = useQuasar()
+    const $router = useRouter()
     const $store = useStore()
-    const leftDrawerOpen = ref(false)
-    const currentPath = $router.currentRoute.value
     const { locale } = useI18n({ useScope: 'global' })
+
+    // Set constants
+    const currentPath = $router.currentRoute.value
+    const leftDrawerOpen = ref(false)
     const languages = ref([
       // Language updates must be changed here and in the webpackInclude magic comment below
       {
@@ -168,12 +171,12 @@ export default defineComponent({
     }
 
     return {
+      changeLanguage,
       currentPath,
+      isAuthenticated,
       leftDrawerOpen,
       languages,
-      changeLanguage,
       logout,
-      isAuthenticated,
       settings
     }
   }

@@ -39,26 +39,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useStore } from '../store'
+import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup () {
     // Import required features
-    const $store = useStore()
-    const $router = useRouter()
     const $q = useQuasar()
+    const $router = useRouter()
+    const $store = useStore()
+
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
 
-    // Username
-    const username = ref<string>('lb')
-    // Password
     const password = ref<string>('')
     const submitting = ref<boolean>(false)
+    const username = ref<string>('lb')
 
     // Login and show message
     function login () {
@@ -81,10 +80,10 @@ export default defineComponent({
     }
 
     return {
-      username,
-      password,
       login,
-      submitting
+      password,
+      submitting,
+      username
     }
   }
 })

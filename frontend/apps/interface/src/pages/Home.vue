@@ -155,9 +155,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
 import Axios from 'app/node_modules/axios'
 import { useStore } from '../store'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   setup () {
@@ -180,6 +180,7 @@ export default defineComponent({
     const settingsState = Axios.get(`${api.value}/v1/settingsui`)
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
+
     // Check to see if everything is disabled
     const allIsDisabled = !!(settings.value.files === false &&
                           settings.value.library === false &&
@@ -191,8 +192,7 @@ export default defineComponent({
     })
 
     async function apiCallAwait () {
-      await Axios.all([settingsState, appStoreState
-      ]).then(Axios.spread(function (res1, res2) {
+      await Axios.all([settingsState, appStoreState]).then(Axios.spread(function (res1, res2) {
         // Redirect for Learner's Block Start Page
         if (res1.data.start_page === '/') {
           settings.value = res1.data
@@ -235,7 +235,9 @@ export default defineComponent({
           slide.value = slides.value[0].name
         }
         settingsLoading.value = false
-      }))
+      })).catch(e => {
+        console.log(e.message)
+      })
     }
 
     function redirect (path) {
