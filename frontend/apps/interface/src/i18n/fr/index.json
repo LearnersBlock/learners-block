@@ -102,5 +102,6 @@
     "this_may_take_time": "Ceci peut prendre un certain temps en fonction de la vitesse de votre connexion. Veuillez patienter.",
     "app_store_app": "Appli de magasin d’applications",
     "invalid_wifi_entry": "Les mots de passe Wi-Fi doivent comporter 8 caractères ou plus et ne pas contenir d’espaces.",
-    "invalid_entry": "Entrée invalide."
+    "invalid_entry": "Entrée invalide.",
+    "update_available": "Mise à jour disponible"
 }
