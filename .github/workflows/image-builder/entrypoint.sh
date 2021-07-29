@@ -15,12 +15,14 @@ fi
 # Log in to Balena
 balena login --token ${BALENA_API_TOKEN} > /dev/null
 
+# Deploy to Balena Cloud
 for line in $(cat $GITHUB_WORKSPACE/.github/workflows/image-builder/apps-$1.txt)
 do
-  # Deploy to Balena server
+  # Run each Balena push command concurrently
   balena push $line &
 done
 
+# Wait for all Balena push commands to finish and check exit codes
 wait || exit 1
 
 # Pre-load images
@@ -35,10 +37,10 @@ for env in $GITHUB_WORKSPACE/.github/workflows/image-builder/env-files/$1/*.env;
   balena os download $type -o $imageFile
 
   # Preload files into image file
-  balena preload $imageFile --app $app --commit latest --debug
+  balena preload $imageFile --app $app --commit latest
 
   # Inject the config file to the image
-  balena os configure $imageFile --config-app-update-poll-interval $appUpdatePollInterval --config-network=ethernet --application $app --debug
+  balena os configure $imageFile --config-app-update-poll-interval $appUpdatePollInterval --config-network=ethernet --application $app
 
   # Zip the image file ready for adding to release assets
   zip -j $GITHUB_WORKSPACE/Learners-Block-$device_name-$RELEASE_VERSION.zip $imageFile
