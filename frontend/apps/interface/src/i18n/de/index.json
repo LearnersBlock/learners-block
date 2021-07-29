@@ -102,5 +102,6 @@
     "this_may_take_time": "Dies kann je nach Ihrer Verbindungsgeschwindigkeit einige Zeit dauern. Bitte haben Sie etwas Geduld.",
     "app_store_app": "App Store-Anwendung",
     "invalid_wifi_entry": "Wi-Fi-Passwörter müssen mindestens 8 Zeichen lang sein und dürfen keine Leerzeichen enthalten.",
-    "invalid_entry": "Ungültiger Eintrag."
+    "invalid_entry": "Ungültiger Eintrag.",
+    "update_available": "Aktualisierung verfügbar"
 }

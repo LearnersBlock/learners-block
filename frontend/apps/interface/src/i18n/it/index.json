@@ -102,5 +102,6 @@
     "this_may_take_time": "Questo potrebbe richiedere un po’ di tempo a seconda della velocità della tua connessione. Per favore, sii paziente.",
     "app_store_app": "Negozio di applicazioni",
     "invalid_wifi_entry": "Le password Wi-Fi devono essere di 8 caratteri o più e non devono contenere spazi.",
-    "invalid_entry": "Voce non valida."
+    "invalid_entry": "Voce non valida.",
+    "update_available": "Aggiornamento disponibile"
 }
