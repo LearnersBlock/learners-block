@@ -24,7 +24,7 @@
     "ajax_request": "Sol·licitud AJAX",
     "username": "Nom d’usuari",
     "password": "Contrasenya",
-    "size": "Mida",
+    "size": "Mida:",
     "permission_parse_error": "No s’han pogut analitzar els permisos.",
     "permissions": "Permisos",
     "refresh": "Actualitza",
@@ -93,5 +93,7 @@
     "file_open_error": "No s’ha pogut obrir el fitxer.",
     "file_load_error": "No s’ha pogut carregar el contingut.",
     "file_display_error": "Aquest fitxer no es pot mostrar ni editar.",
-    "file_delete_confirm": "Segur que voleu suprimir el fitxer següent?:"
+    "file_delete_confirm": "Segur que voleu suprimir el fitxer següent?:",
+    "permission_change_error": "No s’han pogut canviar els permisos:",
+    "logout": "Finalitza la sessió"
 }
