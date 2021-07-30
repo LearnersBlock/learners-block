@@ -5,5 +5,5 @@
     "user": "Usuari",
     "network_fetch_fail": "No s’han pogut recuperar les xarxes disponibles.",
     "network_connect_fail": "No s’ha pogut connectar a la xarxa.",
-    "applying_changes": "S’estan aplicant els canvis…"
+    "applying_changes": "S’estan aplicant els canvis."
 }
