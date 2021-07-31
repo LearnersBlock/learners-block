@@ -2,7 +2,7 @@
     "401": "Unauthorised. Please try logging in again.",
     "404": "The page you tried to reach doesn't exist.",
     "advanced": "Advanced",
-    "api_down": "The API is unavailable. Try refreshing this page.",
+    "api_down": "The API is unavailable. Wait 30 seconds and try refreshing this page. If the page still does not load, restart your device.",
     "available_storage": "Available Storage:",
     "cancel": "Cancel",
     "change_hostname_warning": "Are you sure you want to change the URL and Wi-Fi SSID?",
