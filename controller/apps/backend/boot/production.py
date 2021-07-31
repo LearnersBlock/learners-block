@@ -2,7 +2,6 @@ from common.processes import check_internet
 from common.processes import curl
 from common.wifi import wifi
 from common.wifi import wifi_connect
-from common.supervisor_containers import container
 from resources.supervisor_routes import update
 import inspect
 import subprocess
@@ -83,14 +82,3 @@ def startup():
     except Exception as ex:
         print("Failed during launch. Continuing for debug. " +
               inspect.stack()[0][3] + " - " + str(ex))
-
-    # Stop portainer on boot
-    try:
-        portainer_exit = threading.Thread(target=container.stop,
-                                          args=(None, "portainer", 12),
-                                          name='portainer_exit')
-        portainer_exit.start()
-
-    except Exception as ex:
-        print("Failed to stop Portainer. " +
-              " - " + inspect.stack()[0][3] + " - " + str(ex))

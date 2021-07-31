@@ -5,6 +5,60 @@ from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 import os
 
+# Global variables
+portainer_pidfile = "/app/portainer/portainer.pid"
+
+
+class container_start(Resource):
+    @jwt_required()
+    def post(self):
+        content = request.get_json()
+
+        if content["container_name"] == 'portainer':
+            # Create PID for portainer
+            pid = str(os.getpid())
+            open(portainer_pidfile, 'w').write(pid)
+
+        response = container().start(container_name=content["container_name"])
+
+        return {'status': response["status_code"],
+                'message': response["text"]}, response["status_code"]
+
+
+class container_status(Resource):
+    def post(self):
+        content = request.get_json()
+
+        response, entry = container().status(
+                            container_name=content["container_name"])
+
+        try:
+            if entry["status"].lower() == 'running':
+                state = True
+            else:
+                state = False
+        except Exception as ex:
+            print(str(ex))
+            state = True
+
+        return {'status': response["status_code"],
+                'container_status': state}, response["status_code"]
+
+
+class container_stop(Resource):
+    @jwt_required()
+    def post(self):
+        content = request.get_json()
+
+        if content["container_name"] == 'portainer':
+            # Delete PID for portainer
+            os.remove(portainer_pidfile)
+
+        response = container().stop(container_name=content["container_name"])
+
+        return {'status': response["status_code"],
+                'message': response["text"]}, response["status_code"]
+
 
 class device(Resource):
     def get(self):
@@ -39,41 +93,6 @@ class journal_logs(Resource):
                             "format", "short")')
 
         return response["text"], response["status_code"]
-
-
-class portainer_status(Resource):
-    def get(self):
-        response, entry = container().status(container_name="portainer")
-
-        try:
-            if entry["status"].lower() == 'running':
-                state = True
-            else:
-                state = False
-        except Exception as ex:
-            print(str(ex))
-            state = True
-
-        return {'status': response["status_code"],
-                'container_status': state}, response["status_code"]
-
-
-class portainer_start(Resource):
-    @jwt_required()
-    def get(self):
-        response = container().start(container_name="portainer")
-
-        return {'status': response["status_code"],
-                'message': response["text"]}, response["status_code"]
-
-
-class portainer_stop(Resource):
-    @jwt_required()
-    def get(self):
-        response = container().stop(container_name="portainer")
-
-        return {'status': response["status_code"],
-                'message': response["text"]}, response["status_code"]
 
 
 class update(Resource):

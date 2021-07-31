@@ -618,7 +618,7 @@
                   </div>
                   <div
                     class="pl-6"
-                    v-if="portainer"
+                    v-if="portainer && !portainerLoading"
                   >
                     {{ $t('portainer_starting_at') }} <a
                       href="/portainer/"
@@ -771,7 +771,7 @@ export default defineComponent({
       })
 
       // Set Portainer status
-      Axios.get(`${api.value}/v1/portainer/status`).then((response) => {
+      Axios.post(`${api.value}/v1/container/status`, { container_name: 'portainer' }).then((response) => {
         if (response.data.container_status) {
           portainer.value = true
         }
@@ -1137,13 +1137,13 @@ export default defineComponent({
     const updatePortainer = async () => {
       portainerLoading.value = true
       if (portainer.value) {
-        const portainerStarter = await Axios.get(`${api.value}/v1/portainer/start`)
+        const portainerStarter = await Axios.post(`${api.value}/v1/container/start`, { container_name: 'portainer' })
         if (portainerStarter.status === 404) {
           $q.notify({ type: 'negative', message: t('portainer_unavailable') })
           portainer.value = false
         }
       } else {
-        await Axios.get(`${api.value}/v1/portainer/stop`)
+        await Axios.post(`${api.value}/v1/container/stop`, { container_name: 'portainer' })
       }
 
       setTimeout(() => {
