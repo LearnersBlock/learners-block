@@ -61,7 +61,7 @@
     "change_hostname_warning": "Sei sicuro/a di voler cambiare l’URL e il SSID Wi-Fi?",
     "cancel": "Annulla",
     "available_storage": "Spazio di archiviazione disponibile:",
-    "api_down": "L’API non è disponibile. Prova ad aggiornare questa pagina.",
+    "api_down": "L’API non è disponibile. Aspetta 30 secondi e prova ad aggiornare questa pagina. Se la pagina continua a non caricarsi, riavvia il tuo dispositivo.",
     "advanced": "Avanzato",
     "404": "La pagina che hai cercato di raggiungere non esiste.",
     "401": "Non autorizzato. Si prega di provare ad accedere di nuovo.",
