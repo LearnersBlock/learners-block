@@ -47,7 +47,7 @@
     "components": "Composants",
     "change_hostname_warning": "Êtes-vous sûr·e de vouloir modifier l’URL et le SSID Wi-Fi ?",
     "available_storage": "Espace disponible :",
-    "api_down": "L'API est indisponible. Essayez de rafraîchir la page.",
+    "api_down": "L’API n’est pas disponible. Attendez 30 secondes et essayez d’actualiser cette page. Si la page ne se charge toujours pas, redémarrez votre appareil.",
     "advanced": "Avancé",
     "404": "La page à laquelle vous avez essayé d'accéder n'existe pas.",
     "401": "Non autorisé. Essayez de vous reconnecter.",

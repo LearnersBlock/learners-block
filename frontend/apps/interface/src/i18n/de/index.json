@@ -61,7 +61,7 @@
     "login_disabled": "Das Passwort ist deaktiviert worden.",
     "change_hostname_warning": "Sind Sie sicher, dass Sie die URL und die Wi-Fi SSID ändern möchten?",
     "available_storage": "Verfügbarer Speicher:",
-    "api_down": "Die API ist nicht verfügbar. Versuchen Sie es erneut, oder erwägen Sie einen Neustart des Geräts.",
+    "api_down": "Die API ist nicht verfügbar. Warten Sie 30 Sekunden und versuchen Sie, diese Seite zu aktualisieren. Wenn die Seite immer noch nicht geladen wird, starten Sie Ihr Gerät neu.",
     "advanced": "Erweitert",
     "404": "Die Seite, die Sie erreichen wollten, existiert nicht.",
     "401": "Nicht autorisiert. Bitte versuchen Sie, sich erneut anzumelden.",
