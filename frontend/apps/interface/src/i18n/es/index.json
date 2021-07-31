@@ -32,7 +32,7 @@
     "click_toggle": "Pulse en un elemento a continuación para abrir la administración. Utilice los controles de la derecha para mostrar u ocultar los componentes en la página principal.",
     "change_hostname_warning": "¿Confirma que quiere cambiar el URL y el SSID de wifi?",
     "available_storage": "Almacenamiento disponible:",
-    "api_down": "La API no está disponible. Pruebe a actualizar la página.",
+    "api_down": "La API no está disponible. Espere 30 segundos y pruebe a actualizar la página. Si la página sigue sin cargarse, reinicie el dispositivo.",
     "advanced": "Avanzado",
     "401": "Sin autorización. Intente acceder a su cuenta nuevamente.",
     "makerspace_settings_description": "Descargue contenido desde su cuenta de Makerspace.",

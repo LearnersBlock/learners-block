@@ -64,5 +64,8 @@
     "system_info": "Informações do sistema",
     "success": "Sucesso",
     "status": "Status",
-    "set_password": "Definir senha"
+    "set_password": "Definir senha",
+    "chapter": "Capítulo",
+    "previous": "Anterior",
+    "next": "Próximo"
 }
