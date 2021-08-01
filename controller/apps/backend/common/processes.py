@@ -1,4 +1,5 @@
 from flask_restful import abort
+from resources.errors import print_error
 import inspect
 import os
 import requests
@@ -20,7 +21,7 @@ def check_internet(host="8.8.8.8", port=53, timeout=3):
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
         return True
     except socket.error as ex:
-        print(ex)
+        print_error('check_internet', 'internet check failure', ex)
         return False
 
 
@@ -80,7 +81,6 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
             )
 
         elif cmd["method"] == 'patch':
-
             response = requests.patch(
                 f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
                 f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
@@ -90,7 +90,6 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
             )
 
         elif cmd["method"] == 'get':
-
             response = requests.get(
                 f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
                 f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
@@ -98,11 +97,11 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
                 timeout=timeout
             )
     except Exception as ex:
-        print("Curl request timed out. " + inspect.stack()[0][3] + " - "
-              + str(ex))
+        print_error('curl', 'Curl request timed out', ex)
         abort(408, status=408,
               message=inspect.stack()[0][3] + " - " + str(ex).rstrip())
 
+    # Check if response is JSON and if not return it as text
     try:
         response.json()
     except Exception:
@@ -123,8 +122,9 @@ def database_recover():
     # get bricked in the field.
     try:
         os.remove(os.path.realpath('.') + "/db/sqlite.db")
-    except Exception:
-        print("Failed to delete the database file. May be missing.")
+    except Exception as ex:
+        print_error('database_recover', 'Failed to delete the database. '
+                    'File may be missing.', ex)
 
 
 def demote(user_uid, user_gid):

@@ -28,7 +28,7 @@ class Development:
         JWT_COOKIE_SECURE = False
         JWT_SECRET_KEY = get_secret_key()
         JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
-        PROPAGATE_EXCEPTIONS = True
+        PROPAGATE_EXCEPTIONS = False
         # Set below to False to prevent needing to pass additional header
         # JWT_COOKIE_CSRF_PROTECT = False
 
@@ -49,7 +49,7 @@ class Production:
         JWT_COOKIE_SECURE = False
         JWT_SECRET_KEY = get_secret_key()
         JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
-        PROPAGATE_EXCEPTIONS = True
+        PROPAGATE_EXCEPTIONS = False
 
         # CORS
         CORS_SUPPORTS_CREDENTIALS = True
