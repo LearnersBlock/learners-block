@@ -196,7 +196,6 @@ class download_stop(Resource):
 
 class health_check(Resource):
     def get(self):
-
         serving.WSGIRequestHandler.log_request = log_request
         return {'status': 200, 'message': 'ok'}, 200
 

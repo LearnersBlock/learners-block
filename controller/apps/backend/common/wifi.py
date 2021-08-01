@@ -108,7 +108,6 @@ class wifi:
 
 class wifi_connect:
     def start(self, wait=0.1):
-
         global wifi_process
 
         time.sleep(wait)

@@ -11,7 +11,6 @@ portainerstatus = False
 
 
 def wifi_toggle():
-
     global wifistatus
 
     if wifistatus is False:
@@ -101,19 +100,16 @@ class hostname(Resource):
 
 class journal_logs(Resource):
     def get(self):
-
         return "journal logs..."
 
 
 class update(Resource):
     def get(self):
-
         return {'status': 202, 'message': "Accepted"}, 202
 
 
 class uuid(Resource):
     def get(self):
-
         return {'uuid': "asdsadsdf213qs2"}
 
 
@@ -127,7 +123,6 @@ class wifi_connection_status(Resource):
 class wifi_forget(Resource):
     @jwt_required()
     def get(self):
-
         global wifistatus
 
         if wifistatus is False:
@@ -145,7 +140,6 @@ class wifi_forget(Resource):
 class wifi_forget_all(Resource):
     @jwt_required()
     def get(self):
-
         global wifistatus
 
         if wifistatus is True:

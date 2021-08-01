@@ -52,7 +52,10 @@ class container_stop(Resource):
 
         if content["container_name"] == 'portainer':
             # Delete PID for portainer
-            os.remove(portainer_pidfile)
+            try:
+                os.remove(portainer_pidfile)
+            except FileNotFoundError:
+                print("PID file did not exist. Continuing...")
 
         response = container().stop(container_name=content["container_name"])
 
@@ -62,7 +65,6 @@ class container_stop(Resource):
 
 class device(Resource):
     def get(self):
-
         response = curl(method="get",
                         path="/v1/device?apikey=")
 
@@ -86,7 +88,6 @@ class host_config(Resource):
 
 class journal_logs(Resource):
     def get(self):
-
         response = curl(method="post-json",
                         path="/v2/journal-logs?apikey=",
                         string='("follow", "false", "all", "true", \
