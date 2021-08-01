@@ -1,3 +1,4 @@
+from common.models import User
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
@@ -12,7 +13,6 @@ from flask_jwt_extended import set_access_cookies
 from flask_jwt_extended import unset_jwt_cookies
 from flask_jwt_extended import verify_jwt_in_request
 from flask_restful import Resource
-from common.models import User
 
 
 # Refresh token on each authorised request
@@ -34,24 +34,16 @@ def refresh_expiring_jwts(response):
 
 class login(Resource):
     def post(self):
-        try:
-            lb_database = User.query.filter_by(username='lb').first()
-        except Exception as ex:
-            print(self.__class__.__name__ + " - " + str(ex))
-            return {'message': self.__class__.__name__ + " - " + str(ex)}, 500
+        content = request.get_json()
 
-        try:
-            content = request.get_json()
-            verify_password = User.verify_password(content["password"],
-                                                   lb_database.password)
-            username = content["username"].lower()
-        except AttributeError as ex:
-            print(self.__class__.__name__ + " - " + str(ex))
-            return {'message': 'Error: Must pass valid string.'}, 200
+        lb_database = User.query.filter_by(username='lb').first()
+        verify_password = User.verify_password(content["password"],
+                                               lb_database.password)
+
+        username = content["username"].lower()
 
         if username != lb_database.username or verify_password is not \
                 True:
-            print(self.__class__.__name__ + " - Invaild username of password")
             return {"message": "Invalid or password"}, 401
         access_token = create_access_token(identity=username)
         response = jsonify({"message": "login successful",
@@ -71,26 +63,12 @@ class logout(Resource):
 class set_password(Resource):
     @jwt_required()
     def post(self):
-        try:
-            lb_database = User.query.filter_by(username='lb').first()
-        except Exception as ex:
-            print(self.__class__.__name__ + " - " + str(ex))
-            return {'message': self.__class__.__name__ + " - " + str(ex)}, 403
+        content = request.get_json()
 
-        try:
-            content = request.get_json()
-        except AttributeError as ex:
-            print(self.__class__.__name__ + " - " + str(ex))
-            return {'message': 'Error: Must pass valid string.'}, 403
-
-        try:
-            hashed_password = User.hash_password(content["password"])
-            lb_database.password = hashed_password
-            lb_database.save_to_db()
-        except Exception as ex:
-            print(self.__class__.__name__ + " - " + str(ex))
-            return {'database error': self.__class__.__name__ + " - " +
-                    str(ex)}, 500
+        lb_database = User.query.filter_by(username='lb').first()
+        hashed_password = User.hash_password(content["password"])
+        lb_database.password = hashed_password
+        lb_database.save_to_db()
 
         return {'message': 'done'}, 200
 
@@ -99,8 +77,7 @@ class verify_login(Resource):
     def get(self):
         try:
             verify_jwt_in_request()
-        except Exception as ex:
-            print(self.__class__.__name__ + " - " + str(ex))
+        except Exception:
             return {'logged_in': False}
 
         return {'logged_in': True, 'user': get_jwt_identity()}

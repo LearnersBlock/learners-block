@@ -1,6 +1,7 @@
 from common.models import User
 from dbus.mainloop.glib import DBusGMainLoop
 from flask_restful import abort
+from resources.errors import print_error
 from run import app
 import NetworkManager
 import os
@@ -22,8 +23,9 @@ def handle_exit(*args):
             wifi_process.communicate(timeout=8)
             print("Terminated wifi-connect, exiting.")
             sys.exit(0)
-    except Exception:
-        print("Failed to terminate wifi-connect. Executing kill.")
+    except Exception as ex:
+        print_error('handle_exit', 'Failed to terminate wifi-connect. '
+                    'Executing kill.', ex)
         wifi_process.kill()
         sys.exit(0)
 
@@ -124,13 +126,17 @@ class wifi_connect:
             current_hostname = subprocess.run(["hostname"],
                                               capture_output=True,
                                               text=True).stdout.rstrip()
-        except Exception:
+        except Exception as ex:
+            print_error('wifi_connect.start', 'Failed to set hostname. '
+                        'Setting a default instead.', ex)
             current_hostname = os.environ['DEFAULT_HOSTNAME']
 
         # Check the current hostname variable is not empty, and set if it is
         try:
             current_hostname
-        except Exception:
+        except Exception as ex:
+            print_error('wifi_connect.start', 'Error getting hostname. '
+                        'Setting a default instead.', ex)
             current_hostname = os.environ['DEFAULT_HOSTNAME']
 
         try:
@@ -140,19 +146,17 @@ class wifi_connect:
                 ["iw", "wlan0", "scan"],
                 capture_output=True,
                 text=True).stdout.rstrip()
-        except Exception:
-            print("Error refreshing network points.")
+        except Exception as ex:
+            print_error('wifi_connect.start', 'Error refreshing '
+                        'network points.', ex)
 
         # Check if default SSID
         if current_hostname == os.environ['DEFAULT_HOSTNAME']:
             current_hostname = os.environ["DEFAULT_SSID"]
 
         # Fetch the wi-fi password
-        try:
-            with app.app_context():
-                lb_database = User.query.filter_by(username='lb').first()
-        except Exception as ex:
-            print(ex)
+        with app.app_context():
+            lb_database = User.query.filter_by(username='lb').first()
 
         # Start wifi connect
         if lb_database.wifi_password:
@@ -180,21 +184,20 @@ class wifi_connect:
 
         try:
             wifi_poll = wifi_process.poll()
-        except Exception:
-            print("Wifi-Connect not started")
-            return 1
+        except Exception as ex:
+            print_error('wifi_connect.stop', 'Wifi-connect not started', ex)
+            return
 
         if wifi_poll is not None:
             print("Wifi-Connect already stopped")
-            return 1
+            return
 
         try:
             wifi_process.terminate()
             wifi_process.communicate(timeout=10)
         except Exception:
+            # If it hasn't stopped in 10 seconds kill it
             wifi_process.kill()
-
-        return 0
 
     def status(self):
         global wifi_process
@@ -205,7 +208,8 @@ class wifi_connect:
                 curl_wifi = True
             else:
                 curl_wifi = False
-        except Exception:
+        except Exception as ex:
+            print_error('wifi_connect.status', 'curl failure', ex)
             curl_wifi = False
 
         try:
@@ -219,4 +223,5 @@ class wifi_connect:
         elif curl_wifi is False and wifi_poll is not None:
             return 1
 
-        return 500
+        abort(500, status=500,
+              message='Failed on wifi-connect check')

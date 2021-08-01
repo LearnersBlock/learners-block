@@ -37,8 +37,7 @@ class container_status(Resource):
                 state = True
             else:
                 state = False
-        except Exception as ex:
-            print(str(ex))
+        except Exception:
             state = True
 
         return {'status': response["status_code"],
@@ -55,7 +54,7 @@ class container_stop(Resource):
             try:
                 os.remove(portainer_pidfile)
             except FileNotFoundError:
-                print("PID file did not exist. Continuing...")
+                print("Portainer PID file did not exist. Continuing...")
 
         response = container().stop(container_name=content["container_name"])
 

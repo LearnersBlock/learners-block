@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from resources.errors import print_error
 import docker
 import os
 
@@ -25,12 +26,10 @@ class docker():
                                   ports=ports,
                                   volumes=volumes)
         except Exception as ex:
-            print(str(ex))
-            return {"status_code": 500,
-                    "response": str(ex)}
+            print_error('docker.pull', 'Failed to pull container', ex)
+            return {"response": str(ex), "status_code": 500}
 
-        return {"status_code": 200,
-                "response": str(response)}
+        return {"response": str(response), "status_code": 200}
 
     def remove(name, image):
         try:
@@ -39,12 +38,10 @@ class docker():
             container.remove()
             response = client.images.remove(image=image)
         except Exception as ex:
-            print(str(ex))
-            return {"status_code": 500,
-                    "response": str(ex)}
+            print_error('docker.remove', 'Failed to remove container', ex)
+            return {"response": str(ex), "status_code": 500}
 
-        return {"status_code": 200,
-                "response": str(response)}
+        return {"response": str(response), "status_code": 200}
 
     def run(image, name, ports, volumes, detach=True):
         try:
@@ -55,9 +52,7 @@ class docker():
                                              volumes=volumes,
                                              restart_policy={"Name": "always"})
         except Exception as ex:
-            print(str(ex))
-            return {"status_code": 500,
-                    "response": str(ex)}
+            print_error('docker.run', 'Failed to run container', ex)
+            return {"response": str(ex), "status_code": 500}
 
-        return {"status_code": 200,
-                "response": str(response)}
+        return {"response": str(response), "status_code": 200}

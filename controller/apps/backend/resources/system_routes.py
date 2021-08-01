@@ -8,6 +8,7 @@ from flask import request
 from flask import Response
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
+from resources.errors import print_error
 from werkzeug import serving
 import json
 import shutil
@@ -34,10 +35,7 @@ def log_request(self, *args, **kwargs):
 class docker_pull(Resource):
     @jwt_required()
     def post(self):
-        try:
-            content = request.get_json()
-        except AttributeError:
-            return {'message': 'Error: Must pass valid string.'}, 403
+        content = request.get_json()
 
         response = docker.pull(image=content["image"],
                                name=content["name"],
@@ -47,28 +45,18 @@ class docker_pull(Resource):
 
         update_container_db_status(content["name"], 'installed')
 
-        print(response["response"])
-
         return {"response": response["response"]}, response["status_code"]
 
 
 class docker_remove(Resource):
     @jwt_required()
     def post(self):
-        try:
-            content = request.get_json()
-        except AttributeError:
-            return {'message': 'Error: Must pass valid string.'}, 403
+        content = request.get_json()
 
         response = docker.remove(name=content["name"],
                                  image=content["image"])
 
         update_container_db_status(content["name"], 'install')
-
-        if response["status_code"] == 200:
-            print('docker_remove: container removed')
-        else:
-            print(response["response"])
 
         return {"response": response["response"]}, response["status_code"]
 
@@ -76,10 +64,7 @@ class docker_remove(Resource):
 class docker_run(Resource):
     @jwt_required()
     def post(self):
-        try:
-            content = request.get_json()
-        except AttributeError:
-            return {'message': 'Error: Must pass valid string.'}, 403
+        content = request.get_json()
 
         response = docker.run(image=content["image"],
                               name=content["name"],
@@ -89,8 +74,6 @@ class docker_run(Resource):
 
         update_container_db_status(content["name"], 'installed')
 
-        print(response["response"])
-
         return {"response": response["response"]}, response["status_code"]
 
 
@@ -99,10 +82,7 @@ class download_fetch(Resource):
     def post(self):
         global download_log
         download_log = ''
-        try:
-            content = request.get_json()
-        except AttributeError:
-            return {'message': 'Error. Must pass valid string.'}, 403
+        content = request.get_json()
 
         download_progress = threading.Thread(
                                 target=download_fetch.download_file,
@@ -137,7 +117,8 @@ class download_fetch(Resource):
             if os.environ['FLASK_ENV'].lower() == "production":
                 os.seteuid(65534)
             resp = requests.get(url, stream=True, timeout=5)
-        except Exception:
+        except Exception as ex:
+            print_error('download_file', 'Failed setting euid', ex)
             # Restore original UID
             os.seteuid(euid)
             download_stop.get(self, response='UID failure')
@@ -147,40 +128,37 @@ class download_fetch(Resource):
         os.seteuid(euid)
 
         try:
-            try:
-                total = int(resp.headers.get('content-length', 0))
-            except Exception as ex:
-                print(str(ex) + 'Setting file size to 0')
-                total = 0
-
-            with open(os.path.realpath('.') + '/storage/library/' +
-                      url.split('/')[-1], 'wb') as file:
-
-                global download_terminated
-                downloaded_bytes = 0
-                _, _, free = shutil.disk_usage("/tmp")
-                for data in resp.iter_content(chunk_size=1024):
-                    if download_terminated == 1:
-                        break
-                    size = file.write(data)
-                    downloaded_bytes += size
-
-                    # If running out of disk space exit
-                    if downloaded_bytes + 100000000 > free:
-                        download_stop.get(self, response='Out of disk space')
-                        return
-                    global download_log
-                    download_log = json.dumps({
-                        "progress": format(downloaded_bytes/total*100/100,
-                                           ".4f"),
-                        "mbytes": format(downloaded_bytes/1000000,
-                                         ".4f"),
-                    })
+            total = int(resp.headers.get('content-length', 0))
         except Exception as ex:
-            print(str(ex))
+            print_error('donwload_files',
+                        'failed getting content-length', ex)
+            total = 0
+
+        with open(os.path.realpath('.') + '/storage/library/' +
+                  url.split('/')[-1], 'wb') as file:
+
+            global download_terminated
+            downloaded_bytes = 0
+            _, _, free = shutil.disk_usage("/tmp")
+            for data in resp.iter_content(chunk_size=1024):
+                if download_terminated == 1:
+                    break
+                size = file.write(data)
+                downloaded_bytes += size
+
+                # If running out of disk space exit
+                if downloaded_bytes + 100000000 > free:
+                    download_stop.get(self, response='Out of disk space')
+                    return
+                global download_log
+                download_log = json.dumps({
+                    "progress": format(downloaded_bytes/total*100/100,
+                                       ".4f"),
+                    "mbytes": format(downloaded_bytes/1000000,
+                                     ".4f"),
+                })
 
         download_log = True
-        print("Download complete")
 
         return {'message': 'process complete'}, 200
 

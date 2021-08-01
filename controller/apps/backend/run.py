@@ -1,11 +1,14 @@
+from common.models import db
+from common.models import migrate
 from common.processes import curl
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
-from flask_restful import Api
+from flask_restful import Api as _Api
 from flask_jwt_extended import JWTManager
-from common.models import db
-from common.models import migrate
+from flask_jwt_extended.exceptions import JWTExtendedException
+from jwt.exceptions import PyJWTError
+from resources.errors import errors, print_error
 from resources.system_routes import docker_pull
 from resources.system_routes import docker_remove
 from resources.system_routes import docker_run
@@ -15,17 +18,33 @@ from resources.system_routes import health_check
 from resources.system_routes import internet_connection_status
 from resources.system_routes import system_info
 import atexit
-import inspect
 import os
 import signal
 import subprocess
+
+
+# Apply fix to Flask-Restful not aligned with JWT exceptions
+# https://github.com/flask-restful/flask-restful/issues/783#issuecomment-570177004
+class Api(_Api):
+    def error_router(self, original_handler, e):
+        if not isinstance(e, PyJWTError) \
+            and not isinstance(e, JWTExtendedException) \
+                and self._has_fr_route():
+            try:
+                return self.handle_error(e)
+            except Exception:
+                pass  # Fall through to original handler
+        return original_handler(e)
+
 
 # Import .env file to make env vars available from os.environ
 load_dotenv()
 
 # Load extensions
 jwt = JWTManager()
-api = Api()
+
+# Load Flask-Restful API
+api = Api(errors=errors)
 
 
 # Create Flask app instance
@@ -72,9 +91,9 @@ def first_launch():
                         supervisor_retries=20)
         open(pidfile, 'w').write(pid)
 
-        print('Set hostname on first boot: ' + str(response["status_code"]))
-
-        print('Restarting device: ' + str(response))
+        print_error('first_launch',
+                    'Set hostname on first boot. Restarting',
+                    str(response))
 
         response = curl(method="post-json",
                         path="/v1/reboot?apikey=",
@@ -124,8 +143,7 @@ if __name__ == '__main__':
         try:
             startup()
         except Exception as ex:
-            print("Failed on boot. " +
-                  inspect.stack()[0][3] + " - " + str(ex))
+            print_error('__name__', 'Fail on startup()', ex)
     else:
         from resources.dev_routes import container_start, container_status, \
              container_stop, device, host_config, hostname, journal_logs, \
