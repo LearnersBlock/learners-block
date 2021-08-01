@@ -26,6 +26,52 @@ def wifi_toggle():
         f"Wifi is now set to {wifistatus}"
 
 
+class container_start(Resource):
+    @jwt_required()
+    def post(self):
+        content = request.get_json()
+
+        if content["container_name"] == 'portainer':
+            global portainerstatus
+            time.sleep(3)
+            portainerstatus = True
+            return {'status': 200,
+                    'message': "Supervisor responses here"}, 200
+
+        return {'status': 500, 'container_status': False}, 500
+
+
+class container_status(Resource):
+    def post(self):
+        content = request.get_json()
+
+        if content["container_name"] == 'portainer':
+            global portainerstatus
+            time.sleep(5)
+            if portainerstatus is True:
+                return {'status': 200, 'container_status': True}, 200
+            else:
+                return {'status': 200, 'container_status': False}, 200
+
+        return {'status': 500, 'container_status': False}, 500
+
+
+class container_stop(Resource):
+    @jwt_required()
+    def post(self):
+        content = request.get_json()
+
+        if content["container_name"] == 'portainer':
+            global portainerstatus
+            time.sleep(3)
+            portainerstatus = False
+
+            return {'status': 200,
+                    'message': "Supervisor responses here"}, 200
+
+        return {'status': 500, 'container_status': False}, 500
+
+
 class device(Resource):
     def get(self):
         return {'message': 'output'}, 200
@@ -57,37 +103,6 @@ class journal_logs(Resource):
     def get(self):
 
         return "journal logs..."
-
-
-class portainer_status(Resource):
-    def get(self):
-        global portainerstatus
-        time.sleep(5)
-        if portainerstatus is True:
-            return {'status': 200, 'container_status': True}, 200
-        else:
-            return {'status': 200, 'container_status': False}, 200
-
-
-class portainer_start(Resource):
-    @jwt_required()
-    def get(self):
-        global portainerstatus
-        time.sleep(3)
-        portainerstatus = True
-        return {'status': 200,
-                'message': "Supervisor responses here"}, 200
-
-
-class portainer_stop(Resource):
-    @jwt_required()
-    def get(self):
-        global portainerstatus
-        time.sleep(3)
-        portainerstatus = False
-
-        return {'status': 200,
-                'message': "Supervisor responses here"}, 200
 
 
 class update(Resource):

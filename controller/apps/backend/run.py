@@ -103,9 +103,9 @@ if __name__ == '__main__':
         from boot.production import startup
         from common.wifi import handle_exit
         from resources.system_routes import hostname
-        from resources.supervisor_routes import device, host_config, \
-            journal_logs, portainer_status, portainer_start, portainer_stop, \
-            update, uuid
+        from resources.supervisor_routes import container_start, \
+            container_status, container_stop, device, host_config, \
+            journal_logs, update, uuid
         from resources.wifi_routes import wifi_connection_status, \
             wifi_forget, wifi_forget_all
 
@@ -126,17 +126,19 @@ if __name__ == '__main__':
         except Exception as ex:
             print("Failed on boot. " +
                   inspect.stack()[0][3] + " - " + str(ex))
-
     else:
-        from resources.dev_routes import device, host_config, hostname, \
-            journal_logs, portainer_status, portainer_start, portainer_stop, \
-            update, uuid, wifi_connection_status, wifi_forget, wifi_forget_all
+        from resources.dev_routes import container_start, container_status, \
+             container_stop, device, host_config, hostname, journal_logs, \
+             update, uuid, wifi_connection_status, wifi_forget, wifi_forget_all
 
         print("Api-v1 - Starting API (Development)...")
 
     # Configure endpoints
     api.add_resource(app_store_set, '/v1/appstore/set')
     api.add_resource(app_store_status, '/v1/appstore/status')
+    api.add_resource(container_start, '/v1/container/start')
+    api.add_resource(container_status, '/v1/container/status')
+    api.add_resource(container_stop, '/v1/container/stop')
     api.add_resource(device, '/v1/device')
     api.add_resource(docker_pull, '/v1/docker/pull')
     api.add_resource(docker_remove, '/v1/docker/remove')
@@ -151,9 +153,6 @@ if __name__ == '__main__':
     api.add_resource(journal_logs, '/v1/journallogs')
     api.add_resource(login, '/v1/login')
     api.add_resource(logout, '/v1/logout')
-    api.add_resource(portainer_status, '/v1/portainer/status')
-    api.add_resource(portainer_start, '/v1/portainer/start')
-    api.add_resource(portainer_stop, '/v1/portainer/stop')
     api.add_resource(set_password, '/v1/setpassword')
     api.add_resource(settings_ui, '/v1/settingsui')
     api.add_resource(set_ui, '/v1/setui')
