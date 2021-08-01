@@ -39,7 +39,7 @@ def launch_wifi(self):
             print_error("launch_wifi", 'Software update failed.', ex)
 
 
-def startup(self):
+def startup():
     # Check hostname in container is correct
     try:
         # Fetch container hostname and device hostname
