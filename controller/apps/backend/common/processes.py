@@ -1,6 +1,5 @@
 from flask_restful import abort
 from resources.errors import print_error
-import inspect
 import os
 import requests
 import shutil
@@ -49,7 +48,7 @@ def check_supervisor(supervisor_retries, timeout):
 
             if retry == supervisor_retries:
                 abort(408, status=408,
-                      message=inspect.stack()[0][3] + " - " + str(ex).rstrip())
+                      message=str(ex))
 
             time.sleep(2)
             retry = retry + 1
@@ -99,7 +98,7 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
     except Exception as ex:
         print_error('curl', 'Curl request timed out', ex)
         abort(408, status=408,
-              message=inspect.stack()[0][3] + " - " + str(ex).rstrip())
+              message=str(ex))
 
     # Check if response is JSON and if not return it as text
     try:
