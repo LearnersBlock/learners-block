@@ -101,6 +101,7 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
         abort(408, status=408,
               message=inspect.stack()[0][3] + " - " + str(ex).rstrip())
 
+    # Check if response is JSON and if not return it as text
     try:
         response.json()
     except Exception:
