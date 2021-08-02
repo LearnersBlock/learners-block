@@ -103,5 +103,9 @@
     "available_applications": "Mevcut Uygulamalar",
     "app_store": "Uygulama Mağazası",
     "application": "Uygulama",
-    "no_apps_to_display": "Görüntülenecek uygulama yok. Yukarıdaki simgeyle uygulama veritabanınızı yenilemeyi deneyin."
+    "no_apps_to_display": "Görüntülenecek uygulama yok. Yukarıdaki simgeyle uygulama veritabanınızı yenilemeyi deneyin.",
+    "prune_system_files_description": "Aygıtınızda yer açmak için kullanılmayan sistem dosyalarını temizleyin.",
+    "prune_system_files": "Sistem Dosyalarını Temizle",
+    "prune": "Temizle",
+    "author_colon": "Yazar:"
 }
