@@ -16,24 +16,24 @@ class app_store_set(Resource):
     @jwt_required()
     def get(self):
         try:
-            image_list = requests.get("https://raw.githubusercontent.com/"
-                                      "LearnersBlock/app-store/main/"
-                                      "image_directory.json",
-                                      timeout=8)
+            app_list = requests.get("https://raw.githubusercontent.com/"
+                                    "LearnersBlock/app-store/main/"
+                                    "image_directory.json",
+                                    timeout=8)
         except Exception as ex:
             abort(408, status=408, message='error', error=str(ex))
 
         for i in App_Store.query.all():
-            # Check all entries are present
+            # Check all entries are present to avoid exception
             try:
-                if i.name not in image_list.json():
+                if i.name not in app_list.json():
                     pass
             except Exception as ex:
                 print_error('app_store_set', 'Failed finding app', ex)
                 continue
 
             # Process list
-            if i.name not in image_list.json():
+            if i.name not in app_list.json():
                 print('An entry in the local database has been deleted '
                       'online. Removing local entry...')
 
@@ -58,7 +58,7 @@ class app_store_set(Resource):
 
             if i.status.lower() == "installed" and \
                 packaging.version.parse(i.version) < \
-                packaging.version.parse(image_list.json()
+                packaging.version.parse(app_list.json()
                                         [i.name]['version']):
                 print('Update available for ' + str(i.name))
 
@@ -67,37 +67,55 @@ class app_store_set(Resource):
                 lb_database.status = 'update_available'
                 lb_database.save_to_db()
 
-        for i in image_list.json():
+        for i in app_list.json():
             lb_database = App_Store.query.filter_by(name=i).first()
 
             if lb_database is None:
                 lb_database = App_Store(name=i,
-                                        long_name=image_list.json()[i]
+                                        long_name=app_list.json()[i]
                                         ['long_name'],
-                                        image=image_list.json()[i]
+                                        image=app_list.json()[i]
                                         ['image'],
-                                        ports=json.dumps(image_list.json()
+                                        ports=json.dumps(app_list.json()
                                                          [i]['ports']),
-                                        volumes=json.dumps(image_list
+                                        volumes=json.dumps(app_list
                                                            .json()[i]
                                                            ['volumes']),
-                                        version=image_list.json()[i]
+                                        version=app_list.json()[i]
                                         ['version'],
-                                        author_site=image_list.json()[i]
+                                        author_site=app_list.json()[i]
                                         ['author_site'],
                                         logo='')
 
-                if image_list.json()[i]['logo']:
+                # Check all entries are present to avoid exception
+                try:
+                    if app_list.json()[i]['logo']:
+                        pass
+                except Exception as ex:
+                    print_error('app_store_set',
+                                'Failed getting logo path', ex)
+                    continue
+
+                if app_list.json()[i]['logo']:
                     lb_database.logo = '/lb_share/assets/' + \
-                                        image_list.json()[i]['logo'] \
+                                        lb_database.name + \
+                                        '/' + app_list.json()[i]['logo'] \
                                         .split('/')[-1]
 
                     try:
-                        r = requests.get(image_list.json()[i]['logo'],
+                        r = requests.get(app_list.json()[i]['logo'],
                                          stream=True,
                                          timeout=5)
 
                         if r.status_code == 200:
+                            try:
+                                os.mkdir('./lb_share/assets/' +
+                                         lb_database.name)
+                            except Exception as ex:
+                                print_error('app_store_set',
+                                            'failed making required directory',
+                                            ex)
+
                             with open('.' + lb_database.logo, 'wb') as f:
                                 for chunk in r:
                                     f.write(chunk)
@@ -109,15 +127,15 @@ class app_store_set(Resource):
                                     'failed saving image', ex)
             else:
                 lb_database.name = i
-                lb_database.long_name = image_list.json()[i]['long_name']
-                lb_database.image = image_list.json()[i]['image']
-                lb_database.ports = json.dumps(image_list.json()
+                lb_database.long_name = app_list.json()[i]['long_name']
+                lb_database.image = app_list.json()[i]['image']
+                lb_database.ports = json.dumps(app_list.json()
                                                [i]['ports'])
-                lb_database.volumes = json.dumps(image_list.json()[i]
+                lb_database.volumes = json.dumps(app_list.json()[i]
                                                  ['volumes'])
-                lb_database.version = image_list.json()[i]['version']
+                lb_database.version = app_list.json()[i]['version']
                 lb_database.author_site = \
-                    image_list.json()[i]['author_site']
+                    app_list.json()[i]['author_site']
 
             lb_database.save_to_db()
 
