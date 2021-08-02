@@ -1,5 +1,6 @@
 from common.database import update_container_db_status
-from common.docker import docker
+from common.docker import docker_py
+from common.models import App_Store
 from common.processes import check_internet
 from common.processes import curl
 from common.processes import human_size
@@ -37,11 +38,11 @@ class docker_pull(Resource):
     def post(self):
         content = request.get_json()
 
-        response = docker.pull(image=content["image"],
-                               name=content["name"],
-                               ports=content["ports"],
-                               volumes=content["volumes"],
-                               detach=True)
+        response = docker_py.pull(image=content["image"],
+                                  name=content["name"],
+                                  ports=content["ports"],
+                                  volumes=content["volumes"],
+                                  detach=True)
 
         update_container_db_status(content["name"], 'installed')
 
@@ -53,8 +54,8 @@ class docker_remove(Resource):
     def post(self):
         content = request.get_json()
 
-        response = docker.remove(name=content["name"],
-                                 image=content["image"])
+        response = docker_py.remove(name=content["name"],
+                                    image=content["image"])
 
         update_container_db_status(content["name"], 'install')
 
@@ -66,11 +67,11 @@ class docker_run(Resource):
     def post(self):
         content = request.get_json()
 
-        response = docker.run(image=content["image"],
-                              name=content["name"],
-                              ports=content["ports"],
-                              volumes=content["volumes"],
-                              detach=True)
+        response = docker_py.run(image=content["image"],
+                                 name=content["name"],
+                                 ports=content["ports"],
+                                 volumes=content["volumes"],
+                                 detach=True)
 
         update_container_db_status(content["name"], 'installed')
 
@@ -209,3 +210,14 @@ class system_info(Resource):
                     'lb': version["VERSION"]
                     }
                 }
+
+
+class system_prune(Resource):
+    def get(self):
+        # Prune unused docker images
+        installed_apps = App_Store.query.filter(App_Store.
+                                                status == 'install')
+        for app in installed_apps:
+            docker_py.prune(app.name, app.image)
+
+        return {'status': 200, 'message': 'done'}, 200

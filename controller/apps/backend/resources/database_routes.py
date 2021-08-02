@@ -1,4 +1,4 @@
-from common.docker import docker
+from common.docker import docker_py
 from common.models import User
 from common.models import App_Store
 from flask import request
@@ -40,8 +40,8 @@ class app_store_set(Resource):
                 App_Store.query.filter_by(name=i.name).delete()
 
                 try:
-                    docker.remove(name=i.name,
-                                  image=i.image)
+                    docker_py.remove(name=i.name,
+                                     image=i.image)
                 except Exception as ex:
                     print_error('app_store_set',
                                 'failed docker remove', ex)

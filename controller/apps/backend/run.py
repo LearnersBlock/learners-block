@@ -17,6 +17,7 @@ from resources.system_routes import download_stop
 from resources.system_routes import health_check
 from resources.system_routes import internet_connection_status
 from resources.system_routes import system_info
+from resources.system_routes import system_prune
 import atexit
 import os
 import signal
@@ -176,6 +177,7 @@ if __name__ == '__main__':
     api.add_resource(set_ui, '/v1/setui')
     api.add_resource(set_wifi, '/v1/setwifi')
     api.add_resource(system_info, '/v1/system/info')
+    api.add_resource(system_prune, '/v1/system/prune')
     api.add_resource(update, '/v1/update')
     api.add_resource(uuid, '/v1/uuid')
     api.add_resource(verify_login, '/v1/verifylogin')

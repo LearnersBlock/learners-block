@@ -13,7 +13,7 @@ else:
     client = docker.DockerClient(base_url='unix://var/run/docker.sock')
 
 
-class docker():
+class docker_py():
     def pull(image, name, ports, volumes, detach=True):
         try:
             container = client.containers.get(name)
@@ -31,17 +31,25 @@ class docker():
 
         return {"response": str(response), "status_code": 200}
 
+    def prune(name, image):
+        try:
+            client.images.remove(image=image)
+        except docker.errors.ImageNotFound:
+            # If container was never installed then continue
+            pass
+
+        return {"response": "done", "status_code": 200}
+
     def remove(name, image):
         try:
             container = client.containers.get(name)
             container.stop()
             container.remove()
-            response = client.images.remove(image=image)
         except Exception as ex:
             print_error('docker.remove', 'Failed to remove container', ex)
             return {"response": str(ex), "status_code": 500}
 
-        return {"response": str(response), "status_code": 200}
+        return {"response": "done", "status_code": 200}
 
     def run(image, name, ports, volumes, detach=True):
         try:

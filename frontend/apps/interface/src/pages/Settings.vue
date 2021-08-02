@@ -298,7 +298,7 @@
                 flat
                 bordered
                 :grid="$q.screen.xs"
-                :rows-per-page-options="[5, 10]"
+                :rows-per-page-options="[3, 5, 10]"
                 :rows="rows"
                 :table-class="!visible ? 'text-black': 'text-white'"
                 :columns="columns"
@@ -371,7 +371,7 @@
                         class="text-center"
                       >
                         <div>
-                          {{ $t('author') }} <a
+                          {{ $t('author_colon') }} <a
                             :href="'http://'+ props.row.author_site"
                             target="_blank"
                           >{{ props.row.author_site }}</a>
@@ -420,7 +420,7 @@
                     <div class="text-2xl text-gray-700">
                       {{ $t('choose_start_page') }}
                     </div>
-                    <div class="text-base text-gray-500">
+                    <div class="text-base text-gray-500 mb-1">
                       {{ $t('start_page_desc') }}
                     </div>
                     <q-select
@@ -430,7 +430,7 @@
                       transition-duration="1"
                       v-model="startPage"
                       :options="pages"
-                      class="mb-4"
+                      class="mb-5"
                       @update:model-value="changeStartPage"
                     />
                     <div
@@ -493,7 +493,7 @@
                                     class="text-center"
                                   >
                                     <div>
-                                      {{ $t('author') }} {{ props.row.author_site }}
+                                      {{ $t('author_colon') }} {{ props.row.author_site }}
                                     </div>
                                     <q-btn
                                       class="mb-1"
@@ -625,6 +625,34 @@
                       target="_blank"
                     >http://{{ windowHostname }}/portainer/</a>
                   </div>
+                  <q-separator
+                    class="mr-3 ml-3"
+                    spaced
+                  />
+                  <!-- Prune System Files -->
+                  <div>
+                    <q-item class="flex">
+                      <q-item-section>
+                        <q-item-label class="text-2xl text-gray-700">
+                          {{ $t('prune_system_files') }}
+                        </q-item-label>
+                        <q-item-label class="text-base pr-1 text-gray-500">
+                          {{ $t('prune_system_files_description') }}
+                        </q-item-label>
+                      </q-item-section>
+                      <q-btn
+                        outline
+                        rounded
+                        no-caps
+                        :loading="pruningFiles"
+                        :size="'md'"
+                        color="red"
+                        @click="pruneSystemFiles"
+                        :label="$t('prune')"
+                        class="text-lg mt-2"
+                      />
+                    </q-item>
+                  </div>
                 </q-card-section>
               </q-card>
             </q-expansion-item>
@@ -691,6 +719,7 @@ export default defineComponent({
     const pages = ref(pagesString)
     const portainer = ref<boolean>(false)
     const portainerLoading = ref<boolean>(true)
+    const pruningFiles = ref<boolean>(false)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
@@ -755,7 +784,6 @@ export default defineComponent({
     onMounted(() => {
       apiCall()
       apiCallAwait()
-      fetchApps()
     })
 
     function apiCall () {
@@ -814,6 +842,10 @@ export default defineComponent({
         // Set internet connection status
         if (res2.data.connected) {
           internet.value = true
+          refreshApps()
+        } else {
+          internet.value = false
+          fetchApps()
         }
 
         // Set hostname
@@ -934,9 +966,26 @@ export default defineComponent({
       }
     }
 
+    function pruneSystemFiles () {
+      $q.dialog({
+        title: t('confirm'),
+        message: t('are_you_sure'),
+        cancel: true,
+        persistent: true,
+        dark: true
+      }).onOk(() => {
+        pruningFiles.value = true
+        Axios.get(`${api.value}/v1/system/prune`).then(() => {
+          pruningFiles.value = false
+          $q.notify({ type: 'positive', message: t('success') })
+        })
+      })
+    }
+
     function redirect (path) {
       location.href = path
     }
+
     async function refreshApps () {
       visible.value = true
       await Axios.get(`${api.value}/v1/appstore/set`)
@@ -1235,6 +1284,8 @@ export default defineComponent({
       pages,
       portainer,
       portainerLoading,
+      pruningFiles,
+      pruneSystemFiles,
       redirect,
       refreshApps,
       regexp,
