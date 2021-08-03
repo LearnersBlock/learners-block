@@ -16,24 +16,27 @@ class app_store_set(Resource):
     @jwt_required()
     def get(self):
         try:
-            app_list = requests.get("https://raw.githubusercontent.com/"
-                                    "LearnersBlock/app-store/main/"
-                                    "image_directory.json",
-                                    timeout=8)
+            app_list = requests.get(
+                                "https://raw.githubusercontent.com/"
+                                "LearnersBlock/app-store/main/"
+                                "database.json",
+                                timeout=8).json()
+
         except Exception as ex:
+            print_error('app_store_set', 'Failed loading app list', ex)
             abort(408, status=408, message='error', error=str(ex))
 
         for i in App_Store.query.all():
             # Check all entries are present to avoid exception
             try:
-                if i.name not in app_list.json():
+                if i.name not in app_list:
                     pass
             except Exception as ex:
                 print_error('app_store_set', 'Failed finding app', ex)
                 continue
 
             # Process list
-            if i.name not in app_list.json():
+            if i.name not in app_list:
                 print('An entry in the local database has been deleted '
                       'online. Removing local entry...')
 
@@ -58,7 +61,7 @@ class app_store_set(Resource):
 
             if i.status.lower() == "installed" and \
                 packaging.version.parse(i.version) < \
-                packaging.version.parse(app_list.json()
+                packaging.version.parse(app_list
                                         [i.name]['version']):
                 print('Update available for ' + str(i.name))
 
@@ -67,43 +70,42 @@ class app_store_set(Resource):
                 lb_database.status = 'update_available'
                 lb_database.save_to_db()
 
-        for i in app_list.json():
+        for i in app_list:
             lb_database = App_Store.query.filter_by(name=i).first()
 
             if lb_database is None:
                 lb_database = App_Store(name=i,
-                                        long_name=app_list.json()[i]
+                                        long_name=app_list[i]
                                         ['long_name'],
-                                        image=app_list.json()[i]
+                                        image=app_list[i]
                                         ['image'],
-                                        ports=json.dumps(app_list.json()
+                                        ports=json.dumps(app_list
                                                          [i]['ports']),
-                                        volumes=json.dumps(app_list
-                                                           .json()[i]
+                                        volumes=json.dumps(app_list[i]
                                                            ['volumes']),
-                                        version=app_list.json()[i]
+                                        version=app_list[i]
                                         ['version'],
-                                        author_site=app_list.json()[i]
+                                        author_site=app_list[i]
                                         ['author_site'],
                                         logo='')
 
                 # Check all entries are present to avoid exception
                 try:
-                    if app_list.json()[i]['logo']:
+                    if app_list[i]['logo']:
                         pass
                 except Exception as ex:
                     print_error('app_store_set',
                                 'Failed getting logo path', ex)
                     continue
 
-                if app_list.json()[i]['logo']:
+                if app_list[i]['logo']:
                     lb_database.logo = '/lb_share/assets/' + \
                                         lb_database.name + \
-                                        '/' + app_list.json()[i]['logo'] \
+                                        '/' + app_list[i]['logo'] \
                                         .split('/')[-1]
 
                     try:
-                        r = requests.get(app_list.json()[i]['logo'],
+                        r = requests.get(app_list[i]['logo'],
                                          stream=True,
                                          timeout=5)
 
@@ -127,15 +129,15 @@ class app_store_set(Resource):
                                     'failed saving image', ex)
             else:
                 lb_database.name = i
-                lb_database.long_name = app_list.json()[i]['long_name']
-                lb_database.image = app_list.json()[i]['image']
-                lb_database.ports = json.dumps(app_list.json()
+                lb_database.long_name = app_list[i]['long_name']
+                lb_database.image = app_list[i]['image']
+                lb_database.ports = json.dumps(app_list
                                                [i]['ports'])
-                lb_database.volumes = json.dumps(app_list.json()[i]
+                lb_database.volumes = json.dumps(app_list[i]
                                                  ['volumes'])
-                lb_database.version = app_list.json()[i]['version']
+                lb_database.version = app_list[i]['version']
                 lb_database.author_site = \
-                    app_list.json()[i]['author_site']
+                    app_list[i]['author_site']
 
             lb_database.save_to_db()
 
