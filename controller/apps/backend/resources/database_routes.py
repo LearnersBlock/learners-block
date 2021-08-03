@@ -47,7 +47,13 @@ class app_store_set(Resource):
                                      image=i.image)
                 except Exception as ex:
                     print_error('app_store_set',
-                                'failed docker remove', ex)
+                                'Image may already have been removed', ex)
+
+                try:
+                    docker_py.prune(image=i.image)
+                except Exception as ex:
+                    print_error('app_store_set',
+                                'Image may already have been pruned', ex)
 
                 if i.logo and os.path.exists(os.path.realpath('.') +
                                              i.logo):

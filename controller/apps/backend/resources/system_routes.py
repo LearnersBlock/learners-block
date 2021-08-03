@@ -218,6 +218,6 @@ class system_prune(Resource):
         installed_apps = App_Store.query.filter(App_Store.
                                                 status == 'install')
         for app in installed_apps:
-            docker_py.prune(app.name, app.image)
+            docker_py.prune(app.image)
 
         return {'status': 200, 'message': 'done'}, 200

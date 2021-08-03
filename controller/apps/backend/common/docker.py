@@ -31,7 +31,7 @@ class docker_py():
 
         return {"response": str(response), "status_code": 200}
 
-    def prune(name, image):
+    def prune(image):
         try:
             client.images.remove(image=image)
         except docker.errors.ImageNotFound:
