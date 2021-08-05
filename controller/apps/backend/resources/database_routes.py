@@ -17,7 +17,9 @@ class app_store_set(Resource):
     def get(self):
         try:
             app_list = requests.get(
-                                "https://raw.githubusercontent.com/LearnersBlock/app-store/mulit-app/database.json",
+                                "https://raw.githubusercontent.com/"
+                                "LearnersBlock/app-store/main/"
+                                "database.json",
                                 timeout=8).json()
 
         except Exception as ex:
