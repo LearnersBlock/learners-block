@@ -38,10 +38,28 @@ class docker_pull(Resource):
     def post(self):
         content = request.get_json()
 
-        response = docker_py.pull(image=content["image"],
+        if content["dependencies"]:
+            for dependency in content["dependencies"]:
+                deps = docker_py.pull(env_vars=content["dependencies"]
+                                      [dependency]["env_vars"],
+                                      image=content["dependencies"]
+                                      [dependency]["image"],
+                                      name=dependency,
+                                      ports=content["dependencies"]
+                                      [dependency]["ports"],
+                                      volumes=content["dependencies"]
+                                      [dependency]["volumes"],
+                                      network=content["name"],
+                                      detach=True)
+
+                print_error('docker_pull', deps["response"])
+
+        response = docker_py.pull(env_vars=content["env_vars"],
+                                  image=content["image"],
                                   name=content["name"],
                                   ports=content["ports"],
                                   volumes=content["volumes"],
+                                  network=content["name"],
                                   detach=True)
 
         update_container_db_status(content["name"], 'installed')
@@ -54,8 +72,14 @@ class docker_remove(Resource):
     def post(self):
         content = request.get_json()
 
-        response = docker_py.remove(name=content["name"],
-                                    image=content["image"])
+        # If there are dependencies remove them
+        if content["dependencies"]:
+            for dependency in content["dependencies"]:
+                deps = docker_py.remove(name=dependency)
+
+                print_error('docker_remove', deps["response"])
+
+        response = docker_py.remove(name=content["name"])
 
         update_container_db_status(content["name"], 'install')
 
@@ -67,10 +91,29 @@ class docker_run(Resource):
     def post(self):
         content = request.get_json()
 
-        response = docker_py.run(image=content["image"],
+        # If there are dependencies start them
+        if content["dependencies"]:
+            for dependency in content["dependencies"]:
+                deps = docker_py.run(env_vars=content["dependencies"]
+                                     [dependency]["env_vars"],
+                                     image=content["dependencies"]
+                                     [dependency]["image"],
+                                     name=dependency,
+                                     ports=content["dependencies"]
+                                     [dependency]["ports"],
+                                     volumes=content["dependencies"]
+                                     [dependency]["volumes"],
+                                     network=content["name"],
+                                     detach=True)
+
+                print_error('docker_run', deps["response"])
+
+        response = docker_py.run(env_vars=content["env_vars"],
+                                 image=content["image"],
                                  name=content["name"],
                                  ports=content["ports"],
                                  volumes=content["volumes"],
+                                 network=content["name"],
                                  detach=True)
 
         update_container_db_status(content["name"], 'installed')
@@ -217,7 +260,22 @@ class system_prune(Resource):
         # Prune unused docker images
         installed_apps = App_Store.query.filter(App_Store.
                                                 status == 'install')
+
         for app in installed_apps:
-            docker_py.prune(app.image)
+            # Prune dependencies
+            try:
+                if app.dependencies:
+                    json_dep = json.loads(app.dependencies)
+                    for dependency in json_dep:
+                        deps = docker_py.prune(image=json_dep
+                                               [dependency]
+                                               ["image"],
+                                               network=app.name)
+
+                        print_error('app_store_set', deps["response"])
+            except Exception as ex:
+                print_error('app_store_set', deps["response"], ex)
+
+            docker_py.prune(image=app.image, network=app.name)
 
         return {'status': 200, 'message': 'done'}, 200

@@ -42,15 +42,30 @@ class app_store_set(Resource):
 
                 App_Store.query.filter_by(name=i.name).delete()
 
+                # Remove old containers
                 try:
-                    docker_py.remove(name=i.name,
-                                     image=i.image)
+                    if i.dependencies:
+                        for dependency in json.loads(i.dependencies):
+                            deps = docker_py.remove(name=dependency)
+
+                            print_error('app_store_set', deps["response"])
+
+                    docker_py.remove(name=i.name)
                 except Exception as ex:
                     print_error('app_store_set',
                                 'Image may already have been removed', ex)
 
+                # Prune old data
                 try:
-                    docker_py.prune(image=i.image)
+                    if i.dependencies:
+                        json_dep = json.loads(i.dependencies)
+                        for dependency in json_dep:
+                            deps = docker_py.prune(image=json_dep[dependency]
+                                                   ["image"], network=i.name)
+
+                            print_error('app_store_set', deps["response"])
+
+                    docker_py.prune(image=i.image, network=i.name)
                 except Exception as ex:
                     print_error('app_store_set',
                                 'Image may already have been pruned', ex)
@@ -83,12 +98,17 @@ class app_store_set(Resource):
                 lb_database = App_Store(name=i,
                                         long_name=app_list[i]
                                         ['long_name'],
+                                        env_vars=json.dumps(app_list[i]
+                                                            ['env_vars']),
                                         image=app_list[i]
                                         ['image'],
                                         ports=json.dumps(app_list
                                                          [i]['ports']),
                                         volumes=json.dumps(app_list[i]
                                                            ['volumes']),
+                                        dependencies=json.dumps(
+                                                        app_list[i]
+                                                        ['dependencies']),
                                         version=app_list[i]
                                         ['version'],
                                         author_site=app_list[i]
@@ -117,8 +137,8 @@ class app_store_set(Resource):
 
                         if r.status_code == 200:
                             try:
-                                os.mkdir('./lb_share/assets/' +
-                                         lb_database.name)
+                                os.makedirs('./lb_share/assets/' +
+                                            lb_database.name)
                             except Exception as ex:
                                 print_error('app_store_set',
                                             'failed making required directory',
@@ -136,11 +156,16 @@ class app_store_set(Resource):
             else:
                 lb_database.name = i
                 lb_database.long_name = app_list[i]['long_name']
+                lb_database.env_vars = json.dumps(app_list[i]
+                                                  ['env_vars'])
                 lb_database.image = app_list[i]['image']
                 lb_database.ports = json.dumps(app_list
                                                [i]['ports'])
                 lb_database.volumes = json.dumps(app_list[i]
                                                  ['volumes'])
+                lb_database.dependencies = json.dumps(
+                                                app_list[i]
+                                                ['dependencies'])
                 lb_database.version = app_list[i]['version']
                 lb_database.author_site = \
                     app_list[i]['author_site']
@@ -161,9 +186,11 @@ class app_store_status(Resource):
             entry = {
                         'name': i.name,
                         'long_name': i.long_name,
+                        'env_vars': json.loads(i.env_vars),
                         'image': i.image,
                         "ports": json.loads(i.ports),
                         "volumes": json.loads(i.volumes),
+                        'dependencies': json.loads(i.dependencies),
                         "version": i.version,
                         "author_site": i.author_site,
                         "logo": i.logo,

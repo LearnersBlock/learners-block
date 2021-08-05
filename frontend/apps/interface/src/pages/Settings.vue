@@ -1075,10 +1075,12 @@ export default defineComponent({
           visible.value = true
           // Install app
           Axios.post(`${api.value}/v1/docker/run`, {
+            env_vars: row.env_vars,
             image: row.image,
             name: row.name,
             ports: row.ports,
-            volumes: row.volumes
+            volumes: row.volumes,
+            dependencies: row.dependencies
           }).then(function (response) {
             if (response.status === 200) {
               $q.notify({ type: 'positive', message: t('success') })
@@ -1106,8 +1108,8 @@ export default defineComponent({
           visible.value = true
           // Uninstall app
           Axios.post(`${api.value}/v1/docker/remove`, {
-            image: row.image,
-            name: row.name
+            name: row.name,
+            dependencies: row.dependencies
           }).then(function (response) {
             if (response.status === 200) {
               $q.notify({ type: 'positive', message: t('success') })
@@ -1139,10 +1141,12 @@ export default defineComponent({
           visible.value = true
           // Update app
           Axios.post(`${api.value}/v1/docker/pull`, {
+            env_vars: row.env_vars,
             image: row.image,
             name: row.name,
             ports: row.ports,
-            volumes: row.volumes
+            volumes: row.volumes,
+            dependencies: row.dependencies
           }).then(function (response) {
             if (response.status === 200) {
               $q.notify({ type: 'positive', message: t('success') })

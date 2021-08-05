@@ -93,6 +93,10 @@ class App_Store(db.Model):
                           unique=False,
                           nullable=False)
 
+    env_vars = db.Column(db.String,
+                         unique=False,
+                         nullable=True)
+
     image = db.Column(db.String,
                       unique=False,
                       nullable=False)
@@ -104,6 +108,10 @@ class App_Store(db.Model):
     volumes = db.Column(db.String,
                         unique=False,
                         nullable=True)
+
+    dependencies = db.Column(db.String,
+                             unique=False,
+                             nullable=True)
 
     version = db.Column(db.Text,
                         unique=False,

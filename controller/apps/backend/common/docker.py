@@ -14,33 +14,41 @@ else:
 
 
 class docker_py():
-    def pull(image, name, ports, volumes, detach=True):
+    def pull(env_vars, image, name, ports, volumes, network, detach=True):
         try:
             container = client.containers.get(name)
             client.images.pull(image)
             container.stop()
             container.remove()
-            response = docker.run(image=image,
-                                  detach=True,
-                                  name=name,
-                                  ports=ports,
-                                  volumes=volumes)
+            response = docker_py.run(env_vars=env_vars,
+                                     image=image,
+                                     detach=True,
+                                     name=name,
+                                     ports=ports,
+                                     volumes=volumes,
+                                     network=network)
         except Exception as ex:
             print_error('docker.pull', 'Failed to pull container', ex)
             return {"response": str(ex), "status_code": 500}
 
         return {"response": str(response), "status_code": 200}
 
-    def prune(image):
+    def prune(image, network):
         try:
             client.images.remove(image=image)
         except docker.errors.ImageNotFound:
             # If container was never installed then continue
             pass
 
+        try:
+            app_network = client.networks.get(network)
+            app_network.remove()
+        except Exception as ex:
+            print_error('docker.prune', 'Failed to remove docker network', ex)
+
         return {"response": "done", "status_code": 200}
 
-    def remove(name, image):
+    def remove(name):
         try:
             container = client.containers.get(name)
             container.stop()
@@ -51,13 +59,24 @@ class docker_py():
 
         return {"response": "done", "status_code": 200}
 
-    def run(image, name, ports, volumes, detach=True):
+    def run(env_vars, image, name, ports, volumes, network, detach=True):
+        # If network doesn't yet exist, create it
+        try:
+            client.networks.create(network,
+                                   driver="bridge",
+                                   check_duplicate=True)
+        except docker.errors.APIError:
+            # Network already exists
+            pass
+
         try:
             response = client.containers.run(image,
+                                             environment=env_vars,
                                              detach=True,
                                              ports=ports,
                                              name=name,
                                              volumes=volumes,
+                                             network=network,
                                              restart_policy={"Name": "always"})
         except Exception as ex:
             print_error('docker.run', 'Failed to run container', ex)
