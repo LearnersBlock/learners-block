@@ -103,5 +103,9 @@
     "app_store_app": "Appli de magasin d’applications",
     "invalid_wifi_entry": "Les mots de passe Wi-Fi doivent comporter 8 caractères ou plus et ne pas contenir d’espaces.",
     "invalid_entry": "Entrée invalide.",
-    "update_available": "Mise à jour disponible"
+    "update_available": "Mise à jour disponible",
+    "prune": "Élaguer",
+    "prune_system_files": "Élaguer les fichiers système",
+    "prune_system_files_description": "Supprimez les fichiers système inutilisés pour libérer de l’espace sur votre appareil.",
+    "author_colon": "Auteur·e :"
 }
