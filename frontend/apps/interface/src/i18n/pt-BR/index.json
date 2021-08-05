@@ -103,5 +103,9 @@
     "full_screen": "Tela Cheia",
     "click_swipe_instruction": "Clique e arraste para virar a página.",
     "swipe_up_exit": "Deslize para cima para sair.",
-    "swipe_instruction": "Deslize para esquerda ou direita para virar a página."
+    "swipe_instruction": "Deslize para esquerda ou direita para virar a página.",
+    "prune": "Remover",
+    "prune_system_files": "Remover Arquivos do Sistema",
+    "prune_system_files_description": "Remover arquivos de sistema não utilizados para liberar espaço em seu dispositivo.",
+    "author_colon": "Autor:"
 }
