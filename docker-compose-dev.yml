@@ -17,15 +17,6 @@ services:
     depends_on:
       - "frontend"
 
-  filemanager-builder:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev.filemanager
-    labels:
-      portainer: hidden
-    volumes:
-      - './frontend/apps/file-manager/dist:/export/filemanager'
-
   frontend:
     build:
       context: ./frontend
@@ -37,7 +28,7 @@ services:
     volumes:
       - './frontend/apps/interface:/app/public/interface_dev:cached'
       - './frontend/apps/library:/app/public/library:cached'
-      - './frontend/apps/file-manager/dist:/app/public/files'
+      - './frontend/apps/file-manager/dist:/app/public/files:cached'
       - './controller/apps/backend/storage/library:/app/public/storage/library'            
       - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
       - 'lb_share:/app/public/interface_dev/public/lb_share'

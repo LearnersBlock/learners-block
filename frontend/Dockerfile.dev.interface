@@ -1,3 +1,22 @@
+# Build File Manager
+FROM composer:2.0.11 AS filemanager-buildstep
+
+# Provide TERM for TPUT
+ENV TERM=xterm
+
+# Install required build dependencies
+RUN apk add ncurses
+
+# Set workdir to the build folder
+WORKDIR /build-context
+
+# Copy content to prepare
+COPY apps/file-manager/ .
+
+# Run the build process
+RUN composer run build
+
+
 FROM node:14.17.0-alpine3.13
 
 # Install SupervisorD
@@ -79,6 +98,9 @@ COPY --chown=nginx /config/nginx/assets/web.png public/storage/website/web.png
 
 # --------------- ## End mirror of production file ## -------------- #
 
+# Copy built content ready for adding to folders
+COPY --from=filemanager-buildstep /build-context/dist /filemanager/build/dist
+
 # Create dev-env lb_share
 RUN mkdir -p public/interface_dev/public/lb_share/assets
 
@@ -102,6 +124,8 @@ COPY config/supervisor/supervisord_dev.conf /etc/supervisor/conf.d/supervisord.c
 COPY /config/nginx/nginx.dev.conf /etc/nginx/nginx.conf
 
 # Start services
-CMD yarn install --cwd /app/public/interface_dev/ && \
+CMD rm -rf /app/public/files/* && \
+  cp -Rf /filemanager/build/dist/* /app/public/files/ && \
+  yarn install --cwd /app/public/interface_dev/ && \
   yarn install --cwd /app/public/library/ && \ 
-  supervisord -c /etc/supervisor/conf.d/supervisord.conf
+  exec supervisord -c /etc/supervisor/conf.d/supervisord.conf
