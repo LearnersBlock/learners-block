@@ -14,8 +14,6 @@ services:
       - './controller/apps/backend:/app'
       - '/var/run/docker.sock:/var/run/docker.sock'
       - 'lb_share:/app/lb_share'
-    depends_on:
-      - "frontend"
 
   frontend:
     build:
