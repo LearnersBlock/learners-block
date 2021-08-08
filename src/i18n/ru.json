@@ -44,5 +44,14 @@
     "Burmese": "Бирманский",
     "Bengali": "Бенгальский",
     "Arabic": "Арабский",
-    "Afrikaans": "Африкаанс"
+    "Afrikaans": "Африкаанс",
+    "explore": "Обзор",
+    "powered_by": "При поддержке",
+    "submit_resource": "Отправить ресурс",
+    "level": "Уровень:",
+    "url": "Загрузочный URL",
+    "under_maintenance": "Техническое обслуживание",
+    "uid": "UID",
+    "transferred": "Переведено",
+    "total_entries": "Всего записей в базе данных:"
 }

@@ -212,6 +212,18 @@
             </q-item>
           </template>
         </q-select>
+        <div class="w-90 q-ml-lg q-mt-sm text-grey-9">
+          <q-checkbox
+            left-label
+            size="xs"
+            v-model="directDownload"
+            :label="$t('direct_download')"
+          >
+            <q-tooltip class="text-body2 text-center">
+              {{ $t('display_only_direct_download') }}
+            </q-tooltip>
+          </q-checkbox>
+        </div>
         <q-btn
           rounded
           color="primary"
@@ -263,7 +275,7 @@ import { GET_TAGS } from '../gql/tag/queries'
 import { GET_LEVELS } from '../gql/level/queries'
 import { GET_RESOURCES_LENGTH } from '../gql/resource/queries'
 import { Loading, Quasar, useQuasar } from 'quasar'
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, provide, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -276,6 +288,10 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
     const $router = useRouter()
     const $store = useStore()
+
+    const directDownload = ref(false)
+    provide('direct-download', directDownload)
+
     // Drawer toggle
     const leftDrawerOpen = ref(false)
     // Keyword input
@@ -427,6 +443,7 @@ export default defineComponent({
 
     return {
       changeLanguage,
+      directDownload,
       fetchedLanguages,
       fetchFormatsLoading,
       fetchLanguagesLoading,
