@@ -83,7 +83,7 @@
         >
           <q-badge
             class="q-mt-sm q-pa-sm q-mr-sm q-mb-sm multi-line text-body2 text-weight-medium resource_language"
-            color="primary"
+            color="secondary"
             v-for="language in fetchedResource.resource.languages"
             :key="language.id"
           >
@@ -104,7 +104,7 @@
         >
           <q-badge
             class="q-mt-sm q-pa-sm q-mr-sm q-mb-sm multi-line text-body2 text-weight-medium resource_language"
-            color="primary"
+            color="secondary"
             v-for="format in fetchedResource.resource.formats"
             :key="format.id"
           >
@@ -155,7 +155,7 @@
         >
           <q-badge
             class="q-mt-sm q-pa-sm q-mr-sm q-mb-sm multi-line text-body2 text-weight-medium resource_language"
-            color="primary"
+            color="secondary"
             v-for="tag in fetchedResource.resource.tags"
             :key="tag.id"
           >
@@ -176,7 +176,7 @@
         >
           <q-badge
             class="q-mt-sm q-pa-sm q-mr-sm q-mb-sm multi-line text-body2 text-weight-medium resource_language"
-            color="primary"
+            color="secondary"
             v-for="level in fetchedResource.resource.levels"
             :key="level.id"
           >
@@ -197,7 +197,7 @@
         >
           <q-badge
             class="q-mt-sm q-pa-sm q-mr-sm q-mb-sm multi-line text-body2 text-weight-medium resource_language"
-            color="primary"
+            color="secondary"
             v-for="license in fetchedResource.resource.licenses"
             :key="license.id"
           >
@@ -219,38 +219,27 @@
       <!-- Code for running on Learner's Block -->
       <div v-if="onDevice">
         <q-btn
-          v-if="fetchedResource.resource.no_direct_download"
+          v-if="fetchedResource.resource.author_website && !fetchedResource.resource.download_url"
           class="q-mt-lg q-mb-lg"
           glossy
           rounded
           unelevated
-          :disable="!fetchedResource.resource.download_url"
           color="primary"
           icon="pageview"
           :label="$t('explore')"
-          @click="downloadZip"
+          @click="downloadZip(fetchedResource.resource.author_website)"
         />
         <q-btn
-          v-else
+          v-else-if="fetchedResource.resource.download_url"
           class="q-mt-lg q-mb-lg"
           glossy
           rounded
           unelevated
-          :disable="!fetchedResource.resource.download_url"
           color="primary"
           icon="download"
           :label="exitLoop ? $t('download'): $t('cancel')"
-          @click="downloadFiles"
+          @click="downloadFiles(fetchedResource.resource.download_url)"
         />
-        <q-tooltip
-          class="text-caption"
-          v-if="!fetchedResource.resource.download_url"
-          anchor="top middle"
-          self="center middle"
-          :offset="[10, 10]"
-        >
-          {{ $t('resource_not_available') }}
-        </q-tooltip>
         <q-btn
           class="q-mt-lg q-ml-sm q-mb-lg"
           v-if="fetchedResource.resource.sample"
@@ -291,14 +280,14 @@
         class="q-mt-lg "
       >
         <q-btn
-          v-if="fetchedResource.resource.download_url"
+          v-if="fetchedResource.resource.download_url || fetchedResource.resource.author_website"
           glossy
           unelevated
-          @click="downloadZip"
+          @click="downloadZip(fetchedResource.resource.download_url ? fetchedResource.resource.download_url: fetchedResource.resource.author_website)"
           color="primary"
-          :icon="fetchedResource.resource.no_direct_download ? 'pageview': 'download'"
+          :icon="fetchedResource.resource.download_url ? 'download': 'pageview'"
           rounded
-          :label="fetchedResource.resource.no_direct_download ? $t('explore'): $t('download')"
+          :label="fetchedResource.resource.download_url ? $t('download'): $t('explore')"
           :disable-main-btn="!fetchedResource.resource.download_url"
         />
         <q-btn
@@ -402,8 +391,8 @@ export default defineComponent({
       }
     }
 
-    const downloadZip = () => {
-      window.open(fetchedResource.value.resource.download_url)
+    const downloadZip = (link) => {
+      window.open(link)
     }
 
     async function stopDownload () {

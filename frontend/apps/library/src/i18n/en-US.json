@@ -53,5 +53,7 @@
     "level": "Level:",
     "submit_resource": "Submit a Resource",
     "powered_by": "Powered by",
-    "explore": "Explore"
+    "explore": "Explore",
+    "display_only_direct_download": "Display only items available for direct download.",
+    "direct_download": "Direct Download"
 }

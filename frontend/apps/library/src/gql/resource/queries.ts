@@ -12,6 +12,7 @@ export const GET_RESOURCES = gql`
         }, sort: "published_at:desc",limit:$limit) {
           id
           name
+          download_url
           description
           languages {
             id
@@ -35,7 +36,6 @@ export const GET_RESOURCE = gql`
           author
           author_website
           host
-          no_direct_download
           sample
           formats {
             id

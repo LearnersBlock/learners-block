@@ -34,7 +34,7 @@
             class="resource q-mb-md items-center text-black"
             tag="div"
             :to="'/resource/' + resource.id"
-            v-for="resource in fetchedResources.resources"
+            v-for="resource in filteredResources"
             :key="resource.id"
           >
             <div v-if="resource.logo && resource.logo.formats && resource.logo.formats.thumbnail && resource.logo.formats.thumbnail.url">
@@ -68,7 +68,7 @@
                 <div>
                   <q-badge
                     class="q-pa-sm q-mr-sm q-mt-md multi-line text-body2 text-weight-large"
-                    color="primary"
+                    color="secondary"
                     v-for="language in resource.languages"
                     :key="language.id"
                   >
@@ -76,11 +76,21 @@
                   </q-badge>
                 </div>
               </div>
-              <div
-                v-if="resource.size"
-                class="text-subtitle1 resource_size"
-              >
-                {{ $t('size') }} {{ resource.size }} GB
+              <div class="column resource_size text-center q-mb-xs">
+                <div
+                  v-if="resource.size"
+                  class="col"
+                >
+                  {{ $t('size') }} {{ resource.size }} GB
+                </div>
+                <div
+                  v-if="resource.download_url"
+                  style="line-height: 0px;"
+                >
+                  <q-badge color="secondary">
+                    {{ $t('direct_download') }}
+                  </q-badge>
+                </div>
               </div>
             </div>
           </router-link>
@@ -120,7 +130,7 @@
 /* eslint-disable vue/require-default-prop */
 import { useQuery } from '@vue/apollo-composable'
 import { GET_RESOURCES } from '../gql/resource/queries'
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, inject, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default defineComponent({
@@ -148,6 +158,9 @@ export default defineComponent({
     const { onError } = useQuery(GET_RESOURCES, { limit: 1 })
     const $store = useStore()
 
+    // Direct download boolean from MainLayout
+    const directDownload = ref<any>(inject('direct-download'))
+
     // Constants for resource fetching
     const endOfResults = ref<boolean>(false)
     const numberOfResults = ref<number>(40)
@@ -162,7 +175,7 @@ export default defineComponent({
       result: fetchedResources,
       loading: fetchResourcesLoading,
       refetch: fetchResources
-    } = useQuery(GET_RESOURCES, { limit: numberOfResults.value })
+    } = useQuery(GET_RESOURCES, { limit: numberOfResults.value }) as any
 
     // On mount, enable loading and fetch resources
     onMounted(async () => {
@@ -195,6 +208,14 @@ export default defineComponent({
       endOfResults.value = false
     }
 
+    const filteredResources = computed(() => {
+      if (directDownload.value) {
+        return fetchedResources.value.resources.filter(resource => resource.download_url)
+      } else {
+        return fetchedResources.value.resources
+      }
+    })
+
     // Load more resources when reaching bottom of results
     async function loadMore (_index, done) {
       if (endOfResults.value) {
@@ -217,10 +238,12 @@ export default defineComponent({
 
     return {
       apiIsUp,
+      directDownload,
       endOfResults,
       fetchedResources,
       fetchFilteredResources,
       fetchResourcesLoading,
+      filteredResources,
       loadMore,
       onDevice,
       redirect
