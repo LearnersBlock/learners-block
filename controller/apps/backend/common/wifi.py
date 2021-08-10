@@ -18,10 +18,8 @@ def handle_exit(*args):
     global wifi_process
     try:
         if 'wifi_process' in globals():
-            print("Terminating wifi-connect.")
             wifi_process.terminate()
             wifi_process.communicate(timeout=8)
-            print("Terminated wifi-connect, exiting.")
             sys.exit(0)
     except Exception as ex:
         print_message('handle_exit', 'Failed to terminate wifi-connect. '
@@ -44,7 +42,8 @@ class wifi:
     def forget(self):
         status = 1
 
-        # Wait so user gets return code before disconnecting
+        # Wait so user gets return code before being disconnected
+        # from the device
         time.sleep(5)
 
         wifi_connect().stop()
@@ -70,20 +69,20 @@ class wifi:
 
         # Check that a connection was deleted
         if status == 1:
-            print('Failed to delete connection, '
-                  'trying to clear all saved connections.')
+            print_message('wifi_connect.forget',
+                          'Failed to delete connection, '
+                          'trying to clear all saved connections.')
             wifi().forget_all()
-            return {'status': 500, 'message': 'wifi_forget failed, '
-                    'attempted wifi_forget_all instead'}, 500
+            return
 
         # Wait before trying to launch wifi-connect
         wifi_connect().start(wait=2)
 
-        print('Connection deleted and WiFi-Connect Started.')
-        return {'status': 200, 'message': 'ok'}, 200
+        return {'status': 200, 'message': 'ok'}
 
     def forget_all(self):
-        # Wait so user gets return code before disconnecting
+        # Wait so user gets return code before being disconnected
+        # from the device
         time.sleep(5)
 
         wifi_connect().stop()
@@ -104,8 +103,7 @@ class wifi:
         # Wait before trying to launch wifi-connect
         wifi_connect().start(wait=2)
 
-        print('Success, all wi-fi connections deleted, wifi-connect started.')
-        return {'status': 200, 'message': 'ok'}, 200
+        return {'status': 200, 'message': 'ok'}
 
 
 class wifi_connect:
@@ -141,7 +139,6 @@ class wifi_connect:
 
         try:
             # Refresh networks list before launch
-            print("Refreshing network points")
             subprocess.run(
                 ["iw", "wlan0", "scan"],
                 capture_output=True,
@@ -173,11 +170,12 @@ class wifi_connect:
         time.sleep(4)
 
         if wifi_process.poll() is not None:
-            print('Wifi-Connect launch failure ' + wifi_process.returncode)
+            print_message('wifi_connect', 'Wifi-Connect launch failure',
+                          wifi_process.returncode)
             abort(408, status=wifi_process.returncode,
                   message='Wifi-Connect launch failure')
 
-        return {'status': 200, 'message': 'success'}, 200
+        return {'status': 200, 'message': 'success'}
 
     def stop(self):
         global wifi_process
@@ -189,7 +187,7 @@ class wifi_connect:
             return
 
         if wifi_poll is not None:
-            print("Wifi-Connect already stopped")
+            print_message('wifi_connect.stop', 'ifi-Connect already stopped')
             return
 
         try:

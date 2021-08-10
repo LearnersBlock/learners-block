@@ -1,18 +1,21 @@
-from flask_restful import abort
 from common.processes import curl
+from flask_restful import abort
 import os
 import time
 
 
 class container:
     def status(self, container_name):
+        # Get running containers
         response = curl(method="get",
                         path="/v2/state/status?apikey=")
 
+        # Find the container required and return status
         for entry in response["json_response"]["containers"]:
             if entry['serviceName'] == container_name:
                 return response, entry
 
+        # If container isn't found, abort with error
         abort(404, status=404,
               message='Container not found')
 

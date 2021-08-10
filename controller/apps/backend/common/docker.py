@@ -20,6 +20,8 @@ class docker_py():
             client.images.pull(image)
             container.stop()
             container.remove()
+
+            # Run the pulled containers
             response = docker_py.run(env_vars=env_vars,
                                      image=image,
                                      detach=True,
@@ -41,12 +43,12 @@ class docker_py():
             pass
 
         try:
+            # Check that no dangling networks are left
             app_network = client.networks.get(network)
             app_network.remove()
-        except Exception as ex:
-            print_message('docker.prune',
-                          'Failed to remove docker network',
-                          ex)
+        except Exception:
+            # Pass if network had already been removed
+            pass
 
         return {"response": "done", "status_code": 200}
 

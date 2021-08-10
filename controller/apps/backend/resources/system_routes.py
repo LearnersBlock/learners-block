@@ -25,7 +25,7 @@ version = dotenv_values(".version")
 parent_log_request = serving.WSGIRequestHandler.log_request
 
 
-# Function for disabling enpoint logging
+# Function for disabling logging on '/'
 def log_request(self, *args, **kwargs):
     if self.path == '/':
         return
@@ -38,6 +38,7 @@ class docker_pull(Resource):
     def post(self):
         content = request.get_json()
 
+        # If there are container dependencies, pull those too
         if content["dependencies"]:
             for dependency in content["dependencies"]:
                 deps = docker_py.pull(env_vars=content["dependencies"]
@@ -54,6 +55,7 @@ class docker_pull(Resource):
 
                 print_message('docker_pull', deps["response"])
 
+        # Pull latest containers and run them
         response = docker_py.pull(env_vars=content["env_vars"],
                                   image=content["image"],
                                   name=content["name"],
@@ -62,6 +64,7 @@ class docker_pull(Resource):
                                   network=content["name"],
                                   detach=True)
 
+        # Update the database with new container state
         update_container_db_status(content["name"], 'installed')
 
         return {"response": response["response"]}, response["status_code"]
@@ -72,15 +75,17 @@ class docker_remove(Resource):
     def post(self):
         content = request.get_json()
 
-        # If there are dependencies remove them
+        # If there are container dependencies then remove them
         if content["dependencies"]:
             for dependency in content["dependencies"]:
                 deps = docker_py.remove(name=dependency)
 
                 print_message('docker_remove', deps["response"])
 
+        # Remove main container
         response = docker_py.remove(name=content["name"])
 
+        # Update the database with new container state
         update_container_db_status(content["name"], 'install')
 
         return {"response": response["response"]}, response["status_code"]
@@ -91,7 +96,7 @@ class docker_run(Resource):
     def post(self):
         content = request.get_json()
 
-        # If there are dependencies start them
+        # If there are container dependencies start them
         if content["dependencies"]:
             for dependency in content["dependencies"]:
                 deps = docker_py.run(env_vars=content["dependencies"]
@@ -108,6 +113,7 @@ class docker_run(Resource):
 
                 print_message('docker_run', deps["response"])
 
+        # Run the primary container
         response = docker_py.run(env_vars=content["env_vars"],
                                  image=content["image"],
                                  name=content["name"],
@@ -116,6 +122,7 @@ class docker_run(Resource):
                                  network=content["name"],
                                  detach=True)
 
+        # Update the database with new container state
         update_container_db_status(content["name"], 'installed')
 
         return {"response": response["response"]}, response["status_code"]
@@ -124,10 +131,12 @@ class docker_run(Resource):
 class download_fetch(Resource):
     @jwt_required()
     def post(self):
+        # Set vars
         global download_log
         download_log = ''
         content = request.get_json()
 
+        # Fetch the requested file
         download_progress = threading.Thread(
                                 target=download_fetch.download_file,
                                 args=(self, content["download_url"]),
@@ -135,18 +144,25 @@ class download_fetch(Resource):
 
         download_progress.start()
 
+        # Stream the download progress via the api
         def generate():
+            # Set vars
             global download_log
             global download_terminated
             download_terminated = 0
+            # While the download is running loop
             while download_log is not True:
+                # If download is complete or terminate command is sent
+                # via download_stop
                 if download_terminated == 1:
                     break
+                # If download_terminated is not 1 or 0 then report error
                 if download_terminated != 0:
                     # An error occured
                     yield str(json.dumps({"error":
                                           download_terminated})) + "\n\n"
                     break
+                # Stream last line
                 yield str(download_log) + "\n\n"
                 time.sleep(2)
 
@@ -171,20 +187,29 @@ class download_fetch(Resource):
         # Restore original UID
         os.seteuid(euid)
 
+        # Get length of file for progress reporting
         try:
             total = int(resp.headers.get('content-length', 0))
         except Exception as ex:
+            # If cannot get file length, set to 0 to avoid errors
             print_message('donwload_files',
                           'failed getting content-length', ex)
             total = 0
 
+        # Set the download path
         with open(os.path.realpath('.') + '/storage/library/' +
                   url.split('/')[-1], 'wb') as file:
 
+            # Set vars
             global download_terminated
             downloaded_bytes = 0
+
+            # Get free disk space
             _, _, free = shutil.disk_usage("/tmp")
+
+            # For each chunk write to file to avoid memory overload
             for data in resp.iter_content(chunk_size=1024):
+                # If a stop request has been sent
                 if download_terminated == 1:
                     break
                 size = file.write(data)
@@ -194,6 +219,8 @@ class download_fetch(Resource):
                 if downloaded_bytes + 100000000 > free:
                     download_stop.get(self, response='Out of disk space')
                     return
+
+                # Format and create response for streaming via download_fetch
                 global download_log
                 download_log = json.dumps({
                     "progress": format(downloaded_bytes/total*100/100,
@@ -202,6 +229,7 @@ class download_fetch(Resource):
                                      ".4f"),
                 })
 
+        # Reset global var for next use
         download_log = True
 
         return {'message': 'process complete'}, 200
@@ -209,7 +237,7 @@ class download_fetch(Resource):
 
 class download_stop(Resource):
     def get(self, response=1):
-        # Terminate download upon user request
+        # Terminate by setting global var for reading in other functions
         global download_terminated
         download_terminated = response
 

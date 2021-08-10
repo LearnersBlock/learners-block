@@ -3,6 +3,7 @@ from common.processes import curl
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
+from resources.errors import print_message
 import os
 
 # Global variables
@@ -54,7 +55,8 @@ class container_stop(Resource):
             try:
                 os.remove(portainer_pidfile)
             except FileNotFoundError:
-                print("Portainer PID file did not exist. Continuing...")
+                print_message('container_stop',
+                              'Portainer PID file did not exist. Continuing.')
 
         response = container().stop(container_name=content["container_name"])
 

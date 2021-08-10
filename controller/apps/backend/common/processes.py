@@ -53,7 +53,7 @@ def check_supervisor(supervisor_retries, timeout):
             time.sleep(2)
             retry = retry + 1
 
-    return {'status': 200, 'message': 'Supervisor up'}, 200
+    return {'status': 200, 'message': 'Supervisor up'}
 
 
 def curl(supervisor_retries=8, timeout=5, **cmd):
@@ -112,8 +112,9 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
 def database_recover():
     # Adding delay to allow user intervetion to abort
-    print("Database error detected. Waiting 60 seconds before deleting "
-          "database and restarting.")
+    print_message('database_recover', 'Database error detected. '
+                  'Waiting 60 seconds before deleting '
+                  'database and restarting.')
     time.sleep(60)
 
     # Remove the .db file. It will be rebuilt fresh on next boot.
