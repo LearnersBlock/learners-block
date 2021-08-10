@@ -8,7 +8,7 @@ from flask_restful import Api as _Api
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended.exceptions import JWTExtendedException
 from jwt.exceptions import PyJWTError
-from resources.errors import errors, print_error
+from resources.errors import errors, print_message
 from resources.system_routes import docker_pull
 from resources.system_routes import docker_remove
 from resources.system_routes import docker_run
@@ -92,9 +92,9 @@ def first_launch():
                         supervisor_retries=20)
         open(pidfile, 'w').write(pid)
 
-        print_error('first_launch',
-                    'Set hostname on first boot. Restarting',
-                    str(response))
+        print_message('first_launch',
+                      'Set hostname on first boot. Restarting',
+                      str(response))
 
         response = curl(method="post-json",
                         path="/v1/reboot?apikey=",
@@ -144,7 +144,7 @@ if __name__ == '__main__':
         try:
             startup()
         except Exception as ex:
-            print_error('__name__', 'Fail on startup()', ex)
+            print_message('__name__', 'Fail on startup()', ex)
     else:
         from resources.dev_routes import container_start, container_status, \
              container_stop, device, host_config, hostname, journal_logs, \

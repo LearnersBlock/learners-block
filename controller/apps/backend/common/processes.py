@@ -1,5 +1,5 @@
 from flask_restful import abort
-from resources.errors import print_error
+from resources.errors import print_message
 import os
 import requests
 import shutil
@@ -20,7 +20,7 @@ def check_internet(host="8.8.8.8", port=53, timeout=3):
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
         return True
     except socket.error as ex:
-        print_error('check_internet', 'internet check failure', ex)
+        print_message('check_internet', 'internet check failure', ex)
         return False
 
 
@@ -96,7 +96,7 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
                 timeout=timeout
             )
     except Exception as ex:
-        print_error('curl', 'Curl request timed out', ex)
+        print_message('curl', 'Curl request timed out', ex)
         abort(408, status=408,
               message=str(ex))
 
@@ -122,8 +122,8 @@ def database_recover():
     try:
         os.remove(os.path.realpath('.') + "/db/sqlite.db")
     except Exception as ex:
-        print_error('database_recover', 'Failed to delete the database. '
-                    'File may be missing.', ex)
+        print_message('database_recover', 'Failed to delete the database. '
+                      'File may be missing.', ex)
 
 
 def demote(user_uid, user_gid):

@@ -9,7 +9,7 @@ from flask import request
 from flask import Response
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
-from resources.errors import print_error
+from resources.errors import print_message
 from werkzeug import serving
 import json
 import shutil
@@ -52,7 +52,7 @@ class docker_pull(Resource):
                                       network=content["name"],
                                       detach=True)
 
-                print_error('docker_pull', deps["response"])
+                print_message('docker_pull', deps["response"])
 
         response = docker_py.pull(env_vars=content["env_vars"],
                                   image=content["image"],
@@ -77,7 +77,7 @@ class docker_remove(Resource):
             for dependency in content["dependencies"]:
                 deps = docker_py.remove(name=dependency)
 
-                print_error('docker_remove', deps["response"])
+                print_message('docker_remove', deps["response"])
 
         response = docker_py.remove(name=content["name"])
 
@@ -106,7 +106,7 @@ class docker_run(Resource):
                                      network=content["name"],
                                      detach=True)
 
-                print_error('docker_run', deps["response"])
+                print_message('docker_run', deps["response"])
 
         response = docker_py.run(env_vars=content["env_vars"],
                                  image=content["image"],
@@ -162,7 +162,7 @@ class download_fetch(Resource):
                 os.seteuid(65534)
             resp = requests.get(url, stream=True, timeout=5)
         except Exception as ex:
-            print_error('download_file', 'Failed setting euid', ex)
+            print_message('download_file', 'Failed setting euid', ex)
             # Restore original UID
             os.seteuid(euid)
             download_stop.get(self, response='UID failure')
@@ -174,8 +174,8 @@ class download_fetch(Resource):
         try:
             total = int(resp.headers.get('content-length', 0))
         except Exception as ex:
-            print_error('donwload_files',
-                        'failed getting content-length', ex)
+            print_message('donwload_files',
+                          'failed getting content-length', ex)
             total = 0
 
         with open(os.path.realpath('.') + '/storage/library/' +
@@ -272,9 +272,9 @@ class system_prune(Resource):
                                                ["image"],
                                                network=app.name)
 
-                        print_error('app_store_set', deps["response"])
+                        print_message('app_store_set', deps["response"])
             except Exception as ex:
-                print_error('app_store_set', deps["response"], ex)
+                print_message('app_store_set', deps["response"], ex)
 
             docker_py.prune(image=app.image, network=app.name)
 

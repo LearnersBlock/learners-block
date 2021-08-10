@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from resources.errors import print_error
+from resources.errors import print_message
 import docker
 import os
 
@@ -28,7 +28,7 @@ class docker_py():
                                      volumes=volumes,
                                      network=network)
         except Exception as ex:
-            print_error('docker.pull', 'Failed to pull container', ex)
+            print_message('docker.pull', 'Failed to pull container', ex)
             return {"response": str(ex), "status_code": 500}
 
         return {"response": str(response), "status_code": 200}
@@ -44,7 +44,9 @@ class docker_py():
             app_network = client.networks.get(network)
             app_network.remove()
         except Exception as ex:
-            print_error('docker.prune', 'Failed to remove docker network', ex)
+            print_message('docker.prune',
+                          'Failed to remove docker network',
+                          ex)
 
         return {"response": "done", "status_code": 200}
 
@@ -54,7 +56,7 @@ class docker_py():
             container.stop()
             container.remove()
         except Exception as ex:
-            print_error('docker.remove', 'Failed to remove container', ex)
+            print_message('docker.remove', 'Failed to remove container', ex)
             return {"response": str(ex), "status_code": 500}
 
         return {"response": "done", "status_code": 200}
@@ -79,7 +81,7 @@ class docker_py():
                                              network=network,
                                              restart_policy={"Name": "always"})
         except Exception as ex:
-            print_error('docker.run', 'Failed to run container', ex)
+            print_message('docker.run', 'Failed to run container', ex)
             return {"response": str(ex), "status_code": 500}
 
         return {"response": str(response), "status_code": 200}

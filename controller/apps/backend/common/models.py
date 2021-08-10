@@ -2,7 +2,7 @@ from common.processes import database_recover
 from sqlalchemy.sql import expression
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from resources.errors import print_error
+from resources.errors import print_message
 import bcrypt
 
 db = SQLAlchemy()
@@ -21,7 +21,10 @@ def init_database():
             db.session.add(lb_database)
             db.session.commit()
     except Exception as ex:
-        print_error('init_database', 'Database error. Trying to recover.', ex)
+        print_message('init_database',
+                      'Database error. '
+                      'Trying to recover.',
+                      ex)
         database_recover()
 
 

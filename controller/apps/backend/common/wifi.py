@@ -1,7 +1,7 @@
 from common.models import User
 from dbus.mainloop.glib import DBusGMainLoop
 from flask_restful import abort
-from resources.errors import print_error
+from resources.errors import print_message
 from run import app
 import NetworkManager
 import os
@@ -24,8 +24,8 @@ def handle_exit(*args):
             print("Terminated wifi-connect, exiting.")
             sys.exit(0)
     except Exception as ex:
-        print_error('handle_exit', 'Failed to terminate wifi-connect. '
-                    'Executing kill.', ex)
+        print_message('handle_exit', 'Failed to terminate wifi-connect. '
+                      'Executing kill.', ex)
         wifi_process.kill()
         sys.exit(0)
 
@@ -127,16 +127,16 @@ class wifi_connect:
                                               capture_output=True,
                                               text=True).stdout.rstrip()
         except Exception as ex:
-            print_error('wifi_connect.start', 'Failed to set hostname. '
-                        'Setting a default instead.', ex)
+            print_message('wifi_connect.start', 'Failed to set hostname. '
+                          'Setting a default instead.', ex)
             current_hostname = os.environ['DEFAULT_HOSTNAME']
 
         # Check the current hostname variable is not empty, and set if it is
         try:
             current_hostname
         except Exception as ex:
-            print_error('wifi_connect.start', 'Error getting hostname. '
-                        'Setting a default instead.', ex)
+            print_message('wifi_connect.start', 'Error getting hostname. '
+                          'Setting a default instead.', ex)
             current_hostname = os.environ['DEFAULT_HOSTNAME']
 
         try:
@@ -147,8 +147,8 @@ class wifi_connect:
                 capture_output=True,
                 text=True).stdout.rstrip()
         except Exception as ex:
-            print_error('wifi_connect.start', 'Error refreshing '
-                        'network points.', ex)
+            print_message('wifi_connect.start', 'Error refreshing '
+                          'network points.', ex)
 
         # Check if default SSID
         if current_hostname == os.environ['DEFAULT_HOSTNAME']:
@@ -185,7 +185,7 @@ class wifi_connect:
         try:
             wifi_poll = wifi_process.poll()
         except Exception as ex:
-            print_error('wifi_connect.stop', 'Wifi-connect not started', ex)
+            print_message('wifi_connect.stop', 'Wifi-connect not started', ex)
             return
 
         if wifi_poll is not None:
@@ -209,7 +209,7 @@ class wifi_connect:
             else:
                 curl_wifi = False
         except Exception as ex:
-            print_error('wifi_connect.status', 'curl failure', ex)
+            print_message('wifi_connect.status', 'curl failure', ex)
             curl_wifi = False
 
         try:

@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required
 from flask_restful import abort
 from flask_restful import Resource
 from pkg_resources import packaging
-from resources.errors import print_error
+from resources.errors import print_message
 import json
 import os
 import requests
@@ -23,115 +23,117 @@ class app_store_set(Resource):
                                 timeout=8).json()
 
         except Exception as ex:
-            print_error('app_store_set', 'Failed loading app list', ex)
+            print_message('app_store_set', 'Failed loading app list', ex)
             abort(408, status=408, message='error', error=str(ex))
 
-        for i in App_Store.query.all():
+        for db_entry in App_Store.query.all():
             # Check all entries are present to avoid exception
             try:
-                if i.name not in app_list:
+                if db_entry.name not in app_list:
                     pass
             except Exception as ex:
-                print_error('app_store_set', 'Failed finding app', ex)
+                print_message('app_store_set', 'Failed finding app', ex)
                 continue
 
             # Process list
-            if i.name not in app_list:
+            if db_entry.name not in app_list:
                 print('An entry in the local database has been deleted '
                       'online. Removing local entry...')
 
-                App_Store.query.filter_by(name=i.name).delete()
+                App_Store.query.filter_by(name=db_entry.name).delete()
 
                 # Remove old containers
                 try:
-                    if i.dependencies:
-                        for dependency in json.loads(i.dependencies):
+                    if db_entry.dependencies:
+                        for dependency in json.loads(db_entry.dependencies):
                             deps = docker_py.remove(name=dependency)
 
-                            print_error('app_store_set', deps["response"])
+                            print_message('app_store_set', deps["response"])
 
-                    docker_py.remove(name=i.name)
+                    docker_py.remove(name=db_entry.name)
                 except Exception as ex:
-                    print_error('app_store_set',
-                                'Image may already have been removed', ex)
+                    print_message('app_store_set',
+                                  'Image may already have been removed', ex)
 
                 # Prune old data
                 try:
-                    if i.dependencies:
-                        json_dep = json.loads(i.dependencies)
+                    if db_entry.dependencies:
+                        json_dep = json.loads(db_entry.dependencies)
                         for dependency in json_dep:
                             deps = docker_py.prune(image=json_dep[dependency]
-                                                   ["image"], network=i.name)
+                                                   ["image"],
+                                                   network=db_entry.name)
 
-                            print_error('app_store_set', deps["response"])
+                            print_message('app_store_set', deps["response"])
 
-                    docker_py.prune(image=i.image, network=i.name)
+                    docker_py.prune(image=db_entry.image,
+                                    network=db_entry.name)
                 except Exception as ex:
-                    print_error('app_store_set',
-                                'Image may already have been pruned', ex)
+                    print_message('app_store_set',
+                                  'Image may already have been pruned', ex)
 
-                if i.logo and os.path.exists(os.path.realpath('.') +
-                                             i.logo):
+                if db_entry.logo and os.path.exists(os.path.realpath('.') +
+                                                    db_entry.logo):
                     try:
-                        os.remove(os.path.realpath('.') + i.logo)
+                        os.remove(os.path.realpath('.') + db_entry.logo)
                     except FileNotFoundError as ex:
-                        print_error('app_store_set',
-                                    'failed deleting image', ex)
+                        print_message('app_store_set',
+                                      'failed deleting image', ex)
 
                 continue
 
-            if i.status.lower() == "installed" and \
-                packaging.version.parse(i.version) < \
+            if db_entry.status.lower() == "installed" and \
+                packaging.version.parse(db_entry.version) < \
                 packaging.version.parse(app_list
-                                        [i.name]['version']):
-                print('Update available for ' + str(i.name))
+                                        [db_entry.name]['version']):
+                print('Update available for ' + str(db_entry.name))
 
                 lb_database = App_Store.query.filter_by(
-                            name=i.name).first()
+                            name=db_entry.name).first()
                 lb_database.status = 'update_available'
                 lb_database.save_to_db()
 
-        for i in app_list:
-            lb_database = App_Store.query.filter_by(name=i).first()
+        for app in app_list:
+            lb_database = App_Store.query.filter_by(name=app).first()
 
             if lb_database is None:
-                lb_database = App_Store(name=i,
-                                        long_name=app_list[i]
+                lb_database = App_Store(name=app,
+                                        long_name=app_list[app]
                                         ['long_name'],
-                                        env_vars=json.dumps(app_list[i]
+                                        env_vars=json.dumps(app_list[app]
                                                             ['env_vars']),
-                                        image=app_list[i]
+                                        image=app_list[app]
                                         ['image'],
                                         ports=json.dumps(app_list
-                                                         [i]['ports']),
-                                        volumes=json.dumps(app_list[i]
+                                                         [app]['ports']),
+                                        volumes=json.dumps(app_list[app]
                                                            ['volumes']),
                                         dependencies=json.dumps(
-                                                        app_list[i]
+                                                        app_list[app]
                                                         ['dependencies']),
-                                        version=app_list[i]
+                                        version=app_list[app]
                                         ['version'],
-                                        author_site=app_list[i]
+                                        author_site=app_list[app]
                                         ['author_site'],
                                         logo='')
 
                 # Check all entries are present to avoid exception
                 try:
-                    if app_list[i]['logo']:
+                    if app_list[app]['logo']:
                         pass
                 except Exception as ex:
-                    print_error('app_store_set',
-                                'Failed getting logo path', ex)
+                    print_message('app_store_set',
+                                  'Failed getting logo path', ex)
                     continue
 
-                if app_list[i]['logo']:
+                if app_list[app]['logo']:
                     lb_database.logo = '/lb_share/assets/' + \
                                         lb_database.name + \
-                                        '/' + app_list[i]['logo'] \
+                                        '/' + app_list[app]['logo'] \
                                         .split('/')[-1]
 
                     try:
-                        r = requests.get(app_list[i]['logo'],
+                        r = requests.get(app_list[app]['logo'],
                                          stream=True,
                                          timeout=5)
 
@@ -140,35 +142,36 @@ class app_store_set(Resource):
                                 os.makedirs('./lb_share/assets/' +
                                             lb_database.name)
                             except Exception as ex:
-                                print_error('app_store_set',
-                                            'failed making required directory',
-                                            ex)
+                                print_message('app_store_set',
+                                              'failed making required '
+                                              'directory',
+                                              ex)
 
                             with open('.' + lb_database.logo, 'wb') as f:
                                 for chunk in r:
                                     f.write(chunk)
                         else:
-                            print_error('app_store_set',
-                                        'failed saving image')
+                            print_message('app_store_set',
+                                          'failed saving image')
                     except Exception as ex:
-                        print_error('app_store_set',
-                                    'failed saving image', ex)
+                        print_message('app_store_set',
+                                      'failed saving image', ex)
             else:
-                lb_database.name = i
-                lb_database.long_name = app_list[i]['long_name']
-                lb_database.env_vars = json.dumps(app_list[i]
+                lb_database.name = app
+                lb_database.long_name = app_list[app]['long_name']
+                lb_database.env_vars = json.dumps(app_list[app]
                                                   ['env_vars'])
-                lb_database.image = app_list[i]['image']
+                lb_database.image = app_list[app]['image']
                 lb_database.ports = json.dumps(app_list
-                                               [i]['ports'])
-                lb_database.volumes = json.dumps(app_list[i]
+                                               [app]['ports'])
+                lb_database.volumes = json.dumps(app_list[app]
                                                  ['volumes'])
                 lb_database.dependencies = json.dumps(
-                                                app_list[i]
+                                                app_list[app]
                                                 ['dependencies'])
-                lb_database.version = app_list[i]['version']
+                lb_database.version = app_list[app]['version']
                 lb_database.author_site = \
-                    app_list[i]['author_site']
+                    app_list[app]['author_site']
 
             lb_database.save_to_db()
 
@@ -182,19 +185,19 @@ class app_store_status(Resource):
 
         all_entires = App_Store.query.all()
 
-        for i in all_entires:
+        for db_entry in all_entires:
             entry = {
-                        'name': i.name,
-                        'long_name': i.long_name,
-                        'env_vars': json.loads(i.env_vars),
-                        'image': i.image,
-                        "ports": json.loads(i.ports),
-                        "volumes": json.loads(i.volumes),
-                        'dependencies': json.loads(i.dependencies),
-                        "version": i.version,
-                        "author_site": i.author_site,
-                        "logo": i.logo,
-                        'status': i.status
+                        'name': db_entry.name,
+                        'long_name': db_entry.long_name,
+                        'env_vars': json.loads(db_entry.env_vars),
+                        'image': db_entry.image,
+                        "ports": json.loads(db_entry.ports),
+                        "volumes": json.loads(db_entry.volumes),
+                        'dependencies': json.loads(db_entry.dependencies),
+                        "version": db_entry.version,
+                        "author_site": db_entry.author_site,
+                        "logo": db_entry.logo,
+                        'status': db_entry.status
                     }
 
             database_entries.append(entry)
@@ -274,7 +277,9 @@ class set_wifi(Resource):
                     wifi_connect().stop()
                     wifi_connect().start(wait=2)
                 except Exception as ex:
-                    print_error('set_wifi', 'Failed starting wifi-connect', ex)
+                    print_message('set_wifi',
+                                  'Failed starting wifi-connect',
+                                  ex)
                     abort(500, status=500,
                           message='Wifi-connect failed to launch',
                           error=str(ex))
