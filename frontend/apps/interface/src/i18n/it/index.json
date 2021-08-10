@@ -103,5 +103,9 @@
     "app_store_app": "Negozio di applicazioni",
     "invalid_wifi_entry": "Le password Wi-Fi devono essere di 8 caratteri o più e non devono contenere spazi.",
     "invalid_entry": "Voce non valida.",
-    "update_available": "Aggiornamento disponibile"
+    "update_available": "Aggiornamento disponibile",
+    "prune": "Pota",
+    "prune_system_files": "Pota i file sistema",
+    "prune_system_files_description": "Pota i file di sistema inutilizzati per liberare spazio sul tuo dispositivo.",
+    "author_colon": "Autore:"
 }
