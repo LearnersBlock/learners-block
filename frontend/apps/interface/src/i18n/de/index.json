@@ -103,5 +103,9 @@
     "app_store_app": "App Store-Anwendung",
     "invalid_wifi_entry": "Wi-Fi-Passwörter müssen mindestens 8 Zeichen lang sein und dürfen keine Leerzeichen enthalten.",
     "invalid_entry": "Ungültiger Eintrag.",
-    "update_available": "Aktualisierung verfügbar"
+    "update_available": "Aktualisierung verfügbar",
+    "prune": "Bereinigen",
+    "prune_system_files": "Systemdateien bereinigen",
+    "prune_system_files_description": "Bereinigen Sie nicht verwendete Systemdateien, um Speicherplatz auf Ihrem Gerät freizugeben.",
+    "author_colon": "Autor/in:"
 }
