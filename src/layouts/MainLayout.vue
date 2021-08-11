@@ -219,7 +219,10 @@
             v-model="directDownload"
             :label="$t('direct_download')"
           >
-            <q-tooltip class="text-body2 text-center">
+            <q-tooltip
+              class="text-body2 text-center"
+              anchor="top middle"
+            >
               {{ $t('display_only_direct_download') }}
             </q-tooltip>
           </q-checkbox>
