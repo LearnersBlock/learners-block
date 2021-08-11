@@ -53,5 +53,7 @@
     "no_space": "Votre Block n’a plus d’espace.",
     "submit_resource": "Soumettre une ressource",
     "powered_by": "Propulsé par",
-    "explore": "Explorer"
+    "explore": "Explorer",
+    "display_only_direct_download": "Afficher uniquement les éléments disponibles pour le téléchargement direct.",
+    "direct_download": "Téléchargement direct"
 }

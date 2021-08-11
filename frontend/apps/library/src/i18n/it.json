@@ -53,5 +53,7 @@
     "cancel": "Annulla",
     "submit_resource": "Invia una risorsa",
     "powered_by": "Offerto da",
-    "explore": "Esplora"
+    "explore": "Esplora",
+    "display_only_direct_download": "Visualizza solo gli articoli disponibili per lo scaricamento diretto.",
+    "direct_download": "Scaricamento diretto"
 }

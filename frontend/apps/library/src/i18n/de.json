@@ -53,5 +53,7 @@
     "download": "Herunterladen",
     "submit_resource": "Eine Ressource einreichen",
     "powered_by": "Angetrieben von",
-    "explore": "Durchsuchen"
+    "explore": "Durchsuchen",
+    "display_only_direct_download": "Nur Artikel anzeigen, die zum direkten Herunterladen verfügbar sind.",
+    "direct_download": "Direktes Herunterladen"
 }
