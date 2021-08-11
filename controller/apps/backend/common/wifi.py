@@ -187,7 +187,7 @@ class wifi_connect:
             return
 
         if wifi_poll is not None:
-            print_message('wifi_connect.stop', 'ifi-Connect already stopped')
+            print_message('wifi_connect.stop', 'Wifi-Connect already stopped')
             return
 
         try:

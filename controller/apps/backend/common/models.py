@@ -136,6 +136,9 @@ class App_Store(db.Model):
     def __repr__(self):
         return '<App_Store %r>' % self.name
 
+    def commit():
+        db.session.commit()
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

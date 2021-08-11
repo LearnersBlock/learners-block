@@ -29,15 +29,6 @@ class app_store_set(Resource):
 
         # For all the current apps in database
         for db_entry in App_Store.query.all():
-            # Check if entry exists to avoid exception, if not
-            # move on to next one
-            try:
-                if db_entry.name not in app_list:
-                    pass
-            except Exception as ex:
-                print_message('app_store_set', 'Failed finding app', ex)
-                continue
-
             # If the database entry is not in the list in app-store repo
             if db_entry.name not in app_list:
                 print('An entry in the local database has been deleted '
@@ -89,8 +80,10 @@ class app_store_set(Resource):
 
                 # Remove the application entry from local database
                 App_Store.query.filter_by(name=db_entry.name).delete()
+                App_Store.commit()
 
-                # Continue to next entry in loop
+                # Continue to next entry in loop as remaining steps
+                # are not needed
                 continue
 
             # If the application is installed and there is an update available
@@ -160,7 +153,7 @@ class app_store_set(Resource):
                                             lb_database.name)
                             except Exception as ex:
                                 print_message('app_store_set',
-                                              'failed making required '
+                                              'Could not make required '
                                               'directory',
                                               ex)
 
