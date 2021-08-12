@@ -88,7 +88,7 @@ class download_fetch(Resource):
             downloaded_bytes = 0
 
             # Get free disk space
-            _, _, free = shutil.disk_usage("/tmp")
+            _, _, free = shutil.disk_usage("/")
 
             # For each chunk write to file to avoid memory overload
             for data in resp.iter_content(chunk_size=1024):

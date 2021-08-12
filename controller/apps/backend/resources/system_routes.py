@@ -55,8 +55,8 @@ class internet_connection_status(Resource):
 class system_info(Resource):
     def get(self):
         return {"storage": {
-                    'total': human_size(shutil.disk_usage("/tmp")[-0]),
-                    'available': human_size(shutil.disk_usage("/tmp")[-1])
+                    'total': human_size(shutil.disk_usage("/")[-0]),
+                    'available': human_size(shutil.disk_usage("/")[-1])
                 },
                 "versions": {
                     'lb': version["VERSION"]
