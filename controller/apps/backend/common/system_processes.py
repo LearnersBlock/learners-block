@@ -7,13 +7,6 @@ import socket
 import time
 
 
-def check_space():
-    _, _, free = shutil.disk_usage("/tmp")
-    if free <= 100000000:
-        return True
-    return False
-
-
 def check_internet(host="8.8.8.8", port=53, timeout=3):
     try:
         socket.setdefaulttimeout(timeout)
@@ -21,6 +14,13 @@ def check_internet(host="8.8.8.8", port=53, timeout=3):
         return True
     except socket.error:
         return False
+
+
+def check_space():
+    _, _, free = shutil.disk_usage("/tmp")
+    if free <= 100000000:
+        return True
+    return False
 
 
 def check_supervisor(supervisor_retries, timeout):

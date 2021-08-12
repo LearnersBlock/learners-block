@@ -1,7 +1,5 @@
 from common.docker import docker_py
-from common.models import User
 from common.models import App_Store
-from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import abort
 from flask_restful import Resource
@@ -222,86 +220,3 @@ class app_store_status(Resource):
 
         # Return a list of all the database entries
         return database_entries, 200
-
-
-class set_ui(Resource):
-    @jwt_required()
-    def post(self):
-        content = request.get_json()
-
-        # Fetch current settings toggle and field status
-        lb_database = User.query.filter_by(username='lb').first()
-
-        if "files" in content:
-            if content["files"].lower() == "true":
-                lb_database.files = True
-            else:
-                lb_database.files = False
-        if "library" in content:
-            if content["library"].lower() == "true":
-                lb_database.library = True
-            else:
-                lb_database.library = False
-        if "website" in content:
-            if content["website"].lower() == "true":
-                lb_database.website = True
-            else:
-                lb_database.website = False
-        if "start_page" in content:
-            lb_database.start_page = content["start_page"]
-
-        lb_database.save_to_db()
-
-        return {'message': 'done'}, 200
-
-
-class settings_ui(Resource):
-    def get(self):
-        lb_database = User.query.filter_by(username='lb').first()
-
-        verified_password = User.verify_password(' ',
-                                                 lb_database.password)
-
-        # Check if there is a wifi password set and return boolean
-        if lb_database.wifi_password:
-            wifi_password = True
-        else:
-            wifi_password = False
-
-        return {'files': lb_database.files,
-                'library': lb_database.library,
-                'website': lb_database.website,
-                'start_page': lb_database.start_page,
-                'default_login_password_set': verified_password,
-                'wifi_password_set': wifi_password}, 200
-
-
-class set_wifi(Resource):
-    @jwt_required()
-    def post(self):
-        content = request.get_json()
-        lb_database = User.query.filter_by(username='lb').first()
-        lb_database.wifi_password = content["wifi_password"]
-        lb_database.save_to_db()
-
-        # If in production environment
-        if os.environ['FLASK_ENV'].lower() == "production":
-            from common.wifi import wifi
-            from common.wifi import wifi_connect
-            # If connected, restart Wi-Fi-Connect
-            connected = wifi().check_connection()
-
-            if not connected:
-                try:
-                    # Restart wifi-connect
-                    wifi_connect().stop()
-                    wifi_connect().start(wait=2)
-                except Exception as ex:
-                    print_message('set_wifi',
-                                  'Failed starting wifi-connect',
-                                  ex)
-                    abort(500, status=500,
-                          message='Wifi-connect failed to launch',
-                          error=str(ex))
-
-        return {'message': 'success'}, 200

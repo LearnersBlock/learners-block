@@ -1,5 +1,5 @@
-from common.processes import check_internet
-from common.processes import curl
+from common.system_processes import check_internet
+from common.system_processes import curl
 from common.wifi import wifi
 from common.wifi import wifi_connect
 from resources.errors import print_message
