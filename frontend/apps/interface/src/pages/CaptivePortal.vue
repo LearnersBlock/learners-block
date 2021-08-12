@@ -28,9 +28,9 @@
 
 <script lang="ts">
 import Axios from 'app/node_modules/axios'
-import { computed, defineComponent, onMounted, ref } from 'vue'
 import { copyToClipboard } from 'quasar'
 import { useStore } from '../store'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   setup () {

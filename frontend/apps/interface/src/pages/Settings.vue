@@ -1177,6 +1177,14 @@ export default defineComponent({
       }, 1)
     }
 
+    const updateHostname = async () => {
+      if (newHostname.value) {
+        await Axios.post(`${api.value}/v1/hostconfig`, {
+          hostname: newHostname.value
+        })
+      }
+    }
+
     const updateLibrary = async () => {
       libraryLoading.value = true
       await Axios.post(`${api.value}/v1/setui`, {
@@ -1212,14 +1220,6 @@ export default defineComponent({
       setTimeout(() => {
         websiteLoading.value = false
       }, 1)
-    }
-
-    const updateHostname = async () => {
-      if (newHostname.value) {
-        await Axios.post(`${api.value}/v1/hostconfig`, {
-          hostname: newHostname.value
-        })
-      }
     }
 
     function wifiPasswordChange () {

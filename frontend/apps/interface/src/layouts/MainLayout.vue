@@ -63,11 +63,11 @@
 
 <script lang="ts">
 
-import { computed, defineComponent, onMounted, ref } from 'vue'
 import { Quasar, useQuasar } from 'quasar'
 import { useStore } from '../store'
-import { useRouter } from 'vue-router'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'MainLayout',
