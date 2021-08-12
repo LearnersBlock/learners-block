@@ -1,4 +1,5 @@
 
+import auth from './auth'
 import { store } from 'quasar/wrappers'
 import type { InjectionKey } from 'vue'
 import {
@@ -6,7 +7,6 @@ import {
   Store as VuexStore,
   useStore as vuexUseStore
 } from 'vuex'
-import auth from './auth'
 
 /*
  * If not building with SSR mode, you can
