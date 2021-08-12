@@ -17,7 +17,7 @@ def check_internet(host="8.8.8.8", port=53, timeout=3):
 
 
 def check_space():
-    _, _, free = shutil.disk_usage("/tmp")
+    _, _, free = shutil.disk_usage("/")
     if free <= 100000000:
         return True
     return False
