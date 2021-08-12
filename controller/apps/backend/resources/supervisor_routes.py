@@ -1,5 +1,5 @@
 from common.supervisor_containers import container
-from common.processes import curl
+from common.system_processes import curl
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource

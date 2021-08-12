@@ -1,10 +1,19 @@
-from common.processes import curl
+from common.system_processes import curl
 from flask_restful import abort
 import os
 import time
 
 
 class container:
+    def start(self, container_name, sleep=0):
+        time.sleep(sleep)
+        response = curl(method="post-data",
+                        path=f"/v2/applications/{os.environ['BALENA_APP_ID']}"
+                               "/start-service?apikey=",
+                        string='{"serviceName": "%s"}' % (container_name))
+
+        return response
+
     def status(self, container_name):
         # Get running containers
         response = curl(method="get",
@@ -18,15 +27,6 @@ class container:
         # If container isn't found, abort with error
         abort(404, status=404,
               message='Container not found')
-
-    def start(self, container_name, sleep=0):
-        time.sleep(sleep)
-        response = curl(method="post-data",
-                        path=f"/v2/applications/{os.environ['BALENA_APP_ID']}"
-                               "/start-service?apikey=",
-                        string='{"serviceName": "%s"}' % (container_name))
-
-        return response
 
     def stop(self, container_name, sleep=0):
         time.sleep(sleep)

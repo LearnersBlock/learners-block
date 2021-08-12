@@ -1,6 +1,6 @@
 from common.models import db
 from common.models import migrate
-from common.processes import curl
+from common.system_processes import curl
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
@@ -8,12 +8,13 @@ from flask_restful import Api as _Api
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended.exceptions import JWTExtendedException
 from jwt.exceptions import PyJWTError
-from resources.errors import errors, print_message
-from resources.system_routes import docker_pull
-from resources.system_routes import docker_remove
-from resources.system_routes import docker_run
-from resources.system_routes import download_fetch
-from resources.system_routes import download_stop
+from resources.docker_routes import docker_pull
+from resources.docker_routes import docker_remove
+from resources.docker_routes import docker_run
+from resources.download_routes import download_fetch
+from resources.download_routes import download_stop
+from resources.errors import errors
+from resources.errors import print_message
 from resources.system_routes import health_check
 from resources.system_routes import internet_connection_status
 from resources.system_routes import system_info
@@ -110,11 +111,14 @@ app = create_app()
 if __name__ == '__main__':
     # Initialise database
     with app.app_context():
-        from resources.auth_routes import login, logout, set_password, \
-             verify_login
-        from resources.database_routes import app_store_set, \
-            app_store_status, set_ui, settings_ui, set_wifi
         from common.models import init_database
+        from resources.app_store_routes import app_store_set, \
+            app_store_status
+        from resources.auth_routes import login, logout, set_password, \
+            verify_login
+        from resources.settings_routes import set_ui, \
+            settings_ui
+        from resources.wifi_routes import set_wifi
 
         init_database()
 

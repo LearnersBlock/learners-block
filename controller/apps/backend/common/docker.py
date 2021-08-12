@@ -14,6 +14,23 @@ else:
 
 
 class docker_py():
+    def prune(image, network):
+        try:
+            client.images.remove(image=image)
+        except docker.errors.ImageNotFound:
+            # If container was never installed then continue
+            pass
+
+        try:
+            # Check that no dangling networks are left
+            app_network = client.networks.get(network)
+            app_network.remove()
+        except Exception:
+            # Pass if network had already been removed
+            pass
+
+        return {"response": "done", "status_code": 200}
+
     def pull(env_vars, image, name, ports, volumes, network, detach=True):
         try:
             container = client.containers.get(name)
@@ -34,23 +51,6 @@ class docker_py():
             return {"response": str(ex), "status_code": 500}
 
         return {"response": str(response), "status_code": 200}
-
-    def prune(image, network):
-        try:
-            client.images.remove(image=image)
-        except docker.errors.ImageNotFound:
-            # If container was never installed then continue
-            pass
-
-        try:
-            # Check that no dangling networks are left
-            app_network = client.networks.get(network)
-            app_network.remove()
-        except Exception:
-            # Pass if network had already been removed
-            pass
-
-        return {"response": "done", "status_code": 200}
 
     def remove(name):
         try:

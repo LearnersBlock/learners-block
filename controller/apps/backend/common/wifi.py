@@ -1,16 +1,17 @@
 from common.models import User
-from dbus.mainloop.glib import DBusGMainLoop
 from flask_restful import abort
 from resources.errors import print_message
 from run import app
-import NetworkManager
 import os
 import subprocess
+import sys
 import time
 import requests
-import sys
 
-DBusGMainLoop(set_as_default=True)
+if os.environ['FLASK_ENV'].lower() == "production":
+    from dbus.mainloop.glib import DBusGMainLoop
+    import NetworkManager
+    DBusGMainLoop(set_as_default=True)
 
 
 def handle_exit(*args):
@@ -177,26 +178,6 @@ class wifi_connect:
 
         return {'status': 200, 'message': 'success'}
 
-    def stop(self):
-        global wifi_process
-
-        try:
-            wifi_poll = wifi_process.poll()
-        except Exception as ex:
-            print_message('wifi_connect.stop', 'Wifi-connect not started', ex)
-            return
-
-        if wifi_poll is not None:
-            print_message('wifi_connect.stop', 'Wifi-Connect already stopped')
-            return
-
-        try:
-            wifi_process.terminate()
-            wifi_process.communicate(timeout=10)
-        except Exception:
-            # If it hasn't stopped in 10 seconds kill it
-            wifi_process.kill()
-
     def status(self):
         global wifi_process
 
@@ -223,3 +204,23 @@ class wifi_connect:
 
         abort(500, status=500,
               message='Failed on wifi-connect check')
+
+    def stop(self):
+        global wifi_process
+
+        try:
+            wifi_poll = wifi_process.poll()
+        except Exception as ex:
+            print_message('wifi_connect.stop', 'Wifi-connect not started', ex)
+            return
+
+        if wifi_poll is not None:
+            print_message('wifi_connect.stop', 'Wifi-Connect already stopped')
+            return
+
+        try:
+            wifi_process.terminate()
+            wifi_process.communicate(timeout=10)
+        except Exception:
+            # If it hasn't stopped in 10 seconds kill it
+            wifi_process.kill()
