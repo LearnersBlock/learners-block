@@ -397,7 +397,7 @@ export default defineComponent({
               stopDownload()
               return
             }
-            await delay(1500)
+            await delay(1000)
           }
         }
       } catch (e) {
