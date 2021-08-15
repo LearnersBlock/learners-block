@@ -3,7 +3,7 @@ FROM node:14.17.0-alpine3.13 AS controller-wifi-buildstep
 
 WORKDIR /build-context
 
-# Install node modules with long network timeout to resolve slow disk I/O on local builds
+# Install node modules with long network timeout to resolve slow disk I/O issue on local builds
 COPY apps/wifi-connect/ui .
 
 RUN yarn install --network-timeout 600000
@@ -12,13 +12,13 @@ RUN yarn install --network-timeout 600000
 RUN yarn build
 
 
-## Build Python packages to avoid need for build installs in main image
+## Build Python packages to avoid need for builds in main image
 FROM balenalib/%%BALENA_ARCH%%-debian-python:3.8.10-buster-build-20210506 AS python-buildstep
 
 # Copy Python requirements file
 COPY apps/backend/requirements.txt /tmp/
 
-#Install packages into one directory
+# Install packages into a directory
 RUN pip install --user -r /tmp/requirements.txt --upgrade --no-warn-script-location
 
 
@@ -67,4 +67,5 @@ COPY apps/portainer/portainer.db portainer/portainer.db
 # Check for database migrations then launch controller
 CMD ["bash", "start.sh"]
 
-HEALTHCHECK --start-period=20s --timeout=30s CMD curl --silent --fail http://127.0.0.1:9090/ || exit 1
+HEALTHCHECK --start-period=20s --timeout=30s \
+  CMD curl --silent --fail http://127.0.0.1:9090/ || exit 1

@@ -1,3 +1,5 @@
+# Ensure Docker has access to sufficient 'CPUs' and memory via the Docker 
+# preferences page before running.
 version: '2.1'
 
 services:

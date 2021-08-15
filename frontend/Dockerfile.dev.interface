@@ -1,4 +1,4 @@
-# Build File Manager
+## Build File Manager
 FROM composer:2.0.11 AS filemanager-buildstep
 
 # Provide TERM for TPUT
@@ -17,6 +17,7 @@ COPY apps/file-manager/ .
 RUN composer run build
 
 
+## Compile container
 FROM node:14.17.0-alpine3.13
 
 # Install SupervisorD
