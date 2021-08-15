@@ -22,7 +22,7 @@ On the GitHub release page you will find a 'pre-release' tagged 'development' wh
 
 ### Development Instructions
 
-A Docker based development environment is available. 
+A Docker based development environment is available. If you require each component individually, see the README file in the component's folder.
 
 #### Frontend
 
@@ -33,6 +33,8 @@ Start the development environment:
 The development environment is accessible through:
 
 `http://0.0.0.0:8081`
+
+Note: Ensure Docker has access to sufficient 'CPUs' and memory via the Docker preferences page before running.
 
 #### Library
 
