@@ -254,7 +254,7 @@
         <q-linear-progress
           v-if="!exitLoop"
           size="30px"
-          :value="downloadProgress"
+          :value="downloadProgress/100"
           color="primary"
         >
           <div class="absolute-full flex flex-center">
@@ -263,14 +263,14 @@
               v-if="downloadProgress"
               color="white"
               text-color="black"
-              :label="`${Number(downloadProgress).toFixed(2)*100} % `"
+              :label="`${Number(downloadProgress)} % `"
             />
             <q-badge
               class="text-caption"
               v-if="downloadProgress"
               color="white"
               text-color="black"
-              :label="`${Number(downloadedMb).toFixed(2)} Mb`"
+              :label="`${Number(downloadedMb)} Mb`"
             />
           </div>
         </q-linear-progress>
@@ -343,14 +343,25 @@ export default defineComponent({
           Axios.get(`http://${hostname.value}:9090/v1/download/stop`)
           stopDownload()
         } else {
+          // Start the download process
+          await Axios.post(`http://${hostname.value}:9090/v1/download/fetch`, { download_url: fetchedResource.value.resource.download_url },
+            {
+              validateStatus: function (status) {
+                if (status !== 200) {
+                  $q.notify({ type: 'negative', message: t('error') })
+                  throw new Error()
+                } else {
+                  return status === 200
+                }
+              }
+            })
+
+          // Monitor the download process through stream
           const position = ref<any>(0)
           const progress = ref<any>('')
           const xhr = new XMLHttpRequest()
-          xhr.open('POST', `http://${hostname.value}:9090/v1/download/fetch`)
-          xhr.setRequestHeader('Content-Type', 'application/json')
-          xhr.send(JSON.stringify({
-            download_url: fetchedResource.value.resource.download_url
-          }))
+          xhr.open('GET', `http://${hostname.value}:9090/v1/download/stream`)
+          xhr.send()
 
           exitLoop.value = false
 
@@ -363,7 +374,7 @@ export default defineComponent({
             })
 
             // Handle errors
-            if (progress.value.error) {
+            if (progress.value.error || xhr.status > 200) {
               if (progress.value.error === 'Out of disk space') {
                 $q.notify({ type: 'negative', message: `${t('error')} - ${t('no_space')}` })
               } else {
@@ -374,10 +385,14 @@ export default defineComponent({
             }
 
             downloadedMb.value = progress.value.mbytes
-            downloadProgress.value = progress.value.progress
+            if (progress.value.progress) {
+              downloadProgress.value = Number(progress.value.progress)
+            } else {
+              downloadProgress.value = 0
+            }
             position.value = messages.length - 1
 
-            if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
               $q.notify({ type: 'positive', message: t('download_complete') })
               stopDownload()
               return
