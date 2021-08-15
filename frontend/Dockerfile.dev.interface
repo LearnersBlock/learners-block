@@ -127,6 +127,6 @@ COPY /config/nginx/nginx.dev.conf /etc/nginx/nginx.conf
 # Start services
 CMD rm -rf /app/public/files/* && \
   cp -Rf /filemanager/build/dist/* /app/public/files/ && \
-  yarn install --cwd /app/public/interface_dev/ && \
-  yarn install --cwd /app/public/library/ && \ 
+  yarn install --cwd /app/public/interface_dev/ --frozen-lockfile && \
+  yarn install --cwd /app/public/library/ --frozen-lockfile && \ 
   exec supervisord -c /etc/supervisor/conf.d/supervisord.conf

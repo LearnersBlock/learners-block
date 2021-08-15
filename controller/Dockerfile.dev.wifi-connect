@@ -8,4 +8,4 @@ ENV PORT=8080
 WORKDIR /app/wifi-connect/ui/
 
 # Launch
-CMD yarn install && yarn start
+CMD yarn install --frozen-lockfile && yarn start
