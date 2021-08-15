@@ -222,6 +222,8 @@
             <q-tooltip
               class="text-body2 text-center"
               anchor="top middle"
+              self="bottom middle"
+              :offset="[20, 20]"
             >
               {{ $t('display_only_direct_download') }}
             </q-tooltip>
