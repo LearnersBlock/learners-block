@@ -71,7 +71,7 @@ Learners-Block-%%device-type%%-dev.zip
 
 #### Deploy locally
 
-You may deploy the code to a device locally. This approach, however, will not benefit from automatic updates, and we cannot offer support for its use. 
+You may deploy the code to a device locally. This approach, however, will not benefit from automatic updates, and we cannot offer support for its use. Building all the required components on low-powered devices will also take a considerable time or may fail.
 
 In order to prepare the code from this repository for deployment to a device:
 

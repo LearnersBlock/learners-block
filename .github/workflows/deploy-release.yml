@@ -45,7 +45,7 @@ jobs:
 
       - name: Create build context
         env:
-          BALENA_CLI: https://github.com/balena-io/balena-cli/releases/download/v12.44.29/balena-cli-v12.44.29-linux-x64-standalone.zip
+          BALENA_CLI: https://github.com/balena-io/balena-cli/releases/download/v12.45.2/balena-cli-v12.45.2-linux-x64-standalone.zip
         run: |
           sudo apt-get update && sudo apt-get install -y \
               curl \
