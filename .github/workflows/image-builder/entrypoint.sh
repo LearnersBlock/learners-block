@@ -37,10 +37,10 @@ for env in $GITHUB_WORKSPACE/.github/workflows/image-builder/env-files/$1/*.env;
   balena os download $type -o $imageFile
 
   # Preload files into image file
-  balena preload $imageFile --app $app --commit latest
+  balena preload $imageFile --fleet $app --commit latest
 
   # Inject the config file to the image
-  balena os configure $imageFile --config-app-update-poll-interval $appUpdatePollInterval --config-network=ethernet --application $app
+  balena os configure $imageFile --config-app-update-poll-interval $appUpdatePollInterval --config-network=ethernet --fleet $app
 
   # Zip the image file ready for adding to release assets
   zip -j $GITHUB_WORKSPACE/Learners-Block-$device_name-$RELEASE_VERSION.zip $imageFile
