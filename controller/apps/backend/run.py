@@ -13,6 +13,7 @@ from resources.docker_routes import docker_remove
 from resources.docker_routes import docker_run
 from resources.download_routes import download_fetch
 from resources.download_routes import download_stop
+from resources.download_routes import download_stream
 from resources.errors import errors
 from resources.errors import print_message
 from resources.system_routes import health_check
@@ -168,6 +169,7 @@ if __name__ == '__main__':
     api.add_resource(docker_run, '/v1/docker/run')
     api.add_resource(download_fetch, '/v1/download/fetch')
     api.add_resource(download_stop, '/v1/download/stop')
+    api.add_resource(download_stream, '/v1/download/stream')
     api.add_resource(health_check, '/')
     api.add_resource(host_config, '/v1/hostconfig')
     api.add_resource(hostname, '/v1/hostname')

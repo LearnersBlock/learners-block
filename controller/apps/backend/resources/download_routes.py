@@ -1,5 +1,6 @@
 from flask import request
 from flask import Response
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from resources.errors import print_message
 import json
@@ -11,9 +12,12 @@ import requests
 
 
 class download_fetch(Resource):
+    @jwt_required()
     def post(self):
         # Set vars
         global download_log
+        global download_terminated
+        download_terminated = 0
         download_log = ''
         content = request.get_json()
 
@@ -25,29 +29,7 @@ class download_fetch(Resource):
 
         download_progress.start()
 
-        # Stream the download progress via the api
-        def generate():
-            # Set vars
-            global download_log
-            global download_terminated
-            download_terminated = 0
-            # While the download is running loop
-            while download_log is not True:
-                # If download is complete or terminate command is sent
-                # via download_stop
-                if download_terminated == 1:
-                    break
-                # If download_terminated is not 1 or 0 then report error
-                if download_terminated != 0:
-                    # An error occured
-                    yield str(json.dumps({"error":
-                                          download_terminated})) + "\n\n"
-                    break
-                # Stream last line
-                yield str(download_log) + "\n\n"
-                time.sleep(2)
-
-        return Response(generate(), mimetype="text/event-stream")
+        return {'message': 'process started'}
 
     def download_file(self, url):
         # Store current UID
@@ -104,10 +86,8 @@ class download_fetch(Resource):
                 # Format and create response for streaming via download_fetch
                 global download_log
                 download_log = json.dumps({
-                    "progress": format(downloaded_bytes/total*100/100,
-                                       ".4f"),
-                    "mbytes": format(downloaded_bytes/1000000,
-                                     ".4f"),
+                    "progress": int(float(downloaded_bytes/total*100)),
+                    "mbytes": int(float(downloaded_bytes/1000000)),
                 })
 
         # Reset global var for next use
@@ -123,3 +103,29 @@ class download_stop(Resource):
         download_terminated = response
 
         return {'status': 200, 'message': 'terminate request sent'}, 200
+
+
+class download_stream(Resource):
+    def get(self):
+        # Stream the download progress via the api
+        def generate():
+            # Set vars
+            global download_log
+            global download_terminated
+            # While the download is running loop
+            while download_log is not True:
+                # If download is complete or terminate command is sent
+                # via download_stop
+                if download_terminated == 1:
+                    break
+                # If download_terminated is not 1 or 0 then report error
+                if download_terminated != 0:
+                    # An error occured
+                    yield str(json.dumps({"error":
+                                          download_terminated})) + "\n\n"
+                    break
+                # Stream last line
+                yield str(download_log) + "\n\n"
+                time.sleep(2)
+
+        return Response(generate(), mimetype="text/event-stream")
