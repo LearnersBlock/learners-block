@@ -360,8 +360,6 @@ export default defineComponent({
     const { result: fetchedTags, loading: fetchTagsLoading, refetch: fetchTags } = useQuery(GET_TAGS)
     // Fetch level query
     const { result: fetchedLevels, loading: fetchLevelsLoading, refetch: fetchLevels } = useQuery(GET_LEVELS)
-    // Fetch language cookie
-    const langCookie = ref<any>($q.localStorage.getItem('lang'))
     // Fetch resources query
     const {
       result: fetchedResourcesLength
@@ -369,9 +367,13 @@ export default defineComponent({
 
     onMounted(async () => {
       Loading.show()
-      if (langCookie.value) {
-        locale.value = langCookie.value
-        Quasar.lang.set(langCookie.value)
+      if (onDevice.value) {
+        const langCookie = ref<any>($q.localStorage.getItem('lang'))
+        if (langCookie.value) {
+          // Fetch language cookie
+          locale.value = langCookie.value
+          Quasar.lang.set(langCookie.value)
+        }
       }
       await fetchLanguages()
       await fetchFormats()
