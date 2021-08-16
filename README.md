@@ -112,6 +112,10 @@ We encourage translations and adjustments to current translations on all our com
 
 As with all community projects, we do incur costs. You can see everything we have spent, everything we have been donated and you can donate through our [funding page](https://docs.learnersblock.org/about-us/how-we-are-funded). 
 
+## Security & Privacy
+
+Details on security and privacy can be found in our [documentation](https://docs.learnersblock.org/additional-info/security-and-privacy). 
+
 ## License
 
 Learner’s Block is released under the [GPL-3.0 License](https://github.com/LearnersBlock/learners-block/blob/main/LICENSE)
