@@ -297,14 +297,29 @@
                 :title="$t('available_applications')"
                 flat
                 bordered
+                :loading="appTableVisible"
                 :grid="$q.screen.xs"
                 :rows-per-page-options="[3, 5, 10]"
                 :rows="rows"
-                :table-class="!visible ? 'text-black': 'text-white'"
+                :table-class="!appTableVisible ? 'text-black': 'text-white'"
                 :columns="columns"
                 row-key="application"
                 :no-data-label="$t('no_apps_to_display')"
               >
+                <template #loading>
+                  <q-inner-loading
+                    showing
+                    color="primary"
+                  >
+                    <q-spinner-gears
+                      size="50px"
+                      color="primary"
+                    />
+                    <div class="mt-1 text-base text-center text-gray-800">
+                      {{ $t('this_may_take_time') }}
+                    </div>
+                  </q-inner-loading>
+                </template>
                 <template #top-right>
                   <q-btn
                     round
@@ -315,7 +330,7 @@
                 </template>
                 <template
                   #body-cell-author_site="props"
-                  v-if="!visible"
+                  v-if="!appTableVisible"
                 >
                   <q-td :props="props">
                     <div>
@@ -328,7 +343,7 @@
                 </template>
                 <template
                   #body-cell-status="props"
-                  v-if="!visible"
+                  v-if="!appTableVisible"
                 >
                   <q-td :props="props">
                     <div>
@@ -347,7 +362,7 @@
                 <template #item="props">
                   <div
                     class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4"
-                    :class="!visible ? 'text-black': 'text-white'"
+                    :class="!appTableVisible ? 'text-black': 'text-white'"
                   >
                     <q-card>
                       <q-card-section class="text-center">
@@ -379,7 +394,7 @@
 
                         <div>{{ $t('version') }} {{ props.row.version }}</div>
                         <q-btn
-                          v-if="!visible"
+                          v-if="!appTableVisible"
                           class="mb-1"
                           size="xs"
                           unelevated
@@ -392,15 +407,17 @@
                   </div>
                 </template>
               </q-table>
-              <q-inner-loading :showing="visible">
-                <q-spinner-gears
-                  size="50px"
-                  color="primary"
-                />
-                <div class="mt-1 text-base text-center text-gray-800">
-                  {{ $t('this_may_take_time') }}
-                </div>
-              </q-inner-loading>
+              <q-card v-else>
+                <q-card-section>
+                  <div class="column flex text-base text-center items-center text-gray-800">
+                    <q-spinner-gears
+                      size="50px"
+                      color="primary"
+                    />
+                    {{ $t('this_may_take_time') }}
+                  </div>
+                </q-card-section>
+              </q-card>
             </q-expansion-item>
           </q-list>
           <!-- Advanced Features -->
@@ -455,7 +472,7 @@
                             :grid="$q.screen.xs"
                             :rows-per-page-options="[5, 10]"
                             :rows="rows"
-                            :table-class="!visible ? 'text-black': 'text-white'"
+                            :table-class="!appTableVisible ? 'text-black': 'text-white'"
                             :columns="columns"
                             :visible-columns="visibleColumns"
                             filter="installed"
@@ -464,7 +481,7 @@
                           >
                             <template
                               #body-cell-status="props"
-                              v-if="!visible"
+                              v-if="!appTableVisible"
                             >
                               <q-td :props="props">
                                 <div>
@@ -732,7 +749,7 @@ export default defineComponent({
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
     const togglesLoading = ref<boolean>(true)
-    const visible = ref(false)
+    const appTableVisible = ref(false)
     const website = ref<boolean>(false)
     const websiteLoading = ref<boolean>(false)
     const wifi = ref<boolean>(false)
@@ -829,12 +846,12 @@ export default defineComponent({
         website.value = res1.data.website
         library.value = res1.data.library
 
-        // Check if disable password button should be visible
+        // Check if disable password button should be appTableVisible
         if (!res1.data.default_login_password_set) {
           showPasswordButton.value = true
         }
 
-        // Check if disable wifi password button should be visible
+        // Check if disable wifi password button should be appTableVisible
         if (res1.data.wifi_password_set) {
           showWifiPasswordButton.value = true
         }
@@ -923,10 +940,10 @@ export default defineComponent({
     }
 
     async function fetchApps () {
-      visible.value = true
+      appTableVisible.value = true
       await Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
         rows.value = availableApps.data
-        visible.value = false
+        appTableVisible.value = false
       }
       )
     }
@@ -987,12 +1004,12 @@ export default defineComponent({
     }
 
     async function refreshApps () {
-      visible.value = true
+      appTableVisible.value = true
       await Axios.get(`${api.value}/v1/appstore/set`)
       Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
         rows.value = availableApps.data
         setTimeout(() => {
-          visible.value = false
+          appTableVisible.value = false
         }, 500)
       }
       )
@@ -1072,7 +1089,7 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          visible.value = true
+          appTableVisible.value = true
           // Install app
           Axios.post(`${api.value}/v1/docker/run`, {
             env_vars: row.env_vars,
@@ -1088,14 +1105,14 @@ export default defineComponent({
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            visible.value = false
+            appTableVisible.value = false
           }).catch(function (error) {
             if (error.response) {
               console.log(error.response.data)
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            visible.value = false
+            appTableVisible.value = false
           })
         })
       } else if (row.status.toLowerCase() === 'installed') {
@@ -1105,7 +1122,7 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          visible.value = true
+          appTableVisible.value = true
           // Uninstall app
           Axios.post(`${api.value}/v1/docker/remove`, {
             name: row.name,
@@ -1117,14 +1134,14 @@ export default defineComponent({
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            visible.value = false
+            appTableVisible.value = false
           }).catch(function (error) {
             if (error.response) {
               console.log(error.response.data)
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            visible.value = false
+            appTableVisible.value = false
           })
         })
       } else if (row.status.toLowerCase() === 'update_available') {
@@ -1138,7 +1155,7 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          visible.value = true
+          appTableVisible.value = true
           // Update app
           Axios.post(`${api.value}/v1/docker/pull`, {
             env_vars: row.env_vars,
@@ -1154,14 +1171,14 @@ export default defineComponent({
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            visible.value = false
+            appTableVisible.value = false
           }).catch(function (error) {
             if (error.response) {
               console.log(error.response.data)
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            visible.value = false
+            appTableVisible.value = false
           })
         })
       }
@@ -1310,7 +1327,7 @@ export default defineComponent({
       updateLibrary,
       updatePortainer,
       updateWebsite,
-      visible,
+      appTableVisible,
       visibleColumns: ref(['author_site', 'status']),
       website,
       websiteLoading,
