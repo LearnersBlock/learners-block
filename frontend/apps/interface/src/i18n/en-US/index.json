@@ -61,7 +61,7 @@
     "your_new_password": "Your new password",
     "are_you_sure": "Are you sure?",
     "loading": "Loading …",
-    "need_connection": "You need to connect to Wi-Fi or Ethernet to use these features.",
+    "need_connection": "You need to connect to Wi-Fi or Ethernet to use these features. If you are connected, try refreshing the page.",
     "internet_no_wifi": "Are you connected to Ethernet? To connect your Learner's Block to a Wi-Fi hotspot, you must connect to it via Wi-Fi first.",
     "file_manager": "File Manager",
     "portainer_unavailable": "Portainer is not available for your device.",
