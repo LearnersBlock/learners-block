@@ -1,6 +1,6 @@
 {
     "internet_no_wifi": "Sei collegato/a a Ethernet? Per collegare il tuo Learner’s Block a un hotspot Wi-Fi, devi prima connetterti tramite Wi-Fi.",
-    "need_connection": "È necessario connettersi al Wi-Fi o Ethernet per utilizzare queste funzioni.",
+    "need_connection": "È necessario connettersi al Wi-Fi o Ethernet per utilizzare queste funzioni.Se sei già connesso, prova a ricaricare la pagina.",
     "files_settings_description": "Gestisci i file sul tuo Block. Solo gli utenti connessi possono eliminarli.",
     "makerspace_settings_description": "Scarica i contenuti dal tuo account Makerspace.",
     "makerspace_description": "Sfoglia il Makerspace qui.",
