@@ -42,7 +42,7 @@
     "next": "Sonraki",
     "portainer_unavailable": "Portainer, aygıtınız için kullanılabilir değil.",
     "file_manager": "Dosya Yöneticisi",
-    "need_connection": "Bu özellikleri kullanmak için Wi-Fi veya Ethernet'e bağlanmanız gerekir.",
+    "need_connection": "Bu özellikleri kullanmak için Wi-Fi veya Ethernet'e bağlanmanız gerekir. Bağlıysanız, sayfayı yenilemeyi deneyin.",
     "portainer": "Portainer",
     "portainer_settings_description": "Portainer'i etkinleştirin veya devre dışı bırakın.",
     "password_set_success": "Parolanız belirlendi",
