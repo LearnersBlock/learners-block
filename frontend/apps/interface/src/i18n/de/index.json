@@ -6,7 +6,7 @@
     "username": "Benutzername",
     "wifi": "WLAN",
     "internet_no_wifi": "Sind Sie mit dem Ethernet verbunden? Um Ihren Learner’s Block mit einem WLAN-Hotspot zu verbinden, müssen Sie sich zunächst über WLAN mit ihm verbinden.",
-    "need_connection": "Sie müssen eine Wi-Fi- oder Ethernet-Verbindung herstellen, um diese Funktionen nutzen zu können.",
+    "need_connection": "Sie müssen eine Verbindung zu Wi-Fi oder Ethernet herstellen, um diese Funktionen nutzen zu können. Wenn Sie verbunden sind, versuchen Sie, die Seite zu aktualisieren.",
     "files_settings_description": "Verwalten Sie Dateien auf Ihrem Block. Nur angemeldete Benutzer können sie löschen.",
     "portainer_unavailable": "Portainer ist für Ihr Gerät nicht verfügbar.",
     "file_manager": "Dateiverwaltung",

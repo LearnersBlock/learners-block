@@ -6,7 +6,7 @@
     "username": "Nom d'utilisateur",
     "wifi": "Wi-Fi",
     "file_manager": "Gestionnaire de fichiers",
-    "need_connection": "Vous devez être connecté(e) au Wi-Fi ou par câble Ethernet pour utiliser ces fonctionnalités.",
+    "need_connection": "Vous devez vous connecter au Wi-Fi ou à l’Ethernet pour utiliser ces fonctions. Si vous êtes connecté(e), essayez d’actualiser la page.",
     "loading": "Chargement en cours…",
     "are_you_sure": "Êtes-vous sûr(e) ?",
     "your_new_password": "Votre nouveau mot de passe",
