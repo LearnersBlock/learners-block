@@ -54,20 +54,9 @@ All development changes will require testing through the Balena OS and relevant 
 
 Learner’s Block software is provided as a complete package ready to flash to an SD card, including an operating system with automatic updates. To benefit from these automatic updates download the image files from our [downloads page](https://downloads.learnersblock.org).
 
-Alternatively, you can find these images from the GitHub releases page. 
+Alternatively, you can find these images as well as development images on the GitHub releases page. 
 
-Release names follow the following formats:
-
-**Releases:**
-```
-# Image which runs production code from 'main' branch when submitted with a version tag.
-Learners-Block-%%device-type%%-v%%version-number%%.tar.gz 
-```
-**Pre-releases:**
-```
-## Image which runs latest commits from the 'main' branch. 
-Learners-Block-%%device-type%%-dev.zip 
-```
+Development images will receive updates on all commits, whereas production images will only receive updates on new releases. 
 
 #### Deploy locally
 
