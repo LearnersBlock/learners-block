@@ -26,7 +26,7 @@
     "host": "Hosted by:",
     "keywords": "Keywords",
     "languages": "Languages:",
-    "licenses": "Licenses:",
+    "licenses": "License:",
     "load_more": "Load More",
     "no_results_found": "No results found",
     "no_space": "Your Block is out of space.",
@@ -55,5 +55,11 @@
     "powered_by": "Powered by",
     "explore": "Explore",
     "display_only_direct_download": "Display only items available for direct download.",
-    "direct_download": "Direct Download"
+    "direct_download": "Direct Download",
+    "category": "Category:",
+    "subjects": "Subjects:",
+    "paid": "Paid",
+    "freemium": "Freemium",
+    "free": "Free",
+    "categories": "Categories:"
 }
