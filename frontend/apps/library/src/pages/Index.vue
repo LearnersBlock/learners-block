@@ -37,6 +37,20 @@
             v-for="resource in filteredResources"
             :key="resource.id"
           >
+            <div v-if="resource">
+              <q-badge
+                class="q-mt-sm q-mr-sm text-body2"
+                color="secondary"
+                floating
+                rounded
+                transparent
+                multi-line
+                v-for="license in resource.licenses"
+                :key="license.id"
+              >
+                {{ $t(license.license.toLowerCase()) }}
+              </q-badge>
+            </div>
             <div v-if="resource.logo && resource.logo.formats && resource.logo.formats.thumbnail && resource.logo.formats.thumbnail.url">
               <q-img
                 :src="'https://library-api.learnersblock.org' + resource.logo.formats.thumbnail.url"
@@ -67,7 +81,7 @@
               <div class="resource_languages">
                 <div>
                   <q-badge
-                    class="q-pa-sm q-mr-sm q-mt-md multi-line text-body2 text-weight-large"
+                    class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
                     color="secondary"
                     v-for="language in resource.languages"
                     :key="language.id"
@@ -136,10 +150,13 @@ import { useStore } from 'vuex'
 export default defineComponent({
   name: 'PageIndex',
   props: {
+    categories: {
+      type: Array
+    },
     formats: {
       type: Array
     },
-    tags: {
+    subjects: {
       type: Array
     },
     levels: {
@@ -193,15 +210,17 @@ export default defineComponent({
       keyword: string = props.keyword!,
       formats: string[] = props.formats! as string[],
       languages: string[] = props.languages as string[],
-      tags: string[] = props.tags as string[],
-      levels: string[] = props.levels as string[]) => {
+      subjects: string[] = props.subjects as string[],
+      levels: string[] = props.levels as string[],
+      categories: string[] = props.categories as string[]) => {
       await fetchResources(
         {
           keyword,
           languages,
           formats,
-          tags,
+          subjects,
           levels,
+          categories,
           limit: $store.state.savedResources.limit
         } as any)
       $store.commit('savedResources/updateResources', fetchedResources)

@@ -53,5 +53,7 @@
     "resource_not_available": "Este recurso no está disponible para descargar.",
     "submit_resource": "Enviar un recurso",
     "explore": "Explorar",
-    "powered_by": "Funciona con"
+    "powered_by": "Funciona con",
+    "direct_download": "Descarga directa",
+    "display_only_direct_download": "Mostrar sólo los artículos disponibles para la descarga directa."
 }
