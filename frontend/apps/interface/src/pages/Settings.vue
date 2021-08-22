@@ -1266,7 +1266,7 @@ export default defineComponent({
     }
 
     function wifiWarn () {
-      if (internet.value && !wifi.value) {
+      if (internet.value && !wifi.value && !process.env.DEV) {
         $q.notify({ type: 'negative', message: t('internet_no_wifi') })
       } else if (wifi.value === false) {
         window.open('http://' + window.location.hostname + ':8080/?lang=' + $q.lang.isoName)
