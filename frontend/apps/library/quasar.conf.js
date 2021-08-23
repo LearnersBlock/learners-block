@@ -16,9 +16,9 @@ module.exports = configure(function (ctx) {
       tsCheckerConfig: {
         eslint: {
           enabled: true,
-          files: './src/**/*.{ts,tsx,js,jsx,vue}',
-        },
-      },
+          files: './src/**/*.{ts,tsx,js,jsx,vue}'
+        }
+      }
     },
 
     // https://quasar.dev/quasar-cli/prefetch-feature
@@ -91,9 +91,16 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
+      client: {
+        webSocketURL: 'auto://0.0.0.0:0/upload-library/ws'
+      },
+      webSocketServer: {
+        options: {
+          path: '/upload-library/ws'
+        }
+      },
       https: false,
       host: '0.0.0.0',
-      public: '0.0.0.0:8081/upload-library',
       port: 8081,
       open: true // opens browser window automatically
     },
