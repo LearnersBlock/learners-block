@@ -57,5 +57,8 @@
     "display_only_direct_download": "Afficher uniquement les éléments disponibles pour le téléchargement direct.",
     "direct_download": "Téléchargement direct",
     "subjects": "Sujets :",
-    "category": "Catégorie :"
+    "category": "Catégorie :",
+    "categories": "Catégories :",
+    "free": "Gratuit",
+    "freemium": "Freemium"
 }
