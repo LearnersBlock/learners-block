@@ -4,9 +4,11 @@ FROM node:14.17.0-alpine3.13 AS controller-wifi-buildstep
 WORKDIR /build-context
 
 # Install node modules with long network timeout to resolve slow disk I/O issue on local builds
-COPY apps/wifi-connect/ui .
+COPY apps/wifi-connect/ui/package.json .
 
 RUN yarn install --network-timeout 600000 --frozen-lockfile
+
+COPY apps/wifi-connect/ui .
 
 # Build
 RUN yarn build

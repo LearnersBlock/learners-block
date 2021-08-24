@@ -8,9 +8,11 @@ ENV ONDEVICE=TRUE
 WORKDIR /build-context
 
 # Install node modules with long network timeout to resolve slow disk I/O on local builds
-COPY apps/library/ .
+COPY apps/library/package.json .
 
 RUN yarn install --network-timeout 600000 --frozen-lockfile
+
+COPY apps/library/ .
 
 RUN yarn run lint
 
@@ -23,9 +25,11 @@ FROM node:14.17.0-alpine3.13 AS interface-buildstep
 WORKDIR /build-context
 
 # Install node modules with long network timeout to resolve slow disk I/O on local builds
-COPY apps/interface/ .
+COPY apps/interface/package.json .
 
 RUN yarn install --network-timeout 600000 --frozen-lockfile
+
+COPY apps/interface/ .
 
 RUN yarn run lint
 
