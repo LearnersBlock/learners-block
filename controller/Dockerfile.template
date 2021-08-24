@@ -5,6 +5,7 @@ WORKDIR /build-context
 
 # Install node modules with long network timeout to resolve slow disk I/O issue on local builds
 COPY apps/wifi-connect/ui/package.json .
+COPY apps/wifi-connect/ui/yarn.lock .
 
 RUN yarn install --network-timeout 600000 --frozen-lockfile
 
