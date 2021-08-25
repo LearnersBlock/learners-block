@@ -12,6 +12,7 @@ const routes: RouteRecordRaw[] = [
       { path: '/captive_portal', component: () => import('pages/CaptivePortal.vue'), name: 'captive_portal' },
       { path: '/epub_reader', component: () => import('pages/Epub.vue'), name: 'epub_reader' },
       { path: '/portainer', redirect: '/portainer//' },
+      { path: '/wifi', component: () => import('pages/WifiConnect.vue'), name: 'wifi' },
       // route to fix invalid router replace when clicking password reset from /settings/ page ratner than /settings
       { path: '/settings/password_reset', redirect: '/password_reset' },
       { path: '/401', component: () => import('pages/401.vue'), name: '401' }

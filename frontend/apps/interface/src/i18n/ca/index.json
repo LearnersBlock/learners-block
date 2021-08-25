@@ -67,5 +67,10 @@
     "update_available": "Hi ha una actualització disponible",
     "install": "Instal·la",
     "uninstall": "Desinstal·la",
-    "your_new_name": "el-vostre-nom-nou"
+    "your_new_name": "el-vostre-nom-nou",
+    "network_absent": "Si no veieu la vostra xarxa, reinicieu el dispositiu i torneu-ho a provar.",
+    "user": "Usuari",
+    "network_fetch_fail": "No s’han pogut recuperar les xarxes disponibles.",
+    "network_connect_fail": "No s’ha pogut connectar a la xarxa.",
+    "applying_changes": "S’estan aplicant els canvis."
 }
