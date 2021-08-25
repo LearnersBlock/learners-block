@@ -80,6 +80,9 @@ export default defineComponent({
         identity: username.value,
         passphrase: password.value
       }, { withCredentials: false }).then(() => {
+        wifiSsid.value = ''
+        username.value = ''
+        password.value = ''
         $q.notify({
           type: 'positive',
           multiLine: true,

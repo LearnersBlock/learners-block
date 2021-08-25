@@ -151,7 +151,7 @@ export default defineComponent({
       })
       await $store.dispatch('LOGOUT')
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await $router.push('/').catch(() => {})
+      await $router.replace('/').catch(() => {})
       $q.loading.hide()
     }
 

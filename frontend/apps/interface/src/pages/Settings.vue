@@ -5,7 +5,7 @@
         <div>
           <!-- Home Button -->
           <q-btn
-            @click="$router.replace('/')"
+            @click="$router.push('/')"
             rounded
             color="white"
             text-color="primary"
@@ -173,7 +173,7 @@
               rounded
               no-caps
               color="primary"
-              @click="$router.replace('password_reset')"
+              @click="$router.push('password_reset')"
               :label="$t('set_password')"
               class="ml-3 mr-3 mb-2 text-lg"
             />
@@ -704,6 +704,7 @@ import { useQuasar } from 'quasar'
 import { useStore } from '../store'
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'Settings',
@@ -740,6 +741,7 @@ export default defineComponent({
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
+    const $router = useRouter()
     const settingWifiPassword = ref<boolean>(false)
     const setWifiPasswordDialog = ref<boolean>(false)
     const showPasswordButton = ref<boolean>(false)
@@ -1269,7 +1271,7 @@ export default defineComponent({
       if (internet.value && !wifi.value && !process.env.DEV) {
         $q.notify({ type: 'negative', message: t('internet_no_wifi') })
       } else if (wifi.value === false) {
-        window.open('http://' + window.location.hostname + ':8080/?lang=' + $q.lang.isoName)
+        $router.push('/wifi')
       } else {
         $q.dialog({
           title: t('confirm'),

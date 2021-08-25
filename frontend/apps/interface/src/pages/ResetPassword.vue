@@ -68,7 +68,7 @@ export default defineComponent({
       if (response.status === 200) {
         $q.notify({ type: 'positive', message: t('password_set_success') })
         newPassword.value = ''
-        $router.push('/settings')
+        $router.replace('/settings')
       } else {
         $q.notify({ type: 'negative', message: t('error') })
       }

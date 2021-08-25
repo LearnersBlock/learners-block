@@ -1,20 +1,3 @@
-## Build Wi-Fi Connect UI
-FROM node:14.17.0-alpine3.13 AS controller-wifi-buildstep
-
-WORKDIR /build-context
-
-# Install node modules with long network timeout to resolve slow disk I/O issue on local builds
-COPY apps/wifi-connect/ui/package.json .
-COPY apps/wifi-connect/ui/yarn.lock .
-
-RUN yarn install --network-timeout 600000 --frozen-lockfile
-
-COPY apps/wifi-connect/ui .
-
-# Build
-RUN yarn build
-
-
 ## Build Python packages to avoid need for builds in main image
 FROM balenalib/%%BALENA_ARCH%%-debian-python:3.8.10-buster-build-20210506 AS python-buildstep
 
@@ -53,13 +36,10 @@ RUN mkdir -p common/wifi-connect
 RUN mkdir -p db
 
 # Download Wi-Fi connect based on system architecture 
-ARG VERSION="4.4.5"
+ARG VERSION="4.4.6"
 
 RUN curl -Ls "https://github.com/balena-io/wifi-connect/releases/download/v$VERSION/wifi-connect-v$VERSION-linux-%%BALENA_ARCH%%.tar.gz" \
-  | tar -xvz -C common/wifi-connect && rm -Rf common/wifi-connect/ui/*
-
-# Add Wi-Fi connect UI
-COPY --from=controller-wifi-buildstep /build-context/build common/wifi-connect/ui/
+  | tar -xvz -C common/wifi-connect && rm -Rf common/wifi-connect/ui
 
 # Insert application
 COPY apps/backend .

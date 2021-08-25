@@ -66,7 +66,7 @@ export default defineComponent({
             type: 'positive',
             message: t('login_successfull')
           })
-          $router.push('/settings')
+          $router.replace('/settings')
         })
         .catch((e: { message: never}) => {
           $q.notify({

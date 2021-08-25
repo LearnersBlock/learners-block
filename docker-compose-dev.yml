@@ -33,20 +33,6 @@ services:
       - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
       - 'lb_share:/app/public/interface_dev/public/lb_share'
 
-  wifi_connect:
-    build:
-      context: ./controller
-      dockerfile: Dockerfile.dev.wifi-connect
-    stdin_open: true
-    ports: 
-      - "8080:8080"
-    labels:
-      portainer: hidden
-    volumes:
-      - './controller/apps/wifi-connect/ui:/app/wifi-connect/ui:cached'
-      - 'yarn_cache_wifi:/usr/local/share/.cache/yarn/'
-
 volumes:
   lb_share:
   yarn_cache_frontend:
-  yarn_cache_wifi:
