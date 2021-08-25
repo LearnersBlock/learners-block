@@ -7,14 +7,12 @@
       <div class="text-h4 mb-6 text-gray-600">
         {{ $t('login') }}
       </div>
-
       <q-input
         filled
         v-model="password"
         :label="$t('password')"
         type="password"
       />
-
       <q-btn
         :label="$t('login')"
         class="mt-4"

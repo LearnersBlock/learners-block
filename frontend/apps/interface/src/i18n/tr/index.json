@@ -107,5 +107,13 @@
     "prune_system_files_description": "Aygıtınızda yer açmak için kullanılmayan sistem dosyalarını temizleyin.",
     "prune_system_files": "Sistem Dosyalarını Temizle",
     "prune": "Temizle",
-    "author_colon": "Yazar:"
+    "author_colon": "Yazar:",
+    "applying_changes": "Değişiklikler uygulanıyor.",
+    "connection_reset_request": "Learner's Block'unuz şimdi kablosuz ağa bağlanmayı deneyecek. Blok'unuzu kullanmak için aynı ağa bağlanabilirsiniz. Aygıtınız bir dakika sonra kullanılabilir olmazsa, Learner's Block'unuza yeniden bağlanın, kablosuz ağ parolanızı gözden geçirin ve tekrar deneyin.",
+    "network_connect_fail": "Ağa bağlanılamadı.",
+    "network_fetch_fail": "Kullanılabilir ağlar alınamadı.",
+    "no_networks": "Kapsama alanı içinde kullanılabilir kablosuz ağ yok. Lütfen olduğundan emin olun ve aygıtı yeniden başlatın.",
+    "select_ssid": "Kablosuz Ağ Seç",
+    "user": "Kullanıcı",
+    "network_absent": "Ağınızı göremiyorsanız, aygıtı yeniden başlatın ve tekrar deneyin."
 }
