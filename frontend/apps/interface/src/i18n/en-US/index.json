@@ -115,5 +115,6 @@
     "no_networks": "No Wi-Fi networks within range. Move closer and then reboot the device.",
     "select_ssid": "Select Wi-Fi Network",
     "user": "User",
-    "network_absent": "If you cannot see your network, reboot the device and try again."
+    "network_absent": "If you cannot see your network, reboot the device and try again.",
+    "close": "Close"
 }
