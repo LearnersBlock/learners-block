@@ -109,12 +109,11 @@
     "prune_system_files": "Prune System Files",
     "prune": "Prune",
     "applying_changes": "Applying changes.",
-    "connection_reset_request": "Your Learner's Block will now try to connect to the Wi-Fi network. You can connect to the same network to use your Block. If your device is not available after a minute, reconnect to your Learner's Block, check your Wi-Fi password and try again.",
+    "connection_reset_request": "Your Learner's Block will now try to connect to your chosen Wi-Fi network. If your device is not available on the chosen network after a minute reconnect to your Learner's Block, check your Wi-Fi password and try again.",
     "network_connect_fail": "Failed to connect to the network.",
     "network_fetch_fail": "Failed to fetch available networks.",
     "no_networks": "No Wi-Fi networks within range. Move closer and then reboot the device.",
     "select_ssid": "Select Wi-Fi Network",
     "user": "User",
-    "close": "Close",
     "network_absent": "If you cannot see your network, reboot the device and try again."
 }

@@ -160,12 +160,10 @@ class wifi_connect:
         if lb_database.wifi_password:
             cmd = (f'/app/common/wifi-connect/wifi-connect '
                    f'-p {lb_database.wifi_password} '
-                   f'-s {current_hostname} -o 8080 --ui-directory '
-                   f'/app/common/wifi-connect/ui'.split())
+                   f'-s {current_hostname} -o 8080'.split())
         else:
             cmd = (f'/app/common/wifi-connect/wifi-connect '
-                   f'-s {current_hostname} -o 8080 --ui-directory '
-                   f'/app/common/wifi-connect/ui'.split())
+                   f'-s {current_hostname} -o 8080'.split())
 
         wifi_process = subprocess.Popen(cmd)
         time.sleep(4)
