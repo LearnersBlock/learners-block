@@ -1,23 +1,30 @@
 <template>
   <q-page class="flex flex-col justify-center items-center p-3">
-    <div class="text-h4 mb-6 text-gray-600">
+    <div class="text-h4 mb-3 text-gray-600">
       {{ $t('wifi') }}
     </div>
     <q-form
       @submit="connect"
-      class="mb-6 flex flex-col"
+      class="mb-5 flex flex-col"
     >
-      <div class="text-subtitle1 mb-6 text-center">
+      <div class="text-subtitle1 mb-5 text-center">
         {{ $t('network_absent') }}
       </div>
       <q-select
-        class="mb-5"
+        class="mb-3"
         :label="$t('select_ssid')"
         rounded
         outlined
         v-model="wifiSsid"
         :options="ssids"
         option-label="ssid"
+      />
+      <q-input
+        v-if="wifiSsid && wifiSsid.security.toLowerCase() === 'enterprise'"
+        class="mb-3"
+        filled
+        v-model="username"
+        :label="$t('username')"
       />
       <q-input
         filled
@@ -40,7 +47,7 @@
         :label="$t('cancel')"
         color="primary"
         text-color="white"
-        class="mt-4"
+        class="mt-3"
         rounded
         unelevated
         @click="$router.replace('/settings')"
@@ -161,6 +168,7 @@ export default defineComponent({
       password,
       ssids,
       submitting,
+      username,
       wifiSsid
     }
   }
