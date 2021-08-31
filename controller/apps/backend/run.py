@@ -14,6 +14,15 @@ from resources.docker_routes import docker_run
 from resources.download_routes import download_fetch
 from resources.download_routes import download_stop
 from resources.download_routes import download_stream
+from resources.filemanager_routes import filemanager_copy
+from resources.filemanager_routes import filemanager_delete
+from resources.filemanager_routes import filemanager_file_size
+from resources.filemanager_routes import filemanager_list
+from resources.filemanager_routes import filemanager_move
+from resources.filemanager_routes import filemanager_newfolder
+from resources.filemanager_routes import filemanager_rename
+from resources.filemanager_routes import filemanager_unzip
+from resources.filemanager_routes import filemanager_upload
 from resources.errors import errors
 from resources.errors import print_message
 from resources.system_routes import health_check
@@ -170,6 +179,15 @@ if __name__ == '__main__':
     api.add_resource(download_fetch, '/v1/download/fetch')
     api.add_resource(download_stop, '/v1/download/stop')
     api.add_resource(download_stream, '/v1/download/stream')
+    api.add_resource(filemanager_copy, '/v1/filemanager/copy')
+    api.add_resource(filemanager_delete, '/v1/filemanager/delete')
+    api.add_resource(filemanager_file_size, '/v1/filemanager/file_size')
+    api.add_resource(filemanager_list, '/v1/filemanager/list')
+    api.add_resource(filemanager_move, '/v1/filemanager/move')
+    api.add_resource(filemanager_newfolder, '/v1/filemanager/newfolder')
+    api.add_resource(filemanager_rename, '/v1/filemanager/rename')
+    api.add_resource(filemanager_unzip, '/v1/filemanager/unzip')
+    api.add_resource(filemanager_upload, '/v1/filemanager/upload')
     api.add_resource(health_check, '/')
     api.add_resource(host_config, '/v1/hostconfig')
     api.add_resource(hostname, '/v1/hostname')

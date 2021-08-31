@@ -32,23 +32,12 @@ class download_fetch(Resource):
         return {'message': 'process started'}
 
     def download_file(self, url):
-        # Store current UID
-        euid = os.geteuid()
-
         try:
-            # Set UID for this download
-            if os.environ['FLASK_ENV'].lower() == "production":
-                os.seteuid(65534)
             resp = requests.get(url, stream=True, timeout=5)
         except Exception as ex:
-            print_message('download_file', 'Failed setting euid', ex)
-            # Restore original UID
-            os.seteuid(euid)
-            download_stop.get(self, response='UID failure')
+            print_message('download_file', 'Failed downloading file', ex)
+            download_stop.get(self, response='failed download')
             return
-
-        # Restore original UID
-        os.seteuid(euid)
 
         # Get length of file for progress reporting
         try:
@@ -89,6 +78,10 @@ class download_fetch(Resource):
                     "progress": int(float(downloaded_bytes/total*100)),
                     "mbytes": int(float(downloaded_bytes/1000000)),
                 })
+
+        # Set file permission for access via NGINX and PhP
+        os.chown(os.path.realpath('.') + '/storage/library/' +
+                 url.split('/')[-1], 65534, 65534)
 
         # Reset global var for next use
         download_log = True
