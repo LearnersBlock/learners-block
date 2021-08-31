@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar v-if="!(currentPath.path == '/captive_portal' || currentPath.path == '/captive_portal/' || currentPath.path == '/epub_reader/')">
+      <q-toolbar v-if="!(currentPath == '/captive_portal' || currentPath == '/captive_portal/' || currentPath == '/epub_reader/')">
         <div class="ml-1">
           <router-link to="/">
             <img
@@ -65,7 +65,7 @@
 
 import { Quasar, useQuasar } from 'quasar'
 import { useStore } from '../store'
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
@@ -79,7 +79,7 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
 
     // Set constants
-    const currentPath = $router.currentRoute.value
+    const currentPath = ref<any>($router.currentRoute.value.path)
     const leftDrawerOpen = ref(false)
     const languages = ref([
       // Language updates must be changed here and in the webpackInclude magic comment below
@@ -116,6 +116,10 @@ export default defineComponent({
         value: 'tr'
       }
     ])
+
+    watch(() => $router.currentRoute.value.path, val => {
+      currentPath.value = val
+    })
 
     const isAuthenticated = computed(() => {
       return $store.getters.isAuthenticated

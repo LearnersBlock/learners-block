@@ -496,7 +496,6 @@
                                 </div>
                               </q-td>
                             </template>
-
                             <!-- Mobile templates -->
                             <template #item="props">
                               <div class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4">

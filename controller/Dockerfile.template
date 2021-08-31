@@ -20,12 +20,13 @@ ENV PATH=/root/.local/bin:$PATH
 # Set working directory 
 WORKDIR /app
 
-# Install Wi-Fi connect dependencies
+# Install dependencies
 RUN install_packages \
   dnsmasq \
   iw \
   libglib2.0-0 \
   psmisc \
+  python3-icu \
   wireless-tools
 
 # Copy built Python packages from build container

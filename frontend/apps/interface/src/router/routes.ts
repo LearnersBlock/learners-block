@@ -8,6 +8,7 @@ const routes: RouteRecordRaw[] = [
       { path: '', component: () => import('pages/Home.vue'), name: 'home' },
       { path: '/captive_portal', component: () => import('pages/CaptivePortal.vue'), name: 'captive_portal' },
       { path: '/epub_reader', component: () => import('pages/Epub.vue'), name: 'epub_reader' },
+      { path: '/filemanager', component: () => import('pages/FileManager.vue'), name: 'filemanager' },
       { path: '/login', component: () => import('pages/Login.vue'), name: 'login' },
       { path: '/password_reset', component: () => import('pages/ResetPassword.vue'), name: 'password_reset' },
       { path: '/portainer', redirect: '/portainer//' },
