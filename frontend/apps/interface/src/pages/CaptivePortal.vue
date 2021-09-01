@@ -19,7 +19,7 @@
       >
         content_copy
         <q-tooltip class="text-caption text-center">
-          Copy to clipboard
+          {{ $t('copy_to_clipboard') }}
         </q-tooltip>
       </span>
     </div>

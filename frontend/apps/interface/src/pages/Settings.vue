@@ -8,19 +8,15 @@
             @click="$router.push('/')"
             rounded
             color="white"
+            size="sm"
             text-color="primary"
-            class="ml-3 mt-9 text-subtitle2 text-weight-bold"
+            class="ml-3 mt-7 text-subtitle2 text-weight-bold"
             outline
-          >
-            <span class="material-icons mr-1 mb-.5">
-              arrow_back_ios
-            </span>
-            <div class="mt-0.5">
-              {{ $t('home') }}
-            </div>
-          </q-btn>
+            :label="$t('home')"
+            icon="arrow_back"
+          />
           <!-- Settings label -->
-          <div class="mt-9 pl-3 text-5xl text-gray-600">
+          <div class="mt-8 pl-3 text-5xl text-gray-600">
             {{ $t('settings') }}
           </div>
           <hr class="mt-3">
