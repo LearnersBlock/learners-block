@@ -7,7 +7,7 @@
         </div>
         <q-separator />
         <div
-          v-if="settingsLoading || redirecting"
+          v-if="settingsLoading"
           class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
         >
           {{ $t('loading') }}
@@ -43,7 +43,6 @@
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.files" />
-
           <q-item
             v-if="settings.library"
             class="cursor-pointer py-3"
@@ -68,7 +67,6 @@
             </q-item-section>
           </q-item>
           <q-separator v-if="settings.library" />
-
           <q-item
             v-if="settings.website"
             class="cursor-pointer py-3"
@@ -96,14 +94,13 @@
           </q-item>
           <q-separator v-if="settings.website" />
         </q-list>
-        <div v-if="slides[0] && !settingsLoading && !redirecting">
+        <div v-if="slides[0] && !settingsLoading">
           <q-item-label
             header
             class="text-2xl mt-2"
           >
             {{ $t('app_store') }}
           </q-item-label>
-
           <div class="q-pl-md q-pr-md q-pb-md">
             <div class="q-gutter-md">
               <q-carousel
@@ -177,14 +174,14 @@ export default defineComponent({
     const windowHostname = ref<string>(window.location.hostname)
 
     // Settings for the ui
-    const redirecting = ref<boolean>(false)
     const settingsState = Axios.get(`${api.value}/v1/settingsui`)
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
 
     // Get settings
-    onMounted(() => {
-      apiCallAwait()
+    onMounted(async () => {
+      await apiCallAwait()
+      $q.loading.hide()
     })
 
     async function apiCallAwait () {
@@ -195,6 +192,8 @@ export default defineComponent({
         // Redirect for Learner's Block Start Page
         if (res1.data.start_page === '/') {
           settings.value = res1.data
+          populateAppStore(res2)
+          settingsLoading.value = false
         } else if (res1.data.start_page.substring(0, 1) === ':') {
           // Redirect for ports
           setTimeout(() => {
@@ -213,7 +212,6 @@ export default defineComponent({
             }
           }
           // Redirect for custom path
-          redirecting.value = true
           if (res1.data.start_page === 'files') {
             setTimeout(() => {
               $router.push({ name: 'filemanager', params: { data: 'fileshare' } })
@@ -227,31 +225,31 @@ export default defineComponent({
               location.href = '/website/'
             }, 2000)
           } else {
-            redirecting.value = false
+            populateAppStore(res2)
+            settingsLoading.value = false
           }
         }
-
-        // Populate app store data
-        let entry = 0
-        slides.value = res2
-        for (let i = 0; i < res2.data.length; i++) {
-          if (res2.data[i].status.toLowerCase() === 'installed' || res2.data[i].status.toLowerCase() === 'update_available') {
-            slides.value[entry] = res2.data[i]
-            jsonKey.value = Object.keys(res2.data[i].ports)
-            slides.value[entry].ports = slides.value[entry].ports[jsonKey.value[0]]
-
-            entry = entry + 1
-          }
-        }
-        if (slides.value[0]) {
-          slide.value = slides.value[0].name
-        }
-        settingsLoading.value = false
-        $q.loading.hide()
       })).catch(e => {
         console.log(e.message)
-        $q.loading.hide()
       })
+    }
+
+    function populateAppStore (res2) {
+      // Populate app store data
+      let entry = 0
+      slides.value = res2
+      for (let i = 0; i < res2.data.length; i++) {
+        if (res2.data[i].status.toLowerCase() === 'installed' || res2.data[i].status.toLowerCase() === 'update_available') {
+          slides.value[entry] = res2.data[i]
+          jsonKey.value = Object.keys(res2.data[i].ports)
+          slides.value[entry].ports = slides.value[entry].ports[jsonKey.value[0]]
+
+          entry = entry + 1
+        }
+      }
+      if (slides.value[0]) {
+        slide.value = slides.value[0].name
+      }
     }
 
     function redirect (path) {
@@ -260,7 +258,6 @@ export default defineComponent({
 
     return {
       redirect,
-      redirecting,
       settings,
       settingsLoading,
       slide,
