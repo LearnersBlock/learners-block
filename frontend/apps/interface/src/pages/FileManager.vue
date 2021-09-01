@@ -373,12 +373,13 @@ import { useQuasar, openURL } from 'quasar'
 import { useStore } from '../store'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   setup () {
     // Import required features
     const $q = useQuasar()
+    const route = useRoute()
     const $router = useRouter()
     const $store = useStore()
     // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -390,6 +391,7 @@ export default defineComponent({
     })
 
     const checkRowExistence = nameParam => rows.value.some(({ name }) => name === nameParam)
+    const chosenPath = ref<string>('')
     const currentPath = ref<any>('')
     const fileSelector = ref<boolean>(false)
     const fileSize = ref<number>(0)
@@ -439,10 +441,15 @@ export default defineComponent({
     ]
 
     onMounted(() => {
-      if (loginState === true) {
-        rootPath.value = '/app/storage/'
+      if (route.params.data) {
+        chosenPath.value = `${route.params.data}/`
+      }
+      if (loginState) {
+        rootPath.value = `/app/storage/${chosenPath.value}/`
+      } else if (!loginState && chosenPath.value) {
+        rootPath.value = `/app/storage/${chosenPath.value}/`
       } else {
-        rootPath.value = '/app/storage/fileshare'
+        rootPath.value = '/app/storage/fileshare/'
       }
       updateRows()
     })

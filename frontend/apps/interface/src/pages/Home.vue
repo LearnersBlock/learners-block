@@ -7,7 +7,7 @@
         </div>
         <q-separator />
         <div
-          v-if="settingsLoading"
+          v-if="settingsLoading || redirecting"
           class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
         >
           {{ $t('loading') }}
@@ -22,9 +22,7 @@
           <q-item
             v-if="settings.files"
             class="cursor-pointer py-3"
-            tag="a"
-            target="_self"
-            href="/files/"
+            :to="{ name: 'filemanager', params: { data: 'fileshare'} }"
           >
             <q-item-section
               side
@@ -49,9 +47,7 @@
           <q-item
             v-if="settings.library"
             class="cursor-pointer py-3"
-            tag="a"
-            target="_self"
-            href="/library/"
+            :to="{ name: 'filemanager', params: { data: 'library'} }"
           >
             <q-item-section
               side
@@ -100,7 +96,7 @@
           </q-item>
           <q-separator v-if="settings.website" />
         </q-list>
-        <div v-if="slides[0] && !settingsLoading">
+        <div v-if="slides[0] && !settingsLoading && !redirecting">
           <q-item-label
             header
             class="text-2xl mt-2"
@@ -159,11 +155,13 @@ import Axios from 'app/node_modules/axios'
 import { useStore } from '../store'
 import { useQuasar } from 'quasar'
 import { computed, defineComponent, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup () {
     // Import required features
     const $q = useQuasar()
+    const $router = useRouter()
     const $store = useStore()
 
     // Get API from Store
@@ -179,6 +177,7 @@ export default defineComponent({
     const windowHostname = ref<string>(window.location.hostname)
 
     // Settings for the ui
+    const redirecting = ref<boolean>(true)
     const settingsState = Axios.get(`${api.value}/v1/settingsui`)
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
@@ -214,9 +213,21 @@ export default defineComponent({
             }
           }
           // Redirect for custom path
-          setTimeout(() => {
-            location.href = `/${res1.data.start_page}/`
-          }, 2000)
+          if (res1.data.start_page === 'files') {
+            setTimeout(() => {
+              $router.push({ name: 'filemanager', params: { data: 'fileshare' } })
+            }, 2000)
+          } else if (res1.data.start_page === 'library') {
+            setTimeout(() => {
+              $router.push({ name: 'filemanager', params: { data: 'library' } })
+            }, 2000)
+          } else if (res1.data.start_page === 'website') {
+            setTimeout(() => {
+              location.href = '/website/'
+            }, 2000)
+          } else {
+            redirecting.value = false
+          }
         }
 
         // Populate app store data
@@ -248,6 +259,7 @@ export default defineComponent({
 
     return {
       redirect,
+      redirecting,
       settings,
       settingsLoading,
       slide,

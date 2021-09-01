@@ -40,9 +40,7 @@
               <q-item
                 clickable
                 v-ripple
-                tag="a"
-                target="_self"
-                href="/upload-files/"
+                to="/filemanager"
               >
                 <q-icon
                   name="folder"
@@ -125,9 +123,7 @@
               <q-item
                 clickable
                 v-ripple
-                tag="a"
-                target="_self"
-                href="/upload-website/"
+                :to="{ name: 'filemanager', params: { data: 'website'} }"
               >
                 <q-icon
                   name="language"
