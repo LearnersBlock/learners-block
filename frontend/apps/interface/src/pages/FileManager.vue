@@ -1,5 +1,17 @@
 <template>
   <q-page class="items-center p-3 text-body1">
+    <!-- Home Button -->
+    <q-btn
+      @click="$router.back()"
+      rounded
+      size="sm"
+      color="white"
+      text-color="primary"
+      class="mt-1 mb-2 text-body-1 text-weight-bold"
+      outline
+      :label="$t('back')"
+      icon="arrow_back"
+    />
     <div class="mb-1">
       <q-breadcrumbs v-if="!objPath[0]">
         <q-breadcrumbs-el
@@ -28,9 +40,11 @@
       v-if="rows"
       table-style="width: 90vw;"
       flat
+      :loading="loading"
       :rows="rows"
       :rows-per-page-options="[10, 20, 50, 100]"
       :columns="columns"
+      :no-results-label="$t('empty_folder')"
       row-key="name"
       :selection="loginState ? 'multiple' : 'none'"
       v-model:selected="selected"
@@ -69,7 +83,16 @@
             rounded
             size="sm"
             @click="newFolderPrompt"
-          />
+          >
+            <q-tooltip
+              class="text-caption text-center text-body1"
+              anchor="top middle"
+              self="center middle"
+              :offset="[20, 20]"
+            >
+              {{ $t('new_folder') }}
+            </q-tooltip>
+          </q-btn>
           <q-btn
             class="mr-1"
             icon="drive_file_move_rtl"
@@ -79,7 +102,16 @@
             size="sm"
             :disable="!JSON.parse(JSON.stringify(selected))[0]"
             @click="openFileSelector(JSON.parse(JSON.stringify(selected)))"
-          />
+          >
+            <q-tooltip
+              class="text-caption text-center text-body1"
+              anchor="top middle"
+              self="center middle"
+              :offset="[20, 20]"
+            >
+              {{ $t('move_copy') }}
+            </q-tooltip>
+          </q-btn>
           <q-btn
             class="mr-1"
             icon="upload"
@@ -88,7 +120,16 @@
             rounded
             size="sm"
             @click="uploaderDialog = true"
-          />
+          >
+            <q-tooltip
+              class="text-caption text-center text-body1"
+              anchor="top middle"
+              self="center middle"
+              :offset="[20, 20]"
+            >
+              {{ $t('upload') }}
+            </q-tooltip>
+          </q-btn>
           <q-dialog
             v-model="uploaderDialog"
           >
@@ -117,7 +158,16 @@
             outline
             icon="delete"
             @click="deleteFile(JSON.parse(JSON.stringify(selected)))"
-          />
+          >
+            <q-tooltip
+              class="text-caption text-center text-body1"
+              anchor="top middle"
+              self="center middle"
+              :offset="[20, 20]"
+            >
+              {{ $t('delete') }}
+            </q-tooltip>
+          </q-btn>
         </div>
         <q-btn
           class="mr-1"
@@ -127,7 +177,16 @@
           rounded
           size="sm"
           @click="searchTable = true"
-        />
+        >
+          <q-tooltip
+            class="text-caption text-center text-body1"
+            anchor="top middle"
+            self="center middle"
+            :offset="[20, 20]"
+          >
+            {{ $t('filter') }}
+          </q-tooltip>
+        </q-btn>
         <q-input
           v-if="searchTable"
           class="ml-2"
@@ -135,7 +194,7 @@
           debounce="300"
           hide-bottom-space
           v-model="filter"
-          placeholder="Search"
+          :placeholder="$t('filter')"
         />
         <q-btn
           flat
@@ -144,12 +203,22 @@
           :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
           @click="props.toggleFullscreen"
           class="q-ml-md"
-        />
+        >
+          <q-tooltip
+            class="text-caption text-center text-body1"
+            anchor="top middle"
+            self="center middle"
+            :offset="[20, 20]"
+          >
+            {{ $t('full_screen') }}
+          </q-tooltip>
+        </q-btn>
       </template>
       <!-- Name -->
       <template #body-cell-name="props">
         <q-td :props="props">
           <div class="text-body1">
+            <!-- Folder or file icon -->
             <q-icon
               v-if="props.row.format === 'folder'"
               class="mb-1"
@@ -165,8 +234,10 @@
               name="insert_drive_file"
             />
             {{ props.value }}
+            <!-- Zip button -->
             <q-btn
               v-if="loginState && props.row.extension == '.zip' || props.row.extension == '.gz'"
+              class="ml-1"
               :loading="unzipLoading"
               round
               outline
@@ -174,10 +245,20 @@
               color="gray-800"
               icon="unarchive"
               @click.stop="unzip(props.row.name)"
-            />
+            >
+              <q-tooltip
+                class="text-caption text-center text-body1"
+                anchor="top middle"
+                self="center middle"
+                :offset="[20, 20]"
+              >
+                {{ $t('unzip') }}
+              </q-tooltip>
+            </q-btn>
           </div>
         </q-td>
       </template>
+      <!-- File/Folder buttons -->
       <!-- Copy/Move -->
       <template
         #body-cell-move="props"
@@ -195,7 +276,16 @@
               color="gray-800"
               icon="drive_file_move_rtl"
               @click.stop="openFileSelector([{name:props.row.name, format:props.row.format}])"
-            />
+            >
+              <q-tooltip
+                class="text-caption text-center text-body1"
+                anchor="top middle"
+                self="center middle"
+                :offset="[20, 20]"
+              >
+                {{ $t('move_copy') }}
+              </q-tooltip>
+            </q-btn>
           </div>
         </q-td>
       </template>
@@ -220,6 +310,7 @@
               <q-popup-edit
                 v-model="props.row.name"
                 title="Enter a new name"
+                buttons
                 auto-save
                 v-slot="scope"
                 @save="rename(props.row.name, newName)"
@@ -236,6 +327,14 @@
                   @update:model-value="newName = scope.value"
                 />
               </q-popup-edit>
+              <q-tooltip
+                class="text-caption text-center text-body1"
+                anchor="top middle"
+                self="center middle"
+                :offset="[20, 20]"
+              >
+                {{ $t('rename') }}
+              </q-tooltip>
             </q-btn>
           </div>
         </q-td>
@@ -257,7 +356,16 @@
               color="gray-800"
               icon="delete"
               @click.stop="deleteFile([{name:props.row.name, format:props.row.format}])"
-            />
+            >
+              <q-tooltip
+                class="text-caption text-center text-body1"
+                anchor="top middle"
+                self="center middle"
+                :offset="[20, 20]"
+              >
+                {{ $t('delete') }}
+              </q-tooltip>
+            </q-btn>
           </div>
         </q-td>
       </template>
@@ -299,6 +407,8 @@
             table-style="width: 75vw;"
             hide-bottom
             flat
+            :no-results-label="$t('empty_folder')"
+            :loading="loading"
             :rows-per-page-options="[0]"
             :rows="selectorRows"
             :columns="selectorColumns"
@@ -342,6 +452,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn
+            class="mr-3"
             flat
             :label="$t('cancel')"
             color="primary"
@@ -398,6 +509,7 @@ export default defineComponent({
     const invalidCharacters = ref<Array<any>>([
       '<', '>', '%', '{', '}', '|', '\\', '^', '`', '$', '#'
     ])
+    const loading = ref<boolean>(true)
     const loadingFileSize = ref<boolean>(false)
     const loginState = $store.getters.isAuthenticated
     const loginToken = ref<string>(Axios.defaults.headers.common.Authorization)
@@ -440,18 +552,22 @@ export default defineComponent({
       }
     ]
 
-    onMounted(() => {
+    onMounted(async () => {
+      $q.loading.show({
+        delay: 500 // ms
+      })
       if (route.params.data) {
         chosenPath.value = `${route.params.data}/`
       }
       if (loginState) {
-        rootPath.value = `/app/storage/${chosenPath.value}/`
+        rootPath.value = `/app/storage/${chosenPath.value}`
       } else if (!loginState && chosenPath.value) {
-        rootPath.value = `/app/storage/${chosenPath.value}/`
+        rootPath.value = `/app/storage/${chosenPath.value}`
       } else {
         rootPath.value = '/app/storage/fileshare/'
       }
-      updateRows()
+      await updateRows()
+      $q.loading.hide()
     })
 
     function checkCharacters (files) {
@@ -496,7 +612,8 @@ export default defineComponent({
         root: rootPath.value
       })
       selected.value = []
-      updateRows()
+      await updateRows()
+      notifyComplete()
     }
 
     async function fetchFileSize (itemFile) {
@@ -534,7 +651,8 @@ export default defineComponent({
           })
         }
         selected.value = []
-        updateRows()
+        await updateRows()
+        notifyComplete()
       }
     }
 
@@ -566,9 +684,18 @@ export default defineComponent({
               directory: data,
               root: rootPath.value
             })
-            updateRows()
+            await updateRows()
+            notifyComplete()
           }
         }
+      })
+    }
+
+    function notifyComplete () {
+      $q.notify({
+        type: 'positive',
+        icon: 'done',
+        timeout: 100
       })
     }
 
@@ -655,6 +782,7 @@ export default defineComponent({
             to: newName,
             root: rootPath.value
           })
+          notifyComplete()
         }
       }
       updateRows()
@@ -667,11 +795,13 @@ export default defineComponent({
         path: objPath.value,
         root: rootPath.value
       })
-      updateRows()
+      await updateRows()
+      notifyComplete()
       unzipLoading.value = false
     }
 
     async function updateRows () {
+      loading.value = true
       if (objPath.value.length === 0 && rootPath.value === '/app/storage/') {
         safeRoute.value = false
       } else {
@@ -693,9 +823,11 @@ export default defineComponent({
         }
         $q.notify({ type: 'negative', message: t('error') })
       })
+      loading.value = false
     }
 
     async function updateSelectorRows () {
+      loading.value = true
       await Axios.post(`${api.value}/v1/filemanager/list`, {
         path: selectorObjPath.value,
         root: rootPath.value
@@ -705,6 +837,7 @@ export default defineComponent({
         console.log(error)
         $q.notify({ type: 'negative', message: t('error') })
       })
+      loading.value = false
     }
 
     async function uploadFailed (response) {
@@ -727,6 +860,7 @@ export default defineComponent({
       filter: ref(''),
       filterFiles,
       invalidCharacters,
+      loading,
       loadingFileSize,
       loginState,
       loginToken,
