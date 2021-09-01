@@ -177,7 +177,7 @@ export default defineComponent({
     const windowHostname = ref<string>(window.location.hostname)
 
     // Settings for the ui
-    const redirecting = ref<boolean>(true)
+    const redirecting = ref<boolean>(false)
     const settingsState = Axios.get(`${api.value}/v1/settingsui`)
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
@@ -213,6 +213,7 @@ export default defineComponent({
             }
           }
           // Redirect for custom path
+          redirecting.value = true
           if (res1.data.start_page === 'files') {
             setTimeout(() => {
               $router.push({ name: 'filemanager', params: { data: 'fileshare' } })
