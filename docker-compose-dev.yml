@@ -5,7 +5,7 @@ version: '2.1'
 services:
   controller:
     build:
-      context: ./controller
+      context: ./backend
       dockerfile: Dockerfile.dev.backend
     restart: on-failure
     ports: 
@@ -15,10 +15,10 @@ services:
     depends_on:
       - "frontend"
     volumes:
-      - './controller/apps/backend:/app'
+      - './backend/apps/controller:/app'
       - 'file_storage:/app/storage'
       - '/var/run/docker.sock:/var/run/docker.sock'
-      - 'lb_share:/app/lb_share'
+      - 'asset_share:/app/asset_share'
 
   frontend:
     build:
@@ -31,12 +31,11 @@ services:
     volumes:
       - './frontend/apps/interface:/app/public/interface_dev:cached'
       - './frontend/apps/library:/app/public/library:cached'
-      - './frontend/apps/file-manager/dist:/app/public/files:cached'
       - 'file_storage:/app/public/storage'            
       - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
-      - 'lb_share:/app/public/interface_dev/public/lb_share'
+      - 'asset_share:/app/public/interface_dev/public/asset_share'
 
 volumes:
   file_storage:
-  lb_share:
+  asset_share:
   yarn_cache_frontend:

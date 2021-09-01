@@ -3,14 +3,14 @@ name: Python Lint
 on:
   push:
     paths:
-      - 'controller/apps/backend/**'
+      - 'backend/apps/controller/**'
   pull_request:
     paths:
-      - 'controller/apps/backend/**'
+      - 'backend/apps/controller/**'
 
 defaults:
     run:
-      working-directory: controller/apps/backend
+      working-directory: backend/apps/controller
 
 jobs:
   build:

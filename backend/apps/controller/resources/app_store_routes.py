@@ -135,7 +135,7 @@ class app_store_set(Resource):
 
                 # Save the logo
                 if app_list[app]['logo']:
-                    lb_database.logo = '/lb_share/assets/' + \
+                    lb_database.logo = '/asset_share/assets/' + \
                                         lb_database.name + \
                                         '/' + app_list[app]['logo'] \
                                         .split('/')[-1]
@@ -147,7 +147,7 @@ class app_store_set(Resource):
 
                         if r.status_code == 200:
                             try:
-                                os.makedirs('./lb_share/assets/' +
+                                os.makedirs('./asset_share/assets/' +
                                             lb_database.name)
                             except Exception as ex:
                                 print_message('app_store_set',
