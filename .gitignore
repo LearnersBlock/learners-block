@@ -41,9 +41,9 @@ yarn-error.log*
 *.sw?
 
 # Applications
-/controller/apps/backend/storage/**
-/controller/apps/backend/db/**
-/controller/apps/backend/lb_share
-/frontend/apps/interface/public/lb_share
+/backend/apps/controller/storage/**
+/backend/apps/controller/db/**
+/backend/apps/controller/asset_share
+/frontend/apps/interface/public/asset_share
 /frontend/apps/library/**
 !.gitkeep

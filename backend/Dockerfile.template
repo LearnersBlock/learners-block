@@ -2,7 +2,7 @@
 FROM balenalib/%%BALENA_ARCH%%-debian-python:3.8.10-buster-build-20210506 AS python-buildstep
 
 # Copy Python requirements file
-COPY apps/backend/requirements.txt /tmp/
+COPY apps/controller/requirements.txt /tmp/
 
 # Install packages into a directory
 RUN pip install --user -r /tmp/requirements.txt --upgrade --no-warn-script-location
@@ -43,7 +43,7 @@ RUN curl -Ls "https://github.com/balena-io/wifi-connect/releases/download/v$VERS
   | tar -xvz -C common/wifi-connect && rm -Rf common/wifi-connect/ui
 
 # Insert application
-COPY apps/backend .
+COPY apps/controller .
 
 # Add in default Portainer database
 COPY apps/portainer/portainer.db portainer/portainer.db

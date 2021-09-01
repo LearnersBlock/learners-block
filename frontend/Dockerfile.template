@@ -38,25 +38,6 @@ RUN yarn run lint
 RUN yarn build
 
 
-## Build File Manager
-FROM composer:2.0.11 AS filemanager-buildstep
-
-# Provide TERM for TPUT
-ENV TERM=xterm
-
-# Install required build dependencies
-RUN apk add ncurses
-
-# Set workdir to the build folder
-WORKDIR /build-context
-
-# Copy content to prepare
-COPY apps/file-manager/ .
-
-# Run the build process
-RUN composer run build
-
-
 ## Compile container
 FROM balenalib/%%BALENA_ARCH%%-alpine-python:3.8.10-3.13-20210603
 
@@ -94,28 +75,15 @@ RUN install_packages \
   php8-zlib \
   && rm /etc/nginx/conf.d/default.conf
 
-# Install File Manager dependencies
-RUN install_packages \
-  libbz2 \
-  libzip \
-  libcap \
-  openldap-dev \
-  php8-bz2 \
-  php8-fileinfo \
-  php8-ldap \
-  php8-posix \
-  php8-zip
-
 # Set application directory 
 WORKDIR /app/
 
 # Create root directories #
-RUN mkdir -p public/files && \
-  mkdir -p public/storage && \
+RUN mkdir -p public/storage && \
   mkdir -p public/storage/fileshare && \
   mkdir -p public/storage/library && \ 
   mkdir -p public/storage/website && \
-  mkdir -p public/interface/lb_share/assets
+  mkdir -p public/interface/asset_share/assets
     
 # Configure SupervisorD
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -136,9 +104,6 @@ COPY /config/nginx/conf/ /etc/nginx/conf.d/
 COPY --chown=nginx /config/nginx/assets/index.html public/storage/website/index.html
 COPY --chown=nginx /config/nginx/assets/web.png public/storage/website/web.png
 
-# Insert File Manager source code
-COPY --chown=nginx --from=filemanager-buildstep /build-context/dist public/files
-
 # Insert interface source code
 COPY --chown=nginx --from=interface-buildstep /build-context/dist/spa public/interface
 
@@ -150,7 +115,7 @@ RUN chown -R nginx.nginx /run && \
   chown -R nobody.nobody public/storage/fileshare/ && \
   chown -R nobody.nobody public/storage/library/ && \
   chown -R nobody.nobody public/storage/website/ && \
-  chown -R nobody.nobody public/interface/lb_share/
+  chown -R nobody.nobody public/interface/asset_share/
 
 # Start SupervisorD to manage processes
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

@@ -41,7 +41,7 @@ yarn-error.log*
 *.sw?
 
 # Applications
-/controller/apps/backend/db/**
-/controller/apps/backend/storage/library/**
-/controller/apps/backend/lb_share
-/frontend/apps/interface/public/lb_share
+/backend/apps/controller/db/**
+/backend/apps/controller/storage/library/**
+/backend/apps/controller/asset_share
+/backend/apps/interface/public/asset_share

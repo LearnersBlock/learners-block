@@ -20,14 +20,14 @@ jobs:
       - if: startsWith(github.ref, 'refs/tags/v')
         name: Update versions
         run: |
-          echo VERSION="$RELEASE_VERSION" > ${GITHUB_WORKSPACE}/controller/apps/backend/.version && \
+          echo VERSION="$RELEASE_VERSION" > ${GITHUB_WORKSPACE}/backend/apps/controller/.version && \
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV && \
           sed -i "/^\([[:space:]]*version: \).*/s//\1$RELEASE_VERSION/" ${GITHUB_WORKSPACE}/balena.yml
 
       - if: startsWith(github.ref, 'refs/tags/v') != true
         name: Update versions
         run: |
-          echo VERSION="dev" > ${GITHUB_WORKSPACE}/controller/apps/backend/.version && \
+          echo VERSION="dev" > ${GITHUB_WORKSPACE}/backend/apps/controller/.version && \
           echo "RELEASE_VERSION=dev" >> $GITHUB_ENV
 
       - name: Commit .version file
@@ -37,7 +37,7 @@ jobs:
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
           message: 'Update version files'
           branch: main
-          add: './controller/apps/backend/.version'
+          add: './backend/apps/controller/.version'
 
       - if: startsWith(github.ref, 'refs/tags/v') != true
         name: Remove 'version' line from balena.yml in development environment

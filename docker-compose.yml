@@ -3,7 +3,7 @@ version: '2.1'
 services:
   controller:
     build:
-      context: ./controller
+      context: ./backend
       dockerfile: Dockerfile.template
     restart: always
     network_mode: "host"
@@ -11,7 +11,7 @@ services:
       - 'portainer_data:/app/portainer'
       - 'controller_db:/app/db'
       - 'file_storage:/app/storage'
-      - 'lb_share:/app/lb_share'
+      - 'asset_share:/app/asset_share'
     labels:
       io.balena.features.dbus: '1'
       io.balena.features.supervisor-api: '1'
@@ -33,7 +33,7 @@ services:
       - "80:8081"
     volumes:
       - 'file_storage:/app/public/storage'
-      - 'lb_share:/app/public/interface/lb_share'
+      - 'asset_share:/app/public/interface/asset_share'
     labels:
       portainer: hidden
     privileged: true
@@ -57,5 +57,5 @@ services:
 volumes:
   controller_db:
   file_storage:
-  lb_share:
+  asset_share:
   portainer_data:

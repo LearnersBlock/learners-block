@@ -15,7 +15,7 @@ ENV FLASK_APP=run
 ENV PYTHONUNBUFFERED=1
 
 # Install required packages
-COPY apps/backend/requirements-dev.txt /tmp/
+COPY apps/controller/requirements-dev.txt /tmp/
 RUN pip install -r /tmp/requirements-dev.txt --upgrade --no-deps --force-reinstall --no-cache-dir
 
 # Launch
