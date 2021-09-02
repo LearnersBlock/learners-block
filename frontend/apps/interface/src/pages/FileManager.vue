@@ -125,7 +125,7 @@
               >
                 <q-uploader
                   style="max-width: 300px"
-                  label="Upload"
+                  :label="$t('upload')"
                   multiple
                   flat
                   square
@@ -136,7 +136,7 @@
                   :headers="[{name: 'rootPath', value: rootPath}, {name: 'savePath', value: JSON.stringify(objPath)}, {name: 'Authorization', value: loginToken}]"
                   @uploaded="updateRows()"
                   @failed="uploadFailed"
-                  @rejected="onRejected"
+                  @rejected="onUploaderRejected"
                   @added="checkUploadOverwrite"
                 />
               </q-dialog>
@@ -246,7 +246,7 @@
                 self="center middle"
                 :offset="[20, 20]"
               >
-                {{ $t('unzip') }}
+                {{ $t('extract') }}
               </q-tooltip>
             </q-btn>
           </div>
@@ -303,7 +303,7 @@
             >
               <q-popup-edit
                 v-model="props.row.name"
-                title="Enter a new name"
+                :title="$t('choose_name')"
                 buttons
                 auto-save
                 v-slot="scope"
@@ -316,7 +316,7 @@
                   autofocus
                   :rules="[(val) =>
                     !invalidCharacters.some(el => val.includes(el))
-                    || $t('invalid_string')]"
+                    || $t('invalid_filemanager_string')]"
                   @keyup.enter="scope.set"
                   @update:model-value="newName = scope.value"
                 />
@@ -414,28 +414,28 @@
                     <q-item-section
                       @click="unzip(props.row.name)"
                     >
-                      Unzip
+                      {{ $t('extract') }}
                     </q-item-section>
                   </q-item>
                   <q-item clickable>
                     <q-item-section
                       @click="openFileSelector([{name:props.row.name, format:props.row.format}])"
                     >
-                      Copy/Move
+                      {{ $t('move_copy') }}
                     </q-item-section>
                   </q-item>
                   <q-item clickable>
                     <q-item-section
                       @click="mobileRenameFile(props.row.name)"
                     >
-                      Rename
+                      {{ $t('rename') }}
                     </q-item-section>
                   </q-item>
                   <q-item clickable>
                     <q-item-section
                       @click="deleteFile([{name:props.row.name, format:props.row.format}])"
                     >
-                      Delete
+                      {{ $t('delete') }}
                     </q-item-section>
                   </q-item>
                 </q-list>
@@ -470,10 +470,10 @@
             row-key="name"
             @row-click="onSelectorRowClick"
           >
-            <!-- Back Button/Header -->
+            <!-- Header -->
             <template #top-left>
               <div>
-                {{ $t('Select a folder') }}
+                {{ $t('select_folder') }}
               </div>
               <div class="mt-2">
                 <q-btn
@@ -513,14 +513,14 @@
           />
           <q-btn
             flat
-            label="move"
+            :label="$t('move')"
             color="primary"
             v-close-popup
             @click="moveCopyItem('move')"
           />
           <q-btn
             flat
-            label="copy"
+            :label="$t('copy')"
             color="primary"
             v-close-popup
             @click="moveCopyItem('copy')"
@@ -583,7 +583,7 @@ export default defineComponent({
       {
         name: 'name',
         required: true,
-        label: 'Name',
+        label: t('name'),
         align: 'left',
         field: row => row.name,
         format: val => `${val}`
@@ -599,7 +599,7 @@ export default defineComponent({
       {
         name: 'name',
         required: true,
-        label: 'Name',
+        label: t('name'),
         align: 'left',
         field: row => row.name,
         format: val => `${val}`
@@ -638,7 +638,7 @@ export default defineComponent({
         if (rows.value.some(({ name }) => name === files[i].name)) {
           $q.notify({
             type: 'warning',
-            message: 'Some of the files you added already exist.'
+            message: t('upload_files_exist')
           })
         }
       }
@@ -653,8 +653,7 @@ export default defineComponent({
           if (await new Promise(resolve => $q.dialog({
             title: t('confirm'),
             message: t('overwrite_warning'),
-            cancel: true,
-            persistent: true
+            cancel: true
           }).onOk(() => resolve(true)).onCancel(() => resolve(false)))) {
             return true
           } else {
@@ -666,8 +665,8 @@ export default defineComponent({
 
     function deleteFile (itemObj) {
       $q.dialog({
-        title: 'Confirm',
-        message: 'Are you sure you want to delete this?',
+        title: t('confirm'),
+        message: t('confirm_delete'),
         cancel: true
       }).onOk(async () => {
         await Axios.post(`${api.value}/v1/filemanager/delete`, {
@@ -700,8 +699,8 @@ export default defineComponent({
 
     function mobileRenameFile (currentName) {
       $q.dialog({
-        title: 'Choose a name',
-        message: 'Enter new name',
+        title: t('select_folder'),
+        message: t('select_folder'),
         prompt: {
           model: '',
           isValid: val => val !== ''
@@ -711,7 +710,7 @@ export default defineComponent({
         if (invalidCharacters.value.some(el => data.includes(el))) {
           $q.notify({
             type: 'negative',
-            message: 'Filename did not pass validation constraints'
+            message: t('invalid_filemanager_string')
           })
         } else {
           rename(currentName, data)
@@ -744,8 +743,8 @@ export default defineComponent({
 
     function newFolderPrompt () {
       $q.dialog({
-        title: 'Choose a name',
-        message: 'Enter Folder Name',
+        title: t('choose_name'),
+        message: t('choose_name'),
         prompt: {
           model: '',
           isValid: val => val !== ''
@@ -755,13 +754,13 @@ export default defineComponent({
         if (invalidCharacters.value.some(el => data.includes(el))) {
           $q.notify({
             type: 'negative',
-            message: 'Filename did not pass validation constraints'
+            message: t('invalid_filemanager_string')
           })
         } else {
           if (checkRowExistence(data)) {
             $q.notify({
               type: 'negative',
-              message: 'Folder already exists'
+              message: t('item_already_exists')
             })
           } else {
             await Axios.post(`${api.value}/v1/filemanager/newfolder`, {
@@ -784,10 +783,10 @@ export default defineComponent({
       })
     }
 
-    function onRejected (rejectedEntries) {
+    function onUploaderRejected (rejectedEntries) {
       $q.notify({
         type: 'negative',
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+        message: `${rejectedEntries.length} ${t('invalid_upload_string')}`
       })
     }
 
@@ -857,7 +856,7 @@ export default defineComponent({
       if (checkRowExistence(newName)) {
         $q.notify({
           type: 'negative',
-          message: 'Folder already exists'
+          message: t('item_already_exists')
         })
       } else {
         await Axios.post(`${api.value}/v1/filemanager/rename`, {
@@ -952,7 +951,7 @@ export default defineComponent({
       newFolderPrompt,
       newName: ref<any>(''),
       objPath,
-      onRejected,
+      onUploaderRejected,
       onRowClick,
       onSelectorRowClick,
       openFileSelector,
