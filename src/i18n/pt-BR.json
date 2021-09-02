@@ -55,5 +55,11 @@
     "powered_by": "Distribuído por",
     "submit_resource": "Submeter um Recurso",
     "display_only_direct_download": "Exibir apenas itens disponíveis para download direto.",
-    "direct_download": "Download Direto"
+    "direct_download": "Download Direto",
+    "freemium": "Freemium",
+    "categories": "Categorias:",
+    "free": "Gratuito",
+    "paid": "Pago",
+    "subjects": "Assuntos:",
+    "category": "Categoria:"
 }

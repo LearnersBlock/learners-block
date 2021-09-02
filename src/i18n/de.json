@@ -22,7 +22,7 @@
     "no_space": "Ihr Block hat keinen Platz mehr.",
     "no_results_found": "Keine Ergebnisse gefunden",
     "load_more": "Mehr laden",
-    "licenses": "Lizenzen:",
+    "licenses": "Lizenz:",
     "languages": "Sprachen:",
     "keywords": "Schlüsselwörter",
     "host": "Veranstaltet von:",
@@ -57,5 +57,9 @@
     "display_only_direct_download": "Nur Artikel anzeigen, die zum direkten Herunterladen verfügbar sind.",
     "direct_download": "Direktes Herunterladen",
     "subjects": "Themen:",
-    "category": "Kategorie:"
+    "category": "Kategorie:",
+    "paid": "Kostenpflichtig",
+    "categories": "Kategorien:",
+    "free": "Kostenlos",
+    "freemium": "Freemium"
 }

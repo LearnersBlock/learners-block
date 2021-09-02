@@ -23,7 +23,7 @@
     "enable_rtl": "Sağdan solayı etkinleştir",
     "back": "Geri",
     "tags": "Etiketler:",
-    "licenses": "Lisanslar:",
+    "licenses": "Lisans:",
     "host": "Barındıran:",
     "author": "Yazar:",
     "published_date": "Yayın Tarihi",
@@ -55,5 +55,11 @@
     "powered_by": "Sağlayan",
     "explore": "Keşfet",
     "display_only_direct_download": "Yalnızca doğrudan indirilebilecek ögeleri görüntüle.",
-    "direct_download": "Doğrudan İndir"
+    "direct_download": "Doğrudan İndir",
+    "categories": "Kategoriler:",
+    "free": "Ücretsiz",
+    "freemium": "Yarı Ücretli",
+    "paid": "Ücretli",
+    "subjects": "Konular:",
+    "category": "Kategori:"
 }
