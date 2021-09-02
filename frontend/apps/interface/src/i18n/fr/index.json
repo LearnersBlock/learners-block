@@ -114,5 +114,7 @@
     "no_networks": "Aucun réseau Wi-Fi disponible. Veuillez vous assurer qu’il y a un réseau disponible et redémarrez l’appareil.",
     "select_ssid": "Sélectionnez le réseau Wi-Fi",
     "user": "Utilisateur",
-    "network_absent": "Si vous ne voyez pas votre réseau, redémarrez l’appareil et réessayez."
+    "network_absent": "Si vous ne voyez pas votre réseau, redémarrez l’appareil et réessayez.",
+    "close": "Fermer",
+    "applying_changes": "Application des modifications."
 }

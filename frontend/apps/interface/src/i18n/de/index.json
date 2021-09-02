@@ -114,5 +114,7 @@
     "no_networks": "Keine WLAN-Netzwerke verfügbar. Bitte stellen Sie sicher, dass sich ein Netzwerk in Reichweite befindet und starten Sie das Gerät neu.",
     "select_ssid": "WLAN-Netzwerk auswählen",
     "user": "Benutzer",
-    "network_absent": "Wenn Sie Ihr Netzwerk nicht sehen können, starten Sie das Gerät neu und versuchen Sie es erneut."
+    "network_absent": "Wenn Sie Ihr Netzwerk nicht sehen können, starten Sie das Gerät neu und versuchen Sie es erneut.",
+    "close": "Schließen",
+    "applying_changes": "Änderungen werden gespeichert."
 }
