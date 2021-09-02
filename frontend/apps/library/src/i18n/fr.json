@@ -10,7 +10,7 @@
     "author": "Auteur(e) :",
     "size": "Taille :",
     "host": "Hébergé par :",
-    "licenses": "Licences :",
+    "licenses": "Licence :",
     "tags": "Étiquettes :",
     "back": "Retour",
     "English": "Anglais",
@@ -60,5 +60,6 @@
     "category": "Catégorie :",
     "categories": "Catégories :",
     "free": "Gratuit",
-    "freemium": "Freemium"
+    "freemium": "Semi-payant",
+    "paid": "Payant"
 }
