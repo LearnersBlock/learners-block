@@ -15,10 +15,10 @@ services:
     depends_on:
       - "frontend"
     volumes:
+      - 'asset_share:/app/asset_share'
       - './backend/apps/controller:/app'
       - 'file_storage:/app/storage'
       - '/var/run/docker.sock:/var/run/docker.sock'
-      - 'asset_share:/app/asset_share'
 
   frontend:
     build:
@@ -29,11 +29,11 @@ services:
     labels:
       portainer: hidden
     volumes:
+      - 'asset_share:/app/public/interface_dev/public/asset_share'
       - './frontend/apps/interface:/app/public/interface_dev:cached'
       - './frontend/apps/library:/app/public/library:cached'
       - 'file_storage:/app/public/storage'            
       - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
-      - 'asset_share:/app/public/interface_dev/public/asset_share'
 
 volumes:
   file_storage:

@@ -80,10 +80,10 @@ WORKDIR /app/
 
 # Create root directories #
 RUN mkdir -p public/storage && \
+  mkdir -p public/interface/asset_share/assets && \
   mkdir -p public/storage/fileshare && \
   mkdir -p public/storage/library && \ 
-  mkdir -p public/storage/website && \
-  mkdir -p public/interface/asset_share/assets
+  mkdir -p public/storage/website
     
 # Configure SupervisorD
 COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -112,10 +112,10 @@ COPY --chown=nginx --from=library-buildstep /build-context/dist/spa public/libra
 
 # Set file permissions 
 RUN chown -R nginx.nginx /run && \
+  chown -R nobody.nobody public/interface/asset_share/ && \
   chown -R nobody.nobody public/storage/fileshare/ && \
   chown -R nobody.nobody public/storage/library/ && \
-  chown -R nobody.nobody public/storage/website/ && \
-  chown -R nobody.nobody public/interface/asset_share/
+  chown -R nobody.nobody public/storage/website/
 
 # Start SupervisorD to manage processes
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
