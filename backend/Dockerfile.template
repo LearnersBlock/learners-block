@@ -25,8 +25,8 @@ RUN install_packages \
   dnsmasq \
   iw \
   libglib2.0-0 \
+  libicu63 \
   psmisc \
-  python3-icu \
   wireless-tools
 
 # Copy built Python packages from build container
