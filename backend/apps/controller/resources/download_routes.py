@@ -49,8 +49,9 @@ class download_fetch(Resource):
             total = 0
 
         # Set the download path
-        with open(os.path.realpath('.') + '/storage/library/' +
-                  url.split('/')[-1], 'wb') as file:
+        filePath = os.path.realpath('.') + '/storage/library/' + \
+            url.split('/')[-1]
+        with open(filePath, 'wb') as file:
 
             # Set vars
             global download_terminated
@@ -63,6 +64,10 @@ class download_fetch(Resource):
             for data in resp.iter_content(chunk_size=1024):
                 # If a stop request has been sent
                 if download_terminated == 1:
+                    try:
+                        os.remove(filePath)
+                    except Exception:
+                        pass
                     break
                 size = file.write(data)
                 downloaded_bytes += size
@@ -80,8 +85,8 @@ class download_fetch(Resource):
                 })
 
         # Set file permission for access via NGINX and PhP
-        os.chown(os.path.realpath('.') + '/storage/library/' +
-                 url.split('/')[-1], 65534, 65534)
+        if os.path.isfile(filePath):
+            os.chown(filePath, 65534, 65534)
 
         # Reset global var for next use
         download_log = True
