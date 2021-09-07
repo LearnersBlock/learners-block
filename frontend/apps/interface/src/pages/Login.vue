@@ -1,15 +1,15 @@
 <template>
   <q-page class="flex flex-col justify-center items-center">
     <q-form
-      @submit="login"
       class="mb-6 flex flex-col"
+      @submit="login"
     >
       <div class="text-h4 mb-6 text-gray-600">
         {{ $t('login') }}
       </div>
       <q-input
-        filled
         v-model="password"
+        filled
         :label="$t('password')"
         type="password"
       />

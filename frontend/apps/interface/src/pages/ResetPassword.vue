@@ -1,15 +1,15 @@
 <template>
   <q-page class="flex flex-col justify-center items-center">
     <q-form
-      @submit="resetPassword"
       class="mb-6 flex flex-col"
+      @submit="resetPassword"
     >
       <div class="text-h4 mb-6 text-gray-600">
         {{ $t('set_password') }}
       </div>
       <q-input
-        filled
         v-model="newPassword"
+        filled
         :label="$t('your_new_password')"
         type="password"
       />
@@ -28,9 +28,9 @@
         color="primary"
         text-color="white"
         class="mt-4"
-        @click="$router.replace('/settings')"
         rounded
         unelevated
+        @click="$router.replace('/settings')"
       />
     </q-form>
   </q-page>

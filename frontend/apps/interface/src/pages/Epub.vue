@@ -5,9 +5,9 @@
       style="position: absolute;z-index: 2000 !important; height: 67vh; width: 96%"
     />
     <div
+      id="epub-render"
       class="bg-white"
       :style="'height: ' + $q.screen.height + 'px;'"
-      id="epub-render"
     />
     <q-page-sticky
       v-if="showMenu && !loading"
@@ -18,6 +18,7 @@
       <q-fab
         v-if="!$q.fullscreen.isActive"
         v-model="fabRight"
+        v-touch-pan.prevent.mouse="moveFab"
         vertical-actions-align="right"
         color="white"
         padding="xs"
@@ -25,26 +26,25 @@
         text-color="primary"
         direction="up"
         :disable="draggingFab"
-        v-touch-pan.prevent.mouse="moveFab"
       >
         <q-fab-action
           label-position="left"
           color="primary"
           icon="minimize"
           text-color="white"
-          @click="hideMenu"
           :label="$t('hide_button')"
           :disable="draggingFab"
+          @click="hideMenu"
         />
         <q-fab-action
           label-position="left"
-          @click="download"
           color="primary"
           text-color="white"
           class="material-icons"
           icon="file_download"
           :label="$t('download')"
           :disable="draggingFab"
+          @click="download"
         />
         <q-fab-action
           v-if="$q.fullscreen.isCapable"
@@ -52,9 +52,9 @@
           color="primary"
           :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
           text-color="white"
-          @click="toggle"
           :label="$t('full_screen')"
           :disable="draggingFab"
+          @click="toggle"
         />
         <q-btn
           no-caps
@@ -69,10 +69,10 @@
           <q-menu>
             <q-list>
               <q-item
-                clickable
-                v-close-popup
                 v-for="i in tableOfContents"
                 :key="i['href']"
+                v-close-popup
+                clickable
                 @click="goToExcerpt(i)"
               >
                 <q-item-section>{{ i['label'] }}</q-item-section>

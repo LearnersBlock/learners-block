@@ -14,8 +14,8 @@
       <br><br>
       {{ hostname }}
       <span
-        @click="copyUrl();$q.notify($t('url_copied'));"
         class="material-icons text-h6 mb-1 q-ml-sm cursor-pointer clipboard-sampleUrl"
+        @click="copyUrl();$q.notify($t('url_copied'));"
       >
         content_copy
         <q-tooltip class="text-caption text-center">

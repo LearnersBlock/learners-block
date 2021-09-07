@@ -25,11 +25,11 @@
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item
-                @click="changeLanguage(language.value)"
                 v-for="language in languages"
                 :key="language.value"
-                clickable
                 v-close-popup
+                clickable
+                @click="changeLanguage(language.value)"
               >
                 <q-item-section>{{ language.label }}</q-item-section>
               </q-item>
@@ -37,18 +37,18 @@
           </q-menu>
         </q-item>
         <q-item
-          @click="settings"
           class="flex items-center"
           clickable
+          @click="settings"
         >
           <q-icon name="settings" />
         </q-item>
 
         <q-item
           v-if="isAuthenticated"
-          @click="logout"
           class="flex items-center"
           clickable
+          @click="logout"
         >
           <q-icon name="logout" />
         </q-item>

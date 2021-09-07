@@ -4,31 +4,31 @@
       {{ $t('wifi') }}
     </div>
     <q-form
-      @submit="connect"
       class="mb-5 flex flex-col"
+      @submit="connect"
     >
       <div class="text-subtitle1 mb-5 text-center">
         {{ $t('network_absent') }}
       </div>
       <q-select
+        v-model="wifiSsid"
         class="mb-3"
         :label="$t('select_ssid')"
         rounded
         outlined
-        v-model="wifiSsid"
         :options="ssids"
         option-label="ssid"
       />
       <q-input
         v-if="wifiSsid && wifiSsid.security.toLowerCase() === 'enterprise'"
+        v-model="username"
         class="mb-3"
         filled
-        v-model="username"
         :label="$t('username')"
       />
       <q-input
-        filled
         v-model="password"
+        filled
         :label="$t('password')"
         type="password"
       />

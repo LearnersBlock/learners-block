@@ -104,6 +104,7 @@
           <div class="q-pl-md q-pr-md q-pb-md">
             <div class="q-gutter-md">
               <q-carousel
+                v-model="slide"
                 transition-prev="scale"
                 transition-next="scale"
                 swipeable
@@ -114,7 +115,6 @@
                 arrows
                 height="200px"
                 class="text-plsrimary text-2xl shadow-1 rounded-borders"
-                v-model="slide"
               >
                 <q-carousel-slide
                   v-for="slide in slides"

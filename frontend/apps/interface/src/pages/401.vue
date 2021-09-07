@@ -17,9 +17,9 @@
         color="white"
         text-color="primary"
         unelevated
-        @click="$router.replace('/')"
         :label="$t('home')"
         no-caps
+        @click="$router.replace('/')"
       />
     </div>
   </div>

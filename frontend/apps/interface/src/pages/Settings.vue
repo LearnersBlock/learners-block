@@ -5,7 +5,6 @@
         <div>
           <!-- Home Button -->
           <q-btn
-            @click="$router.push('/')"
             rounded
             color="white"
             size="sm"
@@ -14,6 +13,7 @@
             outline
             :label="$t('home')"
             icon="arrow_back"
+            @click="$router.push('/')"
           />
           <!-- Settings label -->
           <div class="mt-8 pl-3 text-5xl text-gray-600">
@@ -34,8 +34,8 @@
                 {{ $t('click_toggle') }}
               </div>
               <q-item
-                clickable
                 v-ripple
+                clickable
                 to="/filemanager"
               >
                 <q-icon
@@ -70,8 +70,8 @@
               </q-item>
               <!-- Library -->
               <q-item
-                clickable
                 v-ripple
+                clickable
                 tag="a"
                 target="_self"
                 :disable="!internet"
@@ -101,11 +101,11 @@
                   </q-item-label>
                 </q-item-section>
                 <q-toggle
+                  v-if="!libraryLoading"
                   v-model="library"
                   icon="import_contacts"
                   size="lg"
                   :disable="togglesLoading"
-                  v-if="!libraryLoading"
                   @update:model-value="updateLibrary"
                 />
                 <q-spinner
@@ -117,8 +117,8 @@
               </q-item>
               <!-- Website -->
               <q-item
-                clickable
                 v-ripple
+                clickable
                 :to="{ name: 'filemanager', params: { data: 'website'} }"
               >
                 <q-icon
@@ -136,12 +136,12 @@
                   </q-item-label>
                 </q-item-section>
                 <q-toggle
+                  v-if="!websiteLoading"
                   v-model="website"
                   icon="language"
                   size="lg"
                   class="ml-auto"
                   :disable="togglesLoading"
-                  v-if="!websiteLoading"
                   @update:model-value="updateWebsite"
                 />
                 <q-spinner
@@ -165,9 +165,9 @@
               rounded
               no-caps
               color="primary"
-              @click="$router.push('password_reset')"
               :label="$t('set_password')"
               class="ml-3 mr-3 mb-2 text-lg"
+              @click="$router.push('password_reset')"
             />
             <q-btn
               v-if="showPasswordButton"
@@ -176,9 +176,9 @@
               rounded
               no-caps
               color="primary"
-              @click="disableLoginWarn"
               :label="$t('disable_password')"
               class="ml-3 mr-3 mb-2 text-lg"
+              @click="disableLoginWarn"
             />
             <q-separator spaced />
             <!-- Wi-Fi section -->
@@ -202,16 +202,16 @@
               </div>
             </div>
             <q-btn
+              v-model="wifi"
               outline
               rounded
               :loading="wifiLoading"
               no-caps
-              v-model="wifi"
               color="primary"
-              @click="wifiWarn"
               class="ml-3 mr-3 mt-1 mb-2 text-lg"
               :disable="wifiLoading"
               :label="!wifi ? $t('connect'): $t('disconnect')"
+              @click="wifiWarn"
             />
             <q-btn
               outline
@@ -219,9 +219,9 @@
               no-caps
               color="primary"
               :loading="settingWifiPassword || togglesLoading"
-              @click="setWifiPasswordDialog = true"
               :label="$t('set_password')"
               class="ml-3 mr-3 mb-2 text-lg"
+              @click="setWifiPasswordDialog = true"
             />
             <q-dialog
               v-model="setWifiPasswordDialog"
@@ -230,9 +230,10 @@
               <q-card style="width: 700px; max-width: 80vw;">
                 <q-card-section class="row items-center">
                   <q-input
+                    ref="wifiPasswordValid"
+                    v-model="wifiPassword"
                     class="ml-1 mr-1"
                     style="width: 700px; max-width: 80vw;"
-                    ref="wifiPasswordValid"
                     filled
                     type="password"
                     :placeholder="$t('password')"
@@ -240,22 +241,21 @@
                       !value.includes(' ') &&
                       value.length > 7
                       || $t('invalid_wifi_entry')]"
-                    v-model="wifiPassword"
                   />
                 </q-card-section>
                 <q-card-actions align="right">
                   <q-btn
+                    v-close-popup
                     flat
                     :label="$t('cancel')"
                     color="primary"
-                    v-close-popup
                     @click="wifiPassword = ''"
                   />
                   <q-btn
+                    v-close-popup
                     flat
                     :label="$t('set_password')"
                     color="primary"
-                    v-close-popup
                     @click="wifiPasswordChange"
                   />
                 </q-card-actions>
@@ -268,9 +268,9 @@
               rounded
               no-caps
               color="primary"
-              @click="disableWifiWarn"
               :label="$t('disable_password')"
               class="ml-3 mr-3 mb-2 text-lg"
+              @click="disableWifiWarn"
             />
           </div>
           <!-- Application Store -->
@@ -321,8 +321,8 @@
                   />
                 </template>
                 <template
-                  #body-cell-author_site="props"
                   v-if="!appTableVisible"
+                  #body-cell-author_site="props"
                 >
                   <q-td :props="props">
                     <div>
@@ -334,8 +334,8 @@
                   </q-td>
                 </template>
                 <template
-                  #body-cell-status="props"
                   v-if="!appTableVisible"
+                  #body-cell-status="props"
                 >
                   <q-td :props="props">
                     <div>
@@ -434,17 +434,17 @@
                     </div>
                     <q-select
                       v-if="!filesLoading"
+                      v-model="startPage"
                       rounded
                       outlined
                       transition-duration="1"
-                      v-model="startPage"
                       :options="pages"
                       class="mb-5"
                       @update:model-value="changeStartPage"
                     />
                     <div
-                      class="text-lg"
                       v-if="customStartPageInput"
+                      class="text-lg"
                     >
                       {{ $t('choose_new_path') }}
                     </div>
@@ -472,17 +472,17 @@
                             :no-data-label="$t('no_apps_to_display')"
                           >
                             <template
-                              #body-cell-status="props"
                               v-if="!appTableVisible"
+                              #body-cell-status="props"
                             >
                               <q-td :props="props">
                                 <div>
                                   <q-btn
+                                    v-close-popup
                                     size="xs"
                                     unelevated
                                     color="primary"
                                     :label="$t('set_custom_startpage')"
-                                    v-close-popup
                                     @click="storeStartPage(props.row)"
                                   />
                                 </div>
@@ -504,11 +504,11 @@
                                       {{ $t('author_colon') }} {{ props.row.author_site }}
                                     </div>
                                     <q-btn
+                                      v-close-popup
                                       class="mb-1"
                                       size="xs"
                                       unelevated
                                       color="primary"
-                                      v-close-popup
                                       :label="$t('set_custom_startpage')"
                                       @click="storeStartPage(props.row)"
                                     />
@@ -520,10 +520,10 @@
                         </q-card-section>
                         <q-card-actions align="right">
                           <q-btn
+                            v-close-popup
                             flat
                             :label="$t('cancel')"
                             color="primary"
-                            v-close-popup
                             @click="setStartPage"
                           />
                         </q-card-actions>
@@ -535,6 +535,7 @@
                         <q-input
                           v-if="customStartPageInput"
                           ref="startPathValid"
+                          v-model="newStartPath"
                           filled
                           :placeholder="$t('your_new_path')"
                           class="ml-1 mr-1"
@@ -544,7 +545,6 @@
                             !value.includes(' ') &&
                             !value.includes('\\')
                             || $t('invalid_path_input')]"
-                          v-model="newStartPath"
                         >
                           <template #after>
                             <q-btn
@@ -567,6 +567,7 @@
                     </div>
                     <q-input
                       ref="hostnameValid"
+                      v-model="newHostname"
                       filled
                       class="ml-1 mr-1"
                       :rules="[(val) =>
@@ -575,7 +576,6 @@
                         && val === val.toLowerCase()
                         && regexp.test(val)
                         || $t('invalid_input')]"
-                      v-model="newHostname"
                       :placeholder="$t('your_new_name')"
                     >
                       <template #after>
@@ -608,13 +608,13 @@
                         </q-item-label>
                       </q-item-section>
                       <q-toggle
-                        class="mt-3 self-end"
-                        v-model="portainer"
-                        @update:model-value="updatePortainer"
-                        :disable="portainerLoading"
                         v-if="!portainerLoading"
+                        v-model="portainer"
+                        class="mt-3 self-end"
+                        :disable="portainerLoading"
                         icon="widgets"
                         size="lg"
+                        @update:model-value="updatePortainer"
                       />
                       <q-spinner
                         v-if="portainerLoading"
@@ -625,8 +625,8 @@
                     </q-item>
                   </div>
                   <div
-                    class="pl-6"
                     v-if="portainer && !portainerLoading"
+                    class="pl-6"
                   >
                     {{ $t('portainer_starting_at') }} <a
                       href="/portainer/"
@@ -655,9 +655,9 @@
                         :loading="pruningFiles"
                         :size="'md'"
                         color="red"
-                        @click="pruneSystemFiles"
                         :label="$t('prune')"
                         class="text-lg mt-2"
+                        @click="pruneSystemFiles"
                       />
                     </q-item>
                   </div>

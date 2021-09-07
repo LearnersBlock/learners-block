@@ -2,7 +2,6 @@
   <q-page class="items-center p-3 text-body1">
     <!-- Home Button -->
     <q-btn
-      @click="$router.back()"
       rounded
       size="sm"
       color="white"
@@ -11,9 +10,11 @@
       outline
       :label="$t('back')"
       icon="arrow_back"
+      @click="$router.back()"
     />
     <q-table
       v-if="rows"
+      v-model:selected="selected"
       table-style="width: 90vw;"
       flat
       :dense="!$q.platform.is.mobile"
@@ -26,7 +27,6 @@
       :no-results-label="$t('empty_folder')"
       row-key="name"
       :selection="loginState && !$q.platform.is.mobile ? 'multiple' : 'none'"
-      v-model:selected="selected"
       :filter="filter"
       :visible-columns="visibleColumns"
       @row-click="onRowClick"
@@ -49,9 +49,9 @@
                 @click="objPath.splice(0,objPath.length), updateRows()"
               />
               <q-breadcrumbs-el
-                class="cursor-pointer"
                 v-for="path in objPath"
                 :key="path.value"
+                class="cursor-pointer"
                 :label="path"
                 @click="objPath.length = objPath.indexOf(path) +1, updateRows()"
               />
@@ -178,21 +178,21 @@
               </q-btn>
               <q-input
                 v-if="searchTable"
+                v-model="filter"
                 class="ml-3"
                 dense
                 debounce="300"
                 hide-bottom-space
-                v-model="filter"
                 :placeholder="$t('filter')"
               />
               <q-btn
                 v-if="!$q.platform.is.mobile"
+                class="q-ml-md"
                 flat
                 round
                 dense
                 :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
                 @click="props.toggleFullscreen"
-                class="q-ml-md"
               >
                 <q-tooltip
                   class="text-caption text-center text-body1"
@@ -254,8 +254,8 @@
       </template>
       <!-- Buttons on right of row -->
       <template
-        #body-cell-move="props"
         v-if="loginState && safeRoute"
+        #body-cell-move="props"
       >
         <q-td
           :props="props"
@@ -285,8 +285,8 @@
       </template>
       <!-- Rename -->
       <template
-        #body-cell-rename="props"
         v-if="loginState && safeRoute"
+        #body-cell-rename="props"
       >
         <q-td
           :props="props"
@@ -302,11 +302,11 @@
               @click.stop
             >
               <q-popup-edit
+                v-slot="scope"
                 v-model="props.row.name"
                 :title="$t('choose_name')"
                 buttons
                 auto-save
-                v-slot="scope"
                 @save="rename(props.row.name, newName)"
               >
                 <q-input
@@ -335,8 +335,8 @@
       </template>
       <!-- Delete -->
       <template
-        #body-cell-delete="props"
         v-if="loginState && safeRoute"
+        #body-cell-delete="props"
       >
         <q-td
           :props="props"
@@ -408,8 +408,8 @@
               >
                 <q-list style="min-width: 100px">
                   <q-item
-                    clickable
                     v-if="props.row.extension == '.zip' || props.row.extension == '.gz'"
+                    clickable
                   >
                     <q-item-section
                       @click="unzip(props.row.name)"
@@ -505,24 +505,24 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn
+            v-close-popup
             class="mr-3"
             flat
             :label="$t('cancel')"
             color="primary"
-            v-close-popup
           />
           <q-btn
+            v-close-popup
             flat
             :label="$t('move')"
             color="primary"
-            v-close-popup
             @click="moveCopyItem('move')"
           />
           <q-btn
+            v-close-popup
             flat
             :label="$t('copy')"
             color="primary"
-            v-close-popup
             @click="moveCopyItem('copy')"
           />
         </q-card-actions>
