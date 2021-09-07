@@ -1,14 +1,15 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="isInIndex"
           flat
           dense
           round
           icon="menu"
           aria-label="Menu"
-          v-if="isInIndex"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
         <div class="q-ml-sm q-mt-sm">
@@ -40,11 +41,11 @@
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item
-                @click="changeLanguage(language.value)"
                 v-for="language in languages"
                 :key="language.value"
-                clickable
                 v-close-popup
+                clickable
+                @click="changeLanguage(language.value)"
               >
                 <q-item-section>{{ language.label }}</q-item-section>
               </q-item>
@@ -66,9 +67,9 @@
       </q-toolbar>
     </q-header>
     <q-drawer
+      v-if="isInIndex"
       v-model="leftDrawerOpen"
       show-if-above
-      v-if="isInIndex"
       bordered
       class="bg-white"
     >
@@ -81,26 +82,26 @@
         </q-item-label>
         <q-separator class="q-mt-md" />
         <q-input
+          v-model="keyword"
           outlined
           class="q-mt-lg q-mx-auto w-90"
-          v-model="keyword"
           clearable
-          @keyup="searchResourcesString"
           :label="$t('keywords')"
+          @keyup="searchResourcesString"
         />
         <q-select
-          class="w-90 q-mx-auto q-mt-md"
-          outlined
           v-if="fetchedCategories"
           v-model="selectedCategories"
+          class="w-90 q-mx-auto q-mt-md"
+          outlined
           :label="$t('categories')"
           :option-label="(category) => category.category"
           :option-value="(category) => category.id"
           :options="fetchedCategories.categories"
-          @update:model-value="searchResources"
           multiple
           map-options
           emit-value
+          @update:model-value="searchResources"
         >
           <template #option="{ itemProps, opt, selected, toggleOption }">
             <q-item
@@ -120,18 +121,18 @@
           </template>
         </q-select>
         <q-select
-          class="w-90 q-mx-auto q-mt-md"
-          outlined
           v-if="fetchedLanguages"
           v-model="selectedLanguages"
+          class="w-90 q-mx-auto q-mt-md"
+          outlined
           :label="$t('languages')"
           :option-label="(lang) => lang.language"
           :option-value="(lang) => lang.id"
           :options="fetchedLanguages.languages"
-          @update:model-value="searchResources"
           multiple
           map-options
           emit-value
+          @update:model-value="searchResources"
         >
           <template #option="{ itemProps, opt, selected, toggleOption }">
             <q-item
@@ -151,18 +152,18 @@
           </template>
         </q-select>
         <q-select
+          v-if="fetchedLevels"
+          v-model="selectedLevels"
           class="w-90 q-mx-auto q-mt-md"
           outlined
-          v-model="selectedLevels"
-          v-if="fetchedLevels"
           :options="fetchedLevels.levels"
           :option-label="(level) => level.level"
           :option-value="(level) => level.id"
           :label="$t('level')"
-          @update:model-value="searchResources"
           multiple
           emit-value
           map-options
+          @update:model-value="searchResources"
         >
           <template #option="{ itemProps, opt, selected, toggleOption }">
             <q-item
@@ -182,18 +183,18 @@
           </template>
         </q-select>
         <q-select
+          v-if="fetchedSubjects"
+          v-model="selectedSubjects"
           class="w-90 q-mx-auto q-mt-md"
           outlined
-          v-model="selectedSubjects"
-          v-if="fetchedSubjects"
           :options="fetchedSubjects.subjects"
           :option-label="(subject) => subject.subject"
           :option-value="(subject) => subject.id"
           :label="$t('subjects')"
-          @update:model-value="searchResources"
           multiple
           emit-value
           map-options
+          @update:model-value="searchResources"
         >
           <template #option="{ itemProps, opt, selected, toggleOption }">
             <q-item
@@ -213,18 +214,18 @@
           </template>
         </q-select>
         <q-select
+          v-if="fetchedFormats"
+          v-model="selectedFormats"
           class="w-90 q-mx-auto q-mt-md"
           outlined
-          v-model="selectedFormats"
-          v-if="fetchedFormats"
           :options="fetchedFormats.formats"
           :option-label="(format) => format.type"
           :option-value="(format) => format.id"
           :label="$t('formats')"
-          @update:model-value="searchResources"
           multiple
           emit-value
           map-options
+          @update:model-value="searchResources"
         >
           <template #option="{ itemProps, opt, selected, toggleOption }">
             <q-item
@@ -245,9 +246,9 @@
         </q-select>
         <div class="w-90 q-ml-lg q-mt-sm text-grey-9">
           <q-checkbox
+            v-model="directDownload"
             left-label
             size="xs"
-            v-model="directDownload"
             :label="$t('direct_download')"
           >
             <q-tooltip
@@ -323,33 +324,36 @@ export default defineComponent({
   setup () {
     // Import required features
     const $q = useQuasar()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { locale } = useI18n({ useScope: 'global' })
     const $router = useRouter()
     const $store = useStore()
 
+    // Provide directDownload status to Index.vue
     const directDownload = ref(false)
     provide('direct-download', directDownload)
 
-    // Drawer toggle
-    const leftDrawerOpen = ref(false)
     // Keyword input
     const keyword = ref<string>('')
-    // Router view reference in order to call method from parent to child
-    const view = ref<any>(null)
+    // Drawer toggle
+    const leftDrawerOpen = ref(false)
+    // Read envs for page state
+    const onDevice = ref<any>(process.env.ONDEVICE)
     // Selected languages for select dropdown - IDs
     const selectedCategories = ref<string[]>([])
-    // Selected languages for select dropdown - IDs
-    const selectedLanguages = ref<string[]>([])
     // Selected formats
     const selectedFormats = ref<[]>([])
-    // Selected subjects
-    const selectedSubjects = ref<string[]>([])
+    // Selected languages for select dropdown - IDs
+    const selectedLanguages = ref<string[]>([])
     // Selected level
     const selectedLevels = ref<string[]>([])
     // Searching a new string
     const searching = ref<boolean>(false)
-    // Read envs for page state
-    const onDevice = ref<any>(process.env.ONDEVICE)
+    // Selected subjects
+    const selectedSubjects = ref<string[]>([])
+    // Router view reference in order to call method from parent to child
+    const view = ref<any>(null)
+
     // Languages for i18n
     const languages = ref<[]>([
       {
@@ -385,25 +389,25 @@ export default defineComponent({
         value: 'tr'
       }
     ] as any)
+
     // Selected language for i18n
     const selectedLanguage = ref(locale)
     // Fetch categories query
-    const { result: fetchedCategories, loading: fetchCategoriesLoading, refetch: fetchCategories } = useQuery(GET_CATEGORIES)
+    const { result: fetchedCategories, loading: fetchCategoriesLoading } = useQuery(GET_CATEGORIES)
     // Fetch languages query
-    const { result: fetchedLanguages, loading: fetchLanguagesLoading, refetch: fetchLanguages } = useQuery(GET_LANGUAGES)
+    const { result: fetchedLanguages, loading: fetchLanguagesLoading } = useQuery(GET_LANGUAGES)
     // Fetch formats query
-    const { result: fetchedFormats, loading: fetchFormatsLoading, refetch: fetchFormats } = useQuery(GET_FORMATS)
+    const { result: fetchedFormats, loading: fetchFormatsLoading } = useQuery(GET_FORMATS)
     // Fetch subjects query
-    const { result: fetchedSubjects, loading: fetchSubjectsLoading, refetch: fetchSubjects } = useQuery(GET_SUBJECTS)
+    const { result: fetchedSubjects, loading: fetchSubjectsLoading } = useQuery(GET_SUBJECTS)
     // Fetch level query
-    const { result: fetchedLevels, loading: fetchLevelsLoading, refetch: fetchLevels } = useQuery(GET_LEVELS)
+    const { result: fetchedLevels, loading: fetchLevelsLoading } = useQuery(GET_LEVELS)
     // Fetch resources query
     const {
       result: fetchedResourcesLength
     } = useQuery(GET_RESOURCES_LENGTH, {})
 
-    onMounted(async () => {
-      Loading.show()
+    onMounted(() => {
       if (onDevice.value) {
         const langCookie = ref<any>($q.localStorage.getItem('lang'))
         if (langCookie.value) {
@@ -412,12 +416,6 @@ export default defineComponent({
           Quasar.lang.set(langCookie.value)
         }
       }
-      await fetchCategories()
-      await fetchLanguages()
-      await fetchFormats()
-      await fetchSubjects()
-      await fetchLevels()
-      Loading.hide()
     })
 
     // If keyword input is cleared, then execute the query

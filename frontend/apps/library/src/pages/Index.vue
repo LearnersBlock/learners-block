@@ -4,7 +4,15 @@
       {{ $t('under_maintenance') }}
     </div>
     <div
-      v-if="fetchedResources && !fetchResourcesLoading"
+      v-else-if="fetchResourcesLoading"
+    >
+      <q-spinner
+        color="primary"
+        size="6em"
+      />
+    </div>
+    <div
+      v-else-if="fetchedResources && !fetchResourcesLoading"
       class="resource_container"
     >
       <q-btn
@@ -19,31 +27,36 @@
         icon="arrow_back"
         @click="redirect"
       />
-
       <div
-        v-if="fetchedResources.resources"
+        v-if="fetchedResources.resources == '' && !fetchResourcesLoading"
+        class="text-h3 text-center text-grey"
+      >
+        {{ $t('no_results_found') }}
+      </div>
+      <div
+        v-else-if="fetchedResources.resources && !fetchResourcesLoading"
       >
         <q-infinite-scroll
-          @load="loadMore"
           :offset="4000"
+          @load="loadMore"
         >
           <router-link
+            v-for="resource in filteredResources"
+            :key="resource.id"
             class="resource q-mb-md items-center text-black"
             tag="div"
             :to="'/resource/' + resource.id"
-            v-for="resource in filteredResources"
-            :key="resource.id"
           >
             <div v-if="resource">
               <q-badge
+                v-for="license in resource.licenses"
+                :key="license.id"
                 class="q-mt-sm q-mr-sm text-body2"
                 color="secondary"
                 floating
                 rounded
                 transparent
                 multi-line
-                v-for="license in resource.licenses"
-                :key="license.id"
               >
                 {{ $t(license.license.toLowerCase()) }}
               </q-badge>
@@ -78,10 +91,10 @@
               <div class="resource_languages">
                 <div>
                   <q-badge
-                    class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
-                    color="secondary"
                     v-for="language in resource.languages"
                     :key="language.id"
+                    class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
+                    color="secondary"
                   >
                     {{ $t(language.language) }}
                   </q-badge>
@@ -115,8 +128,8 @@
             />
           </div>
           <template
-            #loading
             v-if="!endOfResults"
+            #loading
           >
             <div class="row justify-center q-my-md q-mb-xl">
               <q-spinner-dots
@@ -126,12 +139,6 @@
             </div>
           </template>
         </q-infinite-scroll>
-      </div>
-      <div
-        v-if="fetchedResources.resources == '' && !fetchResourcesLoading"
-        class="text-h3 text-center text-grey"
-      >
-        {{ $t('no_results_found') }}
       </div>
     </div>
   </q-page>
@@ -192,13 +199,13 @@ export default defineComponent({
     } = useQuery(GET_RESOURCES, { limit: numberOfResults.value }) as any
 
     // On mount, enable loading and fetch resources
-    onMounted(async () => {
+    onMounted(() => {
       if ($store.state.savedResources.resources) {
         $store.state.savedResources.limit = $store.state.savedResources.resources.resources.length
         fetchedResources.value = $store.state.savedResources.resources
       } else {
         $store.commit('savedResources/resourceLimit', numberOfResults.value)
-        await $store.commit('savedResources/updateResources', fetchedResources)
+        $store.commit('savedResources/updateResources', fetchedResources)
       }
     })
 
@@ -242,7 +249,7 @@ export default defineComponent({
         endOfResults.value = true
         done()
       } else {
-        $store.commit('savedResources/resourceLimit', $store.state.savedResources.limit + numberOfResults.value)
+        $store.commit('savedResources/resourceLimit', parseInt($store.state.savedResources.limit) + numberOfResults.value)
         await fetchFilteredResources()
         done()
       }
