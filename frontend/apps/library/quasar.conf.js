@@ -57,7 +57,7 @@ module.exports = configure(function (ctx) {
         ONDEVICE: process.env.ONDEVICE
       },
       vueRouterMode: 'history', // available values: 'hash', 'history'
-      publicPath: process.env.ONDEVICE === 'TRUE' ? '/upload-library' : '/',
+      publicPath: process.env.ONDEVICE === 'TRUE' ? '/library' : '/',
 
       // transpile: false,
 
@@ -92,11 +92,11 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       client: {
-        webSocketURL: 'auto://0.0.0.0:0/upload-library/ws'
+        webSocketURL: 'auto://0.0.0.0:0/library/ws'
       },
       webSocketServer: {
         options: {
-          path: '/upload-library/ws'
+          path: '/library/ws'
         }
       },
       https: false,
