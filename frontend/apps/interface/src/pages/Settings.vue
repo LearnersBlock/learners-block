@@ -75,7 +75,7 @@
                 tag="a"
                 target="_self"
                 :disable="!internet"
-                @click="redirect('/upload-library/')"
+                @click="redirect('/library/')"
               >
                 <q-tooltip
                   v-if="!internet"
