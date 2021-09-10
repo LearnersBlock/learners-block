@@ -893,7 +893,7 @@ export default defineComponent({
         if (response.data.message === 'error') {
           $q.notify({ type: 'negative', message: t('error') })
         } else {
-          notifyComplete()
+          $q.notify({ type: 'positive', message: `${t('extracted_to')} ${response.data.new_path}` })
         }
       })
       await updateRows()

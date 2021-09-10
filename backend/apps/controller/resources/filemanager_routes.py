@@ -3,6 +3,7 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from natsort import os_sorted
+from pathlib import Path
 from resources.errors import print_message
 import json
 import os
@@ -82,11 +83,11 @@ class filemanager_list(Resource):
 
         path = generate_path(content['root'], content['path'])
 
-        for direc in os_sorted(next(os.walk(os.path.join(path)))[1]):
+        for direc in os_sorted(next(os.walk(path))[1]):
             output.append({'name': direc,
                            'format': 'folder'})
 
-        for f in os_sorted(next(os.walk(os.path.join(path)))[2]):
+        for f in os_sorted(next(os.walk(path))[2]):
             file_ext = os.path.splitext(f)
             output.append({'name': f,
                            'format': 'file',
@@ -122,7 +123,7 @@ class filemanager_move(Resource):
                     shutil.rmtree(existingFile)
 
             shutil.move(os.path.join(fromPath, item['name']),
-                        os.path.join(toPath))
+                        toPath)
 
         return {'message': 'success'}
 
@@ -161,14 +162,28 @@ class filemanager_unzip(Resource):
         content = request.get_json()
         path = generate_path(content['root'], content['path'])
 
+        # Generate a safe extraction path to avoid overwriting
+        if os.path.exists(os.path.join(path,
+                                       Path(content['file']).stem)):
+            i = 1
+            while True:
+                new_path = Path(content['file']).stem + str(i)
+                if os.path.exists(os.path.join(path, new_path)):
+                    i = i+1
+                else:
+                    break
+        else:
+            new_path = Path(content['file']).stem
+
         pid = os.fork()
 
         if pid == 0:
             try:
                 os.setuid(65534)
+
                 shutil.unpack_archive(os.path.join(path,
                                                    content['file']),
-                                      os.path.join(path))
+                                      os.path.join(path, new_path))
             except Exception as ex:
                 print_message('filemanager_unzip', 'Failed extracting', ex)
                 os._exit(1)
@@ -176,7 +191,7 @@ class filemanager_unzip(Resource):
         else:
             _, status = os.waitpid(pid, 0)
             if status == 0:
-                return {'message': 'done'}
+                return {'message': 'done', 'new_path': new_path}
             else:
                 return {'message': 'error'}
 
