@@ -137,5 +137,7 @@
     "copy": "Kopyala",
     "confirm_delete": "Bu ögeleri silmek istediğinizden emin misiniz?",
     "choose_name": "Bir ad seçin",
-    "back": "Geri"
+    "back": "Geri",
+    "manage_library_files": "İndirilen Kitaplık dosyalarını yönet",
+    "name": "Ad"
 }
