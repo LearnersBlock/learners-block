@@ -63,7 +63,7 @@
           >
             <div>
               <q-btn
-                v-if="loginState && safeRoute"
+                v-if="loginState"
                 class="mr-2"
                 icon="create_new_folder"
                 color="gray-800"
@@ -82,7 +82,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="loginState && safeRoute && !$q.platform.is.mobile"
+                v-if="loginState && !$q.platform.is.mobile"
                 class="mr-2"
                 icon="drive_file_move_rtl"
                 color="gray-800"
@@ -102,7 +102,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="loginState && safeRoute"
+                v-if="loginState"
                 class="mr-2"
                 icon="upload"
                 color="gray-800"
@@ -141,7 +141,7 @@
                 />
               </q-dialog>
               <q-btn
-                v-if="loginState && safeRoute && !$q.platform.is.mobile"
+                v-if="loginState && !$q.platform.is.mobile"
                 class="mr-2"
                 size="sm"
                 color="gray-800"
@@ -254,7 +254,7 @@
       </template>
       <!-- Buttons on right of row -->
       <template
-        v-if="loginState && safeRoute"
+        v-if="loginState"
         #body-cell-move="props"
       >
         <q-td
@@ -285,7 +285,7 @@
       </template>
       <!-- Rename -->
       <template
-        v-if="loginState && safeRoute"
+        v-if="loginState"
         #body-cell-rename="props"
       >
         <q-td
@@ -335,7 +335,7 @@
       </template>
       <!-- Delete -->
       <template
-        v-if="loginState && safeRoute"
+        v-if="loginState"
         #body-cell-delete="props"
       >
         <q-td
@@ -392,7 +392,7 @@
           </div>
           <!-- Mobile menu for right of row -->
           <div
-            v-if="loginState && safeRoute"
+            v-if="loginState"
             class="mobile-only"
           >
             <q-btn
@@ -555,7 +555,6 @@ export default defineComponent({
     })
 
     const checkRowExistence = nameParam => rows.value.some(({ name }) => name === nameParam)
-    const chosenPath = ref<string>('')
     const currentPath = ref<any>('')
     const fileSelector = ref<boolean>(false)
     const fileSize = ref<number>(0)
@@ -570,7 +569,6 @@ export default defineComponent({
     const rootPath = ref<string>()
     const rows = ref<any>(null)
     const objPath = ref<Array<any>>([])
-    const safeRoute = ref<boolean>(false)
     const selected = ref<Array<any>>([])
     const selectedItem = ref<Array<any>>([])
     const selectorObjPath = ref<Array<any>>([])
@@ -610,20 +608,17 @@ export default defineComponent({
       $q.loading.show({
         delay: 500 // ms
       })
+
+      if (route.params.data) {
+        rootPath.value = `${route.params.data}/`
+      } else {
+        rootPath.value = 'fileshare/'
+      }
+
       if ($q.platform.is.mobile) {
         visibleColumns.value = ['info']
       } else {
         visibleColumns.value = ['move', 'rename', 'delete', 'info']
-      }
-      if (route.params.data) {
-        chosenPath.value = `${route.params.data}/`
-      }
-      if (loginState) {
-        rootPath.value = `/app/storage/${chosenPath.value}`
-      } else if (!loginState && chosenPath.value) {
-        rootPath.value = `/app/storage/${chosenPath.value}`
-      } else {
-        rootPath.value = '/app/storage/fileshare/'
       }
       await updateRows()
       $q.loading.hide()
@@ -884,11 +879,6 @@ export default defineComponent({
 
     async function updateRows () {
       loading.value = true
-      if (objPath.value.length === 0 && rootPath.value === '/app/storage/') {
-        safeRoute.value = false
-      } else {
-        safeRoute.value = true
-      }
       await Axios.post(`${api.value}/v1/filemanager/list`, {
         path: objPath.value,
         root: rootPath.value
@@ -960,7 +950,6 @@ export default defineComponent({
       rootPath,
       rows,
       searchTable: ref(false),
-      safeRoute,
       selected,
       selectedItem,
       selectorColumns,

@@ -36,7 +36,7 @@
               <q-item
                 v-ripple
                 clickable
-                to="/filemanager"
+                :to="{ name: 'filemanager', params: { data: 'fileshare'} }"
               >
                 <q-icon
                   name="folder"
@@ -82,7 +82,7 @@
                   anchor="top middle"
                   self="center middle"
                   :offset="[10, 10]"
-                  class="text-caption text-center"
+                  class="text-body1 text-center"
                 >
                   {{ $t('need_connection') }}
                 </q-tooltip>
@@ -99,6 +99,28 @@
                   <q-item-label class="text-base pr-1 text-gray-500">
                     {{ $t('library_settings_description') }}
                   </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-btn
+                    class="mr-3"
+                    icon="folder_open"
+                    outline
+                    dense
+                    flat
+                    size="lg"
+                    color="green"
+                    :to="{ name: 'filemanager', params: { data: 'library'} }"
+                    @click.stop
+                  >
+                    <q-tooltip
+                      anchor="top middle"
+                      self="center middle"
+                      :offset="[10, 10]"
+                      class="text-body1 text-center"
+                    >
+                      {{ $t('manage_library_files') }}
+                    </q-tooltip>
+                  </q-btn>
                 </q-item-section>
                 <q-toggle
                   v-if="!libraryLoading"
@@ -653,7 +675,7 @@
                         rounded
                         no-caps
                         :loading="pruningFiles"
-                        :size="'md'"
+                        size="md"
                         color="red"
                         :label="$t('prune')"
                         class="text-lg mt-2"
