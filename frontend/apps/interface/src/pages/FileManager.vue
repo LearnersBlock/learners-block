@@ -570,7 +570,7 @@ export default defineComponent({
     const fileSelector = ref<boolean>(false)
     const fileSize = ref<number>(0)
     const invalidCharacters = ref<Array<any>>([
-      '<', '>', '%', '{', '}', '|', '\\', '^', '`', '$', '#'
+      '/', '\\0'
     ])
     const loading = ref<boolean>(true)
     const loadingFileSize = ref<boolean>(false)
@@ -870,6 +870,11 @@ export default defineComponent({
         $q.notify({
           type: 'negative',
           message: t('item_already_exists')
+        })
+      } else if (invalidCharacters.value.some(el => newName.includes(el))) {
+        $q.notify({
+          type: 'negative',
+          message: t('invalid_filemanager_string')
         })
       } else {
         await Axios.post(`${api.value}/v1/filemanager/rename`, {
