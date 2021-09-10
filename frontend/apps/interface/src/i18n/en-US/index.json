@@ -25,7 +25,7 @@
     "close": "Close",
     "components": "Components",
     "confirm": "Confirm",
-    "confirm_delete": "Are you sure you want to delete these items?",
+    "confirm_delete": "Are you sure you want to delete the item(s)?",
     "connect": "Connect",
     "connected": "Connected",
     "connection_reset_request": "Your Learner's Block will now try to connect to your chosen Wi-Fi network. If your device is not available on the chosen network after a minute reconnect to your Learner's Block, check your Wi-Fi password and try again.",
