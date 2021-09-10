@@ -213,42 +213,50 @@
         <q-td :props="props">
           <div class="text-body1">
             <!-- Icons on left of row -->
-            <q-icon
-              v-if="props.row.format === 'folder'"
-              class="mb-1"
-              color="gray-800"
-              left
-              name="folder"
-            />
-            <q-icon
-              v-else
-              class="mb-1"
-              color="gray-800"
-              left
-              name="insert_drive_file"
-            />
-            {{ props.value }}
-            <!-- Zip button -->
-            <q-btn
-              v-if="loginState && !$q.platform.is.mobile && props.row.extension == '.zip' || props.row.extension == '.gz'"
-              class="ml-1"
-              :loading="unzipLoading"
-              round
-              outline
-              size="xs"
-              color="gray-800"
-              icon="unarchive"
-              @click.stop="unzip(props.row.name)"
+            <q-slide-item
+              right-color="red"
+              @right="deleteFile([{name:props.row.name, format:props.row.format}])"
             >
-              <q-tooltip
-                class="text-caption text-center text-body1"
-                anchor="top middle"
-                self="center middle"
-                :offset="[20, 20]"
+              <template #right>
+                <q-icon name="delete" />
+              </template>
+              <q-icon
+                v-if="props.row.format === 'folder'"
+                class="mb-1"
+                color="gray-800"
+                left
+                name="folder"
+              />
+              <q-icon
+                v-else
+                class="mb-1"
+                color="gray-800"
+                left
+                name="insert_drive_file"
+              />
+              {{ props.value }}
+              <!-- Zip button -->
+              <q-btn
+                v-if="loginState && !$q.platform.is.mobile && props.row.extension == '.zip' || props.row.extension == '.gz'"
+                class="ml-1"
+                :loading="unzipLoading"
+                round
+                outline
+                size="xs"
+                color="gray-800"
+                icon="unarchive"
+                @click.stop="unzip(props.row.name)"
               >
-                {{ $t('extract') }}
-              </q-tooltip>
-            </q-btn>
+                <q-tooltip
+                  class="text-caption text-center text-body1"
+                  anchor="top middle"
+                  self="center middle"
+                  :offset="[20, 20]"
+                >
+                  {{ $t('extract') }}
+                </q-tooltip>
+              </q-btn>
+            </q-slide-item>
           </div>
         </q-td>
       </template>
