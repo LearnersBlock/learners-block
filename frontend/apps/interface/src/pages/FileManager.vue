@@ -215,6 +215,7 @@
             <!-- Icons on left of row -->
             <q-slide-item
               right-color="red"
+              @action="resetSlide"
               @right="deleteFile([{name:props.row.name, format:props.row.format}])"
             >
               <template #right>
@@ -956,6 +957,9 @@ export default defineComponent({
       rename,
       renameValid,
       rootPath,
+      resetSlide ({ reset }) {
+        reset()
+      },
       rows,
       searchTable: ref(false),
       selected,
