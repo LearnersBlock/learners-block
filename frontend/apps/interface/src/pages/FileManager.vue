@@ -541,7 +541,7 @@
 
 <script lang="ts">
 import Axios from 'app/node_modules/axios'
-import { useQuasar, openURL } from 'quasar'
+import { useQuasar } from 'quasar'
 import { useStore } from '../store'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -803,13 +803,13 @@ export default defineComponent({
           if (ePub) {
             $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
           } else {
-            openURL(`/storage/${encodedCurrentPath}/${encodedRowName}`)
+            window.location.href = `/storage/${encodedCurrentPath}/${encodedRowName}`
           }
         } else {
           if (ePub) {
             $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
           } else {
-            openURL(`/storage/${encodedRowName}`)
+            window.location.href = `/storage/${encodedRowName}`
           }
         }
       } else if (row.format === 'folder') {
@@ -829,13 +829,13 @@ export default defineComponent({
                 if (ePub) {
                   $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
                 } else {
-                  openURL(`/storage/${encodedCurrentPath}/${encodedRowName}`)
+                  window.location.href = `/storage/${encodedCurrentPath}/${encodedRowName}`
                 }
               } else {
                 if (ePub) {
                   $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
                 } else {
-                  openURL(`/storage/${encodedRowName}`)
+                  window.location.href = `/storage/${encodedRowName}`
                 }
               }
             }
