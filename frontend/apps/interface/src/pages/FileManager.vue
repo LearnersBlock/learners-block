@@ -619,9 +619,9 @@ export default defineComponent({
       })
 
       if (route.params.data) {
-        rootPath.value = `${route.params.data}/`
+        rootPath.value = `${route.params.data}`
       } else {
-        rootPath.value = 'fileshare/'
+        rootPath.value = 'fileshare'
       }
 
       if ($q.platform.is.mobile) {

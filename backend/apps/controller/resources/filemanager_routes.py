@@ -9,8 +9,11 @@ import os
 import shutil
 
 
+# System fileshare root
+system_root = '/app/storage/'
+
+
 def generate_path(root, path):
-    system_root = '/app/storage/'
     return os.path.join(system_root, root, *path)
 
 
