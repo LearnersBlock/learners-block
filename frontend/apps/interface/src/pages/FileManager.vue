@@ -177,15 +177,6 @@
                   {{ $t('filter') }}
                 </q-tooltip>
               </q-btn>
-              <q-input
-                v-if="searchTable"
-                v-model="filter"
-                class="ml-3"
-                dense
-                debounce="300"
-                hide-bottom-space
-                :placeholder="$t('filter')"
-              />
               <q-btn
                 v-if="!$q.platform.is.mobile"
                 class="q-ml-md"
@@ -204,6 +195,15 @@
                   {{ $t('full_screen') }}
                 </q-tooltip>
               </q-btn>
+              <q-input
+                v-if="searchTable"
+                v-model="filter"
+                class="ml-3"
+                dense
+                debounce="300"
+                hide-bottom-space
+                :placeholder="$t('filter')"
+              />
             </div>
           </div>
         </div>
