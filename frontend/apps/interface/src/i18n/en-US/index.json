@@ -139,5 +139,6 @@
     "your_new_password": "Your new password",
     "your_new_path": "your/new-path",
     "name": "Name",
-    "manage_library_files": "Manage downloaded Library files"
+    "manage_library_files": "Manage downloaded Library files",
+    "extracted_to": "Extracted to:"
 }
