@@ -159,7 +159,6 @@ class filemanager_unzip(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
-
         path = generate_path(content['root'], content['path'])
 
         pid = os.fork()
@@ -172,9 +171,14 @@ class filemanager_unzip(Resource):
                                       os.path.join(path))
             except Exception as ex:
                 print_message('filemanager_unzip', 'Failed extracting', ex)
+                os._exit(1)
+            os._exit(0)
         else:
-            os.waitpid(pid, 0)
-            return {'message': 'finished'}
+            _, status = os.waitpid(pid, 0)
+            if status == 0:
+                return {'message': 'done'}
+            else:
+                return {'message': 'error'}
 
 
 class filemanager_upload(Resource):

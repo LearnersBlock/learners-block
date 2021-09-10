@@ -131,6 +131,7 @@
                   square
                   no-thumbnails
                   with-credentials
+                  :readonly="delayUpload"
                   :filter="checkCharacters"
                   :url="api + '/v1/filemanager/upload'"
                   :headers="[{name: 'rootPath', value: rootPath}, {name: 'savePath', value: JSON.stringify(objPath)}, {name: 'Authorization', value: loginToken}]"
@@ -565,6 +566,7 @@ export default defineComponent({
 
     const checkRowExistence = nameParam => rows.value.some(({ name }) => name === nameParam)
     const currentPath = ref<any>('')
+    const delayUpload = ref<boolean>(false)
     const fileSelector = ref<boolean>(false)
     const fileSize = ref<number>(0)
     const invalidCharacters = ref<Array<any>>([
@@ -575,7 +577,7 @@ export default defineComponent({
     const loginState = $store.getters.isAuthenticated
     const loginToken = ref<string>(Axios.defaults.headers.common.Authorization)
     const renameValid = ref()
-    const rootPath = ref<string>()
+    const rootPath = ref<any>()
     const rows = ref<any>(null)
     const objPath = ref<Array<any>>([])
     const selected = ref<Array<any>>([])
@@ -619,7 +621,7 @@ export default defineComponent({
       })
 
       if (route.params.data) {
-        rootPath.value = `${route.params.data}`
+        rootPath.value = route.params.data
       } else {
         rootPath.value = 'fileshare'
       }
@@ -640,8 +642,15 @@ export default defineComponent({
     function checkUploadOverwrite (files) {
       for (let i = 0; i < files.length; i++) {
         if (rows.value.some(({ name }) => name === files[i].name)) {
+          delayUpload.value = true
           $q.notify({
+            actions: [
+              { label: t('close'), color: 'black', handler: () => { /* ... */ } }
+            ],
+            onDismiss: () => { delayUpload.value = false },
+            timeout: 0,
             type: 'warning',
+            position: 'center',
             message: t('upload_files_exist')
           })
         }
@@ -880,9 +889,14 @@ export default defineComponent({
         file: fileName,
         path: objPath.value,
         root: rootPath.value
+      }).then((response) => {
+        if (response.data.message === 'error') {
+          $q.notify({ type: 'negative', message: t('error') })
+        } else {
+          notifyComplete()
+        }
       })
       await updateRows()
-      notifyComplete()
       unzipLoading.value = false
     }
 
@@ -935,6 +949,7 @@ export default defineComponent({
       checkUploadOverwrite,
       columns,
       deleteFile,
+      delayUpload,
       fetchFileSize,
       fileSelector,
       fileSize,
