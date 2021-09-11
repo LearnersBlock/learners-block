@@ -430,7 +430,7 @@
                   <q-btn
                     v-if="!appTableVisible"
                     class="mb-1"
-                    size="xs"
+                    size="sm"
                     unelevated
                     color="primary"
                     :label="$t(props.row.status)"
