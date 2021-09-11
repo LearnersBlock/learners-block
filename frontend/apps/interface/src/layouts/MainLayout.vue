@@ -1,16 +1,19 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh lpR fFf">
+    <q-header
+      class="bg-white"
+      bordered
+      reveal
+    >
       <q-toolbar v-if="!(currentPath == '/captive_portal' || currentPath == '/captive_portal/' || currentPath == '/epub_reader/')">
-        <div class="ml-1">
+        <div class="ml-2">
           <router-link to="/">
             <img
               alt=""
-              src="../assets/lb-logo-white-full.svg"
+              src="../assets/lb-logo-full.svg"
             >
           </router-link>
         </div>
-
         <q-toolbar-title class="josefin text-h5 q-mt-xs">
           <router-link
             class="text-white"
@@ -18,10 +21,15 @@
             to="/"
           />
         </q-toolbar-title>
-        <q-item clickable>
-          <span class="material-icons">
-            translate
-          </span>
+        <q-item
+          clickable
+          class="flex items-center"
+        >
+          <q-icon
+            name="translate"
+            color="primary"
+            size="sm"
+          />
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item
@@ -41,20 +49,26 @@
           clickable
           @click="settings"
         >
-          <q-icon name="settings" />
+          <q-icon
+            name="settings"
+            color="primary"
+            size="sm"
+          />
         </q-item>
-
         <q-item
           v-if="isAuthenticated"
           class="flex items-center"
           clickable
           @click="logout"
         >
-          <q-icon name="logout" />
+          <q-icon
+            name="logout"
+            color="primary"
+            size="sm"
+          />
         </q-item>
       </q-toolbar>
     </q-header>
-
     <q-page-container>
       <router-view />
     </q-page-container>

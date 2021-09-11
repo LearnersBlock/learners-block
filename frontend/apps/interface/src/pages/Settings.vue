@@ -1,710 +1,723 @@
 <template>
   <q-page>
     <div class="flex flex-col items-center">
-      <div class="max-w-5xl">
-        <div>
-          <!-- Home Button -->
-          <q-btn
-            rounded
-            color="white"
-            size="sm"
-            text-color="primary"
-            class="ml-3 mt-7 text-subtitle2 text-weight-bold"
-            outline
-            :label="$t('home')"
-            icon="arrow_back"
+      <div
+        class="q-gutter-y-md items-center window-width"
+      >
+        <q-tabs
+          v-model="tab"
+          class="bg-primary text-gray-900"
+          shrink
+          inline-label
+          outside-arrows
+          mobile-arrows
+        >
+          <q-tab
+            name="home"
+            icon="home"
             @click="$router.push('/')"
           />
-          <!-- Settings label -->
-          <div class="mt-8 pl-3 text-5xl text-gray-600">
-            {{ $t('settings') }}
-          </div>
-          <hr class="mt-3">
-          <!-- Component toggles -->
-          <div class="flex flex-col">
-            <q-list>
-              <q-item-label
-                header
-                class="pr-12 text-2xl"
+          <q-tab
+            name="general"
+            icon="build"
+            :label="$t('general')"
+          />
+          <q-tab
+            name="appStore"
+            icon="storefront"
+            :label="$t('app_store')"
+          />
+          <q-tab
+            name="advanced"
+            icon="settings"
+            :label="$t('advanced')"
+          />
+        </q-tabs>
+      </div>
+      <div
+        v-if="tab == 'general'"
+        class="mt-3 pd-5"
+        style="min-width: 70vw"
+      >
+        <!-- Component toggles -->
+        <div class="flex flex-col">
+          <q-list>
+            <q-item-label
+              header
+              class="text-2xl"
+            >
+              {{ $t('components') }}
+            </q-item-label>
+            <!-- File Manager -->
+            <div class="text-base ml-4 mb-4 text-gray-600">
+              {{ $t('click_toggle') }}
+            </div>
+            <q-item
+              v-ripple
+              clickable
+              :to="{ name: 'filemanager', params: { data: 'fileshare'} }"
+            >
+              <q-icon
+                name="folder"
+                color="orange"
+                style="font-size: 2em"
+                class="mr-3"
+              />
+              <q-item-section>
+                <q-item-label class="josefin text-xl">
+                  {{ $t('file_manager') }}
+                </q-item-label>
+                <q-item-label class="text-base pr-1 text-gray-500">
+                  {{ $t('files_settings_description') }}
+                </q-item-label>
+              </q-item-section>
+              <q-toggle
+                v-if="!filesLoading"
+                v-model="files"
+                icon="folder"
+                class="self-end"
+                size="lg"
+                :disable="togglesLoading"
+                @update:model-value="updateFiles"
+              />
+              <q-spinner
+                v-if="filesLoading"
+                color="primary"
+                size="2em"
+                class="mt-6 mr-6"
+              />
+            </q-item>
+            <!-- Library -->
+            <q-item
+              v-ripple
+              clickable
+              tag="a"
+              target="_self"
+              :disable="!internet"
+              @click="redirect('/library/')"
+            >
+              <q-tooltip
+                v-if="!internet"
+                anchor="top middle"
+                self="center middle"
+                :offset="[10, 10]"
+                class="text-body1 text-center"
               >
-                {{ $t('components') }}
-              </q-item-label>
-              <!-- File Manager -->
-              <div class="text-base ml-4 mb-4 text-gray-600">
-                {{ $t('click_toggle') }}
-              </div>
-              <q-item
-                v-ripple
-                clickable
-                :to="{ name: 'filemanager', params: { data: 'fileshare'} }"
-              >
-                <q-icon
-                  name="folder"
-                  color="orange"
-                  style="font-size: 2em"
+                {{ $t('need_connection') }}
+              </q-tooltip>
+              <q-icon
+                name="import_contacts"
+                color="green"
+                style="font-size: 2em"
+                class="mr-3"
+              />
+              <q-item-section>
+                <q-item-label class="josefin text-xl">
+                  {{ $t('library') }}
+                </q-item-label>
+                <q-item-label class="text-base pr-1 text-gray-500">
+                  {{ $t('library_settings_description') }}
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-btn
                   class="mr-3"
-                />
-                <q-item-section>
-                  <q-item-label class="josefin text-xl">
-                    {{ $t('file_manager') }}
-                  </q-item-label>
-                  <q-item-label class="text-base pr-1 text-gray-500">
-                    {{ $t('files_settings_description') }}
-                  </q-item-label>
-                </q-item-section>
-                <q-toggle
-                  v-if="!filesLoading"
-                  v-model="files"
-                  icon="folder"
-                  class="self-end"
+                  icon="edit"
+                  outline
+                  dense
+                  flat
                   size="lg"
-                  :disable="togglesLoading"
-                  @update:model-value="updateFiles"
-                />
-                <q-spinner
-                  v-if="filesLoading"
                   color="primary"
-                  size="2em"
-                  class="mt-6 mr-6"
-                />
-              </q-item>
-              <!-- Library -->
-              <q-item
-                v-ripple
-                clickable
-                tag="a"
-                target="_self"
-                :disable="!internet"
-                @click="redirect('/library/')"
-              >
-                <q-tooltip
-                  v-if="!internet"
-                  anchor="top middle"
-                  self="center middle"
-                  :offset="[10, 10]"
-                  class="text-body1 text-center"
+                  :to="{ name: 'filemanager', params: { data: 'library'} }"
+                  @click.stop
                 >
-                  {{ $t('need_connection') }}
-                </q-tooltip>
-                <q-icon
-                  name="import_contacts"
-                  color="green"
-                  style="font-size: 2em"
-                  class="mr-3"
-                />
-                <q-item-section>
-                  <q-item-label class="josefin text-xl">
-                    {{ $t('library') }}
-                  </q-item-label>
-                  <q-item-label class="text-base pr-1 text-gray-500">
-                    {{ $t('library_settings_description') }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-btn
-                    class="mr-3"
-                    icon="folder_open"
-                    outline
-                    dense
-                    flat
-                    size="lg"
-                    color="green"
-                    :to="{ name: 'filemanager', params: { data: 'library'} }"
-                    @click.stop
+                  <q-tooltip
+                    anchor="top middle"
+                    self="center middle"
+                    :offset="[10, 10]"
+                    class="text-body1 text-center"
                   >
-                    <q-tooltip
-                      anchor="top middle"
-                      self="center middle"
-                      :offset="[10, 10]"
-                      class="text-body1 text-center"
-                    >
-                      {{ $t('manage_library_files') }}
-                    </q-tooltip>
-                  </q-btn>
-                </q-item-section>
-                <q-toggle
-                  v-if="!libraryLoading"
-                  v-model="library"
-                  icon="import_contacts"
-                  size="lg"
-                  :disable="togglesLoading"
-                  @update:model-value="updateLibrary"
-                />
-                <q-spinner
-                  v-if="libraryLoading"
-                  color="primary"
-                  size="2em"
-                  class="mt-6 mr-6"
-                />
-              </q-item>
-              <!-- Website -->
-              <q-item
-                v-ripple
-                clickable
-                :to="{ name: 'filemanager', params: { data: 'website'} }"
-              >
-                <q-icon
-                  name="language"
-                  color="yellow"
-                  style="font-size: 2em"
-                  class="mr-3"
-                />
-                <q-item-section>
-                  <q-item-label class="josefin text-xl">
-                    {{ $t('website') }}
-                  </q-item-label>
-                  <q-item-label class="text-base pr-1 text-gray-500">
-                    {{ $t('website_settings_description') }}
-                  </q-item-label>
-                </q-item-section>
-                <q-toggle
-                  v-if="!websiteLoading"
-                  v-model="website"
-                  icon="language"
-                  size="lg"
-                  class="ml-auto"
-                  :disable="togglesLoading"
-                  @update:model-value="updateWebsite"
-                />
-                <q-spinner
-                  v-if="websiteLoading"
-                  color="primary"
-                  size="2em"
-                  class="mt-6 mr-6"
-                />
-              </q-item>
-            </q-list>
-            <q-separator spaced />
-            <!-- Login section -->
-            <q-item-label
-              header
-              class="text-2xl"
+                    {{ $t('manage_library_files') }}
+                  </q-tooltip>
+                </q-btn>
+              </q-item-section>
+              <q-toggle
+                v-if="!libraryLoading"
+                v-model="library"
+                icon="import_contacts"
+                size="lg"
+                :disable="togglesLoading"
+                @update:model-value="updateLibrary"
+              />
+              <q-spinner
+                v-if="libraryLoading"
+                color="primary"
+                size="2em"
+                class="mt-6 mr-6"
+              />
+            </q-item>
+            <!-- Website -->
+            <q-item
+              v-ripple
+              clickable
+              :to="{ name: 'filemanager', params: { data: 'website'} }"
             >
-              {{ $t('login') }}
-            </q-item-label>
-            <q-btn
-              outline
-              rounded
-              no-caps
-              color="primary"
-              :label="$t('set_password')"
-              class="ml-3 mr-3 mb-2 text-lg"
-              @click="$router.push('password_reset')"
-            />
-            <q-btn
-              v-if="showPasswordButton"
-              outline
-              :loading="togglesLoading"
-              rounded
-              no-caps
-              color="primary"
-              :label="$t('disable_password')"
-              class="ml-3 mr-3 mb-2 text-lg"
-              @click="disableLoginWarn"
-            />
-            <q-separator spaced />
-            <!-- Wi-Fi section -->
-            <q-item-label
-              header
-              class="text-2xl"
-            >
-              {{ $t('wifi') }}
-            </q-item-label>
-            <div>
-              <div class="text-lg ml-4">
-                <div v-if="wifiLoading">
-                  {{ $t('status') }} {{ $t('loading') }}
-                </div>
-                <div v-else-if="!wifi">
-                  {{ $t('status') }} {{ $t('disconnected') }}
-                </div>
-                <div v-else>
-                  {{ $t('status') }} {{ $t('connected') }}
-                </div>
+              <q-icon
+                name="language"
+                color="yellow"
+                style="font-size: 2em"
+                class="mr-3"
+              />
+              <q-item-section>
+                <q-item-label class="josefin text-xl">
+                  {{ $t('website') }}
+                </q-item-label>
+                <q-item-label class="text-base pr-1 text-gray-500">
+                  {{ $t('website_settings_description') }}
+                </q-item-label>
+              </q-item-section>
+              <q-toggle
+                v-if="!websiteLoading"
+                v-model="website"
+                icon="language"
+                size="lg"
+                class="ml-auto"
+                :disable="togglesLoading"
+                @update:model-value="updateWebsite"
+              />
+              <q-spinner
+                v-if="websiteLoading"
+                color="primary"
+                size="2em"
+                class="mt-6 mr-6"
+              />
+            </q-item>
+          </q-list>
+          <q-separator spaced />
+          <!-- Login section -->
+          <q-item-label
+            header
+            class="text-2xl"
+          >
+            {{ $t('login') }}
+          </q-item-label>
+          <q-btn
+            outline
+            rounded
+            no-caps
+            color="primary"
+            :label="$t('set_password')"
+            class="ml-3 mr-3 mb-2 text-lg"
+            @click="$router.push('password_reset')"
+          />
+          <q-btn
+            v-if="showPasswordButton"
+            outline
+            :loading="togglesLoading"
+            rounded
+            no-caps
+            color="primary"
+            :label="$t('disable_password')"
+            class="ml-3 mr-3 mb-2 text-lg"
+            @click="disableLoginWarn"
+          />
+          <q-separator spaced />
+          <!-- Wi-Fi section -->
+          <q-item-label
+            header
+            class="text-2xl"
+          >
+            {{ $t('wifi') }}
+          </q-item-label>
+          <div>
+            <div class="text-lg ml-4">
+              <div v-if="wifiLoading">
+                {{ $t('status') }} {{ $t('loading') }}
+              </div>
+              <div v-else-if="!wifi">
+                {{ $t('status') }} {{ $t('disconnected') }}
+              </div>
+              <div v-else>
+                {{ $t('status') }} {{ $t('connected') }}
               </div>
             </div>
-            <q-btn
-              v-model="wifi"
-              outline
-              rounded
-              :loading="wifiLoading"
-              no-caps
-              color="primary"
-              class="ml-3 mr-3 mt-1 mb-2 text-lg"
-              :disable="wifiLoading"
-              :label="!wifi ? $t('connect'): $t('disconnect')"
-              @click="wifiWarn"
-            />
-            <q-btn
-              outline
-              rounded
-              no-caps
-              color="primary"
-              :loading="settingWifiPassword || togglesLoading"
-              :label="$t('set_password')"
-              class="ml-3 mr-3 mb-2 text-lg"
-              @click="setWifiPasswordDialog = true"
-            />
-            <q-dialog
-              v-model="setWifiPasswordDialog"
-              persistent
-            >
-              <q-card style="width: 700px; max-width: 80vw;">
-                <q-card-section class="row items-center">
-                  <q-input
-                    ref="wifiPasswordValid"
-                    v-model="wifiPassword"
-                    class="ml-1 mr-1"
-                    style="width: 700px; max-width: 80vw;"
-                    filled
-                    type="password"
-                    :placeholder="$t('password')"
-                    :rules="[(value) =>
-                      !value.includes(' ') &&
-                      value.length > 7
-                      || $t('invalid_wifi_entry')]"
-                  />
-                </q-card-section>
-                <q-card-actions align="right">
-                  <q-btn
-                    v-close-popup
-                    flat
-                    :label="$t('cancel')"
-                    color="primary"
-                    @click="wifiPassword = ''"
-                  />
-                  <q-btn
-                    v-close-popup
-                    flat
-                    :label="$t('set_password')"
-                    color="primary"
-                    @click="wifiPasswordChange"
-                  />
-                </q-card-actions>
-              </q-card>
-            </q-dialog>
-            <q-btn
-              v-if="showWifiPasswordButton"
-              outline
-              :loading="settingWifiPassword || togglesLoading"
-              rounded
-              no-caps
-              color="primary"
-              :label="$t('disable_password')"
-              class="ml-3 mr-3 mb-2 text-lg"
-              @click="disableWifiWarn"
-            />
           </div>
-          <!-- Application Store -->
-          <q-list
-            bordered
-            class="rounded-borders mt-2"
+          <q-btn
+            v-model="wifi"
+            outline
+            rounded
+            :loading="wifiLoading"
+            no-caps
+            color="primary"
+            class="ml-3 mr-3 mt-1 mb-2 text-lg"
+            :disable="wifiLoading"
+            :label="!wifi ? $t('connect'): $t('disconnect')"
+            @click="wifiWarn"
+          />
+          <q-btn
+            outline
+            rounded
+            no-caps
+            color="primary"
+            :loading="settingWifiPassword || togglesLoading"
+            :label="$t('set_password')"
+            class="ml-3 mr-3 mb-2 text-lg"
+            @click="setWifiPasswordDialog = true"
+          />
+          <q-dialog
+            v-model="setWifiPasswordDialog"
+            persistent
           >
-            <q-expansion-item
-              expand-separator
-              icon="storefront"
-              :label="$t('app_store')"
-              class="w-full"
+            <q-card style="width: 700px; max-width: 80vw;">
+              <q-card-section class="row items-center">
+                <q-input
+                  ref="wifiPasswordValid"
+                  v-model="wifiPassword"
+                  class="ml-1 mr-1"
+                  style="width: 700px; max-width: 80vw;"
+                  filled
+                  type="password"
+                  :placeholder="$t('password')"
+                  :rules="[(value) =>
+                    !value.includes(' ') &&
+                    value.length > 7
+                    || $t('invalid_wifi_entry')]"
+                />
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn
+                  v-close-popup
+                  flat
+                  :label="$t('cancel')"
+                  color="primary"
+                  @click="wifiPassword = ''"
+                />
+                <q-btn
+                  v-close-popup
+                  flat
+                  :label="$t('set_password')"
+                  color="primary"
+                  @click="wifiPasswordChange"
+                />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
+          <q-btn
+            v-if="showWifiPasswordButton"
+            class="ml-3 mr-3 text-lg"
+            outline
+            :loading="settingWifiPassword || togglesLoading"
+            rounded
+            no-caps
+            color="primary"
+            :label="$t('disable_password')"
+            @click="disableWifiWarn"
+          />
+          <q-separator spaced />
+        </div>
+      </div>
+      <!-- Application Store -->
+      <div
+        v-if="tab == 'appStore'"
+        class="mt-3 pd-5"
+        style="min-width: 70vw"
+      >
+        <q-item-label
+          header
+          class="text-2xl"
+        >
+          {{ $t('available_applications') }}
+        </q-item-label>
+        <q-table
+          v-if="rows"
+          flat
+          :loading="appTableVisible"
+          :grid="$q.screen.xs"
+          :rows-per-page-options="[5, 10, 20]"
+          :rows="rows"
+          :table-class="!appTableVisible ? 'text-black': 'text-white'"
+          :columns="columns"
+          row-key="application"
+          :no-data-label="$t('no_apps_to_display')"
+        >
+          <template #loading>
+            <q-inner-loading
+              showing
+              flat
+              color="primary"
             >
-              <q-table
-                v-if="rows"
-                :title="$t('available_applications')"
-                flat
-                bordered
-                :loading="appTableVisible"
-                :grid="$q.screen.xs"
-                :rows-per-page-options="[3, 5, 10]"
-                :rows="rows"
-                :table-class="!appTableVisible ? 'text-black': 'text-white'"
-                :columns="columns"
-                row-key="application"
-                :no-data-label="$t('no_apps_to_display')"
-              >
-                <template #loading>
-                  <q-inner-loading
-                    showing
-                    color="primary"
-                  >
-                    <q-spinner-gears
-                      size="50px"
-                      color="primary"
-                    />
-                    <div class="mt-1 text-base text-center text-gray-800">
-                      {{ $t('this_may_take_time') }}
-                    </div>
-                  </q-inner-loading>
-                </template>
-                <template #top-right>
-                  <q-btn
-                    round
-                    size="xs"
-                    icon="refresh"
-                    @click="internet ? refreshApps(): $q.notify({ type: 'negative', message: $t('need_connection') })"
+              <q-spinner-gears
+                size="50px"
+                color="primary"
+              />
+              <div class="mt-1 text-base text-center text-gray-800">
+                {{ $t('this_may_take_time') }}
+              </div>
+            </q-inner-loading>
+          </template>
+          <template #top-right>
+            <q-btn
+              round
+              size="xs"
+              icon="refresh"
+              @click="internet ? refreshApps(): $q.notify({ type: 'negative', message: $t('need_connection') })"
+            />
+          </template>
+          <template
+            v-if="!appTableVisible"
+            #body-cell-author_site="props"
+          >
+            <q-td :props="props">
+              <div>
+                <a
+                  :href="'http://'+ props.row.author_site"
+                  target="_blank"
+                >{{ props.row.author_site }}</a>
+              </div>
+            </q-td>
+          </template>
+          <template
+            v-if="!appTableVisible"
+            #body-cell-status="props"
+          >
+            <q-td :props="props">
+              <div>
+                <q-btn
+                  size="xs"
+                  unelevated
+                  color="primary"
+                  :label="$t(props.value)"
+                  @click="toggleApp(props.row)"
+                />
+              </div>
+            </q-td>
+          </template>
+          <!-- Application Store Mobile templates -->
+          <template #item="props">
+            <div
+              class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4"
+              :class="!appTableVisible ? 'text-black': 'text-white'"
+            >
+              <q-card>
+                <q-card-section class="text-center">
+                  <q-img
+                    v-if="props.row.logo"
+                    :src="props.row.logo"
+                    style="max-width: 56px"
                   />
-                </template>
-                <template
-                  v-if="!appTableVisible"
-                  #body-cell-author_site="props"
+                  <q-icon
+                    v-else
+                    name="apps"
+                    size="56px"
+                    color="primary"
+                  />
+                  <br>
+                  <strong>{{ props.row.name }}</strong>
+                </q-card-section>
+                <q-separator />
+                <q-list
+                  dense
+                  class="text-center"
                 >
-                  <q-td :props="props">
-                    <div>
-                      <a
-                        :href="'http://'+ props.row.author_site"
-                        target="_blank"
-                      >{{ props.row.author_site }}</a>
-                    </div>
-                  </q-td>
-                </template>
-                <template
-                  v-if="!appTableVisible"
-                  #body-cell-status="props"
-                >
-                  <q-td :props="props">
-                    <div>
-                      <q-btn
-                        size="xs"
-                        unelevated
-                        color="primary"
-                        :label="$t(props.value)"
-                        @click="toggleApp(props.row)"
-                      />
-                    </div>
-                  </q-td>
-                </template>
+                  <div>
+                    {{ $t('author_colon') }} <a
+                      :href="'http://'+ props.row.author_site"
+                      target="_blank"
+                    >{{ props.row.author_site }}</a>
+                  </div>
 
-                <!-- Application Store Mobile templates -->
-                <template #item="props">
-                  <div
-                    class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4"
-                    :class="!appTableVisible ? 'text-black': 'text-white'"
+                  <div>{{ $t('version') }} {{ props.row.version }}</div>
+                  <q-btn
+                    v-if="!appTableVisible"
+                    class="mb-1"
+                    size="xs"
+                    unelevated
+                    color="primary"
+                    :label="$t(props.row.status)"
+                    @click="toggleApp(props.row)"
+                  />
+                </q-list>
+              </q-card>
+            </div>
+          </template>
+        </q-table>
+        <q-card v-else>
+          <q-card-section>
+            <div class="column flex text-base text-center items-center text-gray-800">
+              <q-spinner-gears
+                size="50px"
+                color="primary"
+              />
+              {{ $t('this_may_take_time') }}
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+      <!-- Advanced Features -->
+      <div
+        v-if="tab == 'advanced'"
+        class="mt-3 pd-5"
+        style="min-width: 70vw"
+      >
+        <q-item-label
+          header
+          class="text-2xl"
+        >
+          {{ $t('advanced') }}
+        </q-item-label>
+        <div class="mr-3 ml-3">
+          <div class="text-lg text-gray-700">
+            {{ $t('choose_start_page') }}
+          </div>
+          <div class="text-base text-gray-500 mb-1">
+            {{ $t('start_page_desc') }}
+          </div>
+          <q-select
+            v-if="!filesLoading"
+            v-model="startPage"
+            rounded
+            outlined
+            transition-duration="1"
+            :options="pages"
+            class="mb-5"
+            @update:model-value="changeStartPage"
+          />
+          <div
+            v-if="customStartPageInput"
+            class="text-lg"
+          >
+            {{ $t('choose_new_path') }}
+          </div>
+          <!-- Choose App as default path -->
+          <q-dialog
+            v-model="appStorePageInput"
+            persistent
+          >
+            <q-card style="width: 700px; max-width: 80vw;">
+              <q-card-section class="row items-center">
+                <q-table
+                  v-if="rows"
+                  :title="$t('available_applications')"
+                  flat
+                  separator="cell"
+                  style="width: 700px; max-width: 80vw;"
+                  :grid="$q.screen.xs"
+                  :rows-per-page-options="[5, 10]"
+                  :rows="rows"
+                  :table-class="!appTableVisible ? 'text-black': 'text-white'"
+                  :columns="columns"
+                  :visible-columns="visibleColumns"
+                  filter="installed"
+                  row-key="application"
+                  :no-data-label="$t('no_apps_to_display')"
+                >
+                  <template
+                    v-if="!appTableVisible"
+                    #body-cell-status="props"
                   >
-                    <q-card>
-                      <q-card-section class="text-center">
-                        <q-img
-                          v-if="props.row.logo"
-                          :src="props.row.logo"
-                          style="max-width: 56px"
-                        />
-                        <q-icon
-                          v-else
-                          name="apps"
-                          size="56px"
-                          color="primary"
-                        />
-                        <br>
-                        <strong>{{ props.row.name }}</strong>
-                      </q-card-section>
-                      <q-separator />
-                      <q-list
-                        dense
-                        class="text-center"
-                      >
-                        <div>
-                          {{ $t('author_colon') }} <a
-                            :href="'http://'+ props.row.author_site"
-                            target="_blank"
-                          >{{ props.row.author_site }}</a>
-                        </div>
-
-                        <div>{{ $t('version') }} {{ props.row.version }}</div>
+                    <q-td :props="props">
+                      <div>
                         <q-btn
-                          v-if="!appTableVisible"
-                          class="mb-1"
+                          v-close-popup
                           size="xs"
                           unelevated
                           color="primary"
-                          :label="$t(props.row.status)"
-                          @click="toggleApp(props.row)"
+                          :label="$t('set_custom_startpage')"
+                          @click="storeStartPage(props.row)"
                         />
-                      </q-list>
-                    </q-card>
-                  </div>
-                </template>
-              </q-table>
-              <q-card v-else>
-                <q-card-section>
-                  <div class="column flex text-base text-center items-center text-gray-800">
-                    <q-spinner-gears
-                      size="50px"
-                      color="primary"
-                    />
-                    {{ $t('this_may_take_time') }}
-                  </div>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
-          </q-list>
-          <!-- Advanced Features -->
-          <q-list
-            bordered
-            class="rounded-borders mt-4"
-          >
-            <q-expansion-item
-              expand-separator
-              icon="build"
-              :label="$t('advanced')"
-              class="w-full"
-            >
-              <q-card>
-                <q-card-section>
-                  <div class="mr-3 ml-3">
-                    <div class="text-2xl text-gray-700">
-                      {{ $t('choose_start_page') }}
-                    </div>
-                    <div class="text-base text-gray-500 mb-1">
-                      {{ $t('start_page_desc') }}
-                    </div>
-                    <q-select
-                      v-if="!filesLoading"
-                      v-model="startPage"
-                      rounded
-                      outlined
-                      transition-duration="1"
-                      :options="pages"
-                      class="mb-5"
-                      @update:model-value="changeStartPage"
-                    />
-                    <div
-                      v-if="customStartPageInput"
-                      class="text-lg"
-                    >
-                      {{ $t('choose_new_path') }}
-                    </div>
-                    <!-- Choose App as default path -->
-                    <q-dialog
-                      v-model="appStorePageInput"
-                      persistent
-                    >
-                      <q-card style="width: 700px; max-width: 80vw;">
-                        <q-card-section class="row items-center">
-                          <q-table
-                            v-if="rows"
-                            :title="$t('available_applications')"
-                            flat
-                            separator="cell"
-                            style="width: 700px; max-width: 80vw;"
-                            :grid="$q.screen.xs"
-                            :rows-per-page-options="[5, 10]"
-                            :rows="rows"
-                            :table-class="!appTableVisible ? 'text-black': 'text-white'"
-                            :columns="columns"
-                            :visible-columns="visibleColumns"
-                            filter="installed"
-                            row-key="application"
-                            :no-data-label="$t('no_apps_to_display')"
-                          >
-                            <template
-                              v-if="!appTableVisible"
-                              #body-cell-status="props"
-                            >
-                              <q-td :props="props">
-                                <div>
-                                  <q-btn
-                                    v-close-popup
-                                    size="xs"
-                                    unelevated
-                                    color="primary"
-                                    :label="$t('set_custom_startpage')"
-                                    @click="storeStartPage(props.row)"
-                                  />
-                                </div>
-                              </q-td>
-                            </template>
-                            <!-- Mobile templates -->
-                            <template #item="props">
-                              <div class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4">
-                                <q-card>
-                                  <q-card-section class="text-center">
-                                    <strong>{{ props.row.name }}</strong>
-                                  </q-card-section>
-                                  <q-separator />
-                                  <q-list
-                                    dense
-                                    class="text-center"
-                                  >
-                                    <div>
-                                      {{ $t('author_colon') }} {{ props.row.author_site }}
-                                    </div>
-                                    <q-btn
-                                      v-close-popup
-                                      class="mb-1"
-                                      size="xs"
-                                      unelevated
-                                      color="primary"
-                                      :label="$t('set_custom_startpage')"
-                                      @click="storeStartPage(props.row)"
-                                    />
-                                  </q-list>
-                                </q-card>
-                              </div>
-                            </template>
-                          </q-table>
+                      </div>
+                    </q-td>
+                  </template>
+                  <!-- Mobile templates -->
+                  <template #item="props">
+                    <div class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4">
+                      <q-card>
+                        <q-card-section class="text-center">
+                          <strong>{{ props.row.name }}</strong>
                         </q-card-section>
-                        <q-card-actions align="right">
+                        <q-separator />
+                        <q-list
+                          dense
+                          class="text-center"
+                        >
+                          <div>
+                            {{ $t('author_colon') }} {{ props.row.author_site }}
+                          </div>
                           <q-btn
                             v-close-popup
-                            flat
-                            :label="$t('cancel')"
+                            class="mb-1"
+                            size="xs"
+                            unelevated
                             color="primary"
-                            @click="setStartPage"
+                            :label="$t('set_custom_startpage')"
+                            @click="storeStartPage(props.row)"
                           />
-                        </q-card-actions>
+                        </q-list>
                       </q-card>
-                    </q-dialog>
-                    <!-- Custom start page -->
-                    <q-slide-transition :duration="2000">
-                      <div v-show="customStartPageInput">
-                        <q-input
-                          v-if="customStartPageInput"
-                          ref="startPathValid"
-                          v-model="newStartPath"
-                          filled
-                          :placeholder="$t('your_new_path')"
-                          class="ml-1 mr-1"
-                          :rules="[(value) =>
-                            !value.substr(0,1).includes('/') &&
-                            !value.substr(-1).includes('/') &&
-                            !value.includes(' ') &&
-                            !value.includes('\\')
-                            || $t('invalid_path_input')]"
-                        >
-                          <template #after>
-                            <q-btn
-                              class="mt-1"
-                              round
-                              dense
-                              flat
-                              color="primary"
-                              icon="check_circle_outline"
-                              @click="newStartPathWarn"
-                            />
-                          </template>
-                        </q-input>
-                      </div>
-                    </q-slide-transition>
-                    <q-separator spaced />
-                    <!-- Set Hostname -->
-                    <div class="text-2xl text-gray-700 mt-5 mb-1">
-                      {{ $t('set_hostname_desc') }}
                     </div>
-                    <q-input
-                      ref="hostnameValid"
-                      v-model="newHostname"
-                      filled
-                      class="ml-1 mr-1"
-                      :rules="[(val) =>
-                        !val.includes(' ') &&
-                        val.length <= 32
-                        && val === val.toLowerCase()
-                        && regexp.test(val)
-                        || $t('invalid_input')]"
-                      :placeholder="$t('your_new_name')"
-                    >
-                      <template #after>
-                        <q-btn
-                          class="mt-1"
-                          round
-                          dense
-                          flat
-                          color="primary"
-                          icon="check_circle_outline"
-                          :disable="newHostname"
-                          @click="hostnameWarn"
-                        />
-                      </template>
-                    </q-input>
-                  </div>
-                  <q-separator
-                    class="mr-3 ml-3"
-                    spaced
+                  </template>
+                </q-table>
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn
+                  v-close-popup
+                  flat
+                  :label="$t('cancel')"
+                  color="primary"
+                  @click="setStartPage"
+                />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
+          <!-- Custom start page -->
+          <q-slide-transition :duration="2000">
+            <div v-show="customStartPageInput">
+              <q-input
+                v-if="customStartPageInput"
+                ref="startPathValid"
+                v-model="newStartPath"
+                filled
+                :placeholder="$t('your_new_path')"
+                class="ml-1 mr-1"
+                :rules="[(value) =>
+                  !value.substr(0,1).includes('/') &&
+                  !value.substr(-1).includes('/') &&
+                  !value.includes(' ') &&
+                  !value.includes('\\')
+                  || $t('invalid_path_input')]"
+              >
+                <template #after>
+                  <q-btn
+                    class="mt-1"
+                    round
+                    dense
+                    flat
+                    color="primary"
+                    icon="check_circle_outline"
+                    @click="newStartPathWarn"
                   />
-                  <!-- Portainer -->
-                  <div>
-                    <q-item class="flex">
-                      <q-item-section>
-                        <q-item-label class="text-2xl text-gray-700">
-                          {{ $t('portainer') }}
-                        </q-item-label>
-                        <q-item-label class="text-base pr-1 text-gray-500">
-                          {{ $t('portainer_settings_description') }}
-                        </q-item-label>
-                      </q-item-section>
-                      <q-toggle
-                        v-if="!portainerLoading"
-                        v-model="portainer"
-                        class="mt-3 self-end"
-                        :disable="portainerLoading"
-                        icon="widgets"
-                        size="lg"
-                        @update:model-value="updatePortainer"
-                      />
-                      <q-spinner
-                        v-if="portainerLoading"
-                        color="primary"
-                        size="2em"
-                        class="mt-4 mr-6"
-                      />
-                    </q-item>
-                  </div>
-                  <div
-                    v-if="portainer && !portainerLoading"
-                    class="pl-6"
-                  >
-                    {{ $t('portainer_starting_at') }} <a
-                      href="/portainer/"
-                      target="_blank"
-                    >http://{{ windowHostname }}/portainer/</a>
-                  </div>
-                  <q-separator
-                    class="mr-3 ml-3"
-                    spaced
-                  />
-                  <!-- Prune System Files -->
-                  <div>
-                    <q-item class="flex">
-                      <q-item-section>
-                        <q-item-label class="text-2xl text-gray-700">
-                          {{ $t('prune_system_files') }}
-                        </q-item-label>
-                        <q-item-label class="text-base pr-1 text-gray-500">
-                          {{ $t('prune_system_files_description') }}
-                        </q-item-label>
-                      </q-item-section>
-                      <q-btn
-                        outline
-                        rounded
-                        no-caps
-                        :loading="pruningFiles"
-                        size="md"
-                        color="red"
-                        :label="$t('prune')"
-                        class="text-lg mt-2"
-                        @click="pruneSystemFiles"
-                      />
-                    </q-item>
-                  </div>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
-          </q-list>
-          <!-- System Info -->
-          <div class="text-center text-2xl mt-6 mb-4 text-gray-600">
-            {{ $t('system_info') }}
+                </template>
+              </q-input>
+            </div>
+          </q-slide-transition>
+          <q-separator spaced />
+          <!-- Set Hostname -->
+          <div class="text-lg text-gray-700 mt-5 mb-1">
+            {{ $t('set_hostname_desc') }}
           </div>
-          <div
-            v-if="!sysInfoLoading"
-            class="flex flex-col text-center text-gray pb-5"
+          <q-input
+            ref="hostnameValid"
+            v-model="newHostname"
+            filled
+            class="ml-1 mr-1"
+            :rules="[(val) =>
+              !val.includes(' ') &&
+              val.length <= 32
+              && val === val.toLowerCase()
+              && regexp.test(val)
+              || $t('invalid_input')]"
+            :placeholder="$t('your_new_name')"
           >
-            <span class="text-gray-600"><span>{{ $t('total_storage') }} </span> {{ sysInfo.storage.total }}</span>
-            <span class="text-gray-600"><span>{{ $t('available_storage') }} </span> {{ sysInfo.storage.available }}</span>
-            <span class="text-gray-600"><span>{{ $t('version') }} </span> {{ sysInfo.versions.lb }}</span>
-          </div>
-          <div
-            v-else
-            class="flex flex-col text-center text-gray pb-5"
-          >
-            <span class="text-gray-600"><span>Loading...</span>{{ sysInfo.versions.lb }}</span>
-          </div>
+            <template #after>
+              <q-btn
+                class="mt-1"
+                round
+                dense
+                flat
+                color="primary"
+                icon="check_circle_outline"
+                :disable="newHostname"
+                @click="hostnameWarn"
+              />
+            </template>
+          </q-input>
+        </div>
+        <q-separator
+          class="mr-3 ml-3"
+          spaced
+        />
+        <!-- Portainer -->
+        <div>
+          <q-item class="flex">
+            <q-item-section>
+              <q-item-label class="text-lg text-gray-700">
+                {{ $t('portainer') }}
+              </q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">
+                {{ $t('portainer_settings_description') }}
+              </q-item-label>
+            </q-item-section>
+            <q-toggle
+              v-if="!portainerLoading"
+              v-model="portainer"
+              class="mt-3 self-end"
+              :disable="portainerLoading"
+              icon="widgets"
+              size="lg"
+              @update:model-value="updatePortainer"
+            />
+            <q-spinner
+              v-if="portainerLoading"
+              color="primary"
+              size="2em"
+              class="mt-4 mr-6"
+            />
+          </q-item>
+        </div>
+        <div
+          v-if="portainer && !portainerLoading"
+          class="pl-6"
+        >
+          {{ $t('portainer_starting_at') }} <a
+            href="/portainer/"
+            target="_blank"
+          >http://{{ windowHostname }}/portainer/</a>
+        </div>
+        <q-separator
+          class="mr-3 ml-3"
+          spaced
+        />
+        <!-- Prune System Files -->
+        <div>
+          <q-item class="flex">
+            <q-item-section>
+              <q-item-label class="text-lg text-gray-700">
+                {{ $t('prune_system_files') }}
+              </q-item-label>
+              <q-item-label class="text-base pr-1 text-gray-500">
+                {{ $t('prune_system_files_description') }}
+              </q-item-label>
+            </q-item-section>
+            <q-btn
+              outline
+              rounded
+              no-caps
+              :loading="pruningFiles"
+              size="md"
+              color="red"
+              :label="$t('prune')"
+              class="text-lg mt-2"
+              @click="pruneSystemFiles"
+            />
+          </q-item>
+        </div>
+        <!-- System Info -->
+        <div class="text-center text-xl mt-6 mb-4 text-gray-600">
+          {{ $t('system_info') }}
+        </div>
+        <div
+          v-if="!sysInfoLoading"
+          class="flex flex-col text-center text-gray pb-5"
+        >
+          <span class="text-gray-600"><span>{{ $t('total_storage') }} </span> {{ sysInfo.storage.total }}</span>
+          <span class="text-gray-600"><span>{{ $t('available_storage') }} </span> {{ sysInfo.storage.available }}</span>
+          <span class="text-gray-600"><span>{{ $t('version') }} </span> {{ sysInfo.versions.lb }}</span>
+        </div>
+        <div
+          v-else
+          class="flex flex-col text-center text-gray pb-5"
+        >
+          <span class="text-gray-600"><span>Loading...</span>{{ sysInfo.versions.lb }}</span>
         </div>
       </div>
     </div>
@@ -1336,6 +1349,7 @@ export default defineComponent({
       storeStartPage,
       sysInfo,
       sysInfoLoading,
+      tab: ref('general'),
       toggleApp,
       togglesLoading,
       updateFiles,

@@ -4,7 +4,8 @@
       <center class="mb-5">
         <img
           alt=""
-          src="../assets/lb-icon.png"
+          width="100"
+          src="../assets/lb-logo.svg"
         >
       </center>
       {{ $t('welcome_lb') }}

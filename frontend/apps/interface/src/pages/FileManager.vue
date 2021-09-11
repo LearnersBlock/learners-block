@@ -796,13 +796,6 @@ export default defineComponent({
       })
     }
 
-    function onUploaderRejected (rejectedEntries) {
-      $q.notify({
-        type: 'negative',
-        message: `${rejectedEntries.length} ${t('invalid_upload_string')}`
-      })
-    }
-
     function onRowClick (_evt, row) {
       const index = row.name.lastIndexOf('.') as number
       const ePub = index > 0 && row.name.substring(index + 1).toLowerCase() === 'epub'
@@ -857,6 +850,13 @@ export default defineComponent({
     function onSelectorRowClick (_evt, row) {
       selectorObjPath.value.push(row.name)
       updateSelectorRows()
+    }
+
+    function onUploaderRejected (rejectedEntries) {
+      $q.notify({
+        type: 'negative',
+        message: `${rejectedEntries.length} ${t('invalid_upload_string')}`
+      })
     }
 
     function openFileSelector (obj) {
@@ -976,10 +976,10 @@ export default defineComponent({
       openFileSelector,
       rename,
       renameValid,
-      rootPath,
       resetSlide ({ reset }) {
         reset()
       },
+      rootPath,
       rows,
       searchTable: ref(false),
       selected,
