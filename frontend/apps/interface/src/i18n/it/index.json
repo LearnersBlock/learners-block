@@ -125,8 +125,8 @@
     "new_folder": "Nuova cartella",
     "move_copy": "Sposta/Copia",
     "item_already_exists": "L'elemento esiste già",
-    "invalid_upload_string": "voci contengono un nome non valido e non saranno caricati. I seguenti caratteri non sono compatibili: '<', '>', '%', '{', '}', '|', '\\', '^', '`', '$', '#'",
-    "invalid_filemanager_string": "Hai inserito un nome non valido. I seguenti caratteri non sono compatibili: '<', '>', '%', '{', '}', '|', '\\', '^', '`', '$', '#'",
+    "invalid_upload_string": "voci contengono un nome non valido e non saranno caricati. I seguenti caratteri non sono compatibili: /, \\0",
+    "invalid_filemanager_string": "Hai inserito un nome non valido. I seguenti caratteri non sono compatibili: /, \\0",
     "info": "Info",
     "filter": "Filtro",
     "extract": "Estrai",
@@ -135,7 +135,10 @@
     "delete": "Elimina",
     "copy_to_clipboard": "Copia negli appunti",
     "copy": "Copia",
-    "confirm_delete": "Sei sicuro/a di volere eliminare questi elementi?",
+    "confirm_delete": "Sei sicuro/a di voler eliminare gli elementi?",
     "choose_name": "Scegli un nome",
-    "back": "Indietro"
+    "back": "Indietro",
+    "extracted_to": "Estratti in una cartella chiamata:",
+    "manage_library_files": "Gestisci i file scaricati della biblioteca",
+    "name": "Nome"
 }

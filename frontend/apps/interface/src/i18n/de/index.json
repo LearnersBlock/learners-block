@@ -125,8 +125,8 @@
     "new_folder": "Neuer Ordner",
     "move_copy": "Verschieben/kopieren",
     "item_already_exists": "Das Element existiert bereits",
-    "invalid_upload_string": "Einträge enthalten einen ungültigen Namen und werden nicht hochgeladen. Die folgenden Zeichen sind nicht kompatibel: '<', '>', '%', '{', '}', '|', '\\', '^', '`', '$', '#'",
-    "invalid_filemanager_string": "Sie haben einen ungültigen Namen eingegeben. Die folgenden Zeichen sind nicht kompatibel: '<', '>', '%', '{', '}', '|', '\\', '^', '`', '$', '#'",
+    "invalid_upload_string": "Einträge enthalten einen ungültigen Namen und werden nicht hochgeladen. Die folgenden Zeichen sind nicht kompatibel: /, \\0",
+    "invalid_filemanager_string": "Sie haben einen ungültigen Namen eingegeben. Die folgenden Zeichen sind nicht kompatibel: /, \\0",
     "info": "Infos",
     "filter": "Filter",
     "extract": "Extrahieren",
@@ -135,7 +135,10 @@
     "delete": "Löschen",
     "copy_to_clipboard": "In Zwischenablage kopieren",
     "copy": "Kopieren",
-    "confirm_delete": "Sind Sie sicher, dass Sie diese Elemente löschen wollen?",
+    "confirm_delete": "Sind Sie sicher, dass Sie das/die Element(e) löschen wollen?",
     "choose_name": "Wählen Sie einen Namen",
-    "back": "Zurück"
+    "back": "Zurück",
+    "extracted_to": "Extrahiert in einen Ordner namens:",
+    "manage_library_files": "Heruntergeladener Bibliotheksdateien verwalten",
+    "name": "Name"
 }
