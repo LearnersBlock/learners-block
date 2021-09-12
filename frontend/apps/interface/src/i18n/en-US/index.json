@@ -141,5 +141,12 @@
     "name": "Name",
     "manage_library_files": "Manage downloaded Library files",
     "extracted_to": "Extracted to a folder called:",
-    "general": "General"
+    "general": "General",
+    "connect_wifi_desc": "Connect your Block to a nearby Wi-Fi network.",
+    "networking": "Networking",
+    "set_wifi_password_desc": "Set a password for accessing your Block via Wi-Fi.",
+    "set_wifi_password": "Set WiFi Hotspot Password",
+    "set_cp_password_desc": "Set a password for logging in to the settings panel.",
+    "set_cp_password": "Set Control Panel Password",
+    "security": "Security"
 }
