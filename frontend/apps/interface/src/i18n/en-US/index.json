@@ -19,7 +19,7 @@
     "chapter": "Chapter",
     "choose_name": "Choose a name",
     "choose_new_path": "Enter a new path",
-    "choose_start_page": "Choose a start page",
+    "choose_start_page": "Choose a Start Page",
     "click_swipe_instruction": "Click and drag to turn the page.",
     "click_toggle": "Click an item below to open the administration. Use the toggles on the right to show or hide the components on the front page.",
     "close": "Close",
@@ -146,7 +146,7 @@
     "networking": "Networking",
     "set_wifi_password_desc": "Set a password for accessing your Block via Wi-Fi.",
     "set_wifi_password": "Set Wi-Fi Hotspot Password",
-    "set_cp_password_desc": "Set a password for logging in to the Control Panel.",
+    "set_cp_password_desc": "Set a password for logging in to this Control Panel.",
     "set_cp_password": "Set Control Panel Password",
     "security": "Security"
 }

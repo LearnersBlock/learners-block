@@ -137,5 +137,16 @@
     "confirm_delete": "هل أنت متأكد أنك تريد حذف هذه العناصر؟",
     "close": "إغلاق",
     "choose_name": "اختر اسمًا",
-    "back": "الرجوع"
+    "back": "الرجوع",
+    "security": "حماية",
+    "set_cp_password": "تعيين كلمة مرور لوحة التحكم",
+    "set_cp_password_desc": "قم بتعيين كلمة مرور لتسجيل الدخول إلى لوحة التحكم.",
+    "set_wifi_password": "قم بتعيين كلمة مرور Wi-Fi Hotspot",
+    "set_wifi_password_desc": "قم بتعيين كلمة مرور للوصول إلى الحظر الخاص بك عبر Wi-Fi.",
+    "networking": "الشبكات",
+    "connect_wifi_desc": "قم بتوصيل Block بشبكة Wi-Fi قريبة.",
+    "general": "عام",
+    "extracted_to": "مستخرج إلى مجلد يسمى:",
+    "manage_library_files": "إدارة ملفات المكتبة التي تم تنزيلها",
+    "name": "اسم"
 }
