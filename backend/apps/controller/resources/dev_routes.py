@@ -1,3 +1,4 @@
+from common.models import User
 from flask_jwt_extended import jwt_required
 from flask import request
 from flask_restful import Resource
@@ -101,6 +102,17 @@ class hostname(Resource):
 class journal_logs(Resource):
     def get(self):
         return "journal logs..."
+
+
+class set_wifi(Resource):
+    @jwt_required()
+    def post(self):
+        global wifistatus
+        content = request.get_json()
+        lb_database = User.query.filter_by(username='lb').first()
+        lb_database.wifi_password = content["wifi_password"]
+        lb_database.save_to_db()
+        return {'status': 200, 'running': wifistatus}, 200
 
 
 class update(Resource):

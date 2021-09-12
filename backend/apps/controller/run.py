@@ -128,7 +128,6 @@ if __name__ == '__main__':
             verify_login
         from resources.settings_routes import set_ui, \
             settings_ui
-        from resources.wifi_routes import set_wifi
 
         init_database()
 
@@ -140,7 +139,7 @@ if __name__ == '__main__':
         from resources.supervisor_routes import container_start, \
             container_status, container_stop, device, host_config, \
             journal_logs, update, uuid
-        from resources.wifi_routes import wifi_connection_status, \
+        from resources.wifi_routes import set_wifi, wifi_connection_status, \
             wifi_forget, wifi_forget_all
 
         print("Api-v1 - Starting API (Production)...")
@@ -162,7 +161,8 @@ if __name__ == '__main__':
     else:
         from resources.dev_routes import container_start, container_status, \
              container_stop, device, host_config, hostname, journal_logs, \
-             update, uuid, wifi_connection_status, wifi_forget, wifi_forget_all
+             update, uuid, set_wifi, wifi_connection_status, wifi_forget, \
+             wifi_forget_all
 
         print("Api-v1 - Starting API (Development)...")
 
