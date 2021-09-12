@@ -252,7 +252,7 @@
             :label="$t('direct_download')"
           >
             <q-tooltip
-              class="text-body2 text-center"
+              class="text-caption text-center"
               anchor="top middle"
               self="bottom middle"
               :offset="[20, 20]"

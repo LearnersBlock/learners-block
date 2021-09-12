@@ -73,7 +73,7 @@
                 @click="newFolderPrompt"
               >
                 <q-tooltip
-                  class="text-caption text-center text-body1"
+                  class="text-caption text-center"
                   anchor="top middle"
                   self="center middle"
                   :offset="[20, 20]"
@@ -93,7 +93,7 @@
                 @click="openFileSelector(JSON.parse(JSON.stringify(selected)))"
               >
                 <q-tooltip
-                  class="text-caption text-center text-body1"
+                  class="text-caption text-center"
                   anchor="top middle"
                   self="center middle"
                   :offset="[20, 20]"
@@ -112,7 +112,7 @@
                 @click="uploaderDialog = true"
               >
                 <q-tooltip
-                  class="text-caption text-center text-body1"
+                  class="text-caption text-center"
                   anchor="top middle"
                   self="center middle"
                   :offset="[20, 20]"
@@ -152,7 +152,7 @@
                 @click="deleteFile(JSON.parse(JSON.stringify(selected)))"
               >
                 <q-tooltip
-                  class="text-caption text-center text-body1"
+                  class="text-caption text-center"
                   anchor="top middle"
                   self="center middle"
                   :offset="[20, 20]"
@@ -169,7 +169,7 @@
                 @click="searchTable = true"
               >
                 <q-tooltip
-                  class="text-caption text-center text-body1"
+                  class="text-caption text-center"
                   anchor="top middle"
                   self="center middle"
                   :offset="[20, 20]"
@@ -187,7 +187,7 @@
                 @click="props.toggleFullscreen"
               >
                 <q-tooltip
-                  class="text-caption text-center text-body1"
+                  class="text-caption text-center"
                   anchor="top middle"
                   self="center middle"
                   :offset="[20, 20]"
@@ -250,7 +250,7 @@
                 @click.stop="unzip(props.row.name)"
               >
                 <q-tooltip
-                  class="text-caption text-center text-body1"
+                  class="text-caption text-center"
                   anchor="top middle"
                   self="center middle"
                   :offset="[20, 20]"
@@ -282,7 +282,7 @@
               @click.stop="openFileSelector([{name:props.row.name, format:props.row.format}])"
             >
               <q-tooltip
-                class="text-caption text-center text-body1"
+                class="text-caption text-center"
                 anchor="top middle"
                 self="center middle"
                 :offset="[20, 20]"
@@ -332,7 +332,7 @@
                 />
               </q-popup-edit>
               <q-tooltip
-                class="text-caption text-center text-body1"
+                class="text-caption text-center"
                 anchor="top middle"
                 self="center middle"
                 :offset="[20, 20]"
@@ -362,7 +362,7 @@
               @click.stop="deleteFile([{name:props.row.name, format:props.row.format}])"
             >
               <q-tooltip
-                class="text-caption text-center text-body1"
+                class="text-caption text-center"
                 anchor="top middle"
                 self="center middle"
                 :offset="[20, 20]"
@@ -388,7 +388,7 @@
                 @click.stop
                 @mouseover="fetchFileSize(props.row.name)"
               >
-                <q-tooltip class="text-body1">
+                <q-tooltip class="text-caption">
                   Size: {{ fileSize }}
                   <q-inner-loading :showing="loadingFileSize">
                     <q-spinner-gears

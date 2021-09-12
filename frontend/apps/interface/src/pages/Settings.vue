@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center text-subtitle1">
       <div
         class="q-gutter-y-md items-center window-width"
       >
@@ -8,6 +8,7 @@
           v-model="tab"
           class="bg-primary text-gray-900"
           shrink
+          dense
           inline-label
           outside-arrows
           mobile-arrows
@@ -36,47 +37,49 @@
       </div>
       <div
         v-if="tab == 'general'"
-        class="mt-3 pd-5"
+        class="q-pa-sm"
         style="min-width: 70vw"
       >
         <!-- Component toggles -->
-        <div class="flex flex-col">
-          <q-list>
-            <q-item-label
-              header
-              class="text-2xl"
-            >
+        <q-list padding>
+          <q-item-label
+            header
+          >
+            <q-item-section class="text-h6">
               {{ $t('components') }}
-            </q-item-label>
-            <!-- File Manager -->
-            <div class="text-base ml-4 mb-4 text-gray-600">
+            </q-item-section>
+            <q-item-section>
               {{ $t('click_toggle') }}
-            </div>
-            <q-item
-              v-ripple
-              clickable
-              :to="{ name: 'filemanager', params: { data: 'fileshare'} }"
+            </q-item-section>
+          </q-item-label>
+          <!-- File Manager -->
+          <q-item
+            v-ripple
+            clickable
+            :to="{ name: 'filemanager', params: { data: 'fileshare'} }"
+          >
+            <q-item-section
+              top
+              avatar
             >
-              <q-icon
-                name="folder"
-                color="orange"
-                style="font-size: 2em"
-                class="mr-3"
+              <q-avatar
+                icon="folder"
+                text-color="orange"
               />
-              <q-item-section>
-                <q-item-label class="josefin text-xl">
-                  {{ $t('file_manager') }}
-                </q-item-label>
-                <q-item-label class="text-base pr-1 text-gray-500">
-                  {{ $t('files_settings_description') }}
-                </q-item-label>
-              </q-item-section>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>
+                {{ $t('file_manager') }}
+              </q-item-label>
+              <q-item-label caption>
+                {{ $t('files_settings_description') }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section side>
               <q-toggle
                 v-if="!filesLoading"
                 v-model="files"
                 icon="folder"
-                class="self-end"
-                size="lg"
                 :disable="togglesLoading"
                 @update:model-value="updateFiles"
               />
@@ -86,66 +89,70 @@
                 size="2em"
                 class="mt-6 mr-6"
               />
-            </q-item>
-            <!-- Library -->
-            <q-item
-              v-ripple
-              clickable
-              tag="a"
-              target="_self"
-              :disable="!internet"
-              @click="redirect('/library/')"
+            </q-item-section>
+          </q-item>
+          <!-- Library -->
+          <q-item
+            v-ripple
+            clickable
+            tag="a"
+            target="_self"
+            :disable="!internet"
+            @click="redirect('/library/')"
+          >
+            <q-tooltip
+              v-if="!internet"
+              class="text-caption text-center"
+              anchor="top middle"
+              self="center middle"
+              :offset="[10, 10]"
             >
-              <q-tooltip
-                v-if="!internet"
-                anchor="top middle"
-                self="center middle"
-                :offset="[10, 10]"
-                class="text-body1 text-center"
-              >
-                {{ $t('need_connection') }}
-              </q-tooltip>
-              <q-icon
-                name="import_contacts"
-                color="green"
-                style="font-size: 2em"
-                class="mr-3"
+              {{ $t('need_connection') }}
+            </q-tooltip>
+            <q-item-section
+              top
+              avatar
+            >
+              <q-avatar
+                icon="import_contacts"
+                text-color="green"
               />
-              <q-item-section>
-                <q-item-label class="josefin text-xl">
-                  {{ $t('library') }}
-                </q-item-label>
-                <q-item-label class="text-base pr-1 text-gray-500">
-                  {{ $t('library_settings_description') }}
-                </q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <q-btn
-                  class="mr-3"
-                  icon="edit"
-                  outline
-                  dense
-                  flat
-                  size="lg"
-                  color="primary"
-                  :to="{ name: 'filemanager', params: { data: 'library'} }"
-                  @click.stop
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>
+                {{ $t('library') }}
+              </q-item-label>
+              <q-item-label caption>
+                {{ $t('library_settings_description') }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section side>
+              <q-btn
+                class="mr-3"
+                icon="edit"
+                outline
+                dense
+                flat
+                size="md"
+                color="primary"
+                :to="{ name: 'filemanager', params: { data: 'library'} }"
+                @click.stop
+              >
+                <q-tooltip
+                  class="text-caption text-center"
+                  anchor="top middle"
+                  self="center middle"
+                  :offset="[10, 10]"
                 >
-                  <q-tooltip
-                    anchor="top middle"
-                    self="center middle"
-                    :offset="[10, 10]"
-                    class="text-body1 text-center"
-                  >
-                    {{ $t('manage_library_files') }}
-                  </q-tooltip>
-                </q-btn>
-              </q-item-section>
+                  {{ $t('manage_library_files') }}
+                </q-tooltip>
+              </q-btn>
+            </q-item-section>
+            <q-item-section side>
               <q-toggle
                 v-if="!libraryLoading"
                 v-model="library"
                 icon="import_contacts"
-                size="lg"
                 :disable="togglesLoading"
                 @update:model-value="updateLibrary"
               />
@@ -155,32 +162,36 @@
                 size="2em"
                 class="mt-6 mr-6"
               />
-            </q-item>
-            <!-- Website -->
-            <q-item
-              v-ripple
-              clickable
-              :to="{ name: 'filemanager', params: { data: 'website'} }"
+            </q-item-section>
+          </q-item>
+          <!-- Website -->
+          <q-item
+            v-ripple
+            clickable
+            :to="{ name: 'filemanager', params: { data: 'website'} }"
+          >
+            <q-item-section
+              top
+              avatar
             >
-              <q-icon
-                name="language"
-                color="yellow"
-                style="font-size: 2em"
-                class="mr-3"
+              <q-avatar
+                icon="language"
+                text-color="yellow"
               />
-              <q-item-section>
-                <q-item-label class="josefin text-xl">
-                  {{ $t('website') }}
-                </q-item-label>
-                <q-item-label class="text-base pr-1 text-gray-500">
-                  {{ $t('website_settings_description') }}
-                </q-item-label>
-              </q-item-section>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>
+                {{ $t('website') }}
+              </q-item-label>
+              <q-item-label caption>
+                {{ $t('website_settings_description') }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section side>
               <q-toggle
                 v-if="!websiteLoading"
                 v-model="website"
                 icon="language"
-                size="lg"
                 class="ml-auto"
                 :disable="togglesLoading"
                 @update:model-value="updateWebsite"
@@ -191,57 +202,106 @@
                 size="2em"
                 class="mt-6 mr-6"
               />
-            </q-item>
-          </q-list>
+            </q-item-section>
+          </q-item>
+
           <q-separator spaced />
-          <!-- Login section -->
+          <!-- Security section -->
           <q-item-label
             header
-            class="text-2xl"
+            class="text-h6"
           >
-            {{ $t('login') }}
+            {{ $t('security') }}
           </q-item-label>
-          <q-btn
-            outline
-            rounded
-            no-caps
-            color="primary"
-            :label="$t('set_password')"
-            class="ml-3 mr-3 mb-2 text-lg"
-            @click="$router.push('password_reset')"
-          />
-          <q-btn
-            v-if="showPasswordButton"
-            outline
-            :loading="togglesLoading"
-            rounded
-            no-caps
-            color="primary"
-            :label="$t('disable_password')"
-            class="ml-3 mr-3 mb-2 text-lg"
-            @click="disableLoginWarn"
-          />
+          <q-item
+            v-ripple
+            clickable
+            :disable="settingPassword || togglesLoading"
+            @click="setLoginPassword()"
+          >
+            <q-item-section
+              top
+              avatar
+            >
+              <q-avatar
+                v-if="loginPasswordStatus"
+                icon="lock"
+                text-color="green"
+              />
+              <q-avatar
+                v-else
+                icon="lock_open"
+                text-color="accent"
+              />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>
+                {{ $t('set_cp_password') }}
+              </q-item-label>
+              <q-item-label caption>
+                {{ $t('set_cp_password_desc') }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section side>
+              <q-toggle
+                v-model="loginPasswordToggle"
+                :icon="loginPasswordToggle ? 'lock' : 'lock_open'"
+                :disable="togglesLoading"
+                @update:model-value="setLoginPassword()"
+              />
+            </q-item-section>
+          </q-item>
+          <!-- Wifi Passwords -->
+          <q-item
+            v-ripple
+            clickable
+            :disable="settingPassword || togglesLoading"
+            @click="setWifiPassword()"
+          >
+            <q-item-section
+              top
+              avatar
+            >
+              <q-avatar
+                v-if="wifiPasswordStatus"
+                icon="lock"
+                text-color="green"
+              />
+              <q-avatar
+                v-else
+                icon="lock_open"
+                text-color="accent"
+              />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>
+                {{ $t('set_wifi_password') }}
+              </q-item-label>
+              <q-item-label caption>
+                {{ $t('set_wifi_password_desc') }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section side>
+              <q-toggle
+                v-model="wifiPasswordToggle"
+                :icon="wifiPasswordToggle ? 'lock' : 'lock_open'"
+                :disable="settingPassword || togglesLoading"
+                @update:model-value="setWifiPassword()"
+              />
+            </q-item-section>
+          </q-item>
           <q-separator spaced />
           <!-- Wi-Fi section -->
           <q-item-label
             header
-            class="text-2xl"
           >
-            {{ $t('wifi') }}
+            <q-item-section class="text-h6">
+              {{ $t('networking') }}
+            </q-item-section>
+            <q-item-section>
+              {{ $t('connect_wifi_desc') }}
+            </q-item-section>
           </q-item-label>
-          <div>
-            <div class="text-lg ml-4">
-              <div v-if="wifiLoading">
-                {{ $t('status') }} {{ $t('loading') }}
-              </div>
-              <div v-else-if="!wifi">
-                {{ $t('status') }} {{ $t('disconnected') }}
-              </div>
-              <div v-else>
-                {{ $t('status') }} {{ $t('connected') }}
-              </div>
-            </div>
-          </div>
           <q-btn
             v-model="wifi"
             outline
@@ -249,85 +309,20 @@
             :loading="wifiLoading"
             no-caps
             color="primary"
-            class="ml-3 mr-3 mt-1 mb-2 text-lg"
+            class="ml-3 mr-3 mt-1 mb-2 text-lg full-width"
             :disable="wifiLoading"
             :label="!wifi ? $t('connect'): $t('disconnect')"
             @click="wifiWarn"
           />
-          <q-btn
-            outline
-            rounded
-            no-caps
-            color="primary"
-            :loading="settingWifiPassword || togglesLoading"
-            :label="$t('set_password')"
-            class="ml-3 mr-3 mb-2 text-lg"
-            @click="setWifiPasswordDialog = true"
-          />
-          <q-dialog
-            v-model="setWifiPasswordDialog"
-            persistent
-          >
-            <q-card style="width: 700px; max-width: 80vw;">
-              <q-card-section class="row items-center">
-                <q-input
-                  ref="wifiPasswordValid"
-                  v-model="wifiPassword"
-                  class="ml-1 mr-1"
-                  style="width: 700px; max-width: 80vw;"
-                  filled
-                  type="password"
-                  :placeholder="$t('password')"
-                  :rules="[(value) =>
-                    !value.includes(' ') &&
-                    value.length > 7
-                    || $t('invalid_wifi_entry')]"
-                />
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn
-                  v-close-popup
-                  flat
-                  :label="$t('cancel')"
-                  color="primary"
-                  @click="wifiPassword = ''"
-                />
-                <q-btn
-                  v-close-popup
-                  flat
-                  :label="$t('set_password')"
-                  color="primary"
-                  @click="wifiPasswordChange"
-                />
-              </q-card-actions>
-            </q-card>
-          </q-dialog>
-          <q-btn
-            v-if="showWifiPasswordButton"
-            class="ml-3 mr-3 text-lg"
-            outline
-            :loading="settingWifiPassword || togglesLoading"
-            rounded
-            no-caps
-            color="primary"
-            :label="$t('disable_password')"
-            @click="disableWifiWarn"
-          />
-          <q-separator spaced />
-        </div>
+        </q-list>
+        <q-separator spaced />
       </div>
       <!-- Application Store -->
       <div
         v-if="tab == 'appStore'"
-        class="mt-3 pd-5"
+        class="q-pa-sm"
         style="min-width: 70vw"
       >
-        <q-item-label
-          header
-          class="text-2xl"
-        >
-          {{ $t('available_applications') }}
-        </q-item-label>
         <q-table
           v-if="rows"
           flat
@@ -354,6 +349,14 @@
                 {{ $t('this_may_take_time') }}
               </div>
             </q-inner-loading>
+          </template>
+          <template #top-left>
+            <q-item-label
+              header
+              class="text-h6"
+            >
+              {{ $t('available_applications') }}
+            </q-item-label>
           </template>
           <template #top-right>
             <q-btn
@@ -459,35 +462,62 @@
         class="mt-3 pd-5"
         style="min-width: 70vw"
       >
-        <q-item-label
-          header
-          class="text-2xl"
+        <q-list
+          dense
+          padding
         >
-          {{ $t('advanced') }}
-        </q-item-label>
-        <div class="mr-3 ml-3">
-          <div class="text-lg text-gray-700">
-            {{ $t('choose_start_page') }}
-          </div>
-          <div class="text-base text-gray-500 mb-1">
-            {{ $t('start_page_desc') }}
-          </div>
-          <q-select
-            v-if="!filesLoading"
-            v-model="startPage"
-            rounded
-            outlined
-            transition-duration="1"
-            :options="pages"
-            class="mb-5"
-            @update:model-value="changeStartPage"
-          />
-          <div
-            v-if="customStartPageInput"
-            class="text-lg"
+          <q-item-label
+            header
           >
-            {{ $t('choose_new_path') }}
-          </div>
+            <q-item-section class="text-h6">
+              {{ $t('choose_start_page') }}
+            </q-item-section>
+          </q-item-label>
+          <q-item class="mb-6">
+            <q-select
+              v-if="!filesLoading"
+              v-model="startPage"
+              class="full-width"
+              rounded
+              outlined
+              transition-duration="1"
+              :options="pages"
+              @update:model-value="changeStartPage"
+            />
+          </q-item>
+          <!-- Custom start page -->
+          <q-item v-if="customStartPageInput">
+            <q-slide-transition :duration="2000">
+              <q-input
+                v-if="customStartPageInput"
+                ref="startPathValid"
+                v-model="newStartPath"
+                class="ml-1 mr-1 full-width"
+                filled
+                :label="$t('choose_new_path')"
+                :placeholder="$t('your_new_path')"
+                :rules="[(value) =>
+                  !value.substr(0,1).includes('/') &&
+                  !value.substr(-1).includes('/') &&
+                  !value.includes(' ') &&
+                  !value.includes('\\')
+                  || $t('invalid_path_input')]"
+              >
+                <template #after>
+                  <q-btn
+                    class="mt-1"
+                    round
+                    dense
+                    flat
+                    color="primary"
+                    icon="check_circle_outline"
+                    :disable="newStartPath "
+                    @click="newStartPathWarn"
+                  />
+                </template>
+              </q-input>
+            </q-slide-transition>
+          </q-item>
           <!-- Choose App as default path -->
           <q-dialog
             v-model="appStorePageInput"
@@ -519,7 +549,6 @@
                       <div>
                         <q-btn
                           v-close-popup
-                          size="xs"
                           unelevated
                           color="primary"
                           :label="$t('set_custom_startpage')"
@@ -569,145 +598,142 @@
               </q-card-actions>
             </q-card>
           </q-dialog>
-          <!-- Custom start page -->
-          <q-slide-transition :duration="2000">
-            <div v-show="customStartPageInput">
-              <q-input
-                v-if="customStartPageInput"
-                ref="startPathValid"
-                v-model="newStartPath"
-                filled
-                :placeholder="$t('your_new_path')"
-                class="ml-1 mr-1"
-                :rules="[(value) =>
-                  !value.substr(0,1).includes('/') &&
-                  !value.substr(-1).includes('/') &&
-                  !value.includes(' ') &&
-                  !value.includes('\\')
-                  || $t('invalid_path_input')]"
-              >
-                <template #after>
-                  <q-btn
-                    class="mt-1"
-                    round
-                    dense
-                    flat
-                    color="primary"
-                    icon="check_circle_outline"
-                    @click="newStartPathWarn"
-                  />
-                </template>
-              </q-input>
-            </div>
-          </q-slide-transition>
           <q-separator spaced />
           <!-- Set Hostname -->
-          <div class="text-lg text-gray-700 mt-5 mb-1">
-            {{ $t('set_hostname_desc') }}
-          </div>
-          <q-input
-            ref="hostnameValid"
-            v-model="newHostname"
-            filled
-            class="ml-1 mr-1"
-            :rules="[(val) =>
-              !val.includes(' ') &&
-              val.length <= 32
-              && val === val.toLowerCase()
-              && regexp.test(val)
-              || $t('invalid_input')]"
-            :placeholder="$t('your_new_name')"
+          <q-item-label
+            header
           >
-            <template #after>
-              <q-btn
-                class="mt-1"
-                round
-                dense
-                flat
-                color="primary"
-                icon="check_circle_outline"
-                :disable="newHostname"
-                @click="hostnameWarn"
+            <q-item-section class="text-h6">
+              {{ $t('set_hostname_desc') }}
+            </q-item-section>
+          </q-item-label>
+          <q-item>
+            <q-input
+              ref="hostnameValid"
+              v-model="newHostname"
+              class="ml-1 mr-1 full-width"
+              filled
+              :label="$t('choose_name')"
+              :placeholder="$t('your_new_name')"
+              :rules="[(val) =>
+                !val.includes(' ') &&
+                val.length <= 32
+                && val === val.toLowerCase()
+                && regexp.test(val)
+                || $t('invalid_input')]"
+            >
+              <template #after>
+                <q-btn
+                  class="mt-1"
+                  round
+                  dense
+                  flat
+                  color="primary"
+                  icon="check_circle_outline"
+                  :disable="newHostname"
+                  @click="hostnameWarn"
+                />
+              </template>
+            </q-input>
+          </q-item>
+          <q-separator
+            class="mr-3 ml-3"
+            spaced
+          />
+          <!-- Portainer -->
+          <q-item-label
+            header
+            class="text-h6"
+          >
+            {{ $t('portainer') }}
+          </q-item-label>
+          <q-item class="mb-5">
+            <q-item-section
+              top
+              avatar
+            >
+              <q-avatar
+                icon="widgets"
+                :text-color="portainer ? 'primary' : 'accent'"
               />
-            </template>
-          </q-input>
-        </div>
-        <q-separator
-          class="mr-3 ml-3"
-          spaced
-        />
-        <!-- Portainer -->
-        <div>
-          <q-item class="flex">
-            <q-item-section>
-              <q-item-label class="text-lg text-gray-700">
-                {{ $t('portainer') }}
-              </q-item-label>
-              <q-item-label class="text-base pr-1 text-gray-500">
+            </q-item-section>
+            <q-item-section bottom>
+              <q-item-label>
                 {{ $t('portainer_settings_description') }}
               </q-item-label>
-            </q-item-section>
-            <q-toggle
-              v-if="!portainerLoading"
-              v-model="portainer"
-              class="mt-3 self-end"
-              :disable="portainerLoading"
-              icon="widgets"
-              size="lg"
-              @update:model-value="updatePortainer"
-            />
-            <q-spinner
-              v-if="portainerLoading"
-              color="primary"
-              size="2em"
-              class="mt-4 mr-6"
-            />
-          </q-item>
-        </div>
-        <div
-          v-if="portainer && !portainerLoading"
-          class="pl-6"
-        >
-          {{ $t('portainer_starting_at') }} <a
-            href="/portainer/"
-            target="_blank"
-          >http://{{ windowHostname }}/portainer/</a>
-        </div>
-        <q-separator
-          class="mr-3 ml-3"
-          spaced
-        />
-        <!-- Prune System Files -->
-        <div>
-          <q-item class="flex">
-            <q-item-section>
-              <q-item-label class="text-lg text-gray-700">
-                {{ $t('prune_system_files') }}
+              <q-item-label
+                v-if="portainer && !portainerLoading"
+                caption
+              >
+                {{ $t('portainer_starting_at') }} <a
+                  href="/portainer/"
+                  target="_blank"
+                >http://{{ windowHostname }}/portainer/</a>
               </q-item-label>
-              <q-item-label class="text-base pr-1 text-gray-500">
+            </q-item-section>
+            <q-item-section side>
+              <q-toggle
+                v-if="!portainerLoading"
+                v-model="portainer"
+                :disable="portainerLoading"
+                icon="widgets"
+                @update:model-value="updatePortainer"
+              />
+              <q-spinner
+                v-if="portainerLoading"
+                color="primary"
+                size="2em"
+              />
+            </q-item-section>
+          </q-item>
+          <q-separator
+            class="mr-3 ml-3"
+            spaced
+          />
+          <!-- Prune System Files -->
+          <q-item-label
+            header
+            class="text-h6"
+          >
+            {{ $t('prune_system_files') }}
+          </q-item-label>
+          <q-item>
+            <q-item-section
+              top
+              avatar
+            >
+              <q-avatar
+                icon="delete"
+                text-color="red"
+              />
+            </q-item-section>
+            <q-item-section bottom>
+              <q-item-label>
                 {{ $t('prune_system_files_description') }}
               </q-item-label>
             </q-item-section>
-            <q-btn
-              outline
-              rounded
-              no-caps
-              :loading="pruningFiles"
-              size="md"
-              color="red"
-              :label="$t('prune')"
-              class="text-lg mt-2"
-              @click="pruneSystemFiles"
-            />
+            <q-item-section side>
+              <q-btn
+                outline
+                rounded
+                no-caps
+                :loading="pruningFiles"
+                size="md"
+                color="red"
+                :label="$t('prune')"
+                class="text-lg mt-2"
+                @click="pruneSystemFiles"
+              />
+            </q-item-section>
           </q-item>
-        </div>
+        </q-list>
         <!-- System Info -->
         <div class="text-center text-xl mt-6 mb-4 text-gray-600">
           {{ $t('system_info') }}
         </div>
         <div
           v-if="!sysInfoLoading"
-          class="flex flex-col text-center text-gray pb-5"
+          class="flex flex-col text-center text-gray pb-5 text-caption"
         >
           <span class="text-gray-600"><span>{{ $t('total_storage') }} </span> {{ sysInfo.storage.total }}</span>
           <span class="text-gray-600"><span>{{ $t('available_storage') }} </span> {{ sysInfo.storage.available }}</span>
@@ -755,6 +781,8 @@ export default defineComponent({
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(false)
     const loading = ref<boolean>(false)
+    const loginPasswordStatus = ref<boolean>(false)
+    const loginPasswordToggle = ref<boolean>(false)
     const newHostname = ref<string>('')
     const newStartPath = ref<string>('')
     const pagesString = [
@@ -768,10 +796,8 @@ export default defineComponent({
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
     const $router = useRouter()
-    const settingWifiPassword = ref<boolean>(false)
+    const settingPassword = ref<boolean>(false)
     const setWifiPasswordDialog = ref<boolean>(false)
-    const showPasswordButton = ref<boolean>(false)
-    const showWifiPasswordButton = ref<boolean>(false)
     const startPage = ref<string>('-')
     const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
@@ -782,6 +808,8 @@ export default defineComponent({
     const websiteLoading = ref<boolean>(false)
     const wifi = ref<boolean>(false)
     const wifiPassword = ref<string>('')
+    const wifiPasswordStatus = ref<boolean>(false)
+    const wifiPasswordToggle = ref<boolean>(false)
     const wifiPasswordValid = ref()
     const wifiLoading = ref<boolean>(true)
     const windowHostname = ref<string>(window.location.hostname)
@@ -876,12 +904,14 @@ export default defineComponent({
 
         // Check if disable password button should be appTableVisible
         if (!res1.data.default_login_password_set) {
-          showPasswordButton.value = true
+          loginPasswordStatus.value = true
+          loginPasswordToggle.value = true
         }
 
         // Check if disable wifi password button should be appTableVisible
         if (res1.data.wifi_password_set) {
-          showWifiPasswordButton.value = true
+          wifiPasswordStatus.value = true
+          wifiPasswordToggle.value = true
         }
 
         // Set internet connection status
@@ -927,44 +957,6 @@ export default defineComponent({
 
     const connectDisconnectWifi = async () => {
       await Axios.get(`${api.value}/v1/wifi/forget`)
-    }
-
-    function disableLoginWarn () {
-      $q.dialog({
-        title: t('confirm'),
-        message: t('are_you_sure'),
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        Axios.post(`${api.value}/v1/setpassword`, { password: ' ' }).then((response) => {
-          if (response.status === 200) {
-            $q.notify({ type: 'positive', message: t('login_disabled') })
-          } else {
-            $q.notify({ type: 'negative', message: t('error') })
-          }
-          showPasswordButton.value = false
-        })
-      })
-    }
-
-    function disableWifiWarn () {
-      $q.dialog({
-        title: t('confirm'),
-        message: t('are_you_sure'),
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        settingWifiPassword.value = true
-        Axios.post(`${api.value}/v1/setwifi`, { wifi_password: '' }).then((response) => {
-          if (response.status === 200) {
-            $q.notify({ type: 'positive', message: t('login_disabled') })
-          } else {
-            $q.notify({ type: 'negative', message: t('error') })
-          }
-          settingWifiPassword.value = false
-          showWifiPasswordButton.value = false
-        })
-      })
     }
 
     async function fetchApps () {
@@ -1060,6 +1052,108 @@ export default defineComponent({
             startPage.value = rows.value[i].long_name
           }
         }
+      }
+    }
+
+    function setLoginPassword () {
+      if (loginPasswordStatus.value) {
+        $q.dialog({
+          title: t('disable_password'),
+          message: t('are_you_sure'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          settingPassword.value = true
+          Axios.post(`${api.value}/v1/setpassword`, { password: ' ' }).then((response) => {
+            if (response.status === 200) {
+              $q.notify({ type: 'positive', message: t('login_disabled') })
+              loginPasswordStatus.value = false
+              loginPasswordToggle.value = false
+            } else {
+              $q.notify({ type: 'negative', message: t('error') })
+              loginPasswordToggle.value = true
+            }
+            settingPassword.value = false
+          })
+        }).onCancel(() => {
+          loginPasswordToggle.value = true
+        })
+      } else {
+        $q.dialog({
+          title: t('set_password'),
+          cancel: true,
+          persistent: true,
+          prompt: {
+            model: '',
+            type: 'password'
+          }
+        }).onOk((data) => {
+          settingPassword.value = true
+          Axios.post(`${api.value}/v1/setpassword`, {
+            password: data
+          }).then((response) => {
+            if (response.status === 200) {
+              $q.notify({ type: 'positive', message: t('password_set_success') })
+              loginPasswordStatus.value = true
+              loginPasswordToggle.value = true
+              settingPassword.value = false
+            }
+          })
+        }).onCancel(() => {
+          loginPasswordToggle.value = false
+        })
+      }
+    }
+
+    function setWifiPassword () {
+      if (wifiPasswordStatus.value) {
+        $q.dialog({
+          title: t('disable_password'),
+          message: t('are_you_sure'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          settingPassword.value = true
+          Axios.post(`${api.value}/v1/setwifi`, { wifi_password: '' }).then((response) => {
+            if (response.status === 200) {
+              $q.notify({ type: 'positive', message: t('login_disabled') })
+              wifiPasswordStatus.value = false
+              wifiPasswordToggle.value = false
+            } else {
+              $q.notify({ type: 'negative', message: t('error') })
+              wifiPasswordToggle.value = true
+            }
+            settingPassword.value = false
+          })
+        }).onCancel(() => {
+          wifiPasswordToggle.value = true
+        })
+      } else {
+        $q.dialog({
+          title: t('set_password'),
+          message: t('invalid_wifi_entry'),
+          cancel: true,
+          persistent: true,
+          prompt: {
+            model: '',
+            isValid: val => val.length > 7,
+            type: 'password'
+          }
+        }).onOk((data) => {
+          settingPassword.value = true
+          Axios.post(`${api.value}/v1/setwifi`, {
+            wifi_password: data
+          }).then((response) => {
+            if (response.status === 200) {
+              $q.notify({ type: 'positive', message: t('password_set_success') })
+              wifiPasswordStatus.value = true
+              wifiPasswordToggle.value = true
+              settingPassword.value = false
+            }
+          })
+        }).onCancel(() => {
+          wifiPasswordToggle.value = false
+        })
       }
     }
 
@@ -1267,32 +1361,6 @@ export default defineComponent({
       }, 1)
     }
 
-    function wifiPasswordChange () {
-      if (wifiPasswordValid.value.validate() && wifiPassword.value !== '') {
-        $q.dialog({
-          title: t('confirm'),
-          message: t('are_you_sure'),
-          cancel: true,
-          persistent: true
-        }).onOk(() => {
-          settingWifiPassword.value = true
-          Axios.post(`${api.value}/v1/setwifi`, {
-            wifi_password: wifiPassword.value
-          }).then((response) => {
-            if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('password_set_success') })
-              settingWifiPassword.value = false
-            }
-          })
-          wifiPassword.value = ''
-          showWifiPasswordButton.value = true
-        })
-      } else {
-        $q.notify({ type: 'negative', message: t('invalid_entry') })
-        wifiPassword.value = ''
-      }
-    }
-
     function wifiWarn () {
       if (internet.value && !wifi.value && !process.env.DEV) {
         $q.notify({ type: 'negative', message: t('internet_no_wifi') })
@@ -1316,8 +1384,6 @@ export default defineComponent({
       changeStartPage,
       columns,
       customStartPageInput,
-      disableLoginWarn,
-      disableWifiWarn,
       files,
       filesLoading,
       hostname,
@@ -1327,6 +1393,7 @@ export default defineComponent({
       library,
       libraryLoading,
       loading,
+      loginPasswordToggle,
       newHostname,
       newStartPath,
       newStartPathWarn,
@@ -1339,11 +1406,14 @@ export default defineComponent({
       refreshApps,
       regexp,
       rows,
+      setLoginPassword,
       setStartPage,
-      settingWifiPassword,
+      setWifiPassword,
+      settingPassword,
       setWifiPasswordDialog,
-      showPasswordButton,
-      showWifiPasswordButton,
+      loginPasswordStatus,
+      wifiPasswordStatus,
+      wifiPasswordToggle,
       startPage,
       startPathValid,
       storeStartPage,
@@ -1363,7 +1433,6 @@ export default defineComponent({
       wifi,
       wifiLoading,
       wifiPassword,
-      wifiPasswordChange,
       wifiPasswordValid,
       wifiWarn,
       windowHostname

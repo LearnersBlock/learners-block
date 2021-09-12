@@ -60,7 +60,7 @@ export default route<StateInterface>(function ({ store }) {
     if (!store.getters.isAuthenticated && sessionStorage.getItem('learners-block-token') !== null) {
       await store.dispatch('VERIFY_LOGIN', sessionStorage.getItem('learners-block-token'))
     }
-    if ((to.name === 'settings' || to.name === 'password_reset' || to.name === 'wifi') && !store.getters.isAuthenticated) {
+    if ((to.name === 'settings' || to.name === 'wifi') && !store.getters.isAuthenticated) {
       await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).catch(() => {
         next('/login')
       })
