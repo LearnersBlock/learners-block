@@ -148,5 +148,7 @@
     "set_wifi_password": "Imposta la password dell’hotspot Wi-Fi",
     "networking": "Rete",
     "connect_wifi_desc": "Collega il tuo Block a una rete Wi-Fi nelle vicinanze.",
-    "general": "Generale"
+    "general": "Generale",
+    "network_name": "Nome della rete",
+    "enter_hidden_network": "Inserisci un nome Wi-Fi nascosto."
 }

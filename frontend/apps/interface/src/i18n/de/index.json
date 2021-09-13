@@ -148,5 +148,7 @@
     "set_wifi_password_desc": "Legen Sie ein Passwort für den Zugriff auf Ihren Block über Wi-Fi fest.",
     "networking": "Vernetzung",
     "connect_wifi_desc": "Verbinden Sie Ihren Block mit einem nahe gelegenen Wi-Fi-Netzwerk.",
-    "general": "Allgemein"
+    "general": "Allgemein",
+    "enter_hidden_network": "Geben Sie einen versteckten Wi-Fi-Namen ein.",
+    "network_name": "Netzwerkname"
 }
