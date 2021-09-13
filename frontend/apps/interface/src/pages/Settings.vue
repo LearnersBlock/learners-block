@@ -1362,11 +1362,10 @@ export default defineComponent({
     }
 
     function wifiWarn () {
-      if (internet.value && !wifi.value && !process.env.DEV) {
-        $q.notify({ type: 'negative', message: t('internet_no_wifi') })
-      } else if (wifi.value === false) {
+      if (wifi.value === false) {
         $router.push('/wifi')
       } else {
+        wifiLoading.value = true
         $q.dialog({
           title: t('confirm'),
           message: t('disconnect_wifi'),
@@ -1374,7 +1373,11 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           connectDisconnectWifi()
-          wifi.value = false
+          // Add delay to improve user interaction
+          setTimeout(() => {
+            wifi.value = false
+            wifiLoading.value = false
+          }, 2000)
         })
       }
     }

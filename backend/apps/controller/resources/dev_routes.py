@@ -125,6 +125,13 @@ class uuid(Resource):
         return {'uuid': "asdsadsdf213qs2"}
 
 
+class wifi_connect(Resource):
+    def post(self):
+        content = request.get_json()
+
+        return {'status': 202, 'message': content}, 202
+
+
 class wifi_connection_status(Resource):
     def get(self):
         global wifistatus
@@ -158,3 +165,13 @@ class wifi_forget_all(Resource):
             wifi_toggle()
 
         return {'status': 202, 'message': 'Accepted'}, 202
+
+
+class wifi_list_access_points(Resource):
+    @jwt_required()
+    def get(self):
+        # Demo routes
+        return [{"ssid": "Trevor House", "security": "WPA"},
+                {"ssid": "TELUS9052", "security": "ENTERPRISE"},
+                {"ssid": "Althaea", "security": "NONE"},
+                {"ssid": "TELUS9052", "security": "HIDDEN"}]

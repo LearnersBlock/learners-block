@@ -133,22 +133,22 @@ if __name__ == '__main__':
 
     # Load and launch based on dev or prod mode
     if os.environ['FLASK_ENV'].lower() == "production":
-        from boot.production import startup
-        from common.wifi import handle_exit
+        from boot.production import handle_exit, handle_sigterm, startup
         from resources.system_routes import hostname
         from resources.supervisor_routes import container_start, \
             container_status, container_stop, device, host_config, \
             journal_logs, update, uuid
-        from resources.wifi_routes import set_wifi, wifi_connection_status, \
-            wifi_forget, wifi_forget_all
+        from resources.wifi_routes import set_wifi, wifi_connect, \
+            wifi_connection_status, wifi_forget, wifi_forget_all, \
+            wifi_list_access_points
 
         print("Api-v1 - Starting API (Production)...")
 
         # Ensure soft shutdown to term wifi-connect
         atexit.register(handle_exit, None, None)
-        signal.signal(signal.SIGTERM, handle_exit)
-        signal.signal(signal.SIGINT, handle_exit)
-        signal.signal(signal.SIGHUP, handle_exit)
+        signal.signal(signal.SIGTERM, handle_sigterm)
+        signal.signal(signal.SIGINT, handle_sigterm)
+        signal.signal(signal.SIGHUP, handle_sigterm)
 
         # Check if first launch
         first_launch()
@@ -157,12 +157,12 @@ if __name__ == '__main__':
         try:
             startup()
         except Exception as ex:
-            print_message('__name__', 'Fail on startup()', ex)
+            print_message('__name__', 'Fail on startup.', ex)
     else:
         from resources.dev_routes import container_start, container_status, \
              container_stop, device, host_config, hostname, journal_logs, \
-             update, uuid, set_wifi, wifi_connection_status, wifi_forget, \
-             wifi_forget_all
+             set_wifi, update, uuid, wifi_connect, wifi_connection_status, \
+             wifi_forget, wifi_forget_all, wifi_list_access_points
 
         print("Api-v1 - Starting API (Development)...")
 
@@ -205,9 +205,11 @@ if __name__ == '__main__':
     api.add_resource(update, '/v1/update')
     api.add_resource(uuid, '/v1/uuid')
     api.add_resource(verify_login, '/v1/verifylogin')
+    api.add_resource(wifi_connect, '/v1/wifi/connect')
     api.add_resource(wifi_connection_status, '/v1/wifi/connectionstatus')
     api.add_resource(wifi_forget, '/v1/wifi/forget')
     api.add_resource(wifi_forget_all, '/v1/wifi/forgetall')
+    api.add_resource(wifi_list_access_points, '/v1/wifi/networks')
 
     api.init_app(app)
 

@@ -5,11 +5,9 @@
     </div>
     <q-form
       class="mb-5 flex flex-col"
+      style="min-width: 40vw"
       @submit="connect"
     >
-      <div class="text-subtitle1 mb-5 text-center">
-        {{ $t('network_absent') }}
-      </div>
       <q-select
         v-model="wifiSsid"
         class="mb-3"
@@ -18,9 +16,37 @@
         outlined
         :options="ssids"
         option-label="ssid"
+      >
+        <template #after>
+          <q-btn
+            class="mt-1"
+            round
+            dense
+            flat
+            color="primary"
+            icon="refresh"
+            @click="fetchNetworks()"
+          />
+        </template>
+      </q-select>
+      <q-input
+        v-if="wifiSsid && wifiSsid.security.toLowerCase() === 'hidden'"
+        v-model="hiddenNetworkName"
+        class="mb-3"
+        filled
+        :label="$t('network_name')"
+      />
+      <q-select
+        v-if="wifiSsid && wifiSsid.security.toLowerCase() === 'hidden'"
+        v-model="hiddenSecurity"
+        class="mb-3"
+        rounded
+        outlined
+        :label="$t('security')"
+        :options="securityOptions"
       />
       <q-input
-        v-if="wifiSsid && wifiSsid.security.toLowerCase() === 'enterprise'"
+        v-if="wifiSsid && (wifiSsid.security.toLowerCase() === 'enterprise' || hiddenSecurity.toLowerCase() === 'enterprise')"
         v-model="username"
         class="mb-3"
         filled
@@ -69,8 +95,11 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
 
-    const ssids = ref<any>([])
+    const hiddenNetworkName = ref<any>('')
+    const hiddenSecurity = ref<any>('')
+    const hostname = ref<any>(window.location.hostname)
     const password = ref<string>('')
+    const ssids = ref<any>([])
     const submitting = ref<boolean>(false)
     const username = ref<string>('')
     const wifiSsid = ref<any>('')
@@ -80,29 +109,15 @@ export default defineComponent({
     })
 
     // Send connect request
-    async function connect () {
+    function connect () {
       submitting.value = true
-      await Axios.post('http://192.168.42.1:8080/connect', {
+      Axios.post(`http://${hostname.value}:9090/v1/wifi/connect`, {
+        hiddenNetworkName: hiddenNetworkName.value,
+        hiddenSecurity: hiddenSecurity.value,
+        passphrase: password.value,
         ssid: wifiSsid.value.ssid,
-        identity: username.value,
-        passphrase: password.value
-      }, { withCredentials: false }).then(() => {
-        wifiSsid.value = ''
-        username.value = ''
-        password.value = ''
-        $q.notify({
-          type: 'positive',
-          multiLine: true,
-          timeout: 0,
-          actions: [
-            {
-              label: t('close'),
-              color: 'white',
-              handler: () => { /* ... */ }
-            }
-          ],
-          message: t('connection_reset_request')
-        })
+        type: wifiSsid.value.security,
+        username: username.value
       }).catch(function (error) {
         console.log(error)
         $q.notify({
@@ -119,14 +134,32 @@ export default defineComponent({
           message: t('network_connect_fail')
         })
       })
-      submitting.value = false
+      wifiSsid.value = ''
+      username.value = ''
+      password.value = ''
+
+      // Delay to improve interface interaction
+      setTimeout(() => {
+        $q.notify({
+          type: 'positive',
+          multiLine: true,
+          timeout: 0,
+          actions: [
+            {
+              label: t('close'),
+              color: 'white',
+              handler: () => { /* ... */ }
+            }
+          ],
+          message: t('connection_reset_request')
+        })
+        submitting.value = false
+      }, 2000)
     }
 
     async function fetchNetworks () {
-      $q.loading.show({
-        delay: 300 // ms
-      })
-      await Axios.get('http://192.168.42.1:8080/networks', { withCredentials: false }).then((response) => {
+      $q.loading.show()
+      await Axios.get(`http://${hostname.value}:9090/v1/wifi/networks`).then((response) => {
         ssids.value = response.data
         if (ssids.value.length === 0) {
           $q.notify({
@@ -143,6 +176,10 @@ export default defineComponent({
             message: t('no_networks')
           })
         }
+        ssids.value.push({
+          ssid: t('enter_hidden_network'),
+          security: 'HIDDEN'
+        })
       }).catch(function (error) {
         console.log(error)
         $q.notify({
@@ -165,7 +202,13 @@ export default defineComponent({
 
     return {
       connect,
+      fetchNetworks,
+      hiddenNetworkName,
+      hiddenSecurity,
       password,
+      securityOptions: [
+        'OPEN', 'ENTERPRISE', 'WEP/WPA/WPA2'
+      ],
       ssids,
       submitting,
       username,

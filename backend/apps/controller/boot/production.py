@@ -1,19 +1,71 @@
 from common.system_processes import check_internet
 from common.system_processes import curl
 from common.wifi import wifi
-from common.wifi import wifi_connect
 from resources.errors import print_message
 from resources.supervisor_routes import update
 import subprocess
+import sys
 import threading
 import time
+
+
+def dnsmasq():
+    global dnsmasq_process
+
+    DEFAULT_GATEWAY = "192.168.42.1"
+    DEFAULT_DHCP_RANGE = "192.168.42.2,192.168.42.254"
+    DEFAULT_INTERFACE = "wlan0"  # use 'ip link show' to see list of interfaces
+
+    # Build the list of args
+    path = "/usr/sbin/dnsmasq"
+    args = [path]
+    args.append(f"--address=/#/{DEFAULT_GATEWAY}")
+    args.append(f"--dhcp-range={DEFAULT_DHCP_RANGE}")
+    args.append(f"--dhcp-option=option:router,{DEFAULT_GATEWAY}")
+    args.append(f"--interface={DEFAULT_INTERFACE}")
+    args.append("--keep-in-foreground")
+    args.append("--bind-dynamic")
+    args.append("--except-interface=lo")
+    args.append("--conf-file")
+    args.append("--no-hosts")
+
+    try:
+        dnsmasq_process = subprocess.Popen(args)
+    except Exception as ex:
+        return ex
+
+    return True
+
+
+def handle_exit(*args):
+    global dnsmasq_process
+    # Ensure Wi-Fi Connect is shutdown softly
+    try:
+        wifi.forget(conn_name='HOTSPOT')
+    except Exception as ex:
+        print_message('handle_exit', 'Failed to terminate wifi-connect. '
+                      'Executing kill.', ex)
+
+    try:
+        dnsmasq_process.terminate()
+        dnsmasq_process.communicate(timeout=5)
+    except Exception as ex:
+        print_message('handle_exit', 'Failed to terminate dnsmasq_process. '
+                      'Executing kill.', ex)
+        dnsmasq_process.kill()
+
+    print("Finshed the exit process")
+
+
+def handle_sigterm(*args):
+    sys.exit(0)
 
 
 def launch_wifi(self):
     # Check if already connected to Wi-Fi
     time.sleep(10)
     try:
-        connected = wifi().check_connection()
+        connected = wifi.check_connection()
     except Exception as ex:
         print_message("launch_wifi", "Error checking wifi connection. Starting \
             wifi-connect in order to allow debugging", ex)
@@ -23,7 +75,7 @@ def launch_wifi(self):
     if not connected:
         try:
             # Launch Wi-Fi Connect
-            wifi_connect().start()
+            wifi.start_hotspot()
             print('Api-v1 - API Started - Launched wifi-connect.')
         except Exception as ex:
             print_message("launch_wifi",
@@ -63,6 +115,12 @@ def startup():
     except Exception as ex:
         print_message("startup",
                       "Failed to compare hostnames, starting anyway.", ex)
+
+    # Start dnsmasq
+    start_dnsmasq = dnsmasq()
+    if start_dnsmasq is not True:
+        print_message("startup",
+                      "dnsmasq failed to start.", start_dnsmasq)
 
     # If connected to a wifi network then update device,
     # otherwise launch wifi-connect

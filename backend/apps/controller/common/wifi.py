@@ -1,12 +1,11 @@
 from common.models import User
-from flask_restful import abort
 from resources.errors import print_message
 from run import app
 import os
 import subprocess
-import sys
 import time
-import requests
+import uuid
+
 
 if os.environ['FLASK_ENV'].lower() == "production":
     from dbus.mainloop.glib import DBusGMainLoop
@@ -14,80 +13,197 @@ if os.environ['FLASK_ENV'].lower() == "production":
     DBusGMainLoop(set_as_default=True)
 
 
-def handle_exit(*args):
-    # Ensure Wi-Fi Connect is shutdown softly
-    global wifi_process
-    try:
-        if 'wifi_process' in globals():
-            wifi_process.terminate()
-            wifi_process.communicate(timeout=8)
-            sys.exit(0)
-    except Exception as ex:
-        print_message('handle_exit', 'Failed to terminate wifi-connect. '
-                      'Executing kill.', ex)
-        wifi_process.kill()
-        sys.exit(0)
-
-    print("Finshed the exit process")
-    sys.exit(0)
-
-
 class wifi:
-    def check_connection(self):
+    def check_connection():
         run = subprocess.run(["iwgetid", "-r"],
                              capture_output=True,
                              text=True).stdout.rstrip()
-
         return run
 
-    def forget(self):
-        status = 1
+    def connect_to_AP(*args, conn_type=None, ssid=None, username=None,
+                      password=None, conn_name='LBNETWORK'):
 
-        # Wait so user gets return code before being disconnected
-        # from the device
-        time.sleep(5)
+        if conn_type is None or ssid is None:
+            print('connect_to_AP() Error: Missing args conn_type, '
+                  'conn_name or ssid')
+            return False
 
-        wifi_connect().stop()
+        # Remove existing HOTSPOT if it exists
+        if conn_name == 'HOTSPOT':
+            wifi.forget(conn_name='HOTSPOT')
 
-        # Get the name of the current wifi network
-        current_ssid = wifi().check_connection()
+        try:
+            # This is the hotspot that we turn on so we can show
+            # ourcaptured portal  to let the user select an AP and
+            # provide credentials.
+            if password:
+                hotspot_dict = {
+                    '802-11-wireless': {'band': 'bg',
+                                        'mode': 'ap',
+                                        'ssid': ssid},
+                    '802-11-wireless-security':
+                        {'key-mgmt': 'wpa-psk', 'psk': password},
+                    'connection': {'autoconnect': False,
+                                   'id': conn_name,
+                                   'interface-name': 'wlan0',
+                                   'type': '802-11-wireless',
+                                   'uuid': str(uuid.uuid4())},
+                    'ipv4': {'address-data':
+                             [{'address': '192.168.42.1', 'prefix': 24}],
+                             'addresses': [['192.168.42.1', 24, '0.0.0.0']],
+                             'method': 'manual'},
+                    'ipv6': {'method': 'auto'}
+                }
+            else:
+                hotspot_dict = {
+                    '802-11-wireless': {'band': 'bg',
+                                        'mode': 'ap',
+                                        'ssid': ssid},
+                    'connection': {'autoconnect': False,
+                                   'id': conn_name,
+                                   'interface-name': 'wlan0',
+                                   'type': '802-11-wireless',
+                                   'uuid': str(uuid.uuid4())},
+                    'ipv4': {'address-data':
+                             [{'address': '192.168.42.1', 'prefix': 24}],
+                             'addresses': [['192.168.42.1', 24, '0.0.0.0']],
+                             'method': 'manual'},
+                    'ipv6': {'method': 'auto'}
+                }
 
-        # Get a list of all connections
-        connections = NetworkManager.Settings.ListConnections()
+            # "MIT SECURE" network.
+            enterprise_dict = {
+                '802-11-wireless': {'mode': 'infrastructure',
+                                    'security': '802-11-wireless-security',
+                                    'ssid': ssid},
+                '802-11-wireless-security':
+                    {'auth-alg': 'open', 'key-mgmt': 'wpa-eap'},
+                '802-1x': {'eap': ['peap'],
+                           'identity': username,
+                           'password': password,
+                           'phase2-auth': 'mschapv2'},
+                'connection': {'id': conn_name,
+                               'type': '802-11-wireless',
+                               'uuid': str(uuid.uuid4())},
+                'ipv4': {'method': 'auto'},
+                'ipv6': {'method': 'auto'}
+            }
 
-        for connection in connections:
-            if connection.GetSettings()["connection"]["type"] \
-               == "802-11-wireless":
-                if connection.GetSettings()["802-11-wireless"]["ssid"] \
-                   == current_ssid:
-                    print("wifi_forget: Deleting connection "
-                          + connection.GetSettings()["connection"]["id"])
+            # No auth, 'open' connection.
+            none_dict = {
+                '802-11-wireless': {'mode': 'infrastructure',
+                                    'ssid': ssid},
+                'connection': {'id': conn_name,
+                               'type': '802-11-wireless',
+                               'uuid': str(uuid.uuid4())},
+                'ipv4': {'method': 'auto'},
+                'ipv6': {'method': 'auto'}
+            }
 
-                    # Delete the identified connection and change status
-                    # code to 0 (success)
-                    connection.Delete()
-                    status = 0
+            # Hidden, WEP, WPA, WPA2, password required.
+            passwd_dict = {
+                '802-11-wireless': {'mode': 'infrastructure',
+                                    'security': '802-11-wireless-security',
+                                    'ssid': ssid},
+                '802-11-wireless-security':
+                    {'key-mgmt': 'wpa-psk', 'psk': password},
+                'connection': {'id': conn_name,
+                               'type': '802-11-wireless',
+                               'uuid': str(uuid.uuid4())},
+                'ipv4': {'method': 'auto'},
+                'ipv6': {'method': 'auto'}
+            }
 
-        # Check that a connection was deleted
-        if status == 1:
-            print_message('wifi_connect.forget',
-                          'Failed to delete connection, '
-                          'trying to clear all saved connections.')
-            wifi().forget_all()
-            return
+            conn_dict = None
+            conn_str = ''
 
-        # Wait before trying to launch wifi-connect
-        wifi_connect().start(wait=2)
+            if conn_type.lower() == 'hotspot':
+                conn_dict = hotspot_dict
+                conn_str = 'HOTSPOT'
+            elif conn_type.lower() == 'none':
+                conn_dict = none_dict
+                conn_str = 'OPEN'
+            elif conn_type.lower() == 'enterprise':
+                conn_dict = enterprise_dict
+                conn_str = 'ENTERPRISE'
+            else:
+                conn_dict = passwd_dict
+                conn_str = 'WEP/WPA/WPA2'
 
-        return {'status': 200, 'message': 'ok'}
+            if conn_dict is None:
+                print('connect_to_AP() Error: '
+                      f'Invalid conn_type="{conn_type}"')
+                return False
 
-    def forget_all(self):
-        # Wait so user gets return code before being disconnected
-        # from the device
-        time.sleep(5)
+            NetworkManager.Settings.AddConnection(conn_dict)
+            print(f"Added connection {conn_name} of type {conn_str}")
 
-        wifi_connect().stop()
+            # Now find this connection and its device
+            connections = NetworkManager.Settings.ListConnections()
+            connections = dict([(x.GetSettings()['connection']['id'], x)
+                                for x in connections])
+            conn = connections[conn_name]
 
+            # Find a suitable device
+            ctype = conn.GetSettings()['connection']['type']
+            dtype = {'802-11-wireless': NetworkManager.NM_DEVICE_TYPE_WIFI} \
+                .get(ctype, ctype)
+            devices = NetworkManager.NetworkManager.GetDevices()
+
+            for dev in devices:
+                if dev.DeviceType == dtype:
+                    break
+            else:
+                print(f"connect_to_AP() Error: No suitable and "
+                      f"available {ctype} device found.")
+                return False
+
+            # And connect
+            NetworkManager.NetworkManager.ActivateConnection(conn, dev, "/")
+            print(f"Activated connection={conn_name}.")
+
+            # Wait for ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
+            print('Waiting for connection to become active...')
+            loop_count = 0
+            while dev.State != NetworkManager.NM_DEVICE_STATE_ACTIVATED:
+                time.sleep(1)
+                loop_count += 1
+                if loop_count > 30:  # only wait 30 seconds max
+                    break
+
+            if dev.State == NetworkManager.NM_DEVICE_STATE_ACTIVATED:
+                print(f'Connection {conn_name} is live.')
+                return True
+
+        except Exception as e:
+            print(f'Connection error {e}')
+
+        print(f'Connection {conn_name} failed.')
+        return False
+
+    def forget(conn_name='LBNETWORK'):
+        # Find the hotspot connection
+        try:
+            connections = NetworkManager.Settings.ListConnections()
+            connections = dict([(x.GetSettings()['connection']['id'], x)
+                                for x in connections])
+
+            if conn_name in connections:
+                conn = connections[conn_name]
+                conn.Delete()
+
+        except Exception as ex:
+            print_message('wifi.forget', 'Failed to delete network. '
+                          'Trying reset all.', ex)
+            wifi.forget_all()
+        time.sleep(2)
+
+        if conn_name == 'LBNETWORK':
+            print('Removing exsiting HOSTSPOT')
+            wifi.start_hotspot()
+        return True
+
+    def forget_all():
         # Get a list of all connections
         connections = NetworkManager.Settings.ListConnections()
 
@@ -98,21 +214,21 @@ class wifi:
                       + connection.GetSettings()["connection"]["id"])
 
                 # Delete the identified connection and change
-                # status code to 200 (success)
                 connection.Delete()
 
-        # Wait before trying to launch wifi-connect
-        wifi_connect().start(wait=2)
+        # Launch wifi-connect
+        wifi.start_hotspot()
 
-        return {'status': 200, 'message': 'ok'}
+        return True
 
+    # Get user defined hotspot password.
+    def get_hotspot_password():
+        with app.app_context():
+            lb_database = User.query.filter_by(username='lb').first()
+        return lb_database.wifi_password
 
-class wifi_connect:
-    def start(self, wait=0.1):
-        global wifi_process
-
-        time.sleep(wait)
-
+    # Get hotspot SSID name.
+    def get_hotspot_SSID():
         # Check default hostname variables is not empty, and set if it is
         try:
             os.environ['DEFAULT_HOSTNAME']
@@ -126,7 +242,7 @@ class wifi_connect:
                                               capture_output=True,
                                               text=True).stdout.rstrip()
         except Exception as ex:
-            print_message('wifi_connect.start', 'Failed to set hostname. '
+            print_message('wifi.get_hotspot_SSID', 'Failed to set hostname. '
                           'Setting a default instead.', ex)
             current_hostname = os.environ['DEFAULT_HOSTNAME']
 
@@ -134,91 +250,112 @@ class wifi_connect:
         try:
             current_hostname
         except Exception as ex:
-            print_message('wifi_connect.start', 'Error getting hostname. '
+            print_message('wifi.get_hotspot_SSID', 'Error getting hostname. '
                           'Setting a default instead.', ex)
             current_hostname = os.environ['DEFAULT_HOSTNAME']
-
-        try:
-            # Refresh networks list before launch
-            subprocess.run(
-                ["iw", "wlan0", "scan"],
-                capture_output=True,
-                text=True).stdout.rstrip()
-        except Exception as ex:
-            print_message('wifi_connect.start', 'Error refreshing '
-                          'network points.', ex)
 
         # Check if default SSID
         if current_hostname == os.environ['DEFAULT_HOSTNAME']:
             current_hostname = os.environ["DEFAULT_SSID"]
 
-        # Fetch the wi-fi password
-        with app.app_context():
-            lb_database = User.query.filter_by(username='lb').first()
+        return current_hostname
 
-        # Start wifi connect
-        if lb_database.wifi_password:
-            cmd = (f'/app/common/wifi-connect/wifi-connect '
-                   f'-p {lb_database.wifi_password} '
-                   f'-s {current_hostname} -o 8080'.split())
-        else:
-            cmd = (f'/app/common/wifi-connect/wifi-connect '
-                   f'-s {current_hostname} -o 8080'.split())
+    # Return a list of available SSIDs and their security type,
+    # or [] for none available or error.
+    def list_access_points():
+        # Run IW to reduce chance of empty SSID list
+        wifi.refresh_networks()
 
-        wifi_process = subprocess.Popen(cmd)
-        time.sleep(4)
+        # Fetch current hotspot name
+        currentSSID = wifi.get_hotspot_SSID()
 
-        if wifi_process.poll() is not None:
-            print_message('wifi_connect', 'Wifi-Connect launch failure',
-                          wifi_process.returncode)
-            abort(408, status=wifi_process.returncode,
-                  message='Wifi-Connect launch failure')
+        # Bit flags we use when decoding what we get back from NetMan
+        NM_SECURITY_NONE = 0x0
+        NM_SECURITY_WEP = 0x1
+        NM_SECURITY_WPA = 0x2
+        NM_SECURITY_WPA2 = 0x4
+        NM_SECURITY_ENTERPRISE = 0x8
 
-        return {'status': 200, 'message': 'success'}
+        ssids = []  # list we return
 
-    def status(self):
-        global wifi_process
+        for dev in NetworkManager.NetworkManager.GetDevices():
+            if dev.DeviceType != NetworkManager.NM_DEVICE_TYPE_WIFI:
+                continue
+            for ap in dev.GetAccessPoints():
 
+                # Get Flags, WpaFlags and RsnFlags, all are bit OR'd
+                # combinations of the NM_802_11_AP_SEC_* bit flags.
+                # https://developer.gnome.org/NetworkManager/1.2/nm-dbus-types.html#NM80211ApSecurityFlags
+
+                security = NM_SECURITY_NONE
+
+                # Based on a subset of the flag settings we can determine which
+                # type of security this AP uses.
+                # We can also determine what input we need from the user
+                # to connect to any given AP.
+                AP_SEC = NetworkManager.NM_802_11_AP_SEC_NONE
+                if ap.Flags & NetworkManager.NM_802_11_AP_FLAGS_PRIVACY and \
+                        ap.WpaFlags == AP_SEC and \
+                        ap.RsnFlags == AP_SEC:
+                    security = NM_SECURITY_WEP
+
+                if ap.WpaFlags != AP_SEC:
+                    security = NM_SECURITY_WPA
+
+                if ap.RsnFlags != AP_SEC:
+                    security = NM_SECURITY_WPA2
+
+                if ap.WpaFlags & \
+                    NetworkManager.NM_802_11_AP_SEC_KEY_MGMT_802_1X or \
+                        ap.RsnFlags & \
+                        NetworkManager.NM_802_11_AP_SEC_KEY_MGMT_802_1X:
+                    security = NM_SECURITY_ENTERPRISE
+
+                # Decode our flag into a display string
+                security_str = ''
+                if security == NM_SECURITY_NONE:
+                    security_str = 'NONE'
+
+                if security & NM_SECURITY_WEP:
+                    security_str = 'WEP'
+
+                if security & NM_SECURITY_WPA:
+                    security_str = 'WPA'
+
+                if security & NM_SECURITY_WPA2:
+                    security_str = 'WPA2'
+
+                if security & NM_SECURITY_ENTERPRISE:
+                    security_str = 'ENTERPRISE'
+
+                entry = {"ssid": ap.Ssid, "security": security_str}
+
+                # Don't add duplicates to the list
+                if ssids.__contains__(entry):
+                    continue
+
+                # Don't add own hotspot to the list
+                if ap.Ssid == currentSSID:
+                    continue
+
+                ssids.append(entry)
+
+        return ssids
+
+    def refresh_networks():
         try:
-            curl_wifi = requests.get('http://192.168.42.1:8080', timeout=5)
-            if curl_wifi.status_code == 200:
-                curl_wifi = True
-            else:
-                curl_wifi = False
+            # Refresh networks list using IW which
+            # has proven to be better at refreshing than NM
+            subprocess.check_output(
+                ["iw", "dev", "wlan0", "scan"])
         except Exception as ex:
-            print_message('wifi_connect.status', 'curl failure', ex)
-            curl_wifi = False
+            print_message('wifi_connect.start', 'Error refreshing '
+                          'network points.', ex)
 
-        try:
-            wifi_poll = wifi_process.poll()
-        except Exception:
-            wifi_poll = False
-
-        if curl_wifi is True and wifi_poll is None:
-            return 0
-
-        elif curl_wifi is False and wifi_poll is not None:
-            return 1
-
-        abort(500, status=500,
-              message='Failed on wifi-connect check')
-
-    def stop(self):
-        global wifi_process
-
-        try:
-            wifi_poll = wifi_process.poll()
-        except Exception as ex:
-            print_message('wifi_connect.stop', 'Wifi-connect not started', ex)
-            return
-
-        if wifi_poll is not None:
-            print_message('wifi_connect.stop', 'Wifi-Connect already stopped')
-            return
-
-        try:
-            wifi_process.terminate()
-            wifi_process.communicate(timeout=10)
-        except Exception:
-            # If it hasn't stopped in 10 seconds kill it
-            wifi_process.kill()
+    # Start a local hotspot on the wifi interface.
+    def start_hotspot():
+        return wifi.connect_to_AP(conn_type='HOTSPOT',
+                                  ssid=wifi.get_hotspot_SSID(),
+                                  username=None,
+                                  password=wifi.get_hotspot_password(),
+                                  conn_name='HOTSPOT')

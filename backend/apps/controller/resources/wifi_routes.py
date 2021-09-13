@@ -1,6 +1,5 @@
 from common.models import User
 from common.wifi import wifi
-from common.wifi import wifi_connect
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import abort
@@ -18,11 +17,11 @@ class set_wifi(Resource):
         lb_database.save_to_db()
 
         # If connected, restart Wi-Fi-Connect
-        connected = wifi().check_connection()
+        connected = wifi.check_connection()
         if not connected:
             try:
-                wifi_connect().stop()
-                wifi_connect().start(wait=2)
+                wifi.forget(conn_name='HOTSPOT')
+                wifi.start_hotspot()
             except Exception as ex:
                 print_message('set_wifi',
                               'Failed starting wifi-connect',
@@ -34,9 +33,28 @@ class set_wifi(Resource):
         return {'message': 'success'}, 200
 
 
+class wifi_connect(Resource):
+    @jwt_required()
+    def post(self):
+        content = request.get_json()
+
+        if content["hiddenNetworkName"]:
+            wifi.connect_to_AP(conn_type=content["hiddenSecurity"],
+                               ssid=content["hiddenNetworkName"],
+                               username=content["username"],
+                               password=content["passphrase"])
+        else:
+            wifi.connect_to_AP(conn_type=content["type"],
+                               ssid=content["ssid"],
+                               username=content["username"],
+                               password=content["passphrase"])
+
+        return {'status': 200, 'message': 'Accepted'}, 200
+
+
 class wifi_connection_status(Resource):
     def get(self):
-        response = wifi().check_connection()
+        response = wifi.check_connection()
 
         if response:
             return {'status': 200, 'running': True}, 200
@@ -44,11 +62,17 @@ class wifi_connection_status(Resource):
             return {'status': 206, 'running': False}, 206
 
 
+class wifi_list_access_points(Resource):
+    @jwt_required()
+    def get(self):
+        return wifi.list_access_points()
+
+
 class wifi_forget(Resource):
     @jwt_required()
     def get(self):
         # Check and store the current connection state
-        connection_state = wifi().check_connection()
+        connection_state = wifi.check_connection()
 
         # If the device is connected to a wifi network
         if not connection_state:
@@ -59,7 +83,7 @@ class wifi_forget(Resource):
             }, 409
 
         wifi_forget_thread = threading.Thread(target=wifi.forget,
-                                              args=(1,),
+                                              args=('LBNETWORK',),
                                               name='wifi_forget_thread')
         wifi_forget_thread.start()
 
