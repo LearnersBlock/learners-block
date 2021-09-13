@@ -139,5 +139,7 @@
     "choose_name": "Bir ad seçin",
     "back": "Geri",
     "manage_library_files": "İndirilen Kitaplık dosyalarını yönet",
-    "name": "Ad"
+    "name": "Ad",
+    "general": "Genel",
+    "extracted_to": "Şu klasöre çıkarıldı:"
 }

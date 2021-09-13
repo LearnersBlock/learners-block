@@ -37,7 +37,7 @@
     "files_description": "Parcourir les fichiers ici.",
     "files": "Fichiers",
     "error": "Une erreur est survenue.",
-    "enable_components_in": "Vous pouvez activer les composants dans l'onglet Paramètres.",
+    "enable_components_in": "Vous pouvez activer les composants dans le Panneau de configuration.",
     "disconnected": "Déconnecté",
     "disconnect_wifi": "Êtes-vous sûr(e) de vouloir vous déconnecter du Wi-Fi ?",
     "disconnect": "Déconnecter",
@@ -140,5 +140,13 @@
     "back": "Retour",
     "extracted_to": "Extraits dans un dossier appelé :",
     "manage_library_files": "Gérer les fichiers de la bibliothèque téléchargés",
-    "name": "Nom"
+    "name": "Nom",
+    "networking": "Mise en réseau",
+    "general": "Géneral",
+    "security": "Sécurité",
+    "set_cp_password": "Définir le mot de passe du panneau de contrôle",
+    "set_cp_password_desc": "Définissez un mot de passe pour vous connecter à ce panneau de contrôle.",
+    "set_wifi_password": "Définir le mot de passe du point d’accès Wi-Fi",
+    "set_wifi_password_desc": "Définissez un mot de passe pour accéder à votre Block via le Wi-Fi.",
+    "connect_wifi_desc": "Connecterz votre Block à un réseau Wi-Fi proche."
 }

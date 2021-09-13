@@ -44,7 +44,7 @@
     "files_description": "Hier Dateien durchsuchen.",
     "files": "Dateien",
     "error": "Ein Fehler ist aufgetreten.",
-    "enable_components_in": "Sie können Komponenten im Bedienfeld „Einstellungen“ aktivieren.",
+    "enable_components_in": "Sie können Komponenten in der Systemsteuerung aktivieren.",
     "disconnected": "Getrennt",
     "disconnect_wifi": "Sind Sie sicher, dass Sie die Verbindung zum WLAN trennen möchten?",
     "disconnect": "Trennen",
@@ -140,5 +140,13 @@
     "back": "Zurück",
     "extracted_to": "Extrahiert in einen Ordner namens:",
     "manage_library_files": "Heruntergeladener Bibliotheksdateien verwalten",
-    "name": "Name"
+    "name": "Name",
+    "security": "Sicherheit",
+    "set_cp_password": "Passwort für die Systemsteuerung festlegen",
+    "set_cp_password_desc": "Legen Sie ein Passwort für die Anmeldung bei dieser Systemsteuerung fest.",
+    "set_wifi_password": "Wi-Fi-Hotspot-Passwort festlegen",
+    "set_wifi_password_desc": "Legen Sie ein Passwort für den Zugriff auf Ihren Block über Wi-Fi fest.",
+    "networking": "Vernetzung",
+    "connect_wifi_desc": "Verbinden Sie Ihren Block mit einem nahe gelegenen Wi-Fi-Netzwerk.",
+    "general": "Allgemein"
 }

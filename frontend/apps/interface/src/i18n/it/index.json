@@ -48,7 +48,7 @@
     "files_description": "Sfoglia i file qui.",
     "files": "File",
     "error": "Si è verificato un errore.",
-    "enable_components_in": "Puoi abilitare i componenti nel pannello Impostazioni.",
+    "enable_components_in": "Puoi abilitare i componenti nel Pannello di controllo.",
     "disconnected": "Disconnesso",
     "disconnect_wifi": "Sei sicuro/a di volerti disconnettere dal Wi-Fi?",
     "disconnect": "Disconnetti",
@@ -140,5 +140,13 @@
     "back": "Indietro",
     "extracted_to": "Estratti in una cartella chiamata:",
     "manage_library_files": "Gestisci i file scaricati della biblioteca",
-    "name": "Nome"
+    "name": "Nome",
+    "set_cp_password": "Imposta la password del pannello di controllo",
+    "set_cp_password_desc": "Imposta una password per accedere a questo pannello di controllo.",
+    "set_wifi_password_desc": "Imposta una password per accedere al tuo Block tramite Wi-Fi.",
+    "security": "Sicurezza",
+    "set_wifi_password": "Imposta la password dell’hotspot Wi-Fi",
+    "networking": "Rete",
+    "connect_wifi_desc": "Collega il tuo Block a una rete Wi-Fi nelle vicinanze.",
+    "general": "Generale"
 }
