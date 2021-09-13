@@ -148,5 +148,7 @@
     "set_wifi_password": "Set Wi-Fi Hotspot Password",
     "set_cp_password_desc": "Set a password for logging in to this Control Panel.",
     "set_cp_password": "Set Control Panel Password",
-    "security": "Security"
+    "security": "Security",
+    "enter_hidden_network": "Enter a hidden WiFi name.",
+    "network_name": "Network Name"
 }
