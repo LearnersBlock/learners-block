@@ -39,14 +39,15 @@ def dnsmasq():
 
 def handle_exit(*args):
     global dnsmasq_process
-    # Ensure Wi-Fi Connect is shutdown softly
+    # Ensure Wi-Fi connections are shutdown softly
     try:
         wifi.forget(conn_name='HOTSPOT')
     except Exception as ex:
-        print_message('handle_exit', 'Failed to terminate wifi-connect. '
-                      'Executing kill.', ex)
+        print_message('handle_exit', 'Failed to terminate wifi processes. ',
+                      ex)
 
     try:
+        # Terminate dnsmasq cleanly
         dnsmasq_process.terminate()
         dnsmasq_process.communicate(timeout=5)
     except Exception as ex:
@@ -62,8 +63,10 @@ def handle_sigterm(*args):
 
 
 def launch_wifi(self):
-    # Check if already connected to Wi-Fi
+    # Delay to allow a pre-configured connection to connect
     time.sleep(10)
+
+    # Check if already connected to Wi-Fi
     try:
         connected = wifi.check_connection()
     except Exception as ex:
@@ -81,7 +84,7 @@ def launch_wifi(self):
             print_message("launch_wifi",
                           'Wifi-connect failed to launch.', ex)
 
-    # If internet available (ethernet or WiFi) request update
+    # If internet available (Ethernet or WiFi) request update
     if check_internet():
         try:
             update().get()
@@ -92,13 +95,14 @@ def launch_wifi(self):
 
 
 def startup():
-    # Check hostname in container is correct
+    # Check hostname in container is same as device
     try:
-        # Fetch container hostname and device hostname
+        # Fetch container hostname
         container_hostname = subprocess.run(["hostname"], capture_output=True,
                                             check=True,
                                             text=True).stdout.rstrip()
 
+        # Fetch device hostname from Balena Supervisor
         device_hostname = curl(method="get",
                                path="/v1/device/host-config?apikey=",
                                supervisor_retries=20)
@@ -116,14 +120,14 @@ def startup():
         print_message("startup",
                       "Failed to compare hostnames, starting anyway.", ex)
 
-    # Start dnsmasq
+    # Start dnsmasq permanently
     start_dnsmasq = dnsmasq()
     if start_dnsmasq is not True:
         print_message("startup",
                       "dnsmasq failed to start.", start_dnsmasq)
 
-    # If connected to a wifi network then update device,
-    # otherwise launch wifi-connect
+    # Start the launch_wifi process as a thread to avoid delays
+    # to booting device
     try:
         wifi_thread = threading.Thread(target=launch_wifi,
                                        args=(1,),
@@ -132,4 +136,4 @@ def startup():
 
     except Exception as ex:
         print_message("startup",
-                      "Failed during launch. Continuing for debug.", ex)
+                      "Failed during wifi_thread. Continuing for debug.", ex)

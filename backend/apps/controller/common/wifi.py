@@ -24,8 +24,8 @@ class wifi:
                       password=None, conn_name='LBNETWORK'):
 
         if conn_type is None or ssid is None:
-            print('connect_to_AP() Error: Missing args conn_type, '
-                  'conn_name or ssid')
+            print_message('connect_to_AP', 'Missing '
+                          'args conn_type.')
             return False
 
         # Remove existing HOTSPOT if it exists
@@ -34,9 +34,10 @@ class wifi:
 
         try:
             # This is the hotspot that we turn on so we can show
-            # ourcaptured portal  to let the user select an AP and
+            # ourcaptured portal to let the user select an AP and
             # provide credentials.
             if password:
+                # Include a key-mgmt string for setting password
                 hotspot_dict = {
                     '802-11-wireless': {'band': 'bg',
                                         'mode': 'ap',
@@ -89,7 +90,7 @@ class wifi:
                 'ipv6': {'method': 'auto'}
             }
 
-            # No auth, 'open' connection.
+            # No auth/'open' connection.
             none_dict = {
                 '802-11-wireless': {'mode': 'infrastructure',
                                     'ssid': ssid},
@@ -131,14 +132,14 @@ class wifi:
                 conn_str = 'WEP/WPA/WPA2'
 
             if conn_dict is None:
-                print('connect_to_AP() Error: '
-                      f'Invalid conn_type="{conn_type}"')
+                print_message('connect_to_AP', 'Missing '
+                              'Invalid conn_type.')
                 return False
 
             NetworkManager.Settings.AddConnection(conn_dict)
-            print(f"Added connection {conn_name} of type {conn_str}")
+            print(f"Added connection of type {conn_str}")
 
-            # Now find this connection and its device
+            # Find this connection and its device
             connections = NetworkManager.Settings.ListConnections()
             connections = dict([(x.GetSettings()['connection']['id'], x)
                                 for x in connections])
@@ -154,13 +155,13 @@ class wifi:
                 if dev.DeviceType == dtype:
                     break
             else:
-                print(f"connect_to_AP() Error: No suitable and "
-                      f"available {ctype} device found.")
+                print_message('connect_to_AP', 'No suitable and '
+                              f"available {ctype} device found.")
                 return False
 
             # And connect
             NetworkManager.NetworkManager.ActivateConnection(conn, dev, "/")
-            print(f"Activated connection={conn_name}.")
+            print("Activated connection.")
 
             # Wait for ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
             print('Waiting for connection to become active...')
@@ -172,17 +173,17 @@ class wifi:
                     break
 
             if dev.State == NetworkManager.NM_DEVICE_STATE_ACTIVATED:
-                print(f'Connection {conn_name} is live.')
+                print('Connection is live.')
                 return True
 
         except Exception as e:
             print(f'Connection error {e}')
 
-        print(f'Connection {conn_name} failed.')
+        print_message('connect_to_AP', 'Connection failed.')
         return False
 
     def forget(conn_name='LBNETWORK'):
-        # Find the hotspot connection
+        # Find and delete the hotspot connection
         try:
             connections = NetworkManager.Settings.ListConnections()
             connections = dict([(x.GetSettings()['connection']['id'], x)
@@ -198,8 +199,8 @@ class wifi:
             wifi.forget_all()
         time.sleep(2)
 
+        # Start HOTSPOT for new connections
         if conn_name == 'LBNETWORK':
-            print('Removing exsiting HOSTSPOT')
             wifi.start_hotspot()
         return True
 
@@ -210,13 +211,11 @@ class wifi:
         for connection in connections:
             if connection.GetSettings()["connection"]["type"] \
                     == "802-11-wireless":
-                print("Deleting connection "
-                      + connection.GetSettings()["connection"]["id"])
 
-                # Delete the identified connection and change
+                # Delete the identified connection
                 connection.Delete()
 
-        # Launch wifi-connect
+        # Launch wifi hotspot
         wifi.start_hotspot()
 
         return True
@@ -227,7 +226,7 @@ class wifi:
             lb_database = User.query.filter_by(username='lb').first()
         return lb_database.wifi_password
 
-    # Get hotspot SSID name.
+    # Get user specified hotspot SSID.
     def get_hotspot_SSID():
         # Check default hostname variables is not empty, and set if it is
         try:
@@ -254,7 +253,7 @@ class wifi:
                           'Setting a default instead.', ex)
             current_hostname = os.environ['DEFAULT_HOSTNAME']
 
-        # Check if default SSID
+        # If default SSID is active then provide default SSID
         if current_hostname == os.environ['DEFAULT_HOSTNAME']:
             current_hostname = os.environ["DEFAULT_SSID"]
 
@@ -276,22 +275,22 @@ class wifi:
         NM_SECURITY_WPA2 = 0x4
         NM_SECURITY_ENTERPRISE = 0x8
 
-        ssids = []  # list we return
+        ssids = []  # list to be returned
 
         for dev in NetworkManager.NetworkManager.GetDevices():
             if dev.DeviceType != NetworkManager.NM_DEVICE_TYPE_WIFI:
                 continue
             for ap in dev.GetAccessPoints():
 
-                # Get Flags, WpaFlags and RsnFlags, all are bit OR'd
+                # Get Flags, WpaFlags and RsnFlags, all are
                 # combinations of the NM_802_11_AP_SEC_* bit flags.
                 # https://developer.gnome.org/NetworkManager/1.2/nm-dbus-types.html#NM80211ApSecurityFlags
 
                 security = NM_SECURITY_NONE
 
-                # Based on a subset of the flag settings we can determine which
+                # Based on a subset of the flag settings determine which
                 # type of security this AP uses.
-                # We can also determine what input we need from the user
+                # Determine what input we need from the user
                 # to connect to any given AP.
                 AP_SEC = NetworkManager.NM_802_11_AP_SEC_NONE
                 if ap.Flags & NetworkManager.NM_802_11_AP_FLAGS_PRIVACY and \
@@ -311,7 +310,7 @@ class wifi:
                         NetworkManager.NM_802_11_AP_SEC_KEY_MGMT_802_1X:
                     security = NM_SECURITY_ENTERPRISE
 
-                # Decode our flag into a display string
+                # Decode flag into a display string
                 security_str = ''
                 if security == NM_SECURITY_NONE:
                     security_str = 'NONE'
@@ -330,11 +329,11 @@ class wifi:
 
                 entry = {"ssid": ap.Ssid, "security": security_str}
 
-                # Don't add duplicates to the list
+                # Do not add duplicates to the list
                 if ssids.__contains__(entry):
                     continue
 
-                # Don't add own hotspot to the list
+                # Do not add own hotspot to the list
                 if ap.Ssid == currentSSID:
                     continue
 
@@ -349,7 +348,7 @@ class wifi:
             subprocess.check_output(
                 ["iw", "dev", "wlan0", "scan"])
         except Exception as ex:
-            print_message('wifi_connect.start', 'Error refreshing '
+            print_message('wifi.refresh_networks', 'Error refreshing '
                           'network points.', ex)
 
     # Start a local hotspot on the wifi interface.

@@ -146,9 +146,9 @@ if __name__ == '__main__':
 
         # Ensure soft shutdown to term wifi-connect
         atexit.register(handle_exit, None, None)
-        signal.signal(signal.SIGTERM, handle_sigterm)
-        signal.signal(signal.SIGINT, handle_sigterm)
         signal.signal(signal.SIGHUP, handle_sigterm)
+        signal.signal(signal.SIGINT, handle_sigterm)
+        signal.signal(signal.SIGTERM, handle_sigterm)
 
         # Check if first launch
         first_launch()

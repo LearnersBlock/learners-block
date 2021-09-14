@@ -1,6 +1,6 @@
 from common.models import User
-from flask_jwt_extended import jwt_required
 from flask import request
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 import subprocess
 import time
@@ -171,7 +171,7 @@ class wifi_list_access_points(Resource):
     @jwt_required()
     def get(self):
         # Demo routes
-        return [{"ssid": "Trevor House", "security": "WPA"},
-                {"ssid": "TELUS9052", "security": "ENTERPRISE"},
-                {"ssid": "Althaea", "security": "NONE"},
-                {"ssid": "TELUS9052", "security": "HIDDEN"}]
+        return [{"ssid": "My House", "security": "WPA"},
+                {"ssid": "TELUS9052-Enterprise", "security": "ENTERPRISE"},
+                {"ssid": "Althaea-2-no-password", "security": "NONE"},
+                {"ssid": "TELUS9052-Hidden", "security": "HIDDEN"}]
