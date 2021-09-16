@@ -148,5 +148,8 @@
     "manage_library_files": "Gestionar archivos de la Biblioteca descargados",
     "name": "Nombre",
     "copy_to_clipboard": "Copiar en el portapapeles",
-    "back": "Atrás"
+    "back": "Atrás",
+    "network_name": "Nombre de red",
+    "enter_hidden_network": "Introduzca el nombre de una red wifi oculta.",
+    "system_maintenance": "Mantenimiento del sistema"
 }
