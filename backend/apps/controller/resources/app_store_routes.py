@@ -3,7 +3,6 @@ from common.models import App_Store
 from flask_jwt_extended import jwt_required
 from flask_restful import abort
 from flask_restful import Resource
-from pkg_resources import packaging
 from resources.errors import print_message
 import json
 import os
@@ -86,9 +85,8 @@ class app_store_set(Resource):
 
             # If the application is installed and there is an update available
             if db_entry.status.lower() == "installed" and \
-                packaging.version.parse(db_entry.version) < \
-                packaging.version.parse(app_list
-                                        [db_entry.name]['version']):
+                db_entry.version < \
+                    app_list[db_entry.name]['version']:
                 print('Update available for ' + str(db_entry.name))
 
                 # Change the database entry to update_available
@@ -115,9 +113,13 @@ class app_store_set(Resource):
                                                          [app]['ports']),
                                         volumes=json.dumps(app_list[app]
                                                            ['volumes']),
+                                        info=app_list[app]
+                                        ['info'],
                                         dependencies=json.dumps(
                                                         app_list[app]
                                                         ['dependencies']),
+                                        version_name=app_list[app]
+                                        ['version_name'],
                                         version=app_list[app]
                                         ['version'],
                                         author_site=app_list[app]
@@ -176,9 +178,11 @@ class app_store_set(Resource):
                                                [app]['ports'])
                 lb_database.volumes = json.dumps(app_list[app]
                                                  ['volumes'])
+                lb_database.info = app_list[app]['info']
                 lb_database.dependencies = json.dumps(
                                                 app_list[app]
                                                 ['dependencies'])
+                lb_database.version_name = app_list[app]['version_name']
                 lb_database.version = app_list[app]['version']
                 lb_database.author_site = \
                     app_list[app]['author_site']
@@ -208,7 +212,9 @@ class app_store_status(Resource):
                         'image': db_entry.image,
                         "ports": json.loads(db_entry.ports),
                         "volumes": json.loads(db_entry.volumes),
+                        'info': db_entry.info,
                         'dependencies': json.loads(db_entry.dependencies),
+                        "version_name": db_entry.version_name,
                         "version": db_entry.version,
                         "author_site": db_entry.author_site,
                         "logo": db_entry.logo,

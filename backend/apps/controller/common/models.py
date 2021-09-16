@@ -35,7 +35,7 @@ class App_Store(db.Model):
                      unique=True,
                      nullable=False)
 
-    long_name = db.Column(db.String,
+    long_name = db.Column(db.Text,
                           unique=False,
                           nullable=False)
 
@@ -51,6 +51,10 @@ class App_Store(db.Model):
                       unique=False,
                       nullable=False)
 
+    info = db.Column(db.String,
+                     unique=False,
+                     nullable=False)
+
     volumes = db.Column(db.String,
                         unique=False,
                         nullable=True)
@@ -59,7 +63,11 @@ class App_Store(db.Model):
                              unique=False,
                              nullable=True)
 
-    version = db.Column(db.Text,
+    version_name = db.Column(db.Text,
+                             unique=False,
+                             nullable=False)
+
+    version = db.Column(db.Integer,
                         unique=False,
                         nullable=False)
 

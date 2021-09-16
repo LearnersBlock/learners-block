@@ -326,6 +326,7 @@
         <q-table
           v-if="rows"
           flat
+          wrap-cells
           :loading="appTableVisible"
           :grid="$q.screen.xs"
           :rows-per-page-options="[5, 10, 20]"
@@ -428,8 +429,8 @@
                       target="_blank"
                     >{{ props.row.author_site }}</a>
                   </div>
-
-                  <div>{{ $t('version') }} {{ props.row.version }}</div>
+                  <div class="text-gray-600">{{ props.row.info }}</div>
+                  <div class="text-gray-600">{{ $t('version') }} {{ props.row.version_name }}</div>
                   <q-btn
                     v-if="!appTableVisible"
                     class="mb-1"
@@ -690,12 +691,13 @@
             class="mr-3 ml-3"
             spaced
           />
+          <q-separator spaced />
           <!-- Prune System Files -->
           <q-item-label
             header
             class="text-h6"
           >
-            {{ $t('prune_system_files') }}
+            {{ $t('system_maintenance') }}
           </q-item-label>
           <q-item>
             <q-item-section
@@ -727,6 +729,7 @@
             </q-item-section>
           </q-item>
         </q-list>
+        <q-separator spaced />
         <!-- System Info -->
         <div class="text-center text-xl mt-6 mb-4 text-gray-600">
           {{ $t('system_info') }}
@@ -842,8 +845,9 @@ export default defineComponent({
         sortable: true
       },
       { name: 'author_site', label: t('author'), field: 'author_site', sortable: true },
-      { name: 'version', label: t('version'), field: 'version', sortable: true },
-      { name: 'ports', field: 'ports', sortable: true },
+      { name: 'info', label: t('info'), field: 'info' },
+      { name: 'version', label: t('version'), field: 'version_name' },
+      { name: 'ports', field: 'ports' },
       { name: 'status', field: 'status', sortable: true }
     ]
 
