@@ -136,5 +136,19 @@
     "new_folder": "Nova Pasta",
     "move_copy": "Mover/Copiar",
     "item_already_exists": "Item já existe",
-    "invalid_filemanager_string": "Você entrou um nome inválido. Os seguintes caracteres não são compatíveis: '<', '>', '%', '{', '}', '|', '\\', '^', '`', '$', '#'"
+    "invalid_filemanager_string": "Você entrou um nome inválido. Os seguintes caracteres não são compatíveis: '<', '>', '%', '{', '}', '|', '\\', '^', '`', '$', '#'",
+    "networking": "Rede",
+    "system_maintenance": "Manutenção do Sistema",
+    "network_name": "Nome da Rede",
+    "enter_hidden_network": "Digite o nome de WiFi oculto.",
+    "security": "Segurança",
+    "set_cp_password": "Definir senha para o painel de controle",
+    "connect_wifi_desc": "Conectar seu Block a uma rede Wi-Fi próxima.",
+    "set_wifi_password_desc": "Definir uma senha para acessar seu Block via Wi-Fi.",
+    "set_cp_password_desc": "Definir uma senha para fazer login neste Painel de Controle.",
+    "set_wifi_password": "Definir senha do ponto de acesso Wi-Fi",
+    "general": "Geral",
+    "extracted_to": "Extraído para uma pasta chamada:",
+    "manage_library_files": "Gerenciar arquivos baixados da Biblioteca",
+    "name": "Nome"
 }
