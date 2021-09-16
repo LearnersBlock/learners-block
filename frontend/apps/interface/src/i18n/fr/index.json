@@ -150,5 +150,6 @@
     "set_wifi_password_desc": "Définissez un mot de passe pour accéder à votre Block via le Wi-Fi.",
     "connect_wifi_desc": "Connecterz votre Block à un réseau Wi-Fi proche.",
     "network_name": "Nom du réseau",
-    "enter_hidden_network": "Entrez un nom de Wi-Fi caché."
+    "enter_hidden_network": "Entrez un nom de Wi-Fi caché.",
+    "system_maintenance": "Maintenance du système"
 }
