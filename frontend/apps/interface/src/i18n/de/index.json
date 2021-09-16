@@ -150,5 +150,6 @@
     "connect_wifi_desc": "Verbinden Sie Ihren Block mit einem nahe gelegenen Wi-Fi-Netzwerk.",
     "general": "Allgemein",
     "enter_hidden_network": "Geben Sie einen versteckten Wi-Fi-Namen ein.",
-    "network_name": "Netzwerkname"
+    "network_name": "Netzwerkname",
+    "system_maintenance": "Systemwartung"
 }
