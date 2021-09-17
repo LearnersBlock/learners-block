@@ -233,7 +233,11 @@ export default defineComponent({
 
     const filteredResources = computed(() => {
       if (directDownload.value) {
-        return fetchedResources.value.resources.filter(resource => resource.download_url)
+        const response = fetchedResources.value.resources.filter(resource => resource.download_url)
+        if (response.length === 0 && endOfResults.value === false) {
+          loadMore(null, null)
+        }
+        return response
       } else {
         return fetchedResources.value.resources
       }
@@ -243,15 +247,21 @@ export default defineComponent({
     async function loadMore (_index, done) {
       if (endOfResults.value) {
         setTimeout(() => {
-          done()
+          if (done) {
+            done()
+          }
         }, 2000)
       } else if ($store.state.savedResources.limit > $store.state.savedResources.resources.resources.length) {
         endOfResults.value = true
-        done()
+        if (done) {
+          done()
+        }
       } else {
         $store.commit('savedResources/resourceLimit', parseInt($store.state.savedResources.limit) + numberOfResults.value)
         await fetchFilteredResources()
-        done()
+        if (done) {
+          done()
+        }
       }
     }
 
