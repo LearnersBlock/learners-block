@@ -10,8 +10,6 @@ import time
 
 
 def dnsmasq():
-    global dnsmasq_process
-
     DEFAULT_GATEWAY = "192.168.42.1"
     DEFAULT_DHCP_RANGE = "192.168.42.2,192.168.42.254"
     DEFAULT_INTERFACE = "wlan0"  # use 'ip link show' to see list of interfaces
@@ -30,30 +28,22 @@ def dnsmasq():
     args.append("--no-hosts")
 
     try:
-        dnsmasq_process = subprocess.Popen(args)
+        subprocess.Popen(args)
     except Exception as ex:
+        print_message('dnsmasq_process', 'Failed to start dnsmasq.',
+                      ex)
         return ex
 
     return True
 
 
 def handle_exit(*args):
-    global dnsmasq_process
     # Ensure Wi-Fi connections are shutdown softly
     try:
         wifi.forget(conn_name='HOTSPOT')
     except Exception as ex:
         print_message('handle_exit', 'Failed to terminate wifi processes. ',
                       ex)
-
-    try:
-        # Terminate dnsmasq cleanly
-        dnsmasq_process.terminate()
-        dnsmasq_process.communicate(timeout=5)
-    except Exception as ex:
-        print_message('handle_exit', 'Failed to terminate dnsmasq_process. '
-                      'Executing kill.', ex)
-        dnsmasq_process.kill()
 
     print("Finshed the exit process")
 

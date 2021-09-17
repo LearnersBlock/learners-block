@@ -94,23 +94,28 @@ def first_launch():
                                         capture_output=True,
                                         check=True,
                                         text=True).stdout.rstrip()
-    if not os.path.isfile(pidfile) and container_hostname != 'lb':
+    if not os.path.isfile(pidfile):
         # Run tasks on first launch
         # Set hostname to 'lb'
-        response = curl(method="patch",
-                        path="/v1/device/host-config?apikey=",
-                        string='{"network": {"hostname": "lb"}}',
-                        supervisor_retries=20)
         open(pidfile, 'w').write(pid)
 
         print_message('first_launch',
-                      'Set hostname on first boot. Restarting',
-                      str(response))
+                      'Created first launch PID.')
 
-        response = curl(method="post-json",
-                        path="/v1/reboot?apikey=",
-                        string='("force", "true")',
-                        supervisor_retries=20)
+        if container_hostname != 'lb':
+            response = curl(method="patch",
+                            path="/v1/device/host-config?apikey=",
+                            string='{"network": {"hostname": "lb"}}',
+                            supervisor_retries=20)
+
+            print_message('first_launch',
+                          'Set hostname on first boot. Restarting',
+                          str(response))
+
+            response = curl(method="post-json",
+                            path="/v1/reboot?apikey=",
+                            string='("force", "true")',
+                            supervisor_retries=20)
 
 
 # Create Flask app instance
