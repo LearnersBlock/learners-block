@@ -1,5 +1,5 @@
 # Message formatter for printing standard messages from functions
-def print_message(function='Unspecified', message='None', ex=''):
+def print_message(function='Unspecified', message='None', ex='Not Specified'):
     print('function: ' + str(function) + " - message: " +
           str(message) + " - error: " + str(ex), flush=True)
 

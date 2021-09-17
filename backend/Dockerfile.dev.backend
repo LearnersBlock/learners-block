@@ -1,13 +1,18 @@
-FROM python:3.8.10-buster
+FROM python:3.8.10-alpine
 
 # Set working directory 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-  libicu63 \
-  psmisc \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+RUN apk add \
+  build-base \
+  dbus-libs \
+  dnsmasq \
+  glib \
+  iw \
+  libffi-dev \
+  musl \
+  py3-icu \
+  wireless-tools
 
 # Set env variables
 ENV FLASK_ENV=development
@@ -19,4 +24,4 @@ COPY apps/controller/requirements-dev.txt /tmp/
 RUN pip install -r /tmp/requirements-dev.txt --upgrade --no-deps --force-reinstall --no-cache-dir
 
 # Launch
-CMD ["bash", "start.sh"]
+CMD ["sh", "start.sh"]

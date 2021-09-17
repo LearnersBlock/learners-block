@@ -11,11 +11,11 @@
     "build": "quasar build"
   },
   "dependencies": {
-    "@quasar/extras": "^1.10.12",
+    "@quasar/extras": "^1.11.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "epubjs": "^0.3.88",
-    "quasar": "^2.0.4",
+    "quasar": "^2.1.0",
     "vue-i18n": "^9.1.0",
     "vuex": "^4.0.2"
   },

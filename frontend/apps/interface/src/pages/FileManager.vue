@@ -17,7 +17,7 @@
       v-model:selected="selected"
       table-style="width: 90vw;"
       flat
-      :dense="!$q.platform.is.mobile"
+      :dense="$q.screen.gt.sm"
       wrap-cells
       :loading="loading"
       :rows="rows"
@@ -26,7 +26,7 @@
       :no-data-label="$t('empty_folder')"
       :no-results-label="$t('empty_folder')"
       row-key="name"
-      :selection="loginState && !$q.platform.is.mobile ? 'multiple' : 'none'"
+      :selection="loginState && $q.screen.gt.sm ? 'multiple' : 'none'"
       :filter="filter"
       :visible-columns="visibleColumns"
       @row-click="onRowClick"
@@ -82,7 +82,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="loginState && !$q.platform.is.mobile"
+                v-if="loginState && $q.screen.gt.sm"
                 class="mr-2"
                 icon="drive_file_move_rtl"
                 color="gray-800"
@@ -142,7 +142,7 @@
                 />
               </q-dialog>
               <q-btn
-                v-if="loginState && !$q.platform.is.mobile"
+                v-if="loginState && $q.screen.gt.sm"
                 class="mr-2"
                 size="sm"
                 color="gray-800"
@@ -178,7 +178,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="!$q.platform.is.mobile"
+                v-if="$q.screen.gt.sm"
                 class="q-ml-md"
                 flat
                 round
@@ -239,7 +239,7 @@
               {{ props.value }}
               <!-- Zip button -->
               <q-btn
-                v-if="loginState && !$q.platform.is.mobile && props.row.extension == '.zip' || props.row.extension == '.gz'"
+                v-if="loginState && $q.screen.gt.sm && props.row.extension == '.zip' || props.row.extension == '.gz'"
                 class="ml-1"
                 :loading="unzipLoading"
                 round
@@ -466,7 +466,7 @@
             table-style="width: 75vw;"
             hide-bottom
             flat
-            :dense="!$q.platform.is.mobile"
+            :dense="$q.screen.gt.sm"
             square
             wrap-cells
             :no-data-label="$t('empty_folder')"
@@ -625,11 +625,10 @@ export default defineComponent({
       } else {
         rootPath.value = 'fileshare'
       }
-
-      if ($q.platform.is.mobile) {
-        visibleColumns.value = ['info']
-      } else {
+      if ($q.screen.gt.sm) {
         visibleColumns.value = ['move', 'rename', 'delete', 'info']
+      } else {
+        visibleColumns.value = ['info']
       }
       await updateRows()
       $q.loading.hide()

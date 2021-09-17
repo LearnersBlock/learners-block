@@ -5,7 +5,7 @@ import time
 
 
 class container:
-    def start(self, container_name, sleep=0):
+    def start(container_name, sleep=0):
         time.sleep(sleep)
         response = curl(method="post-data",
                         path=f"/v2/applications/{os.environ['BALENA_APP_ID']}"
@@ -14,7 +14,7 @@ class container:
 
         return response
 
-    def status(self, container_name):
+    def status(container_name):
         # Get running containers
         response = curl(method="get",
                         path="/v2/state/status?apikey=")
@@ -28,7 +28,7 @@ class container:
         abort(404, status=404,
               message='Container not found')
 
-    def stop(self, container_name, sleep=0):
+    def stop(container_name, sleep=0):
         time.sleep(sleep)
         response = curl(method="post-data",
                         path=f"/v2/applications/{os.environ['BALENA_APP_ID']}"

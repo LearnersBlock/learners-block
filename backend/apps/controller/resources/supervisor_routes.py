@@ -20,7 +20,7 @@ class container_start(Resource):
             pid = str(os.getpid())
             open(portainer_pidfile, 'w').write(pid)
 
-        response = container().start(container_name=content["container_name"])
+        response = container.start(container_name=content["container_name"])
 
         return {'status': response["status_code"],
                 'message': response["text"]}, response["status_code"]
@@ -30,7 +30,7 @@ class container_status(Resource):
     def post(self):
         content = request.get_json()
 
-        response, entry = container().status(
+        response, entry = container.status(
                             container_name=content["container_name"])
 
         try:
@@ -58,7 +58,7 @@ class container_stop(Resource):
                 print_message('container_stop',
                               'Portainer PID file did not exist. Continuing.')
 
-        response = container().stop(container_name=content["container_name"])
+        response = container.stop(container_name=content["container_name"])
 
         return {'status': response["status_code"],
                 'message': response["text"]}, response["status_code"]

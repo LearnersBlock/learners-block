@@ -1,5 +1,5 @@
 ## Build Python packages to avoid need for builds in main image
-FROM balenalib/%%BALENA_ARCH%%-debian-python:3.8.10-buster-build-20210506 AS python-buildstep
+FROM balenalib/%%BALENA_ARCH%%-alpine-python:3.8.10-3.13-build-20210603 AS python-buildstep
 
 # Copy Python requirements file
 COPY apps/controller/requirements.txt /tmp/
@@ -9,7 +9,7 @@ RUN pip install --user -r /tmp/requirements.txt --upgrade --no-warn-script-locat
 
 
 ## Compile container
-FROM balenalib/%%BALENA_ARCH%%-debian-python:3.8.10-buster-20210506
+FROM balenalib/%%BALENA_ARCH%%-alpine-python:3.8.10-3.13-20210603
 
 # Set env variables
 ENV FLASK_ENV=production
@@ -22,25 +22,19 @@ WORKDIR /app
 
 # Install dependencies
 RUN install_packages \
+  dbus-libs \
   dnsmasq \
+  glib \
   iw \
-  libglib2.0-0 \
-  libicu63 \
-  psmisc \
+  musl \
+  py3-icu \
   wireless-tools
 
 # Copy built Python packages from build container
 COPY --from=python-buildstep /root/.local /root/.local
 
 # Make required directories
-RUN mkdir -p common/wifi-connect
 RUN mkdir -p db
-
-# Download Wi-Fi connect based on system architecture 
-ARG VERSION="4.4.6"
-
-RUN curl -Ls "https://github.com/balena-io/wifi-connect/releases/download/v$VERSION/wifi-connect-v$VERSION-linux-%%BALENA_ARCH%%.tar.gz" \
-  | tar -xvz -C common/wifi-connect && rm -Rf common/wifi-connect/ui
 
 # Insert application
 COPY apps/controller .
@@ -49,7 +43,7 @@ COPY apps/controller .
 COPY apps/portainer/portainer.db portainer/portainer.db
 
 # Check for database migrations then launch controller
-CMD ["bash", "start.sh"]
+CMD ["sh", "start.sh"]
 
 HEALTHCHECK --start-period=20s --timeout=30s \
   CMD curl --silent --fail http://127.0.0.1:9090/ || exit 1
