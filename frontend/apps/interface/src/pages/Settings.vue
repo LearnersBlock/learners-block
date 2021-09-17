@@ -988,8 +988,6 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           updateHostname()
-
-          $q.notify({ type: 'positive', message: t('hostname_changed_notification') })
         })
       } else {
         $q.notify({ type: 'negative', message: t('invalid_hostname') })
@@ -1327,11 +1325,11 @@ export default defineComponent({
       }, 1)
     }
 
-    const updateHostname = async () => {
+    const updateHostname = () => {
       if (newHostname.value) {
-        await Axios.post(`${api.value}/v1/hostconfig`, {
+        Axios.post(`${api.value}/v1/hostconfig`, {
           hostname: newHostname.value
-        })
+        }).then(() => { $q.notify({ type: 'positive', message: t('hostname_changed_notification') }) })
       }
     }
 
