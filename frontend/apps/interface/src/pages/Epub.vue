@@ -163,10 +163,10 @@ export default defineComponent({
       ePubJs.rendition.display()
       ePubJs.book.ready.then(() => {
         loading.value = false
-        if ($q.platform.is.mobile) {
-          $q.notify({ type: 'info', multiLine: true, message: t('swipe_instruction') })
-        } else {
+        if (!$q.platform.is.mobile) {
           $q.notify({ type: 'info', multiLine: true, message: t('click_swipe_instruction') })
+        } else {
+          $q.notify({ type: 'info', multiLine: true, message: t('swipe_instruction') })
         }
       })
     }

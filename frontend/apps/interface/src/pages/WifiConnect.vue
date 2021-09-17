@@ -5,7 +5,7 @@
     </div>
     <q-form
       class="mb-5 flex flex-col"
-      style="min-width: 40vw"
+      :style="$q.screen.gt.sm ? 'min-width: 40vw' : 'min-width: 90vw'"
       @submit="connect"
     >
       <q-select
@@ -119,20 +119,24 @@ export default defineComponent({
         type: wifiSsid.value.security,
         username: username.value
       }).catch(function (error) {
-        console.log(error)
-        $q.notify({
-          type: 'negative',
-          multiLine: true,
-          timeout: 0,
-          actions: [
-            {
-              label: t('close'),
-              color: 'white',
-              handler: () => { /* ... */ }
-            }
-          ],
-          message: t('network_connect_fail')
-        })
+        // Only return an error if the request failed to send
+        // A timeout is expected as the device is connecting to new network
+        if (error.response && !error.request) {
+          console.log(error)
+          $q.notify({
+            type: 'negative',
+            multiLine: true,
+            timeout: 0,
+            actions: [
+              {
+                label: t('close'),
+                color: 'white',
+                handler: () => { /* ... */ }
+              }
+            ],
+            message: t('network_connect_fail')
+          })
+        }
       })
       wifiSsid.value = ''
       username.value = ''

@@ -429,8 +429,12 @@
                       target="_blank"
                     >{{ props.row.author_site }}</a>
                   </div>
-                  <div class="text-gray-600">{{ props.row.info }}</div>
-                  <div class="text-gray-600">{{ $t('version') }} {{ props.row.version_name }}</div>
+                  <div class="text-gray-600">
+                    {{ props.row.info }}
+                  </div>
+                  <div class="text-gray-600">
+                    {{ $t('version') }} {{ props.row.version_name }}
+                  </div>
                   <q-btn
                     v-if="!appTableVisible"
                     class="mb-1"
@@ -530,6 +534,8 @@
                   v-if="rows"
                   :title="$t('available_applications')"
                   flat
+                  dense
+                  wrap-cells
                   separator="cell"
                   style="width: 700px; max-width: 80vw;"
                   :grid="$q.screen.xs"
@@ -552,6 +558,7 @@
                           v-close-popup
                           unelevated
                           color="primary"
+                          size="sm"
                           :label="$t('set_custom_startpage')"
                           @click="storeStartPage(props.row)"
                         />
@@ -844,11 +851,11 @@ export default defineComponent({
         format: val => `${val}`,
         sortable: true
       },
-      { name: 'author_site', label: t('author'), field: 'author_site', sortable: true },
-      { name: 'info', label: t('info'), field: 'info' },
-      { name: 'version', label: t('version'), field: 'version_name' },
+      { name: 'author_site', label: t('author'), field: 'author_site', align: 'left', sortable: true },
+      { name: 'info', label: t('info'), field: 'info', align: 'left' },
+      { name: 'version', label: t('version'), field: 'version_name', align: 'left' },
       { name: 'ports', field: 'ports' },
-      { name: 'status', field: 'status', sortable: true }
+      { name: 'status', field: 'status', sortable: true, align: 'center' }
     ]
 
     const rows = ref<any>(null)
