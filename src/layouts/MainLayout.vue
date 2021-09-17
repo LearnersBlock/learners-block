@@ -1,10 +1,15 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh lpR fFf">
+    <q-header
+      class="bg-white"
+      bordered
+      reveal
+    >
       <q-toolbar>
         <q-btn
           v-if="isInIndex"
+          color="primary"
           flat
           dense
           round
@@ -16,13 +21,12 @@
           <a href="/">
             <img
               alt=""
-              src="../assets/lb-logo-white-full.svg"
+              src="../assets/lb-logo-full.svg"
             >
           </a>
         </div>
         <q-toolbar-title class="josefin text-h5 q-mt-xs">
           <a
-            class="text-white"
             style="text-decoration:none;"
             href="https://library.learnersblock.org"
             target="_self"
@@ -32,12 +36,15 @@
           v-if="!onDevice"
           clickable
         >
-          <span class="material-icons">
-            translate
-          </span>
-          <q-tooltip class="text-caption text-center">
-            {{ $t('switch_language') }}
-          </q-tooltip>
+          <q-icon
+            name="translate"
+            color="primary"
+            size="sm"
+          >
+            <q-tooltip class="text-caption text-center">
+              {{ $t('switch_language') }}
+            </q-tooltip>
+          </q-icon>
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item
@@ -57,12 +64,15 @@
           clickable
           @click="redirect('https://airtable.com/shrkg3MkzXLd7hBts')"
         >
-          <span class="material-icons">
-            send
-          </span>
-          <q-tooltip class="text-caption text-center">
-            {{ $t('submit_resource') }}
-          </q-tooltip>
+          <q-icon
+            name="send"
+            color="primary"
+            size="sm"
+          >
+            <q-tooltip class="text-caption text-center">
+              {{ $t('submit_resource') }}
+            </q-tooltip>
+          </q-icon>
         </q-item>
       </q-toolbar>
     </q-header>
@@ -80,11 +90,10 @@
         >
           {{ $t('search_options') }}
         </q-item-label>
-        <q-separator class="q-mt-md" />
         <q-input
           v-model="keyword"
           outlined
-          class="q-mt-lg q-mx-auto w-90"
+          class="q-mt-sm q-mx-auto w-90"
           clearable
           :label="$t('keywords')"
           @keyup="searchResourcesString"
@@ -275,7 +284,8 @@
         >
           {{ $t('total_entries') }} {{ fetchedResourcesLength.resourcesConnection.aggregate.totalCount }}
         </div>
-        <div class="q-ml-md q-mt-md q-mb-sm text-grey absolute-bottom">
+        <q-separator class="q-mt-lg" />
+        <div class="q-mt-sm text-grey text-center">
           {{ $t('powered_by') }} <a
             href="https://learnersblock.org"
             target="_blank"

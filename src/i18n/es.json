@@ -9,9 +9,9 @@
     "reset": "Restablecer",
     "enable_rtl": "Activar disposición de derecha a izquierda",
     "tags": "Etiquetas:",
-    "licenses": "Licencias:",
+    "licenses": "Licencia:",
     "host": "Alojado por:",
-    "author": "Autor:",
+    "author": "Autoría:",
     "published_date": "Fecha de publicación",
     "search_options": "Opciones de búsqueda",
     "no_results_found": "No se encontró ningún resultado",
@@ -55,5 +55,11 @@
     "explore": "Explorar",
     "powered_by": "Funciona con",
     "direct_download": "Descarga directa",
-    "display_only_direct_download": "Mostrar sólo los artículos disponibles para la descarga directa."
+    "display_only_direct_download": "Mostrar sólo los artículos disponibles para la descarga directa.",
+    "categories": "Categorías:",
+    "free": "Gratis",
+    "freemium": "«Freemium»",
+    "paid": "De pago",
+    "subjects": "Materias:",
+    "category": "Categoría:"
 }
