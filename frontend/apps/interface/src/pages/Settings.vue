@@ -342,12 +342,17 @@
               flat
               color="primary"
             >
-              <q-spinner-gears
-                size="50px"
-                color="primary"
-              />
-              <div class="mt-1 text-base text-center text-gray-800">
-                {{ $t('this_may_take_time') }}
+              <div
+                class="flex justify-center"
+                style="background-color: white"
+              >
+                <q-spinner-gears
+                  size="50px"
+                  color="primary"
+                />
+                <div class="mt-2 text-center text-base text-gray-800">
+                  {{ $t('this_may_take_time') }}
+                </div>
               </div>
             </q-inner-loading>
           </template>
@@ -449,7 +454,10 @@
             </div>
           </template>
         </q-table>
-        <q-card v-else>
+        <q-card
+          v-else
+          flat
+        >
           <q-card-section>
             <div class="column flex text-base text-center items-center text-gray-800">
               <q-spinner-gears
