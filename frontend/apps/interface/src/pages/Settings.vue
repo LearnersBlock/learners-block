@@ -291,7 +291,7 @@
             </q-item-section>
           </q-item>
           <q-separator spaced />
-          <!-- Wi-Fi section -->
+          <!-- Networking section -->
           <q-item-label
             header
           >
@@ -606,7 +606,10 @@
               </q-card-actions>
             </q-card>
           </q-dialog>
-          <q-separator spaced />
+          <q-separator
+            class="mr-3 ml-3"
+            spaced
+          />
           <!-- Set Hostname -->
           <q-item-label
             header
@@ -698,7 +701,6 @@
             class="mr-3 ml-3"
             spaced
           />
-          <q-separator spaced />
           <!-- Prune System Files -->
           <q-item-label
             header
