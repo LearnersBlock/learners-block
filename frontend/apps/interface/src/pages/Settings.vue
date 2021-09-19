@@ -213,83 +213,91 @@
           >
             {{ $t('security') }}
           </q-item-label>
-          <q-item
-            v-ripple
-            clickable
-            :disable="settingPassword || togglesLoading"
-            @click="setLoginPassword()"
-          >
-            <q-item-section
-              top
-              avatar
+          <q-card flat>
+            <q-item
+              v-ripple
+              clickable
+              :disable="settingPassword || togglesLoading"
+              @click="setLoginPassword()"
             >
-              <q-avatar
-                v-if="loginPasswordStatus"
-                icon="lock"
-                text-color="green"
-              />
-              <q-avatar
-                v-else
-                icon="lock_open"
-                text-color="accent"
-              />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>
-                {{ $t('set_cp_password') }}
-              </q-item-label>
-              <q-item-label caption>
-                {{ $t('set_cp_password_desc') }}
-              </q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-toggle
-                v-model="loginPasswordToggle"
-                :icon="loginPasswordToggle ? 'lock' : 'lock_open'"
-                :disable="togglesLoading"
-                @update:model-value="setLoginPassword()"
-              />
-            </q-item-section>
-          </q-item>
-          <!-- Wifi Passwords -->
-          <q-item
-            v-ripple
-            clickable
-            :disable="settingPassword || togglesLoading"
-            @click="setWifiPassword()"
-          >
-            <q-item-section
-              top
-              avatar
+              <q-item-section
+                top
+                avatar
+              >
+                <q-avatar
+                  v-if="loginPasswordStatus"
+                  icon="lock"
+                  text-color="green"
+                />
+                <q-avatar
+                  v-else
+                  icon="lock_open"
+                  text-color="accent"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>
+                  {{ $t('set_cp_password') }}
+                </q-item-label>
+                <q-item-label caption>
+                  {{ $t('set_cp_password_desc') }}
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-toggle
+                  v-model="loginPasswordToggle"
+                  :icon="loginPasswordToggle ? 'lock' : 'lock_open'"
+                  :disable="settingPassword || togglesLoading"
+                  @update:model-value="setLoginPassword()"
+                />
+              </q-item-section>
+            </q-item>
+            <!-- Wifi Passwords -->
+            <q-item
+              v-ripple
+              clickable
+              :disable="settingPassword || togglesLoading"
+              @click="setWifiPassword()"
             >
-              <q-avatar
-                v-if="wifiPasswordStatus"
-                icon="lock"
-                text-color="green"
+              <q-item-section
+                top
+                avatar
+              >
+                <q-avatar
+                  v-if="wifiPasswordStatus"
+                  icon="lock"
+                  text-color="green"
+                />
+                <q-avatar
+                  v-else
+                  icon="lock_open"
+                  text-color="accent"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>
+                  {{ $t('set_wifi_password') }}
+                </q-item-label>
+                <q-item-label caption>
+                  {{ $t('set_wifi_password_desc') }}
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-toggle
+                  v-model="wifiPasswordToggle"
+                  :icon="wifiPasswordToggle ? 'lock' : 'lock_open'"
+                  :disable="settingPassword || togglesLoading"
+                  @update:model-value="setWifiPassword()"
+                />
+              </q-item-section>
+            </q-item>
+            <q-inner-loading :showing="settingPassword || togglesLoading">
+              <q-spinner-gears
+                size="50px"
+                color="primary"
               />
-              <q-avatar
-                v-else
-                icon="lock_open"
-                text-color="accent"
-              />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>
-                {{ $t('set_wifi_password') }}
-              </q-item-label>
-              <q-item-label caption>
-                {{ $t('set_wifi_password_desc') }}
-              </q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-toggle
-                v-model="wifiPasswordToggle"
-                :icon="wifiPasswordToggle ? 'lock' : 'lock_open'"
-                :disable="settingPassword || togglesLoading"
-                @update:model-value="setWifiPassword()"
-              />
-            </q-item-section>
-          </q-item>
+            </q-inner-loading>
+          </q-card>
           <q-separator spaced />
           <!-- Networking section -->
           <q-item-label

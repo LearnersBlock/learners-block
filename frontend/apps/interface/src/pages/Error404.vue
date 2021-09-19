@@ -4,14 +4,12 @@
       <div class="text-h1">
         {{ urlCode }}
       </div>
-
       <div
         class="text-h2"
         style="opacity:.4"
       >
         {{ $t('404') }}
       </div>
-
       <q-btn
         class="q-mt-xl"
         color="white"
