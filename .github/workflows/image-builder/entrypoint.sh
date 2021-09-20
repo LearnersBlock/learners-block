@@ -19,11 +19,12 @@ balena login --token ${BALENA_API_TOKEN} > /dev/null
 for line in $(cat $GITHUB_WORKSPACE/.github/workflows/image-builder/apps-$1.txt)
 do
   # Run each Balena push command concurrently
-  balena push $line &
+  balena push $line || tee fail &
 done
 
 # Wait for all Balena push commands to finish and check exit codes
-wait || exit 1
+wait < <(jobs -p)
+test -f fail && exit 1
 
 # Pre-load images
 for env in $GITHUB_WORKSPACE/.github/workflows/image-builder/env-files/$1/*.env; do
