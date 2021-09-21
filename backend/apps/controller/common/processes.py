@@ -126,15 +126,6 @@ def database_recover():
                       'File may be missing.', ex)
 
 
-def demote(user_uid, user_gid):
-    # Demote the user to pass UID/GID for one subprocess only
-    def set_ids():
-        os.setgid(user_gid)
-        os.setuid(user_uid)
-
-    return set_ids
-
-
 def human_size(nbytes):
     # Convert system file sizes to human readable
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
