@@ -1,4 +1,5 @@
 from common.models import User
+from common.system_processes import check_internet
 from common.wifi import wifi
 from flask import request
 from flask_jwt_extended import jwt_required
@@ -54,12 +55,9 @@ class wifi_connect(Resource):
 
 class wifi_connection_status(Resource):
     def get(self):
-        response = wifi.check_connection()
-
-        if response:
-            return {'status': 200, 'running': True}, 200
-        else:
-            return {'status': 206, 'running': False}, 206
+        return {'status': 200,
+                'running': wifi.check_connection(),
+                'connected': check_internet()}, 200
 
 
 class wifi_list_access_points(Resource):

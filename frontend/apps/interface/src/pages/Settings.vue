@@ -87,7 +87,7 @@
                 v-if="filesLoading"
                 color="primary"
                 size="2em"
-                class="mt-6 mr-6"
+                class="mt-1 mr-2"
               />
             </q-item-section>
           </q-item>
@@ -150,17 +150,17 @@
             </q-item-section>
             <q-item-section side>
               <q-toggle
-                v-if="!libraryLoading"
+                v-if="!libraryLoading && !wifiLoading"
                 v-model="library"
                 icon="import_contacts"
                 :disable="togglesLoading"
                 @update:model-value="updateLibrary"
               />
               <q-spinner
-                v-if="libraryLoading"
+                v-if="libraryLoading || wifiLoading"
                 color="primary"
                 size="2em"
-                class="mt-6 mr-6"
+                class="mt-1 mr-2"
               />
             </q-item-section>
           </q-item>
@@ -200,7 +200,7 @@
                 v-if="websiteLoading"
                 color="primary"
                 size="2em"
-                class="mt-6 mr-6"
+                class="mt-1 mr-2"
               />
             </q-item-section>
           </q-item>
@@ -675,6 +675,15 @@
             {{ $t('portainer') }}
           </q-item-label>
           <q-item class="mb-5">
+            <q-tooltip
+              v-if="portainerUnavailable && !portainerLoading"
+              class="text-caption text-center"
+              anchor="top middle"
+              self="center middle"
+              :offset="[10, 10]"
+            >
+              {{ $t('need_connection') }}
+            </q-tooltip>
             <q-item-section
               top
               avatar
@@ -693,16 +702,16 @@
                 caption
               >
                 {{ $t('portainer_starting_at') }} <a
-                  href="/portainer/"
+                  :href="'http://' + windowHostname + ':9000'"
                   target="_blank"
-                >http://{{ windowHostname }}/portainer/</a>
+                >http://{{ windowHostname }}:9000</a>
               </q-item-label>
             </q-item-section>
             <q-item-section side>
               <q-toggle
                 v-if="!portainerLoading"
                 v-model="portainer"
-                :disable="portainerLoading"
+                :disable="portainerLoading || portainerUnavailable"
                 icon="widgets"
                 @update:model-value="updatePortainer"
               />
@@ -799,15 +808,14 @@ export default defineComponent({
     const currentStartPage = ref<any>()
     const customStartPageInput = ref<boolean>(false)
     const files = ref<boolean>(false)
-    const filesLoading = ref<boolean>(false)
-    const hostname = ref<string>('')
+    const filesLoading = ref<boolean>(true)
     const hostnameValid = ref()
     const internet = ref<boolean>(false)
     const lang = computed(() => {
       return ref($q.lang.isoName)
     })
     const library = ref<boolean>(false)
-    const libraryLoading = ref<boolean>(false)
+    const libraryLoading = ref<boolean>(true)
     const loading = ref<boolean>(false)
     const loginPasswordStatus = ref<boolean>(false)
     const loginPasswordToggle = ref<boolean>(false)
@@ -819,6 +827,7 @@ export default defineComponent({
     const pages = ref(pagesString)
     const portainer = ref<boolean>(false)
     const portainerLoading = ref<boolean>(true)
+    const portainerUnavailable = ref<boolean>(true)
     const pruningFiles = ref<boolean>(false)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
@@ -833,7 +842,7 @@ export default defineComponent({
     const togglesLoading = ref<boolean>(true)
     const appTableVisible = ref(false)
     const website = ref<boolean>(false)
-    const websiteLoading = ref<boolean>(false)
+    const websiteLoading = ref<boolean>(true)
     const wifi = ref<boolean>(false)
     const wifiPassword = ref<string>('')
     const wifiPasswordStatus = ref<boolean>(false)
@@ -878,36 +887,81 @@ export default defineComponent({
 
     const rows = ref<any>(null)
 
-    // API calls for Axios Spread
-    const fetchedHostName = Axios.get(`${api.value}/v1/hostname`)
-    const fetchedInternetConnectionStatus = Axios.get(`${api.value}/v1/internet/connectionstatus`)
-    const fetchedSettings = Axios.get(`${api.value}/v1/settingsui`)
-
     onMounted(() => {
       apiCall()
-      apiCallAwait()
     })
 
     function apiCall () {
-      Axios.get(`${api.value}/v1/wifi/connectionstatus`).then((response) => {
+      // API calls for Axios Spread
+      const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connectionstatus`)
+      const fetchedPortainerSettings = Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'status' })
+
+      // Group dependent calls together for Portainer and Connection Status
+      Axios.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(Axios.spread(function (res1, res2) {
         // Set connection status
-        if (response.data.running) {
+        if (res1.data.running) {
           wifi.value = true
         }
 
+        // Set internet connection status
+        if (res1.data.connected) {
+          internet.value = true
+          refreshApps()
+        } else {
+          internet.value = false
+          fetchApps()
+        }
+
+        // Set Portainer status. Dependent on having fetched internet connection status.
+        if (res2.data.installed === true) {
+          portainer.value = true
+          portainerUnavailable.value = false
+        } else if (!res2.data.image && !internet.value) {
+          portainer.value = false
+          portainerUnavailable.value = true
+        } else {
+          portainer.value = false
+          portainerUnavailable.value = false
+        }
+
+        portainerLoading.value = false
         wifiLoading.value = false
-      }).catch(e => {
+      })).catch(e => {
         console.log(e.message)
+        $q.notify({ type: 'negative', message: t('error') })
       })
 
-      // Set Portainer status
-      Axios.post(`${api.value}/v1/container/status`, { container_name: 'portainer' }).then((response) => {
-        if (response.data.container_status) {
-          portainer.value = true
+      // Fetch settings UI configuration
+      Axios.get(`${api.value}/v1/settingsui`).then((response) => {
+        // Set settings toggle status
+        currentStartPage.value = response.data.start_page
+        files.value = response.data.files
+        website.value = response.data.website
+        library.value = response.data.library
+
+        // Check if disable password button should be visible
+        if (!response.data.default_login_password_set) {
+          loginPasswordStatus.value = true
+          loginPasswordToggle.value = true
         }
-        portainerLoading.value = false
+
+        // Check if disable wifi password button should be visible
+        if (response.data.wifi_password_set) {
+          wifiPasswordStatus.value = true
+          wifiPasswordToggle.value = true
+        }
+
+        // Stop loading toggles
+        togglesLoading.value = false
+
+        setStartPage()
+
+        filesLoading.value = false
+        libraryLoading.value = false
+        websiteLoading.value = false
       }).catch(e => {
         console.log(e.message)
+        $q.notify({ type: 'negative', message: t('error') })
       })
 
       // Set SysInfo status
@@ -916,56 +970,8 @@ export default defineComponent({
         sysInfoLoading.value = false
       }).catch(e => {
         console.log(e.message)
+        $q.notify({ type: 'negative', message: t('error') })
       })
-    }
-
-    async function apiCallAwait () {
-      filesLoading.value = true
-      libraryLoading.value = true
-      websiteLoading.value = true
-      await Axios.all([fetchedSettings, fetchedInternetConnectionStatus,
-        fetchedHostName]).then(Axios.spread(function (res1, res2, res3) {
-        // Set settings toggle status
-        currentStartPage.value = res1.data.start_page
-        files.value = res1.data.files
-        website.value = res1.data.website
-        library.value = res1.data.library
-
-        // Check if disable password button should be appTableVisible
-        if (!res1.data.default_login_password_set) {
-          loginPasswordStatus.value = true
-          loginPasswordToggle.value = true
-        }
-
-        // Check if disable wifi password button should be appTableVisible
-        if (res1.data.wifi_password_set) {
-          wifiPasswordStatus.value = true
-          wifiPasswordToggle.value = true
-        }
-
-        // Set internet connection status
-        if (res2.data.connected) {
-          internet.value = true
-          refreshApps()
-        } else {
-          internet.value = false
-          fetchApps()
-        }
-
-        // Set hostname
-        hostname.value = res3.data.hostname
-
-        // Stop loading toggles
-        togglesLoading.value = false
-      })).catch(e => {
-        console.log(e.message)
-      })
-
-      setStartPage()
-
-      filesLoading.value = false
-      libraryLoading.value = false
-      websiteLoading.value = false
     }
 
     const changeStartPage = () => {
@@ -1249,7 +1255,18 @@ export default defineComponent({
             dependencies: row.dependencies
           }).then(function (response) {
             if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('success') })
+              $q.notify({
+                type: 'positive',
+                timeout: 0,
+                actions: [
+                  {
+                    label: t('close'),
+                    color: 'white',
+                    handler: () => { /* ... */ }
+                  }
+                ],
+                message: t('app_installed')
+              })
             } else {
               $q.notify({ type: 'negative', message: t('error') })
             }
@@ -1315,7 +1332,18 @@ export default defineComponent({
             dependencies: row.dependencies
           }).then(function (response) {
             if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('success') })
+              $q.notify({
+                type: 'positive',
+                timeout: 0,
+                actions: [
+                  {
+                    label: t('close'),
+                    color: 'white',
+                    handler: () => { /* ... */ }
+                  }
+                ],
+                message: t('app_installed')
+              })
             } else {
               $q.notify({ type: 'negative', message: t('error') })
             }
@@ -1364,13 +1392,13 @@ export default defineComponent({
     const updatePortainer = async () => {
       portainerLoading.value = true
       if (portainer.value) {
-        const portainerStarter = await Axios.post(`${api.value}/v1/container/start`, { container_name: 'portainer' })
+        const portainerStarter = await Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'start' })
         if (portainerStarter.status === 404) {
           $q.notify({ type: 'negative', message: t('portainer_unavailable') })
           portainer.value = false
         }
       } else {
-        await Axios.post(`${api.value}/v1/container/stop`, { container_name: 'portainer' })
+        await Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'remove' })
       }
 
       setTimeout(() => {
@@ -1416,7 +1444,6 @@ export default defineComponent({
       customStartPageInput,
       files,
       filesLoading,
-      hostname,
       hostnameValid,
       hostnameWarn,
       internet,
@@ -1430,6 +1457,7 @@ export default defineComponent({
       pages,
       portainer,
       portainerLoading,
+      portainerUnavailable,
       pruningFiles,
       pruneSystemFiles,
       redirect,

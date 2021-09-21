@@ -1,4 +1,5 @@
 from common.models import User
+from common.system_processes import check_internet
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
@@ -24,52 +25,6 @@ def wifi_toggle():
 
     return "This is a dev function, not for production. " \
         f"Wifi is now set to {wifistatus}"
-
-
-class container_start(Resource):
-    @jwt_required()
-    def post(self):
-        content = request.get_json()
-
-        if content["container_name"] == 'portainer':
-            global portainerstatus
-            time.sleep(3)
-            portainerstatus = True
-            return {'status': 200,
-                    'message': "Supervisor responses here"}, 200
-
-        return {'status': 500, 'container_status': False}, 500
-
-
-class container_status(Resource):
-    def post(self):
-        content = request.get_json()
-
-        if content["container_name"] == 'portainer':
-            global portainerstatus
-            time.sleep(5)
-            if portainerstatus is True:
-                return {'status': 200, 'container_status': True}, 200
-            else:
-                return {'status': 200, 'container_status': False}, 200
-
-        return {'status': 500, 'container_status': False}, 500
-
-
-class container_stop(Resource):
-    @jwt_required()
-    def post(self):
-        content = request.get_json()
-
-        if content["container_name"] == 'portainer':
-            global portainerstatus
-            time.sleep(3)
-            portainerstatus = False
-
-            return {'status': 200,
-                    'message': "Supervisor responses here"}, 200
-
-        return {'status': 500, 'container_status': False}, 500
 
 
 class device(Resource):
@@ -135,8 +90,9 @@ class wifi_connect(Resource):
 class wifi_connection_status(Resource):
     def get(self):
         global wifistatus
-        time.sleep(3)
-        return {'status': 200, 'running': wifistatus}, 200
+        time.sleep(1.5)
+        return {'status': 200, 'running': wifistatus,
+                'connected': check_internet()}, 200
 
 
 class wifi_forget(Resource):

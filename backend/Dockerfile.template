@@ -39,9 +39,6 @@ RUN mkdir -p db
 # Insert application
 COPY apps/controller .
 
-# Add in default Portainer database
-COPY apps/portainer/portainer.db portainer/portainer.db
-
 # Check for database migrations then launch controller
 CMD ["sh", "start.sh"]
 
