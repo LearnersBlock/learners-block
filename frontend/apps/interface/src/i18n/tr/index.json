@@ -92,7 +92,7 @@
     "invalid_wifi_entry": "Wi-Fi parolaları 8 karakter veya daha fazla olmalı ve boşluk içermemelidir.",
     "invalid_entry": "Geçersiz giriş.",
     "app_store_app": "Uygulama Mağazası",
-    "this_may_take_time": "Bağlantı hızınıza bağlı olarak bu biraz zaman alabilir. Lütfen sabırlı olun.",
+    "this_may_take_time": "Bağlantı hızınıza bağlı olarak bu biraz zaman alabilir.",
     "author": "Yazar",
     "description": "Açıklama",
     "installed": "Kurulu",
@@ -151,5 +151,6 @@
     "set_wifi_password": "Wi-Fi Erişim Noktası Parolasını Ayarla",
     "set_wifi_password_desc": "Wi-Fi aracılığıyla Block'unuza erişmek için bir parola belirleyin.",
     "networking": "Ağ",
-    "connect_wifi_desc": "Block'unuzu yakındaki bir Wi-Fi ağına bağlayın."
+    "connect_wifi_desc": "Block'unuzu yakındaki bir Wi-Fi ağına bağlayın.",
+    "app_installed": "Uygulama kuruldu. Uygulamanın başlaması ve kullanılabilir hale gelmesi biraz zaman alabilir."
 }
