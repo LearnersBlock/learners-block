@@ -96,13 +96,13 @@ class portainer(Resource):
         elif content['cmd'] == 'status':
             # Fetch container status and check if image exists on the system
             container_status = docker_py.status(name="portainer")
+            image_status = docker_py.image_status(portainer_image)
 
             if container_status['response'] is not False:
-                return {"installed": container_status["response"]}, \
+                return {"installed": container_status["response"],
+                        "image": image_status}, \
                         container_status["status_code"]
             else:
-                image_status = docker_py.image_status(portainer_image)
-
                 return {"installed": False, "image": image_status}, \
                     container_status["status_code"]
 
@@ -136,8 +136,6 @@ class system_prune(Resource):
                                                [dependency]
                                                ["image"],
                                                network=app.name)
-
-                        print_message('system_prune', deps["response"])
             except Exception as ex:
                 print_message('system_prune', deps["response"], ex)
 

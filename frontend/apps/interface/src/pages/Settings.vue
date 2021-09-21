@@ -708,10 +708,10 @@
                 >http://{{ windowHostname }}:9000</a>
               </q-item-label>
               <q-item-label
-                v-if="portainer && portainerLoading"
+                v-if="portainer && portainerLoading && !portainerImageExists"
                 caption
               >
-                {{ $t('portainer_starting') }}
+                {{ $t('portainer_installing') }}
               </q-item-label>
             </q-item-section>
             <q-item-section side>
@@ -834,6 +834,7 @@ export default defineComponent({
     ]
     const pages = ref(pagesString)
     const portainer = ref<boolean>(false)
+    const portainerImageExists = ref<boolean>(true)
     const portainerLoading = ref<boolean>(true)
     const portainerUnavailable = ref<boolean>(true)
     const pruningFiles = ref<boolean>(false)
@@ -929,6 +930,7 @@ export default defineComponent({
           portainerUnavailable.value = true
         } else {
           portainer.value = false
+          portainerImageExists.value = res2.data.image
           portainerUnavailable.value = false
         }
 
@@ -1054,6 +1056,7 @@ export default defineComponent({
       }).onOk(() => {
         pruningFiles.value = true
         Axios.get(`${api.value}/v1/system/prune`).then(() => {
+          portainerImageExists.value = false
           pruningFiles.value = false
           $q.notify({ type: 'positive', message: t('success') })
         })
@@ -1408,14 +1411,13 @@ export default defineComponent({
         if (portainerStarter.status === 404) {
           $q.notify({ type: 'negative', message: t('portainer_unavailable') })
           portainer.value = false
+        } else {
+          portainerImageExists.value = true
         }
       } else {
         await Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'remove' })
       }
-
-      setTimeout(() => {
-        portainerLoading.value = false
-      }, 1)
+      portainerLoading.value = false
     }
 
     const updateWebsite = async () => {
@@ -1469,6 +1471,7 @@ export default defineComponent({
       newStartPathWarn,
       pages,
       portainer,
+      portainerImageExists,
       portainerLoading,
       portainerUnavailable,
       pruningFiles,
