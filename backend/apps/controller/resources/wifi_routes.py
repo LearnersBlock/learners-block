@@ -56,8 +56,8 @@ class wifi_connect(Resource):
 class wifi_connection_status(Resource):
     def get(self):
         return {'status': 200,
-                'running': wifi.check_connection(),
-                'connected': check_internet()}, 200
+                'wifi': wifi.check_connection(),
+                'internet': check_internet()}, 200
 
 
 class wifi_list_access_points(Resource):

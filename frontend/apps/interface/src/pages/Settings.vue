@@ -899,12 +899,12 @@ export default defineComponent({
       // Group dependent calls together for Portainer and Connection Status
       Axios.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(Axios.spread(function (res1, res2) {
         // Set connection status
-        if (res1.data.running) {
+        if (res1.data.wifi) {
           wifi.value = true
         }
 
         // Set internet connection status
-        if (res1.data.connected) {
+        if (res1.data.internet) {
           internet.value = true
           refreshApps()
         } else {
