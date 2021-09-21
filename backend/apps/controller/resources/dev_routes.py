@@ -36,6 +36,7 @@ class host_config(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
+        time.sleep(3)
         print(f"Hostname changed to '{content['hostname']}'")
         return {
             'status': 200,

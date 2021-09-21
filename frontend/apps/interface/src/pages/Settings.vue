@@ -655,6 +655,7 @@
                   round
                   dense
                   flat
+                  :loading="hostnameChanging"
                   color="primary"
                   icon="check_circle_outline"
                   :disable="newHostname"
@@ -809,6 +810,7 @@ export default defineComponent({
     const customStartPageInput = ref<boolean>(false)
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(true)
+    const hostnameChanging = ref<boolean>(false)
     const hostnameValid = ref()
     const internet = ref<boolean>(false)
     const lang = computed(() => {
@@ -1373,9 +1375,13 @@ export default defineComponent({
 
     const updateHostname = () => {
       if (newHostname.value) {
+        hostnameChanging.value = true
         Axios.post(`${api.value}/v1/hostconfig`, {
           hostname: newHostname.value
-        }).then(() => { $q.notify({ type: 'positive', message: t('hostname_changed_notification') }) })
+        }).then(() => {
+          $q.notify({ type: 'positive', message: t('hostname_changed_notification') })
+          hostnameChanging.value = false
+        })
       }
     }
 
@@ -1420,13 +1426,13 @@ export default defineComponent({
       if (wifi.value === false) {
         $router.push('/wifi')
       } else {
-        wifiLoading.value = true
         $q.dialog({
           title: t('confirm'),
           message: t('disconnect_wifi'),
           cancel: true,
           persistent: true
         }).onOk(() => {
+          wifiLoading.value = true
           connectDisconnectWifi()
           // Add delay to improve user interaction
           setTimeout(() => {
@@ -1444,6 +1450,7 @@ export default defineComponent({
       customStartPageInput,
       files,
       filesLoading,
+      hostnameChanging,
       hostnameValid,
       hostnameWarn,
       internet,
