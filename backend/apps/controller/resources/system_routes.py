@@ -64,15 +64,11 @@ class portainer(Resource):
                 ['/var/run/balena-engine.sock:/var/run/balena-engine.sock',
                  'portainer_data:/data']
             command = "-H unix://var/run/balena-engine.sock " \
-                      "--admin-password=$2y$05$BZL" \
-                      "cvMK8JXjo1qNIKbBIjOPcbVfnvb5PSbDm0CgNgwAEBGI5Dky/W " \
                       "-l portainer=hidden"
         else:
             volumes = ['/var/run/docker.sock:/var/run/docker.sock',
                        'portainer_data:/data']
             command = "-H unix://var/run/docker.sock " \
-                      "--admin-password=$2y$05$BZL" \
-                      "cvMK8JXjo1qNIKbBIjOPcbVfnvb5PSbDm0CgNgwAEBGI5Dky/W " \
                       "-l portainer=hidden"
 
         if content['cmd'] == 'start':
