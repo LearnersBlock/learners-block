@@ -913,7 +913,7 @@ export default defineComponent({
         }
 
         // Set Portainer status. Dependent on having fetched internet connection status.
-        if (res2.data.installed === true) {
+        if (res2.data.installed) {
           portainer.value = true
           portainerUnavailable.value = false
         } else if (!res2.data.image && !internet.value) {

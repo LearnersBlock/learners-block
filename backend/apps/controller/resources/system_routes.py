@@ -73,31 +73,36 @@ class portainer(Resource):
 
         if content['cmd'] == 'start':
             # Run the primary container
-            response = docker_py.run(image=portainer_image,
-                                     name=name,
-                                     ports=ports,
-                                     privileged=privileged,
-                                     labels=labels,
-                                     volumes=volumes,
-                                     command=command)
+            container_status = docker_py.run(image=portainer_image,
+                                             name=name,
+                                             ports=ports,
+                                             privileged=privileged,
+                                             labels=labels,
+                                             volumes=volumes,
+                                             command=command)
 
-            return {"installed": response["response"]}, response["status_code"]
+            return {"installed": container_status["response"]}, \
+                container_status["status_code"]
 
         elif content['cmd'] == 'remove':
-            response = docker_py.remove(name="portainer")
-            return {"installed": response["response"]}, response["status_code"]
+            # Remove the container (but not the image)
+            container_status = docker_py.remove(name="portainer")
+
+            return {"installed": container_status["response"]}, \
+                container_status["status_code"]
 
         elif content['cmd'] == 'status':
             # Fetch container status and check if image exists on the system
-            response = docker_py.status(name="portainer")
-            image_status = docker_py.image_status(portainer_image)
+            container_status = docker_py.status(name="portainer")
 
-            if response["response"] == 'running':
-                return {"installed": True, "image": image_status}, \
-                    response["status_code"]
+            if container_status['response'] is not False:
+                return {"installed": container_status["response"]}, \
+                        container_status["status_code"]
             else:
+                image_status = docker_py.image_status(portainer_image)
+
                 return {"installed": False, "image": image_status}, \
-                    response["status_code"]
+                    container_status["status_code"]
 
 
 class system_info(Resource):

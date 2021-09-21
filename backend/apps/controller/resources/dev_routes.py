@@ -91,8 +91,8 @@ class wifi_connection_status(Resource):
     def get(self):
         global wifistatus
         time.sleep(1.5)
-        return {'status': 200, 'running': wifistatus,
-                'connected': check_internet()}, 200
+        return {'status': 200, 'wifi': wifistatus,
+                'internet': check_internet()}, 200
 
 
 class wifi_forget(Resource):
