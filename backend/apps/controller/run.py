@@ -26,7 +26,7 @@ from resources.filemanager_routes import filemanager_rename
 from resources.filemanager_routes import filemanager_unzip
 from resources.filemanager_routes import filemanager_upload
 from resources.system_routes import health_check
-from resources.system_routes import internet_connection_status
+from resources.system_routes import portainer
 from resources.system_routes import system_info
 from resources.system_routes import system_prune
 import atexit
@@ -140,8 +140,7 @@ if __name__ == '__main__':
     if os.environ['FLASK_ENV'].lower() == "production":
         from boot.production import handle_exit, handle_sigterm, startup
         from resources.system_routes import hostname
-        from resources.supervisor_routes import container_start, \
-            container_status, container_stop, device, host_config, \
+        from resources.supervisor_routes import device, host_config, \
             journal_logs, update, uuid
         from resources.wifi_routes import set_wifi, wifi_connect, \
             wifi_connection_status, wifi_forget, wifi_forget_all, \
@@ -164,19 +163,16 @@ if __name__ == '__main__':
         except Exception as ex:
             print_message('__name__', 'Fail on startup.', ex)
     else:
-        from resources.dev_routes import container_start, container_status, \
-             container_stop, device, host_config, hostname, journal_logs, \
-             set_wifi, update, uuid, wifi_connect, wifi_connection_status, \
-             wifi_forget, wifi_forget_all, wifi_list_access_points
+        from resources.dev_routes import device, host_config, hostname, \
+            journal_logs, set_wifi, update, uuid, wifi_connect, \
+            wifi_connection_status, wifi_forget, wifi_forget_all, \
+            wifi_list_access_points
 
         print("Api-v1 - Starting API (Development)...")
 
     # Configure endpoints
     api.add_resource(app_store_set, '/v1/appstore/set')
     api.add_resource(app_store_status, '/v1/appstore/status')
-    api.add_resource(container_start, '/v1/container/start')
-    api.add_resource(container_status, '/v1/container/status')
-    api.add_resource(container_stop, '/v1/container/stop')
     api.add_resource(device, '/v1/device')
     api.add_resource(docker_pull, '/v1/docker/pull')
     api.add_resource(docker_remove, '/v1/docker/remove')
@@ -196,8 +192,6 @@ if __name__ == '__main__':
     api.add_resource(health_check, '/')
     api.add_resource(host_config, '/v1/hostconfig')
     api.add_resource(hostname, '/v1/hostname')
-    api.add_resource(internet_connection_status,
-                     '/v1/internet/connectionstatus')
     api.add_resource(journal_logs, '/v1/journallogs')
     api.add_resource(login, '/v1/login')
     api.add_resource(logout, '/v1/logout')
@@ -206,6 +200,7 @@ if __name__ == '__main__':
     api.add_resource(set_ui, '/v1/setui')
     api.add_resource(set_wifi, '/v1/setwifi')
     api.add_resource(system_info, '/v1/system/info')
+    api.add_resource(portainer, '/v1/system/portainer')
     api.add_resource(system_prune, '/v1/system/prune')
     api.add_resource(update, '/v1/update')
     api.add_resource(uuid, '/v1/uuid')

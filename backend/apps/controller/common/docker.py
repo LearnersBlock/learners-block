@@ -14,17 +14,24 @@ else:
 
 
 class docker_py():
-    def prune(image, network):
+    def image_status(image):
+        if client.images.list(image):
+            return True
+        else:
+            return False
+
+    def prune(image, network=None):
         try:
             client.images.remove(image=image)
         except docker.errors.ImageNotFound:
-            # If container was never installed then continue
+            # If image was never downloaded then continue
             pass
 
         try:
             # Check that no dangling networks are left
-            app_network = client.networks.get(network)
-            app_network.remove()
+            if network is not None:
+                app_network = client.networks.get(network)
+                app_network.remove()
         except Exception:
             # Pass if network had already been removed
             pass
@@ -63,7 +70,8 @@ class docker_py():
 
         return {"response": "done", "status_code": 200}
 
-    def run(env_vars, image, name, ports, volumes, network, detach=True):
+    def run(image, name, ports={}, volumes={}, detach=True, network='lbsystem',
+            env_vars={}, privileged=False, command='', labels={}):
         # If network doesn't yet exist, create it
         try:
             client.networks.create(network,
@@ -77,13 +85,23 @@ class docker_py():
             response = client.containers.run(image,
                                              environment=env_vars,
                                              detach=True,
+                                             privileged=privileged,
                                              ports=ports,
                                              name=name,
+                                             labels=labels,
                                              volumes=volumes,
                                              network=network,
-                                             restart_policy={"Name": "always"})
+                                             restart_policy={"Name": "always"},
+                                             command=command)
         except Exception as ex:
             print_message('docker.run', 'Failed to run container', ex)
             return {"response": str(ex), "status_code": 500}
 
         return {"response": str(response), "status_code": 200}
+
+    def status(name):
+        try:
+            container = client.containers.get(name)
+        except docker.errors.NotFound:
+            return {"response": False, "status_code": 200}
+        return {"response": str(container.status), "status_code": 200}

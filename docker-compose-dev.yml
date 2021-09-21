@@ -30,12 +30,12 @@ services:
       portainer: hidden
     volumes:
       - 'asset_share:/app/public/interface_dev/public/asset_share'
+      - 'file_storage:/app/public/storage'       
       - './frontend/apps/interface:/app/public/interface_dev:cached'
-      - './frontend/apps/library:/app/public/library:cached'
-      - 'file_storage:/app/public/storage'            
+      - './frontend/apps/library:/app/public/library:cached'     
       - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
 
 volumes:
-  file_storage:
   asset_share:
+  file_storage:
   yarn_cache_frontend:

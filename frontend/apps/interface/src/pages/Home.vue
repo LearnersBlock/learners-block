@@ -258,7 +258,7 @@ export default defineComponent({
     }
 
     function redirect (path) {
-      location.href = path
+      window.open(path, '_blank')
     }
 
     return {

@@ -39,6 +39,7 @@ class settings_ui(Resource):
     def get(self):
         lb_database = User.query.filter_by(username='lb').first()
 
+        # Check if there is a user password set for display disable button
         verified_password = User.verify_password(' ',
                                                  lb_database.password)
 

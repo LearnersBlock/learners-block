@@ -10,7 +10,6 @@ const routes: RouteRecordRaw[] = [
       { path: '/epub_reader', component: () => import('pages/Epub.vue'), name: 'epub_reader' },
       { path: '/filemanager', component: () => import('pages/FileManager.vue'), name: 'filemanager' },
       { path: '/login', component: () => import('pages/Login.vue'), name: 'login' },
-      { path: '/portainer', redirect: '/portainer//' },
       { path: '/settings', component: () => import('pages/Settings.vue'), name: 'settings' },
       { path: '/wifi', component: () => import('pages/WifiConnect.vue'), name: 'wifi' },
       { path: '/401', component: () => import('pages/401.vue'), name: '401' }

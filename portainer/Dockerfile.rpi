@@ -1,3 +1,0 @@
-FROM busybox:1.33.0@sha256:5e59b80dd0d2abf6a200abecd99d8c6dfb39414ba2bac60871ac53348931b983
-
-CMD echo "No Portainer Image Available for RPI Zero"

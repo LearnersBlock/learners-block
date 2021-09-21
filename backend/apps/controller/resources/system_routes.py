@@ -1,14 +1,18 @@
 from common.docker import docker_py
 from common.models import App_Store
-from common.system_processes import check_internet
 from common.system_processes import curl
 from common.system_processes import human_size
 from dotenv import dotenv_values
+from flask import request
 from flask_restful import Resource
 from resources.errors import print_message
 from werkzeug import serving
 import json
+import os
 import shutil
+
+# Portainer version for LB system
+portainer_image = "portainer/portainer-ce:2.6.3-alpine"
 
 # Import .version file
 version = dotenv_values(".version")
@@ -44,12 +48,60 @@ class hostname(Resource):
         }, 200
 
 
-class internet_connection_status(Resource):
-    def get(self):
-        if check_internet():
-            return {'status': 200, 'connected': True}, 200
+class portainer(Resource):
+    def post(self):
+        content = request.get_json()
+
+        name = "portainer"
+        ports = {"9000/tcp": 9000, "8000/tcp": 8000}
+        privileged = True
+        labels = {"io.balena.features.balena-socket": "1",
+                  "portainer": "hidden"}
+
+        # Mount to standard docker if in dev env
+        if os.environ['FLASK_ENV'].lower() == "production":
+            volumes = \
+                ['/var/run/balena-engine.sock:/var/run/balena-engine.sock',
+                 'portainer_data:/data']
+            command = "-H unix://var/run/balena-engine.sock " \
+                      "--admin-password=$2y$05$BZL" \
+                      "cvMK8JXjo1qNIKbBIjOPcbVfnvb5PSbDm0CgNgwAEBGI5Dky/W " \
+                      "-l portainer=hidden"
         else:
-            return {'status': 206, 'connected': False}, 206
+            volumes = ['/var/run/docker.sock:/var/run/docker.sock',
+                       'portainer_data:/data']
+            command = "-H unix://var/run/docker.sock " \
+                      "--admin-password=$2y$05$BZL" \
+                      "cvMK8JXjo1qNIKbBIjOPcbVfnvb5PSbDm0CgNgwAEBGI5Dky/W " \
+                      "-l portainer=hidden"
+
+        if content['cmd'] == 'start':
+            # Run the primary container
+            response = docker_py.run(image=portainer_image,
+                                     name=name,
+                                     ports=ports,
+                                     privileged=privileged,
+                                     labels=labels,
+                                     volumes=volumes,
+                                     command=command)
+
+            return {"installed": response["response"]}, response["status_code"]
+
+        elif content['cmd'] == 'remove':
+            response = docker_py.remove(name="portainer")
+            return {"installed": response["response"]}, response["status_code"]
+
+        elif content['cmd'] == 'status':
+            # Fetch container status and check if image exists on the system
+            response = docker_py.status(name="portainer")
+            image_status = docker_py.image_status(portainer_image)
+
+            if response["response"] == 'running':
+                return {"installed": True, "image": image_status}, \
+                    response["status_code"]
+            else:
+                return {"installed": False, "image": image_status}, \
+                    response["status_code"]
 
 
 class system_info(Resource):
@@ -66,12 +118,12 @@ class system_info(Resource):
 
 class system_prune(Resource):
     def get(self):
-        # Prune unused docker images
         installed_apps = App_Store.query.filter(App_Store.
                                                 status == 'install')
 
+        # Prune app store
         for app in installed_apps:
-            # Prune dependencies
+            # Prune app store dependencies
             try:
                 if app.dependencies:
                     json_dep = json.loads(app.dependencies)
@@ -81,10 +133,17 @@ class system_prune(Resource):
                                                ["image"],
                                                network=app.name)
 
-                        print_message('app_store_set', deps["response"])
+                        print_message('system_prune', deps["response"])
             except Exception as ex:
-                print_message('app_store_set', deps["response"], ex)
+                print_message('system_prune', deps["response"], ex)
 
             docker_py.prune(image=app.image, network=app.name)
+
+        # Prune Portainer image
+        try:
+            docker_py.prune(image=portainer_image)
+        except Exception as ex:
+            print_message('system_prune',
+                          'Failed to remove Portainer image.', ex)
 
         return {'status': 200, 'message': 'done'}, 200
