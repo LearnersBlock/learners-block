@@ -81,6 +81,7 @@ class uuid(Resource):
 
 
 class wifi_connect(Resource):
+    @jwt_required()
     def post(self):
         content = request.get_json()
 

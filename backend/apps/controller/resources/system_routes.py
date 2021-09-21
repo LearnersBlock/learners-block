@@ -4,6 +4,7 @@ from common.processes import curl
 from common.processes import human_size
 from dotenv import dotenv_values
 from flask import request
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from common.errors import print_message
 from werkzeug import serving
@@ -49,6 +50,7 @@ class hostname(Resource):
 
 
 class portainer(Resource):
+    @jwt_required()
     def post(self):
         content = request.get_json()
 
@@ -118,6 +120,7 @@ class system_info(Resource):
 
 
 class system_prune(Resource):
+    @jwt_required()
     def get(self):
         installed_apps = App_Store.query.filter(App_Store.
                                                 status == 'install')
