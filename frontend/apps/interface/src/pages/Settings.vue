@@ -707,6 +707,12 @@
                   target="_blank"
                 >http://{{ windowHostname }}:9000</a>
               </q-item-label>
+              <q-item-label
+                v-if="portainer && portainerLoading"
+                caption
+              >
+                {{ $t('portainer_starting') }}
+              </q-item-label>
             </q-item-section>
             <q-item-section side>
               <q-toggle
