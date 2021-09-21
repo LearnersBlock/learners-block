@@ -99,7 +99,7 @@
     "no_apps_to_display": "Il n’y a aucune application à afficher. Essayez de rafraîchir votre base de données d’applications avec l’icône ci-dessus.",
     "author": "Auteur",
     "description": "Description",
-    "this_may_take_time": "Ceci peut prendre un certain temps en fonction de la vitesse de votre connexion. Veuillez patienter.",
+    "this_may_take_time": "Ceci peut prendre un certain temps en fonction de la vitesse de votre connexion.",
     "app_store_app": "Appli de magasin d’applications",
     "invalid_wifi_entry": "Les mots de passe Wi-Fi doivent comporter 8 caractères ou plus et ne pas contenir d’espaces.",
     "invalid_entry": "Entrée invalide.",
@@ -151,5 +151,6 @@
     "connect_wifi_desc": "Connecterz votre Block à un réseau Wi-Fi proche.",
     "network_name": "Nom du réseau",
     "enter_hidden_network": "Entrez un nom de Wi-Fi caché.",
-    "system_maintenance": "Maintenance du système"
+    "system_maintenance": "Maintenance du système",
+    "app_installed": "L'application a été installée. Le démarrage et la disponibilité de l'application peuvent prendre un certain temps."
 }
