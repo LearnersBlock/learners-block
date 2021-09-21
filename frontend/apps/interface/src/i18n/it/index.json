@@ -99,7 +99,7 @@
     "no_apps_to_display": "Non ci sono applicazioni da visualizzare. Prova ad aggiornare la banca dati delle applicazioni con l’icona qui sopra.",
     "author": "Autore",
     "description": "Descrizione",
-    "this_may_take_time": "Questo potrebbe richiedere un po’ di tempo a seconda della velocità della tua connessione. Per favore, sii paziente.",
+    "this_may_take_time": "Questo potrebbe richiedere un po’ di tempo a seconda della velocità della tua connessione.",
     "app_store_app": "Negozio di applicazioni",
     "invalid_wifi_entry": "Le password Wi-Fi devono essere di 8 caratteri o più e non devono contenere spazi.",
     "invalid_entry": "Voce non valida.",
@@ -151,5 +151,6 @@
     "general": "Generale",
     "network_name": "Nome della rete",
     "enter_hidden_network": "Inserisci un nome Wi-Fi nascosto.",
-    "system_maintenance": "Manutenzione del sistema"
+    "system_maintenance": "Manutenzione del sistema",
+    "app_installed": "L’applicazione è stata installata. Potrebbe essere necessario un po’ di tempo perché l’applicazione si avvii e diventi disponibile."
 }
