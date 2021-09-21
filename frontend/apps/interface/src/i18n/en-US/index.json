@@ -151,5 +151,6 @@
     "security": "Security",
     "enter_hidden_network": "Enter a hidden WiFi name.",
     "network_name": "Network Name",
-    "system_maintenance": "System Maintenance"
+    "system_maintenance": "System Maintenance",
+    "app_installed": "The application has been installed. It may take some time for the application to start and become available."
 }
