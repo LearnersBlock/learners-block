@@ -35,7 +35,7 @@ services:
       - 'file_storage:/app/public/storage'
     labels:
       portainer: hidden
-    privileged: true
+    privileged: true # Required for USB access
 
 volumes:
   asset_share:
