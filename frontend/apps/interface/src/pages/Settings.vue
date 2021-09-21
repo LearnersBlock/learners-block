@@ -927,6 +927,7 @@ export default defineComponent({
           portainerUnavailable.value = false
         } else if (!res2.data.image && !internet.value) {
           portainer.value = false
+          portainerImageExists.value = res2.data.image
           portainerUnavailable.value = true
         } else {
           portainer.value = false
