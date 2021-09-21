@@ -1,5 +1,5 @@
 from flask_restful import abort
-from resources.errors import print_message
+from common.errors import print_message
 import os
 import requests
 import shutil

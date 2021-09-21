@@ -1,7 +1,7 @@
-from common.system_processes import check_internet
-from common.system_processes import curl
+from common.processes import check_internet
+from common.processes import curl
 from common.wifi import wifi
-from resources.errors import print_message
+from common.errors import print_message
 from resources.supervisor_routes import update
 import subprocess
 import sys

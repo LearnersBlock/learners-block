@@ -1,5 +1,5 @@
 from common.models import User
-from resources.errors import print_message
+from common.errors import print_message
 from run import app
 import os
 import subprocess
