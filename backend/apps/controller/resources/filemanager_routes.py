@@ -1,10 +1,10 @@
-from common.system_processes import human_size
+from common.processes import human_size
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from natsort import os_sorted
 from pathlib import Path
-from resources.errors import print_message
+from common.errors import print_message
 import json
 import os
 import shutil

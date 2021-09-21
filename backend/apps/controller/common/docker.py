@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from resources.errors import print_message
+from common.errors import print_message
 import docker
 import os
 

@@ -1,11 +1,11 @@
 from common.docker import docker_py
 from common.models import App_Store
-from common.system_processes import curl
-from common.system_processes import human_size
+from common.processes import curl
+from common.processes import human_size
 from dotenv import dotenv_values
 from flask import request
 from flask_restful import Resource
-from resources.errors import print_message
+from common.errors import print_message
 from werkzeug import serving
 import json
 import os
