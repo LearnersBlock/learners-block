@@ -152,5 +152,6 @@
     "enter_hidden_network": "Geben Sie einen versteckten Wi-Fi-Namen ein.",
     "network_name": "Netzwerkname",
     "system_maintenance": "Systemwartung",
-    "app_installed": "Die Anwendung wurde installiert. Es kann einige Zeit dauern, bis die Anwendung gestartet und verfügbar ist."
+    "app_installed": "Die Anwendung wurde installiert. Es kann einige Zeit dauern, bis die Anwendung gestartet und verfügbar ist.",
+    "portainer_installing": "Portainer wird installiert. Dies kann einige Zeit dauern …"
 }
