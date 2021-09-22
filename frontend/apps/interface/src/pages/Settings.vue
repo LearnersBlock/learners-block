@@ -1133,6 +1133,7 @@ export default defineComponent({
         dark: true
       }).onOk(() => {
         systemMaintenance.value = true
+        $q.loading.show()
         // Create new Axios instance to override default interceptor
         const resetDb = Axios.create({ timeout: 4000 })
         resetDb.get(`${api.value}/v1/system/reset_database`).catch(() => {
@@ -1145,9 +1146,10 @@ export default defineComponent({
       while (true) {
         const xhr = new XMLHttpRequest()
         xhr.open('GET', `${api.value}`)
+        xhr.timeout = 2000
         xhr.send()
 
-        await delay(3000)
+        await delay(3500)
         if (xhr.status === 200) {
           await delay(3000)
           redirect('/')
