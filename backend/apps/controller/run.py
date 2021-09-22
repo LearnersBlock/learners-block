@@ -1,3 +1,5 @@
+from common.errors import errors
+from common.errors import print_message
 from common.models import db
 from common.models import migrate
 from common.processes import curl
@@ -14,8 +16,6 @@ from resources.docker_routes import docker_run
 from resources.download_routes import download_fetch
 from resources.download_routes import download_stop
 from resources.download_routes import download_stream
-from common.errors import errors
-from common.errors import print_message
 from resources.filemanager_routes import filemanager_copy
 from resources.filemanager_routes import filemanager_delete
 from resources.filemanager_routes import filemanager_file_size
@@ -27,6 +27,7 @@ from resources.filemanager_routes import filemanager_unzip
 from resources.filemanager_routes import filemanager_upload
 from resources.system_routes import health_check
 from resources.system_routes import portainer
+from resources.system_routes import reset_database
 from resources.system_routes import system_info
 from resources.system_routes import system_prune
 import atexit
@@ -202,6 +203,7 @@ if __name__ == '__main__':
     api.add_resource(system_info, '/v1/system/info')
     api.add_resource(portainer, '/v1/system/portainer')
     api.add_resource(system_prune, '/v1/system/prune')
+    api.add_resource(reset_database, '/v1/system/reset_database')
     api.add_resource(update, '/v1/update')
     api.add_resource(uuid, '/v1/uuid')
     api.add_resource(verify_login, '/v1/verifylogin')

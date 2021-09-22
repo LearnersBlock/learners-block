@@ -733,42 +733,84 @@
             class="mr-3 ml-3"
             spaced
           />
-          <!-- Prune System Files -->
-          <q-item-label
-            header
-            class="text-h6"
-          >
-            {{ $t('system_maintenance') }}
-          </q-item-label>
-          <q-item>
-            <q-item-section
-              top
-              avatar
-            >
-              <q-avatar
-                icon="delete"
-                text-color="red"
-              />
-            </q-item-section>
-            <q-item-section bottom>
-              <q-item-label>
-                {{ $t('prune_system_files_description') }}
-              </q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-btn
-                outline
-                rounded
-                no-caps
-                :loading="pruningFiles"
-                size="md"
-                color="red"
-                :label="$t('prune')"
-                class="text-lg mt-2"
-                @click="pruneSystemFiles"
-              />
-            </q-item-section>
-          </q-item>
+          <!-- System Maintenance -->
+          <q-expansion-item>
+            <template #header>
+              <q-item-section class="text-h6 text-gray-500">
+                {{ $t('system_maintenance') }}
+              </q-item-section>
+              <q-item-section side>
+                <div class="row items-center">
+                  <q-icon
+                    color="red"
+                    name="warning"
+                  />
+                </div>
+              </q-item-section>
+            </template>
+            <q-card>
+              <!-- Prune System Files -->
+              <q-item>
+                <q-item-section
+                  top
+                  avatar
+                >
+                  <q-avatar
+                    icon="delete"
+                    text-color="red"
+                  />
+                </q-item-section>
+                <q-item-section bottom>
+                  <q-item-label>
+                    {{ $t('prune_system_files_description') }}
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-btn
+                    outline
+                    rounded
+                    no-caps
+                    :loading="systemMaintenance"
+                    size="md"
+                    color="red"
+                    :label="$t('prune')"
+                    class="text-lg"
+                    @click="pruneSystemFiles"
+                  />
+                </q-item-section>
+              </q-item>
+              <!-- Reset Database -->
+              <q-item>
+                <q-item-section
+                  top
+                  avatar
+                >
+                  <q-avatar
+                    icon="restart_alt"
+                    text-color="red"
+                  />
+                </q-item-section>
+                <q-item-section bottom>
+                  <q-item-label>
+                    {{ $t('reset_database_description') }}
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-btn
+                    outline
+                    rounded
+                    no-caps
+                    :loading="systemMaintenance"
+                    size="md"
+                    color="red"
+                    :label="$t('reset')"
+                    class="text-lg"
+                    @click="resetDatabase"
+                  />
+                </q-item-section>
+              </q-item>
+            </q-card>
+          </q-expansion-item>
         </q-list>
         <q-separator spaced />
         <!-- System Info -->
@@ -812,6 +854,7 @@ export default defineComponent({
     const { t } = useI18n()
 
     const appStorePageInput = ref<boolean>(false)
+    const appTableVisible = ref(false)
     const currentStartPage = ref<any>()
     const customStartPageInput = ref<boolean>(false)
     const files = ref<boolean>(false)
@@ -837,7 +880,6 @@ export default defineComponent({
     const portainerImageExists = ref<boolean>(true)
     const portainerLoading = ref<boolean>(true)
     const portainerUnavailable = ref<boolean>(true)
-    const pruningFiles = ref<boolean>(false)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
@@ -848,8 +890,8 @@ export default defineComponent({
     const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
+    const systemMaintenance = ref<boolean>(false)
     const togglesLoading = ref<boolean>(true)
-    const appTableVisible = ref(false)
     const website = ref<boolean>(false)
     const websiteLoading = ref<boolean>(true)
     const wifi = ref<boolean>(false)
@@ -1014,6 +1056,10 @@ export default defineComponent({
       )
     }
 
+    function delay (ms: number) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+
     function hostnameWarn () {
       if (hostnameValid.value.validate() && newHostname.value !== '') {
         $q.dialog({
@@ -1055,10 +1101,10 @@ export default defineComponent({
         persistent: true,
         dark: true
       }).onOk(() => {
-        pruningFiles.value = true
+        systemMaintenance.value = true
         Axios.get(`${api.value}/v1/system/prune`).then(() => {
           portainerImageExists.value = false
-          pruningFiles.value = false
+          systemMaintenance.value = false
           $q.notify({ type: 'positive', message: t('success') })
         })
       })
@@ -1073,11 +1119,40 @@ export default defineComponent({
       await Axios.get(`${api.value}/v1/appstore/set`)
       Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
         rows.value = availableApps.data
-        setTimeout(() => {
-          appTableVisible.value = false
-        }, 500)
+        appTableVisible.value = false
       }
       )
+    }
+
+    function resetDatabase () {
+      $q.dialog({
+        title: t('confirm'),
+        message: t('are_you_sure'),
+        cancel: true,
+        persistent: true,
+        dark: true
+      }).onOk(() => {
+        systemMaintenance.value = true
+        // Create new Axios instance to override default interceptor
+        const resetDb = Axios.create({ timeout: 4000 })
+        resetDb.get(`${api.value}/v1/system/reset_database`).catch(() => {
+          resetDatabaseLoop()
+        })
+      })
+    }
+
+    async function resetDatabaseLoop () {
+      while (true) {
+        const xhr = new XMLHttpRequest()
+        xhr.open('GET', `${api.value}`)
+        xhr.send()
+
+        await delay(3000)
+        if (xhr.status === 200) {
+          $router.replace('/')
+          break
+        }
+      }
     }
 
     function setStartPage () {
@@ -1378,9 +1453,7 @@ export default defineComponent({
       await Axios.post(`${api.value}/v1/setui`, {
         files: files.value ? 'TRUE' : 'FALSE'
       })
-      setTimeout(() => {
-        filesLoading.value = false
-      }, 1)
+      filesLoading.value = false
     }
 
     const updateHostname = () => {
@@ -1400,9 +1473,7 @@ export default defineComponent({
       await Axios.post(`${api.value}/v1/setui`, {
         library: library.value ? 'TRUE' : 'FALSE'
       })
-      setTimeout(() => {
-        libraryLoading.value = false
-      }, 1)
+      libraryLoading.value = false
     }
 
     const updatePortainer = async () => {
@@ -1426,9 +1497,7 @@ export default defineComponent({
       await Axios.post(`${api.value}/v1/setui`, {
         website: website.value ? 'TRUE' : 'FALSE'
       })
-      setTimeout(() => {
-        websiteLoading.value = false
-      }, 1)
+      websiteLoading.value = false
     }
 
     function wifiWarn () {
@@ -1454,6 +1523,7 @@ export default defineComponent({
 
     return {
       appStorePageInput,
+      appTableVisible,
       changeStartPage,
       columns,
       customStartPageInput,
@@ -1466,6 +1536,7 @@ export default defineComponent({
       library,
       libraryLoading,
       loading,
+      loginPasswordStatus,
       loginPasswordToggle,
       newHostname,
       newStartPath,
@@ -1475,20 +1546,18 @@ export default defineComponent({
       portainerImageExists,
       portainerLoading,
       portainerUnavailable,
-      pruningFiles,
       pruneSystemFiles,
       redirect,
       refreshApps,
       regexp,
+      resetDatabase,
       rows,
       setLoginPassword,
       setStartPage,
       setWifiPassword,
       settingPassword,
       setWifiPasswordDialog,
-      loginPasswordStatus,
-      wifiPasswordStatus,
-      wifiPasswordToggle,
+      systemMaintenance,
       startPage,
       startPathValid,
       storeStartPage,
@@ -1501,13 +1570,14 @@ export default defineComponent({
       updateLibrary,
       updatePortainer,
       updateWebsite,
-      appTableVisible,
       visibleColumns: ref(['author_site', 'status']),
       website,
       websiteLoading,
       wifi,
       wifiLoading,
       wifiPassword,
+      wifiPasswordStatus,
+      wifiPasswordToggle,
       wifiPasswordValid,
       wifiWarn,
       windowHostname

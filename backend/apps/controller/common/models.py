@@ -1,7 +1,7 @@
+from common.errors import print_message
 from common.processes import database_recover
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from common.errors import print_message
 from sqlalchemy.sql import expression
 import bcrypt
 

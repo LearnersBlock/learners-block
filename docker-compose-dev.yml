@@ -7,7 +7,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev.backend
-    restart: on-failure
+    restart: always
     ports: 
       - "9090:9090"
     labels:

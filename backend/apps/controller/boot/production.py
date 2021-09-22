@@ -45,7 +45,7 @@ def handle_exit(*args):
         print_message('handle_exit', 'Failed to terminate wifi processes. ',
                       ex)
 
-    print("Finshed the exit process")
+    print_message('handle_exit', 'Finshed the exit process.')
 
 
 def handle_sigterm(*args):

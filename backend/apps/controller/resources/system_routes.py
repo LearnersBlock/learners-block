@@ -1,6 +1,7 @@
 from common.docker import docker_py
 from common.models import App_Store
 from common.processes import curl
+from common.processes import database_recover
 from common.processes import human_size
 from dotenv import dotenv_values
 from flask import request
@@ -104,6 +105,14 @@ class portainer(Resource):
                 image_status = docker_py.image_status(portainer_image)
                 return {"installed": False, "image": image_status}, \
                     container_status["status_code"]
+
+
+class reset_database(Resource):
+    @jwt_required()
+    def get(self):
+        database_recover()
+
+        return {'message': 'Forcing an error to activate polling.'}, 410
 
 
 class system_info(Resource):

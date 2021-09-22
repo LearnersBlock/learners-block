@@ -1,8 +1,9 @@
-from flask_restful import abort
 from common.errors import print_message
+from flask_restful import abort
 import os
 import requests
 import shutil
+import signal
 import socket
 import time
 
@@ -110,20 +111,18 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
 
 def database_recover():
-    # Adding delay to allow user intervetion to abort
-    print_message('database_recover', 'Database error detected. '
-                  'Waiting 60 seconds before deleting '
-                  'database and restarting.')
-    time.sleep(60)
+    # Resetting database
+    print_message('database_recover', 'Deleting database and restarting.')
 
     # Remove the .db file. It will be rebuilt fresh on next boot.
     # While this is a drastic step, it ensures devices do not
     # get bricked in the field.
     try:
         os.remove(os.path.realpath('.') + "/db/sqlite.db")
+        os.kill(os.getpid(), signal.SIGTERM)
     except Exception as ex:
-        print_message('database_recover', 'Failed to delete the database. '
-                      'File may be missing.', ex)
+        print_message('database_recover',
+                      'Failed to delete the database. ', ex)
 
 
 def human_size(nbytes):

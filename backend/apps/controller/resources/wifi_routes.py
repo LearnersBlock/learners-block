@@ -1,3 +1,4 @@
+from common.errors import print_message
 from common.models import User
 from common.processes import check_internet
 from common.wifi import wifi
@@ -5,7 +6,6 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import abort
 from flask_restful import Resource
-from common.errors import print_message
 import threading
 
 
