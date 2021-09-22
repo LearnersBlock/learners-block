@@ -155,5 +155,5 @@
     "app_installed": "The application has been installed. It may take some time for the application to start and become available.",
     "portainer_installing": "Portainer is installing. This may take some time…",
     "reset": "Reset",
-    "reset_database_description": "Reset the database. Should only be used when system errors occur. This will erase many of your settings and stored passwords."
+    "reset_database_description": "Reset the database. This will erase many of your settings and stored passwords."
 }
