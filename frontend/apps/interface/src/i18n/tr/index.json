@@ -152,5 +152,8 @@
     "set_wifi_password_desc": "Wi-Fi aracılığıyla Block'unuza erişmek için bir parola belirleyin.",
     "networking": "Ağ",
     "connect_wifi_desc": "Block'unuzu yakındaki bir Wi-Fi ağına bağlayın.",
-    "app_installed": "Uygulama kuruldu. Uygulamanın başlaması ve kullanılabilir hale gelmesi biraz zaman alabilir."
+    "app_installed": "Uygulama kuruldu. Uygulamanın başlaması ve kullanılabilir hale gelmesi biraz zaman alabilir.",
+    "reset_database_description": "Veri tabanını sıfırlayın. Bu, ayarlarınızın çoğunu ve kaydedilen parolalarınızı silecektir.",
+    "reset": "Sıfırla",
+    "portainer_installing": "Portainer kuruluyor. Bu biraz zaman alabilir…"
 }
