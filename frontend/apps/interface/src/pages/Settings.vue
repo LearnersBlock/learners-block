@@ -1149,7 +1149,8 @@ export default defineComponent({
 
         await delay(3000)
         if (xhr.status === 200) {
-          $router.replace('/')
+          await delay(3000)
+          redirect('/')
           break
         }
       }
