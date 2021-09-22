@@ -90,7 +90,7 @@
     "portainer_starting_at": "El Portainer ha iniciado en:",
     "invalid_entry": "Entrada no válida.",
     "app_store_app": "Aplicación de la tienda de aplicaciones",
-    "this_may_take_time": "El proceso puede demorar en función de la velocidad de la conexión. Sea paciente.",
+    "this_may_take_time": "El proceso puede demorar en función de la velocidad de la conexión.",
     "update_available": "Actualización disponible",
     "invalid_wifi_entry": "Las contraseñas de wifi deben tener 8 caracteres como mínimo y no incluir espacios.",
     "available_applications": "Aplicaciones disponibles",
@@ -151,5 +151,9 @@
     "back": "Atrás",
     "network_name": "Nombre de red",
     "enter_hidden_network": "Introduzca el nombre de una red wifi oculta.",
-    "system_maintenance": "Mantenimiento del sistema"
+    "system_maintenance": "Mantenimiento del sistema",
+    "reset_database_description": "Restablezca la base de datos. Hágalo solo cuando se produzcan errores en el sistema. Se eliminarán muchas de sus configuraciones y contraseñas almacenadas.",
+    "app_installed": "Se ha instalado la aplicación. Puede tardar un rato en iniciarse y estar disponible.",
+    "reset": "Restablecer",
+    "portainer_installing": "Se está instalando el Portainer. Esto puede demorar un poco…"
 }
