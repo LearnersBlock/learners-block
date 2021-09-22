@@ -111,5 +111,10 @@
     "upload_files_exist": "Alguns dels fitxers que heu afegit ja existien. Aquests fitxers se sobreescriuran.",
     "set_cp_password_desc": "Definiu una contrasenya per a accedir a aquest tauler de control.",
     "set_cp_password": "Estableix la contrasenya del tauler de control",
-    "upload": "Puja"
+    "upload": "Puja",
+    "reset_database_description": "Reinicialitzeu la base de dades. Feu-ho només quan es produeixin errors al sistema. Se suprimiran moltes de les vostres configuracions i contrasenyes emmagatzemades.",
+    "app_installed": "S’ha instal·lat l’aplicació. Pot tardar una estona en iniciar-se i tornar-se disponible.",
+    "set_wifi_password_desc": "Definiu una contrasenya per a accedir al Block mitjançant Wi-Fi.",
+    "reset": "Reinicialitza",
+    "portainer_installing": "S’està instal·lant el Portainer. Això pot tardar una mica…"
 }
