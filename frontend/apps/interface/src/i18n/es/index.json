@@ -152,7 +152,7 @@
     "network_name": "Nombre de red",
     "enter_hidden_network": "Introduzca el nombre de una red wifi oculta.",
     "system_maintenance": "Mantenimiento del sistema",
-    "reset_database_description": "Restablezca la base de datos. Hágalo solo cuando se produzcan errores en el sistema. Se eliminarán muchas de sus configuraciones y contraseñas almacenadas.",
+    "reset_database_description": "Restablezca la base de datos. Se eliminarán muchas de sus configuraciones y contraseñas almacenadas.",
     "app_installed": "Se ha instalado la aplicación. Puede tardar un rato en iniciarse y estar disponible.",
     "reset": "Restablecer",
     "portainer_installing": "Se está instalando el Portainer. Esto puede demorar un poco…"
