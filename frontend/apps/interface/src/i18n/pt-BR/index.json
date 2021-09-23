@@ -73,7 +73,7 @@
     "invalid_wifi_entry": "Senhas de Wi-Fi devem conter 8 caracteres ou mais e não podem conter espaços.",
     "invalid_entry": "Entrada inválida.",
     "app_store_app": "Loja de Aplicativos da Aplicação",
-    "this_may_take_time": "Isso pode demorar algum tempo dependendo da velocidade de sua conexão. Por favor, seja paciente.",
+    "this_may_take_time": "Isso pode demorar algum tempo dependendo da velocidade da sua conexão.",
     "author": "Autor",
     "description": "Descrição",
     "installed": "Instalado",
@@ -151,5 +151,9 @@
     "extracted_to": "Extraído para uma pasta chamada:",
     "manage_library_files": "Gerenciar arquivos baixados da Biblioteca",
     "name": "Nome",
-    "info": "Info"
+    "info": "Info",
+    "reset_database_description": "Reinicialize o banco de dados. Isso apagará muitas das suas configurações e das senhas que foram armazenadas.",
+    "reset": "Redefinir",
+    "portainer_installing": "Portainer está instalando. Isso pode levar algum tempo…",
+    "app_installed": "O aplicativo foi instalado. Pode levar algum tempo para ele comece e fique disponível."
 }
