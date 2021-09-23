@@ -20,7 +20,7 @@
     "files_description": "Explore arquivos aqui.",
     "files": "Arquivos",
     "error": "Um erro ocorreu.",
-    "enable_components_in": "Você pode ativar componentes no painel de Configurações.",
+    "enable_components_in": "Você pode ativar componentes no Painel de Controle.",
     "disconnected": "Desconectado",
     "disconnect_wifi": "Tem certeza de que deseja desconectar do Wi-Fi?",
     "disconnect": "Desconectar",
@@ -136,7 +136,7 @@
     "new_folder": "Nova Pasta",
     "move_copy": "Mover/Copiar",
     "item_already_exists": "Item já existe",
-    "invalid_filemanager_string": "Você entrou um nome inválido. Os seguintes caracteres não são compatíveis: '/', '\\0'",
+    "invalid_filemanager_string": "Você digitou um nome inválido. Os seguintes caracteres não são compatíveis: '/', '\\0'",
     "networking": "Rede",
     "system_maintenance": "Manutenção do Sistema",
     "network_name": "Nome da Rede",
@@ -151,5 +151,5 @@
     "extracted_to": "Extraído para uma pasta chamada:",
     "manage_library_files": "Gerenciar arquivos baixados da Biblioteca",
     "name": "Nome",
-    "info": "Informação"
+    "info": "Info"
 }
