@@ -190,9 +190,7 @@ export default defineComponent({
     })
 
     async function apiCallAwait () {
-      $q.loading.show({
-        delay: 500 // ms
-      })
+      $q.loading.show()
       await Axios.all([settingsState, appStoreState]).then(Axios.spread(function (res1, res2) {
         // Redirect for Learner's Block Start Page
         if (res1.data.start_page === '/') {

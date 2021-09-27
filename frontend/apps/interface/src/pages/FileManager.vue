@@ -616,9 +616,7 @@ export default defineComponent({
     ]
 
     onMounted(async () => {
-      $q.loading.show({
-        delay: 500 // ms
-      })
+      $q.loading.show()
 
       if (route.params.data) {
         rootPath.value = route.params.data
