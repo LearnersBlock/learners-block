@@ -155,5 +155,6 @@
     "app_installed": "Die Anwendung wurde installiert. Es kann einige Zeit dauern, bis die Anwendung gestartet und verfügbar ist.",
     "portainer_installing": "Portainer wird installiert. Dies kann einige Zeit dauern …",
     "reset_database_description": "Setzen Sie die Datenbank zurück. Dadurch werden viele Ihrer Einstellungen und gespeicherten Passwörter gelöscht.",
-    "reset": "Zurücksetzen"
+    "reset": "Zurücksetzen",
+    "library_empty": "Ihre Bibliothek ist leer. Sie können Inhalte über das Bedienfeld hinzufügen."
 }

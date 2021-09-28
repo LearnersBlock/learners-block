@@ -155,5 +155,6 @@
     "app_installed": "L’applicazione è stata installata. Potrebbe essere necessario un po’ di tempo perché l’applicazione si avvii e diventi disponibile.",
     "portainer_installing": "Portainer si sta installando. Questo può richiedere un po’ di tempo…",
     "reset": "Azzera",
-    "reset_database_description": "Azzera la banca dati. Questo eliminerà molte delle tue impostazioni e password memorizzate."
+    "reset_database_description": "Azzera la banca dati. Questo eliminerà molte delle tue impostazioni e password memorizzate.",
+    "library_empty": "La tua Biblioteca è vuota. Puoi aggiungere contenuti via il Pannello di controllo."
 }
