@@ -25,8 +25,18 @@
             flat
             color="primary"
             icon="refresh"
+            :disable="!refreshCompatible"
             @click="fetchNetworks()"
           />
+          <q-tooltip
+            v-if="!refreshCompatible"
+            class="text-caption text-center"
+            anchor="top middle"
+            self="center middle"
+            :offset="[20, 20]"
+          >
+            {{ $t('refresh_not_compatible') }}
+          </q-tooltip>
         </template>
       </q-select>
       <q-input
@@ -99,6 +109,7 @@ export default defineComponent({
     const hiddenSecurity = ref<any>('')
     const hostname = ref<any>(window.location.hostname)
     const password = ref<string>('')
+    const refreshCompatible = ref<boolean>(false)
     const ssids = ref<any>([])
     const submitting = ref<boolean>(false)
     const username = ref<string>('')
@@ -164,7 +175,8 @@ export default defineComponent({
     async function fetchNetworks () {
       $q.loading.show()
       await Axios.get(`http://${hostname.value}:9090/v1/wifi/list_access_points`).then((response) => {
-        ssids.value = response.data
+        refreshCompatible.value = response.data.compatible
+        ssids.value = response.data.ssids
         if (ssids.value.length === 0) {
           $q.notify({
             type: 'warning',
@@ -210,6 +222,7 @@ export default defineComponent({
       hiddenNetworkName,
       hiddenSecurity,
       password,
+      refreshCompatible,
       securityOptions: [
         'OPEN', 'ENTERPRISE', 'WEP/WPA/WPA2'
       ],

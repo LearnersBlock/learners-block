@@ -15,10 +15,19 @@ if os.environ['FLASK_ENV'].lower() == "production":
 
 class wifi:
     def check_connection():
-        run = subprocess.run(["iwgetid", "-r"],
-                             capture_output=True,
-                             text=True).stdout.rstrip()
-        return run
+        try:
+            run = subprocess.run(["iw", "dev", "wlan0", "link"],
+                                 capture_output=True,
+                                 text=True).stdout.rstrip()
+        except Exception as ex:
+            print_message("check_connection", "Failed checking connection. "
+                          "Returning False to force wifi-connect start", ex)
+            return False
+
+        if run == "Not connected.":
+            return False
+        else:
+            return True
 
     def connect_to_AP(*args, conn_type=None, ssid=None, username=None,
                       password=None, conn_name='LBNETWORK'):
@@ -263,7 +272,7 @@ class wifi:
     # or [] for none available or error.
     def list_access_points():
         # Run IW to reduce chance of empty SSID list
-        wifi.refresh_networks()
+        refresh_status = wifi.refresh_networks()
 
         # Fetch current hotspot name
         currentSSID = wifi.get_hotspot_SSID()
@@ -339,17 +348,21 @@ class wifi:
 
                 ssids.append(entry)
 
-        return ssids
+        return ssids, refresh_status
 
     def refresh_networks():
         try:
-            # Refresh networks list using IW which
-            # has proven to be better at refreshing than NM
+            # Refresh networks list using IW which has
+            # proven to be better at refreshing than nmcli. Some devices
+            # do not support this feature while the AP is active
+            # and therefore returns a boolean
             subprocess.check_output(
                 ["iw", "dev", "wlan0", "scan"])
-        except Exception as ex:
+            return True
+        except subprocess.CalledProcessError as ex:
             print_message('wifi.refresh_networks', 'Error refreshing '
                           'network points.', ex)
+            return False
 
     # Start a local hotspot on the wifi interface.
     def start_hotspot():

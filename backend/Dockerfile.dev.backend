@@ -11,8 +11,7 @@ RUN apk add \
   iw \
   libffi-dev \
   musl \
-  py3-icu \
-  wireless-tools
+  py3-icu
 
 # Set env variables
 ENV FLASK_ENV=development

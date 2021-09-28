@@ -72,7 +72,8 @@ class wifi_forget_all(Resource):
 class wifi_list_access_points(Resource):
     @jwt_required()
     def get(self):
-        return wifi.list_access_points()
+        ssids, refresh_status = wifi.list_access_points()
+        return {'ssids': ssids, 'compatible': refresh_status}
 
 
 class wifi_set_password(Resource):

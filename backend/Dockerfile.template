@@ -27,8 +27,7 @@ RUN install_packages \
   glib \
   iw \
   musl \
-  py3-icu \
-  wireless-tools
+  py3-icu
 
 # Copy built Python packages from build container
 COPY --from=python-buildstep /root/.local /root/.local
