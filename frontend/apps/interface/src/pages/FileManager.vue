@@ -127,9 +127,10 @@
                 <q-uploader
                   style="max-width: 300px"
                   :label="$t('upload')"
+                  color="white"
+                  text-color="black"
                   multiple
                   flat
-                  square
                   no-thumbnails
                   with-credentials
                   :readonly="delayUpload"
@@ -381,7 +382,10 @@
           auto-width
         >
           <!-- Info menu for right of row -->
-          <div class="desktop-only">
+          <div
+            v-if="$q.screen.gt.sm"
+            class="touch-hide"
+          >
             <div v-if="props.row.format == 'file'">
               <q-icon
                 size="xs"
@@ -402,10 +406,7 @@
             </div>
           </div>
           <!-- Mobile menu for right of row -->
-          <div
-            v-if="loginState"
-            class="mobile-only"
-          >
+          <div v-if="loginState && !$q.screen.gt.sm">
             <q-btn
               round
               size="xs"
@@ -546,7 +547,7 @@
 import Axios from 'app/node_modules/axios'
 import { useQuasar } from 'quasar'
 import { useStore } from '../store'
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -615,6 +616,15 @@ export default defineComponent({
         format: val => `${val}`
       }
     ]
+
+    // Adjust visible columns when screen is rotated
+    watch(() => $q.screen.gt.sm, size => {
+      if (size) {
+        visibleColumns.value = ['move', 'rename', 'delete', 'info']
+      } else {
+        visibleColumns.value = ['info']
+      }
+    })
 
     onMounted(async () => {
       $q.loading.show()
