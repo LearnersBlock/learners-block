@@ -155,5 +155,8 @@
     "app_installed": "The application has been installed. It may take some time for the application to start and become available.",
     "portainer_installing": "Portainer is installing. This may take some time…",
     "reset": "Reset",
-    "reset_database_description": "Reset the database. This will erase many of your settings and stored passwords."
+    "reset_database_description": "Reset the database. This will erase many of your settings and stored passwords.",
+    "library_empty": "Your Library is empty. You can add content through the Control Panel.",
+    "no_apps_installed": "There are no applications installed on this device.",
+    "refresh_not_compatible": "Your device is not compatible with the refresh networks button. Restart your device to refresh the networks list instead."
 }
