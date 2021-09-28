@@ -86,7 +86,7 @@
     "new_folder": "New Folder",
     "next": "Next",
     "no_apps_to_display": "There are no applications to display. Try refreshing your application database with the icon above.",
-    "no_networks": "No Wi-Fi networks within range. Move closer and then reboot the device.",
+    "no_networks": "No Wi-Fi networks within range. Move closer and then click the refresh button.",
     "overwrite_warning": "This will overwrite the existing files. Do you want to continue?",
     "password": "Password",
     "password_set_success": "Your password has been set",
