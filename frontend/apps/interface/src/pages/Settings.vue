@@ -946,6 +946,8 @@ export default defineComponent({
       // API calls for Axios Spread
       const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connectionstatus`)
       const fetchedPortainerSettings = Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'status' })
+      const settingsUi = Axios.get(`${api.value}/v1/settingsui`)
+      const verifyUserPasswordState = Axios.get(`${api.value}/v1/verify_user_password_state`)
 
       // Group dependent calls together for Portainer and Connection Status
       Axios.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(Axios.spread(function (res1, res2) {
@@ -985,23 +987,23 @@ export default defineComponent({
       })
 
       // Fetch settings UI configuration
-      Axios.get(`${api.value}/v1/settingsui`).then((response) => {
+      Axios.all([settingsUi, verifyUserPasswordState]).then(Axios.spread(function (res1, res2) {
         // Set settings toggle status
-        currentStartPage.value = response.data.start_page
-        files.value = response.data.files
-        website.value = response.data.website
-        library.value = response.data.library
-
-        // Check if disable password button should be visible
-        if (!response.data.default_login_password_set) {
-          loginPasswordStatus.value = true
-          loginPasswordToggle.value = true
-        }
+        currentStartPage.value = res1.data.start_page
+        files.value = res1.data.files
+        website.value = res1.data.website
+        library.value = res1.data.library
 
         // Check if disable wifi password button should be visible
-        if (response.data.wifi_password_set) {
+        if (res1.data.wifi_password_set) {
           wifiPasswordStatus.value = true
           wifiPasswordToggle.value = true
+        }
+
+        // Check if disable password button should be visible
+        if (res2.data.default_login_password_set) {
+          loginPasswordStatus.value = true
+          loginPasswordToggle.value = true
         }
 
         // Stop loading toggles
@@ -1012,7 +1014,7 @@ export default defineComponent({
         filesLoading.value = false
         libraryLoading.value = false
         websiteLoading.value = false
-      }).catch(e => {
+      })).catch(e => {
         console.log(e.message)
         $q.notify({ type: 'negative', message: t('error') })
       })

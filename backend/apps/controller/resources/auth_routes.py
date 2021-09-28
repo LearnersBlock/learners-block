@@ -81,3 +81,14 @@ class verify_login(Resource):
             return {'logged_in': False}
 
         return {'logged_in': True, 'user': get_jwt_identity()}
+
+
+class verify_user_password_state(Resource):
+    def get(self):
+        lb_database = User.query.filter_by(username='lb').first()
+
+        # Check if there is a user password set
+        verified_password = User.verify_password(' ',
+                                                 lb_database.password)
+
+        return {'default_login_password_set': not verified_password}, 200

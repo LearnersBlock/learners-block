@@ -39,10 +39,6 @@ class settings_ui(Resource):
     def get(self):
         lb_database = User.query.filter_by(username='lb').first()
 
-        # Check if there is a user password set for display disable button
-        verified_password = User.verify_password(' ',
-                                                 lb_database.password)
-
         # Check if there is a wifi password set and return boolean
         if lb_database.wifi_password:
             wifi_password = True
@@ -53,5 +49,4 @@ class settings_ui(Resource):
                 'library': lb_database.library,
                 'website': lb_database.website,
                 'start_page': lb_database.start_page,
-                'default_login_password_set': verified_password,
                 'wifi_password_set': wifi_password}, 200

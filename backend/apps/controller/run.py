@@ -131,7 +131,7 @@ if __name__ == '__main__':
         from resources.app_store_routes import app_store_set, \
             app_store_status
         from resources.auth_routes import login, logout, set_password, \
-            verify_login
+            verify_login, verify_user_password_state
         from resources.settings_routes import set_ui, \
             settings_ui
 
@@ -207,6 +207,8 @@ if __name__ == '__main__':
     api.add_resource(update, '/v1/update')
     api.add_resource(uuid, '/v1/uuid')
     api.add_resource(verify_login, '/v1/verifylogin')
+    api.add_resource(verify_user_password_state,
+                     '/v1/verify_user_password_state')
     api.add_resource(wifi_connect, '/v1/wifi/connect')
     api.add_resource(wifi_connection_status, '/v1/wifi/connectionstatus')
     api.add_resource(wifi_forget, '/v1/wifi/forget')
