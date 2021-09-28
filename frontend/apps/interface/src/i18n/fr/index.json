@@ -155,5 +155,6 @@
     "app_installed": "L’application a été installée. Le démarrage et la disponibilité de l’application peuvent prendre un certain temps.",
     "portainer_installing": "Portainer est en train d’être installé. Ceci peut prendre un certain temps…",
     "reset_database_description": "Réinitialiser la base de données. Ceci effacera un grand nombre de vos paramètres et de vos mots de passe enregistrés.",
-    "reset": "Réinitialiser"
+    "reset": "Réinitialiser",
+    "library_empty": "Votre bibliothèque est vide. Vous pouvez ajouter du contenu via le Panneau de configuration."
 }
