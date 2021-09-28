@@ -2,6 +2,7 @@
   <q-page class="items-center p-3 text-body1">
     <!-- Home Button -->
     <q-btn
+      v-if="rows"
       rounded
       size="sm"
       color="white"
@@ -773,7 +774,7 @@ export default defineComponent({
               message: t('item_already_exists')
             })
           } else {
-            await Axios.post(`${api.value}/v1/filemanager/newfolder`, {
+            await Axios.post(`${api.value}/v1/filemanager/new_folder`, {
               path: objPath.value,
               directory: data,
               root: rootPath.value

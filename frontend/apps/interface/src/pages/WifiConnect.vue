@@ -163,7 +163,7 @@ export default defineComponent({
 
     async function fetchNetworks () {
       $q.loading.show()
-      await Axios.get(`http://${hostname.value}:9090/v1/wifi/networks`).then((response) => {
+      await Axios.get(`http://${hostname.value}:9090/v1/wifi/list_access_points`).then((response) => {
         ssids.value = response.data
         if (ssids.value.length === 0) {
           $q.notify({

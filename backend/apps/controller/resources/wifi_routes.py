@@ -9,31 +9,6 @@ from flask_restful import Resource
 import threading
 
 
-class set_wifi(Resource):
-    @jwt_required()
-    def post(self):
-        content = request.get_json()
-        lb_database = User.query.filter_by(username='lb').first()
-        lb_database.wifi_password = content["wifi_password"]
-        lb_database.save_to_db()
-
-        # If connected, restart Wi-Fi-Connect
-        connected = wifi.check_connection()
-        if not connected:
-            try:
-                wifi.forget(conn_name='HOTSPOT')
-                wifi.start_hotspot()
-            except Exception as ex:
-                print_message('set_wifi',
-                              'Failed starting wifi-connect',
-                              ex)
-                abort(500, status=500,
-                      message='Wifi-connect failed to launch',
-                      error=str(ex))
-
-        return {'message': 'success'}, 200
-
-
 class wifi_connect(Resource):
     @jwt_required()
     def post(self):
@@ -58,12 +33,6 @@ class wifi_connection_status(Resource):
         return {'status': 200,
                 'wifi': wifi.check_connection(),
                 'internet': check_internet()}, 200
-
-
-class wifi_list_access_points(Resource):
-    @jwt_required()
-    def get(self):
-        return wifi.list_access_points()
 
 
 class wifi_forget(Resource):
@@ -98,3 +67,34 @@ class wifi_forget_all(Resource):
         wifi_forget_thread_all.start()
 
         return {'status': 202, 'message': 'Accepted'}, 202
+
+
+class wifi_list_access_points(Resource):
+    @jwt_required()
+    def get(self):
+        return wifi.list_access_points()
+
+
+class wifi_set_password(Resource):
+    @jwt_required()
+    def post(self):
+        content = request.get_json()
+        lb_database = User.query.filter_by(username='lb').first()
+        lb_database.wifi_password = content["wifi_password"]
+        lb_database.save_to_db()
+
+        # If connected, restart Wi-Fi-Connect
+        connected = wifi.check_connection()
+        if not connected:
+            try:
+                wifi.forget(conn_name='HOTSPOT')
+                wifi.start_hotspot()
+            except Exception as ex:
+                print_message('wifi_set_password',
+                              'Failed starting wifi-connect',
+                              ex)
+                abort(500, status=500,
+                      message='Wifi-connect failed to launch',
+                      error=str(ex))
+
+        return {'message': 'success'}, 200

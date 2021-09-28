@@ -31,13 +31,13 @@ def log_request(self, *args, **kwargs):
     parent_log_request(self, *args, **kwargs)
 
 
-class health_check(Resource):
+class system_health_check(Resource):
     def get(self):
         serving.WSGIRequestHandler.log_request = log_request
         return {'status': 200, 'message': 'ok'}, 200
 
 
-class hostname(Resource):
+class system_hostname(Resource):
     def get(self):
         device_hostname = curl(method="get",
                                path="/v1/device/host-config?apikey=")
@@ -50,7 +50,19 @@ class hostname(Resource):
         }, 200
 
 
-class portainer(Resource):
+class system_info(Resource):
+    def get(self):
+        return {"storage": {
+                    'total': human_size(shutil.disk_usage("/")[-0]),
+                    'available': human_size(shutil.disk_usage("/")[-1])
+                },
+                "versions": {
+                    'lb': version["VERSION"]
+                    }
+                }
+
+
+class system_portainer(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
@@ -107,26 +119,6 @@ class portainer(Resource):
                     container_status["status_code"]
 
 
-class reset_database(Resource):
-    @jwt_required()
-    def get(self):
-        database_recover()
-
-        return {'message': 'Forcing an error to activate polling.'}, 410
-
-
-class system_info(Resource):
-    def get(self):
-        return {"storage": {
-                    'total': human_size(shutil.disk_usage("/")[-0]),
-                    'available': human_size(shutil.disk_usage("/")[-1])
-                },
-                "versions": {
-                    'lb': version["VERSION"]
-                    }
-                }
-
-
 class system_prune(Resource):
     @jwt_required()
     def get(self):
@@ -157,3 +149,11 @@ class system_prune(Resource):
                           'Failed to remove Portainer image.', ex)
 
         return {'status': 200, 'message': 'done'}, 200
+
+
+class system_reset_database(Resource):
+    @jwt_required()
+    def get(self):
+        database_recover()
+
+        return {'message': 'Forcing an error to activate polling.'}, 410

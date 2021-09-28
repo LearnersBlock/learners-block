@@ -2,7 +2,7 @@ from common.processes import check_internet
 from common.processes import curl
 from common.wifi import wifi
 from common.errors import print_message
-from resources.supervisor_routes import update
+from resources.supervisor_routes import supervisor_update
 import subprocess
 import sys
 import threading
@@ -77,7 +77,7 @@ def launch_wifi(self):
     # If internet available (Ethernet or WiFi) request update
     if check_internet():
         try:
-            update().get()
+            supervisor_update().get()
             print('Api-v1 - API Started - Internet available, '
                   'software update request made.')
         except Exception as ex:

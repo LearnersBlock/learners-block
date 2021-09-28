@@ -944,10 +944,10 @@ export default defineComponent({
 
     function apiCall () {
       // API calls for Axios Spread
-      const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connectionstatus`)
+      const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connection_status`)
       const fetchedPortainerSettings = Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'status' })
-      const settingsUi = Axios.get(`${api.value}/v1/settingsui`)
-      const verifyUserPasswordState = Axios.get(`${api.value}/v1/verify_user_password_state`)
+      const settingsUi = Axios.get(`${api.value}/v1/settings/get_ui`)
+      const verifyUserPasswordState = Axios.get(`${api.value}/v1/auth/verify_user_password_state`)
 
       // Group dependent calls together for Portainer and Connection Status
       Axios.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(Axios.spread(function (res1, res2) {
@@ -1085,7 +1085,7 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          Axios.post(`${api.value}/v1/setui`, {
+          Axios.post(`${api.value}/v1/settings/set_ui`, {
             start_page: newStartPath.value
           })
           $q.notify({ type: 'positive', message: `${t('path_changed_to')} '${newStartPath.value}'` })
@@ -1118,7 +1118,7 @@ export default defineComponent({
 
     async function refreshApps () {
       appTableVisible.value = true
-      await Axios.get(`${api.value}/v1/appstore/set`)
+      await Axios.get(`${api.value}/v1/appstore/get_apps`)
       Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
         rows.value = availableApps.data
         appTableVisible.value = false
@@ -1189,7 +1189,7 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           settingPassword.value = true
-          Axios.post(`${api.value}/v1/setpassword`, { password: ' ' }).then((response) => {
+          Axios.post(`${api.value}/v1/auth/set_password`, { password: ' ' }).then((response) => {
             if (response.status === 200) {
               $q.notify({ type: 'positive', message: t('login_disabled') })
               loginPasswordStatus.value = false
@@ -1214,7 +1214,7 @@ export default defineComponent({
           }
         }).onOk((data) => {
           settingPassword.value = true
-          Axios.post(`${api.value}/v1/setpassword`, {
+          Axios.post(`${api.value}/v1/auth/set_password`, {
             password: data
           }).then((response) => {
             if (response.status === 200) {
@@ -1239,7 +1239,7 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           settingPassword.value = true
-          Axios.post(`${api.value}/v1/setwifi`, { wifi_password: '' }).then((response) => {
+          Axios.post(`${api.value}/v1/wifi/set_password`, { wifi_password: '' }).then((response) => {
             if (response.status === 200) {
               $q.notify({ type: 'positive', message: t('login_disabled') })
               wifiPasswordStatus.value = false
@@ -1266,7 +1266,7 @@ export default defineComponent({
           }
         }).onOk((data) => {
           settingPassword.value = true
-          Axios.post(`${api.value}/v1/setwifi`, {
+          Axios.post(`${api.value}/v1/wifi/set_password`, {
             wifi_password: data
           }).then((response) => {
             if (response.status === 200) {
@@ -1284,7 +1284,7 @@ export default defineComponent({
 
     async function storeStartPage (rows) {
       if (startPage.value === t('lb_welcome_page')) {
-        await Axios.post(`${api.value}/v1/setui`, {
+        await Axios.post(`${api.value}/v1/settings/set_ui`, {
           start_page: '/'
         })
         currentStartPage.value = '/'
@@ -1297,7 +1297,7 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           if (rows) {
-            Axios.post(`${api.value}/v1/setui`, {
+            Axios.post(`${api.value}/v1/settings/set_ui`, {
               start_page: rows.name
             })
             currentStartPage.value = rows.name
@@ -1311,7 +1311,7 @@ export default defineComponent({
               currentStartPage.value = 'website'
             }
 
-            Axios.post(`${api.value}/v1/setui`, {
+            Axios.post(`${api.value}/v1/settings/set_ui`, {
               start_page: currentStartPage.value
             })
             $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${startPage.value}` })
@@ -1455,7 +1455,7 @@ export default defineComponent({
 
     const updateFiles = async () => {
       filesLoading.value = true
-      await Axios.post(`${api.value}/v1/setui`, {
+      await Axios.post(`${api.value}/v1/settings/set_ui`, {
         files: files.value ? 'TRUE' : 'FALSE'
       })
       filesLoading.value = false
@@ -1464,7 +1464,7 @@ export default defineComponent({
     const updateHostname = () => {
       if (newHostname.value) {
         hostnameChanging.value = true
-        Axios.post(`${api.value}/v1/hostconfig`, {
+        Axios.post(`${api.value}/v1/supervisor/host_config`, {
           hostname: newHostname.value
         }).then(() => {
           $q.notify({ type: 'positive', message: t('hostname_changed_notification') })
@@ -1475,7 +1475,7 @@ export default defineComponent({
 
     const updateLibrary = async () => {
       libraryLoading.value = true
-      await Axios.post(`${api.value}/v1/setui`, {
+      await Axios.post(`${api.value}/v1/settings/set_ui`, {
         library: library.value ? 'TRUE' : 'FALSE'
       })
       libraryLoading.value = false
@@ -1499,7 +1499,7 @@ export default defineComponent({
 
     const updateWebsite = async () => {
       websiteLoading.value = true
-      await Axios.post(`${api.value}/v1/setui`, {
+      await Axios.post(`${api.value}/v1/settings/set_ui`, {
         website: website.value ? 'TRUE' : 'FALSE'
       })
       websiteLoading.value = false

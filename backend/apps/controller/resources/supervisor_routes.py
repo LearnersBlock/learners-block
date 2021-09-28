@@ -5,7 +5,7 @@ from flask_restful import Resource
 import os
 
 
-class device(Resource):
+class supervisor_device(Resource):
     def get(self):
         response = curl(method="get",
                         path="/v1/device?apikey=")
@@ -13,7 +13,7 @@ class device(Resource):
         return response["json_response"], response["status_code"]
 
 
-class host_config(Resource):
+class supervisor_host_config(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
@@ -28,7 +28,7 @@ class host_config(Resource):
         }, response["status_code"]
 
 
-class journal_logs(Resource):
+class supervisor_journal_logs(Resource):
     def get(self):
         response = curl(method="post-json",
                         path="/v2/journal-logs?apikey=",
@@ -38,7 +38,7 @@ class journal_logs(Resource):
         return response["text"], response["status_code"]
 
 
-class update(Resource):
+class supervisor_update(Resource):
     def get(self):
         response = curl(method="post-json",
                         path="/v1/update?apikey=",
@@ -48,6 +48,6 @@ class update(Resource):
                 'message': response["text"]}, response["status_code"]
 
 
-class uuid(Resource):
+class supervisor_uuid(Resource):
     def get(self):
-        return {'uuid': os.environ['BALENA_DEVICE_UUID']}
+        return {'supervisor_uuid': os.environ['BALENA_DEVICE_UUID']}

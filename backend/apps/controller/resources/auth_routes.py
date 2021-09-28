@@ -32,7 +32,7 @@ def refresh_expiring_jwts(response):
     return response
 
 
-class login(Resource):
+class auth_log_in(Resource):
     def post(self):
         content = request.get_json()
 
@@ -53,14 +53,14 @@ class login(Resource):
         return response
 
 
-class logout(Resource):
+class auth_log_out(Resource):
     def post(self):
         response = jsonify({"message": "logout successful"})
         unset_jwt_cookies(response)
         return response
 
 
-class set_password(Resource):
+class auth_set_password(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
@@ -73,7 +73,7 @@ class set_password(Resource):
         return {'message': 'done'}, 200
 
 
-class verify_login(Resource):
+class auth_verify_login(Resource):
     def get(self):
         try:
             verify_jwt_in_request()
@@ -83,7 +83,7 @@ class verify_login(Resource):
         return {'logged_in': True, 'user': get_jwt_identity()}
 
 
-class verify_user_password_state(Resource):
+class auth_verify_user_password_state(Resource):
     def get(self):
         lb_database = User.query.filter_by(username='lb').first()
 

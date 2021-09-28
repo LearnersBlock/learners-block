@@ -27,12 +27,12 @@ def wifi_toggle():
         f"Wifi is now set to {wifistatus}"
 
 
-class device(Resource):
+class supervisor_device(Resource):
     def get(self):
         return {'message': 'output'}, 200
 
 
-class host_config(Resource):
+class supervisor_host_config(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
@@ -44,7 +44,7 @@ class host_config(Resource):
         }, 200
 
 
-class hostname(Resource):
+class system_hostname(Resource):
     def get(self):
         container_hostname = subprocess.run(["hostname"], capture_output=True,
                                             text=True).stdout.rstrip()
@@ -55,28 +55,17 @@ class hostname(Resource):
         }, 200
 
 
-class journal_logs(Resource):
+class supervisor_journal_logs(Resource):
     def get(self):
         return "journal logs..."
 
 
-class set_wifi(Resource):
-    @jwt_required()
-    def post(self):
-        global wifistatus
-        content = request.get_json()
-        lb_database = User.query.filter_by(username='lb').first()
-        lb_database.wifi_password = content["wifi_password"]
-        lb_database.save_to_db()
-        return {'status': 200, 'running': wifistatus}, 200
-
-
-class update(Resource):
+class supervisor_update(Resource):
     def get(self):
         return {'status': 202, 'message': "Accepted"}, 202
 
 
-class uuid(Resource):
+class supervisor_uuid(Resource):
     def get(self):
         return {'uuid': "asdsadsdf213qs2"}
 
@@ -133,3 +122,14 @@ class wifi_list_access_points(Resource):
                 {"ssid": "TELUS9052-Enterprise", "security": "ENTERPRISE"},
                 {"ssid": "Althaea-2-no-password", "security": "NONE"},
                 {"ssid": "TELUS9052-Hidden", "security": "HIDDEN"}]
+
+
+class wifi_set_password(Resource):
+    @jwt_required()
+    def post(self):
+        global wifistatus
+        content = request.get_json()
+        lb_database = User.query.filter_by(username='lb').first()
+        lb_database.wifi_password = content["wifi_password"]
+        lb_database.save_to_db()
+        return {'status': 200, 'running': wifistatus}, 200

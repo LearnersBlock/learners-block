@@ -27,7 +27,7 @@ const auth = {
   },
   actions: {
     LOGIN: async ({ commit, getters }: { commit: any, getters: any }, payload: { username: string, password: string }) => {
-      const response = await Axios.post(`${getters.GET_API}/v1/login`, payload).catch(() => {
+      const response = await Axios.post(`${getters.GET_API}/v1/auth/log_in`, payload).catch(() => {
         throw Error('Wrong credentials')
       })
       if (response.status === 200) {
@@ -39,7 +39,7 @@ const auth = {
       }
     },
     LOGOUT: async ({ commit, getters }: { commit: any, getters: any }) => {
-      const response = await Axios.post(`${getters.GET_API}/v1/logout`).catch(e => {
+      const response = await Axios.post(`${getters.GET_API}/v1/auth/log_out`).catch(e => {
         throw new Error(e.message)
       })
       if (response.status === 200) {
@@ -49,7 +49,7 @@ const auth = {
       }
     },
     VERIFY_LOGIN: async ({ commit, getters, dispatch }: { commit: any, getters: any, dispatch: any }, payload: string) => {
-      const response = await Axios.get(`${getters.GET_API}/v1/verifylogin`, {
+      const response = await Axios.get(`${getters.GET_API}/v1/auth/verify_login`, {
         headers: {
           Authorization: `Bearer ${payload}`
         }

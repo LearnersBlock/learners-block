@@ -179,7 +179,7 @@ export default defineComponent({
     const windowHostname = ref<string>(window.location.hostname)
 
     // Settings for the ui
-    const settingsState = Axios.get(`${api.value}/v1/settingsui`)
+    const settingsState = Axios.get(`${api.value}/v1/settings/get_ui`)
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
 

@@ -9,7 +9,7 @@ import os
 import requests
 
 
-class app_store_set(Resource):
+class appstore_get_apps(Resource):
     @jwt_required()
     def get(self):
         # Fetch list of available apps from app-store repo
@@ -21,7 +21,7 @@ class app_store_set(Resource):
                                 timeout=8).json()
 
         except Exception as ex:
-            print_message('app_store_set', 'Failed loading app list', ex)
+            print_message('appstore_get_apps', 'Failed loading app list', ex)
             abort(408, status=408, message='error', error=str(ex))
 
         # For all the current apps in database
@@ -48,12 +48,12 @@ class app_store_set(Resource):
                                                    ["image"],
                                                    network=db_entry.name)
                         except Exception as ex:
-                            print_message('app_store_set',
+                            print_message('appstore_get_apps',
                                           'Dependency image may already '
                                           'have been pruned',
                                           ex)
 
-                        print_message('app_store_set', deps["response"])
+                        print_message('appstore_get_apps', deps["response"])
 
                 # Remove the main container and image
                 docker_py.remove(name=db_entry.name)
@@ -61,7 +61,7 @@ class app_store_set(Resource):
                     docker_py.prune(image=db_entry.image,
                                     network=db_entry.name)
                 except Exception as ex:
-                    print_message('app_store_set',
+                    print_message('appstore_get_apps',
                                   'Image may already have been '
                                   'pruned',
                                   ex)
@@ -72,7 +72,7 @@ class app_store_set(Resource):
                     try:
                         os.remove(os.path.realpath('.') + db_entry.logo)
                     except FileNotFoundError as ex:
-                        print_message('app_store_set',
+                        print_message('appstore_get_apps',
                                       'failed deleting image', ex)
 
                 # Remove the application entry from local database
@@ -131,7 +131,7 @@ class app_store_set(Resource):
                     if app_list[app]['logo']:
                         pass
                 except Exception as ex:
-                    print_message('app_store_set',
+                    print_message('appstore_get_apps',
                                   'Failed getting logo path', ex)
                     continue
 
@@ -152,7 +152,7 @@ class app_store_set(Resource):
                                 os.makedirs('./asset_share/assets/' +
                                             lb_database.name)
                             except Exception as ex:
-                                print_message('app_store_set',
+                                print_message('appstore_get_apps',
                                               'Could not make required '
                                               'directory',
                                               ex)
@@ -161,10 +161,10 @@ class app_store_set(Resource):
                                 for chunk in r:
                                     f.write(chunk)
                         else:
-                            print_message('app_store_set',
+                            print_message('appstore_get_apps',
                                           'failed saving image')
                     except Exception as ex:
-                        print_message('app_store_set',
+                        print_message('appstore_get_apps',
                                       'failed saving image', ex)
 
             # If it already exists in the database, update the details
@@ -193,7 +193,7 @@ class app_store_set(Resource):
         return {'message': 'done'}, 200
 
 
-class app_store_status(Resource):
+class appstore_status(Resource):
     def get(self):
         # Set vars
         database_entries = []
