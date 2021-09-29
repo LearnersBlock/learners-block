@@ -17,6 +17,35 @@
         :options="ssids"
         option-label="ssid"
       >
+        <template #option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label>{{ scope.opt.ssid }}</q-item-label>
+            </q-item-section>
+            <q-item-section
+              v-if="scope.opt.strength && scope.opt.ssid !== $t('enter_hidden_network')"
+              avatar
+            >
+              <q-knob
+                v-model="scope.opt.strength"
+                show-value
+                font-size="13px"
+                :class="scope.opt.strength > 60 ? 'text-primary' : 'text-accent'"
+                size="40px"
+                :thickness="0.13"
+                :color="scope.opt.strength > 60 ? 'primary' : 'accent'"
+                track-color="grey-3"
+              >
+                <div class="m-2 text-center">
+                  <q-icon
+                    name="signal_cellular_alt"
+                  />
+                  {{ scope.opt.strength }}
+                </div>
+              </q-knob>
+            </q-item-section>
+          </q-item>
+        </template>
         <template #after>
           <q-btn
             class="mt-1"

@@ -336,7 +336,8 @@ class wifi:
                 if security & NM_SECURITY_ENTERPRISE:
                     security_str = 'ENTERPRISE'
 
-                entry = {"ssid": ap.Ssid, "security": security_str}
+                entry = {"ssid": ap.Ssid, "security": security_str,
+                         "strength": int(ap.Strength)}
 
                 # Do not add duplicates to the list
                 if ssids.__contains__(entry):

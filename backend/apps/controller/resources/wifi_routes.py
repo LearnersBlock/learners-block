@@ -73,6 +73,12 @@ class wifi_list_access_points(Resource):
     @jwt_required()
     def get(self):
         ssids, refresh_status = wifi.list_access_points()
+
+        # Sort SSIDs by signal strength
+        ssids = sorted(ssids,
+                       key=lambda x: x['strength'],
+                       reverse=True)
+
         return {'ssids': ssids, 'compatible': refresh_status}
 
 

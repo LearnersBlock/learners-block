@@ -118,11 +118,23 @@ class wifi_list_access_points(Resource):
     @jwt_required()
     def get(self):
         # Demo routes
-        return {'ssids': [{"ssid": "My House", "security": "WPA"},
-                {"ssid": "TELUS9052-Enterprise", "security": "ENTERPRISE"},
-                {"ssid": "Althaea-2-no-password", "security": "NONE"},
-                {"ssid": "TELUS9052-Hidden", "security": "HIDDEN"}],
-                'compatible': True}
+        ssids = [{"ssid": "My House", "security": "WPA",
+                  "strength": 70},
+                 {"ssid": "TELUS9052-Enterprise",
+                  "security": "ENTERPRISE",
+                  "strength": 100},
+                 {"ssid": "Althaea-2-no-password",
+                  "security": "NONE",
+                  "strength": 1},
+                 {"ssid": "TELUS9052-Hidden", "security": "HIDDEN",
+                  "strength": 10}]
+
+        # Sort SSIDs by signal strength
+        ssids = sorted(ssids,
+                       key=lambda x: x['strength'],
+                       reverse=True)
+
+        return {'ssids': ssids, 'compatible': True}
 
 
 class wifi_set_password(Resource):
