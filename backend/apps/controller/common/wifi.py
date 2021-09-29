@@ -24,7 +24,7 @@ class wifi:
                           "Returning False to force wifi-connect start", ex)
             return False
 
-        if run == "Not connected.":
+        if run.lower()[:13] == "not connected":
             return False
         else:
             return True
