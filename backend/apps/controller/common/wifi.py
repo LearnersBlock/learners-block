@@ -353,10 +353,10 @@ class wifi:
 
     def refresh_networks():
         try:
-            # Refresh networks list using IW which has
-            # proven to be better at refreshing than nmcli. Some devices
+            # Refresh networks list using IW which has proven
+            # to be better at refreshing than nmcli. Some devices
             # do not support this feature while the AP is active
-            # and therefore returns a boolean
+            # and therefore returns a boolean with status of request
             subprocess.check_output(
                 ["iw", "dev", "wlan0", "scan"])
             return True
@@ -365,8 +365,16 @@ class wifi:
                           'network points.', ex)
             return False
 
-    # Start a local hotspot on the wifi interface.
     def start_hotspot():
+        # On some devices, fetching available wifi networks in the area
+        # is only possible before the hotspot is started. Therefore
+        # the fetch is activated here to improve user experience later
+        try:
+            wifi.refresh_networks()
+        except Exception as ex:
+            print_message('wifi.start_hotspot', 'Error refreshing '
+                          'network points. Starting hotspot anyway', ex)
+
         return wifi.connect_to_AP(conn_type='HOTSPOT',
                                   ssid=wifi.get_hotspot_SSID(),
                                   username=None,
