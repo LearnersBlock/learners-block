@@ -335,11 +335,11 @@
           v-if="rows"
           flat
           wrap-cells
-          :loading="appTableVisible"
+          :loading="!appTableVisible"
           :grid="$q.screen.xs"
           :rows-per-page-options="[5, 10, 20]"
           :rows="rows"
-          :table-class="!appTableVisible ? 'text-black': 'text-white'"
+          :table-class="appTableVisible ? 'text-black': 'text-white'"
           :columns="columns"
           row-key="application"
           :no-data-label="$t('no_apps_to_display')"
@@ -381,7 +381,7 @@
             />
           </template>
           <template
-            v-if="!appTableVisible"
+            v-if="appTableVisible"
             #body-cell-author_site="props"
           >
             <q-td :props="props">
@@ -394,7 +394,7 @@
             </q-td>
           </template>
           <template
-            v-if="!appTableVisible"
+            v-if="appTableVisible"
             #body-cell-status="props"
           >
             <q-td :props="props">
@@ -413,7 +413,7 @@
           <template #item="props">
             <div
               class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4"
-              :class="!appTableVisible ? 'text-black': 'text-white'"
+              :class="appTableVisible ? 'text-black': 'text-white'"
             >
               <q-card>
                 <q-card-section class="text-center">
@@ -449,7 +449,7 @@
                     {{ $t('version') }} {{ props.row.version_name }}
                   </div>
                   <q-btn
-                    v-if="!appTableVisible"
+                    v-if="appTableVisible"
                     class="mb-1"
                     size="sm"
                     unelevated
@@ -499,6 +499,7 @@
               v-if="!filesLoading"
               v-model="startPage"
               class="full-width"
+              :loading="startPage"
               rounded
               outlined
               transition-duration="1"
@@ -557,7 +558,7 @@
                   :grid="$q.screen.xs"
                   :rows-per-page-options="[5, 10]"
                   :rows="rows"
-                  :table-class="!appTableVisible ? 'text-black': 'text-white'"
+                  :table-class="appTableVisible ? 'text-black': 'text-white'"
                   :columns="columns"
                   :visible-columns="visibleColumns"
                   filter="installed"
@@ -565,7 +566,7 @@
                   :no-data-label="$t('no_apps_to_display')"
                 >
                   <template
-                    v-if="!appTableVisible"
+                    v-if="appTableVisible"
                     #body-cell-status="props"
                   >
                     <q-td :props="props">
@@ -886,7 +887,7 @@ export default defineComponent({
     const $router = useRouter()
     const settingPassword = ref<boolean>(false)
     const setWifiPasswordDialog = ref<boolean>(false)
-    const startPage = ref<string>('-')
+    const startPage = ref<string>('')
     const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
@@ -959,10 +960,8 @@ export default defineComponent({
         // Set internet connection status
         if (res1.data.internet) {
           internet.value = true
-          refreshApps()
         } else {
           internet.value = false
-          fetchApps()
         }
 
         // Set Portainer status. Dependent on having fetched internet connection status.
@@ -1009,7 +1008,8 @@ export default defineComponent({
         // Stop loading toggles
         togglesLoading.value = false
 
-        setStartPage()
+        // Fetch available apps from database, then populate start page which relies on populated rows
+        fetchApps().then(() => setStartPage())
 
         filesLoading.value = false
         libraryLoading.value = false
@@ -1050,10 +1050,10 @@ export default defineComponent({
     }
 
     async function fetchApps () {
-      appTableVisible.value = true
+      appTableVisible.value = false
       await Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
         rows.value = availableApps.data
-        appTableVisible.value = false
+        appTableVisible.value = true
       }
       )
     }
@@ -1117,11 +1117,11 @@ export default defineComponent({
     }
 
     async function refreshApps () {
-      appTableVisible.value = true
+      appTableVisible.value = false
       await Axios.get(`${api.value}/v1/appstore/get_apps`)
-      Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
+      await Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
         rows.value = availableApps.data
-        appTableVisible.value = false
+        appTableVisible.value = true
       }
       )
     }
@@ -1151,7 +1151,7 @@ export default defineComponent({
         xhr.timeout = 2000
         xhr.send()
 
-        await delay(3500)
+        await delay(2000)
         if (xhr.status === 200) {
           await delay(3000)
           redirect('/')
@@ -1172,10 +1172,9 @@ export default defineComponent({
       } else {
         startPage.value = currentStartPage.value
 
-        for (let i = 0; i < rows.value.length; i++) {
-          if (rows.value[i].name === currentStartPage.value) {
-            startPage.value = rows.value[i].long_name
-          }
+        const appEntry = rows.value.find(x => x.name === currentStartPage.value)
+        if (appEntry) {
+          startPage.value = appEntry.long_name
         }
       }
     }
@@ -1336,7 +1335,7 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          appTableVisible.value = true
+          appTableVisible.value = false
           // Install app
           Axios.post(`${api.value}/v1/docker/run`, {
             env_vars: row.env_vars,
@@ -1363,14 +1362,14 @@ export default defineComponent({
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            appTableVisible.value = false
+            appTableVisible.value = true
           }).catch(function (error) {
             if (error.response) {
               console.log(error.response.data)
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            appTableVisible.value = false
+            appTableVisible.value = true
           })
         })
       } else if (row.status.toLowerCase() === 'installed') {
@@ -1380,7 +1379,7 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          appTableVisible.value = true
+          appTableVisible.value = false
           // Uninstall app
           Axios.post(`${api.value}/v1/docker/remove`, {
             name: row.name,
@@ -1392,14 +1391,14 @@ export default defineComponent({
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            appTableVisible.value = false
+            appTableVisible.value = true
           }).catch(function (error) {
             if (error.response) {
               console.log(error.response.data)
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            appTableVisible.value = false
+            appTableVisible.value = true
           })
         })
       } else if (row.status.toLowerCase() === 'update_available') {
@@ -1413,7 +1412,7 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          appTableVisible.value = true
+          appTableVisible.value = false
           // Update app
           Axios.post(`${api.value}/v1/docker/pull`, {
             env_vars: row.env_vars,
@@ -1440,14 +1439,14 @@ export default defineComponent({
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            appTableVisible.value = false
+            appTableVisible.value = true
           }).catch(function (error) {
             if (error.response) {
               console.log(error.response.data)
               $q.notify({ type: 'negative', message: t('error') })
             }
             fetchApps()
-            appTableVisible.value = false
+            appTableVisible.value = true
           })
         })
       }

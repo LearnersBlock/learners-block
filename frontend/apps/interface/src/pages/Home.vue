@@ -204,17 +204,15 @@ export default defineComponent({
           }, 2000)
         } else {
           // Redirect for App Store
-          for (let i = 0; i < res2.data.length; i++) {
-            if (res2.data[i].name === res1.data.start_page) {
-              setTimeout(() => {
-                const appPort = Object.keys(res2.data[i].ports)
-                const forwardUrl = res2.data[i].ports[appPort[0]]
-                location.href = `http://${window.location.hostname}:${forwardUrl}`
-              }, 2000)
-              return
-            }
+          const appEntry = res2.data.find(x => x.name === res1.data.start_page)
+          if (appEntry) {
+            const appPort = Object.keys(appEntry.ports)
+            setTimeout(() => {
+              location.href = `http://${window.location.hostname}:${appEntry.ports[appPort[0]]}`
+            }, 2000)
+            return
           }
-          // Redirect for custom path
+          // Redirect for pre-set paths
           if (res1.data.start_page === 'files') {
             setTimeout(() => {
               $router.push({ name: 'filemanager', params: { data: 'fileshare' } })
@@ -228,8 +226,10 @@ export default defineComponent({
               location.href = '/website/'
             }, 2000)
           } else {
-            populateAppStore(res2)
-            settingsLoading.value = false
+            // Redirect for custom path
+            setTimeout(() => {
+              location.href = res1.data.start_page
+            }, 2000)
           }
         }
       })).catch(e => {
