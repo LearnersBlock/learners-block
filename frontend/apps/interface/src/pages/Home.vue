@@ -100,7 +100,7 @@
         </q-item>
         <q-separator v-if="settings.website" />
       </q-list>
-      <div v-if="slides[0] && !settingsLoading">
+      <div v-if="slide && !settingsLoading">
         <q-item-label
           header
           class="text-2xl mt-2"
@@ -173,7 +173,6 @@ export default defineComponent({
 
     // App Store
     const appStoreState = Axios.get(`${api.value}/v1/appstore/status`)
-    const jsonKey = ref<any>()
     const slide = ref<any>()
     const slides = ref<any>({})
     const windowHostname = ref<string>(window.location.hostname)
@@ -239,19 +238,21 @@ export default defineComponent({
 
     function populateAppStore (res2) {
       // Populate app store data
-      let entry = 0
-      slides.value = res2
-      for (let i = 0; i < res2.data.length; i++) {
-        if (res2.data[i].status.toLowerCase() === 'installed' || res2.data[i].status.toLowerCase() === 'update_available') {
-          slides.value[entry] = res2.data[i]
-          jsonKey.value = Object.keys(res2.data[i].ports)
-          slides.value[entry].ports = slides.value[entry].ports[jsonKey.value[0]]
+      const installedApps = res2.data.filter(obj => {
+        if (obj.status.toLowerCase() === 'installed' || obj.status.toLowerCase() === 'update_available') {
+          // Set the port to be the inbound port only
+          const jsonKey = Object.keys(obj.ports)
+          obj.ports = obj.ports[jsonKey[0]]
 
-          entry = entry + 1
+          return obj
+        } else {
+          return false
         }
-      }
-      if (slides.value[0]) {
-        slide.value = slides.value[0].name
+      })
+
+      if (installedApps[0]) {
+        slides.value = installedApps
+        slide.value = installedApps[0].name
       }
     }
 

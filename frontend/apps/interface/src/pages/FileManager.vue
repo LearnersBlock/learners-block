@@ -648,40 +648,43 @@ export default defineComponent({
     }
 
     function checkUploadOverwrite (files) {
-      for (let i = 0; i < files.length; i++) {
-        if (rows.value.some(({ name }) => name === files[i].name)) {
-          delayUpload.value = true
-          $q.notify({
-            actions: [
-              { label: t('close'), color: 'black', handler: () => { /* ... */ } }
-            ],
-            onDismiss: () => { delayUpload.value = false },
-            timeout: 0,
-            type: 'warning',
-            position: 'center',
-            message: t('upload_files_exist')
-          })
-        }
+      const itemCheck = files.filter(obj => {
+        return rows.value.some(({ name }) => name === obj.name)
+      })
+
+      if (itemCheck.length > 0) {
+        delayUpload.value = true
+        $q.notify({
+          actions: [
+            { label: t('close'), color: 'black', handler: () => { /* ... */ } }
+          ],
+          onDismiss: () => { delayUpload.value = false },
+          timeout: 0,
+          type: 'warning',
+          position: 'center',
+          message: t('upload_files_exist')
+        })
       }
     }
 
     async function confirmOverwrite (item, rows) {
-      const arrayItem = JSON.parse(JSON.stringify(item))
-      const arrayRow = JSON.parse(JSON.stringify(rows))
+      const itemCheck = item.filter(obj => {
+        return rows.some(({ name }) => name === obj.name)
+      })
 
-      for (let i = 0; i < arrayItem.length; i++) {
-        if (arrayRow.some(({ name }) => name === arrayItem[i].name)) {
-          if (await new Promise(resolve => $q.dialog({
-            title: t('confirm'),
-            message: t('overwrite_warning'),
-            cancel: true
-          }).onOk(() => resolve(true)).onCancel(() => resolve(false)))) {
-            return true
-          } else {
-            return false
-          }
+      if (itemCheck.length > 0) {
+        if (await new Promise(resolve => $q.dialog({
+          title: t('confirm'),
+          message: t('overwrite_warning'),
+          cancel: true
+        }).onOk(() => resolve(true)).onCancel(() => resolve(false)))) {
+          return true
+        } else {
+          return false
         }
-      } return true
+      } else {
+        return false
+      }
     }
 
     function deleteFile (itemObj) {
