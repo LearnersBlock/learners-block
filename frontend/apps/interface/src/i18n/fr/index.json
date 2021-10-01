@@ -111,7 +111,7 @@
     "connection_reset_request": "Votre Learner’s Block va maintenant tenter de se connecter. Il sera à votre disposition en connectant votre appareil au même réseau Wi-Fi. Si après une minute votre Learner’s Block n’est toujours pas connecté au réseau Wi-Fi choisi, reconnectez-vous à votre Learner’s Block, vérifiez votre mot de passe et réessayez.",
     "network_connect_fail": "Échec de connexion au réseau.",
     "network_fetch_fail": "Échec de la recherche des réseaux disponibles.",
-    "no_networks": "Aucun réseau Wi-Fi disponible. Veuillez vous assurer qu’il y a un réseau disponible et redémarrez l’appareil.",
+    "no_networks": "Aucun réseau Wi-Fi à portée. Rapprochez-vous, puis cliquez sur le bouton d’actualisation.",
     "select_ssid": "Sélectionnez le réseau Wi-Fi",
     "user": "Utilisateur",
     "network_absent": "Si vous ne voyez pas votre réseau, redémarrez l’appareil et réessayez.",
@@ -156,5 +156,7 @@
     "portainer_installing": "Portainer est en train d’être installé. Ceci peut prendre un certain temps…",
     "reset_database_description": "Réinitialiser la base de données. Ceci effacera un grand nombre de vos paramètres et de vos mots de passe enregistrés.",
     "reset": "Réinitialiser",
-    "library_empty": "Votre bibliothèque est vide. Vous pouvez ajouter du contenu via le Panneau de configuration."
+    "library_empty": "Votre bibliothèque est vide. Vous pouvez ajouter du contenu via le Panneau de configuration.",
+    "refresh_not_compatible": "Votre appareil n’est pas en mesure d’actualiser les réseaux. Redémarrez votre appareil pour actualiser la liste des réseaux.",
+    "no_apps_installed": "Aucune application n’est installée sur cet appareil."
 }

@@ -110,7 +110,7 @@
     "author_colon": "Autore:",
     "user": "Utente",
     "select_ssid": "Seleziona la rete Wi-Fi",
-    "no_networks": "Nessuna rete Wi-Fi disponibile nel raggio d’azione. Assicurati che ci sia e riavvia il dispositivo.",
+    "no_networks": "Nessuna rete Wi-Fi nel raggio d’azione. Avvicinati e poi clicca sul pulsante di aggiornamento.",
     "network_fetch_fail": "Impossibile recuperare le reti disponibili.",
     "network_connect_fail": "Impossibile connettersi alla rete.",
     "connection_reset_request": "Il tuo Learner’s Block cercherà ora di connettersi alla rete Wi-Fi. Puoi connetterti alla stessa rete per usare il tuo Block. Se il tuo dispositivo non è disponibile dopo un minuto, riconnettiti al tuo Learner’s Block, controlla la tua password Wi-Fi e riprova.",
@@ -156,5 +156,7 @@
     "portainer_installing": "Portainer si sta installando. Questo può richiedere un po’ di tempo…",
     "reset": "Azzera",
     "reset_database_description": "Azzera la banca dati. Questo eliminerà molte delle tue impostazioni e password memorizzate.",
-    "library_empty": "La tua Biblioteca è vuota. Puoi aggiungere contenuti via il Pannello di controllo."
+    "library_empty": "La tua Biblioteca è vuota. Puoi aggiungere contenuti via il Pannello di controllo.",
+    "refresh_not_compatible": "Il tuo dispositivo non è in grado di aggiornare le reti. Riavvia il tuo dispositivo per aggiornare l’elenco delle reti.",
+    "no_apps_installed": "Non ci sono applicazioni installate su questo dispositivo."
 }
