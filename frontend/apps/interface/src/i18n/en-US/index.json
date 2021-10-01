@@ -158,5 +158,5 @@
     "reset_database_description": "Reset the database. This will erase many of your settings and stored passwords.",
     "library_empty": "Your Library is empty. You can add content through the Control Panel.",
     "no_apps_installed": "There are no applications installed on this device.",
-    "refresh_not_compatible": "Your device is not compatible with the refresh networks button. Restart your device to refresh the networks list instead."
+    "refresh_not_compatible": "Your device is not able to refresh the networks. Restart your device to refresh the networks list instead."
 }
