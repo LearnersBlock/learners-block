@@ -156,7 +156,7 @@
     "reset": "Redefinir",
     "portainer_installing": "Portainer está instalando. Isso pode levar algum tempo…",
     "app_installed": "O aplicativo foi instalado. Pode levar algum tempo para ele comece e fique disponível.",
-    "refresh_not_compatible": "O seu dispositivo não é compatível com o botão de atualização de redes. Reinicie o seu dispositivo para atualizar a lista de redes.",
+    "refresh_not_compatible": "Seu dispositivo não é capaz de atualizar as redes. Reinicie seu dispositivo para atualizar a lista de redes.",
     "no_apps_installed": "Não há aplicativos instalados neste dispositivo.",
     "library_empty": "A sua biblioteca está vazia. Você pode adicionar um conteúdo através do Painel de Controle."
 }
