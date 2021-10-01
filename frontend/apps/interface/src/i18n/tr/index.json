@@ -112,7 +112,7 @@
     "connection_reset_request": "Learner's Block'unuz şimdi kablosuz ağa bağlanmayı deneyecek. Blok'unuzu kullanmak için aynı ağa bağlanabilirsiniz. Aygıtınız bir dakika sonra kullanılabilir olmazsa, Learner's Block'unuza yeniden bağlanın, kablosuz ağ parolanızı gözden geçirin ve tekrar deneyin.",
     "network_connect_fail": "Ağa bağlanılamadı.",
     "network_fetch_fail": "Kullanılabilir ağlar alınamadı.",
-    "no_networks": "Kapsama alanı içinde kullanılabilir kablosuz ağ yok. Lütfen olduğundan emin olun ve aygıtı yeniden başlatın.",
+    "no_networks": "Kapsama alanı içinde kullanılabilir kablosuz ağ yok. Lütfen olduğundan emin olun ve yenile düğmesine tıklayın.",
     "select_ssid": "Kablosuz Ağ Seç",
     "user": "Kullanıcı",
     "network_absent": "Ağınızı göremiyorsanız, aygıtı yeniden başlatın ve tekrar deneyin.",
@@ -155,5 +155,8 @@
     "app_installed": "Uygulama kuruldu. Uygulamanın başlaması ve kullanılabilir hale gelmesi biraz zaman alabilir.",
     "reset_database_description": "Veri tabanını sıfırlayın. Bu, ayarlarınızın çoğunu ve kaydedilen parolalarınızı silecektir.",
     "reset": "Sıfırla",
-    "portainer_installing": "Portainer kuruluyor. Bu biraz zaman alabilir…"
+    "portainer_installing": "Portainer kuruluyor. Bu biraz zaman alabilir…",
+    "refresh_not_compatible": "Aygıtınız ağları yenileyemiyor. Bunun yerine ağlar listesini yenilemek için aygıtınızı yeniden başlatın.",
+    "no_apps_installed": "Bu aygıtta kurulu uygulama yok.",
+    "library_empty": "Kitaplığınız boş. Denetim Panelinden içerik ekleyebilirsiniz."
 }
