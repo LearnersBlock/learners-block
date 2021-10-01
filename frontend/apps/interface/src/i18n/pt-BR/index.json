@@ -111,7 +111,7 @@
     "connection_reset_request": "O Learner's Block agora tentará se conectar à rede Wi-Fi. Você pode se conectar à mesma rede para usar o seu Bloco. Se o dispositivo não estiver disponível após um minuto, reconecte-se ao seu Bloco de Aprendizes, verifique sua senha wi-fi e tente novamente.",
     "network_connect_fail": "Falha ao conectar à rede.",
     "network_fetch_fail": "Falha ao buscar redes disponíveis.",
-    "no_networks": "Nenhuma rede Wi-Fi disponível dentro do alcance. Certifique-se de que existe e reinicie o dispositivo.",
+    "no_networks": "Nenhuma rede Wi-Fi está disponível dentro do alcance. Certifique-se de que ela existe e clique no botão de atualização.",
     "select_ssid": "Selecione a rede Wi-Fi",
     "user": "Usuário",
     "network_absent": "Se você não ver a sua rede, reinicie o dispositivo e tente novamente.",
@@ -155,5 +155,8 @@
     "reset_database_description": "Reinicialize o banco de dados. Isso apagará muitas das suas configurações e das senhas que foram armazenadas.",
     "reset": "Redefinir",
     "portainer_installing": "Portainer está instalando. Isso pode levar algum tempo…",
-    "app_installed": "O aplicativo foi instalado. Pode levar algum tempo para ele comece e fique disponível."
+    "app_installed": "O aplicativo foi instalado. Pode levar algum tempo para ele comece e fique disponível.",
+    "refresh_not_compatible": "O seu dispositivo não é compatível com o botão de atualização de redes. Reinicie o seu dispositivo para atualizar a lista de redes.",
+    "no_apps_installed": "Não há aplicativos instalados neste dispositivo.",
+    "library_empty": "A sua biblioteca está vazia. Você pode adicionar um conteúdo através do Painel de Controle."
 }
