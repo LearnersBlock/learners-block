@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import Axios from 'app/node_modules/axios'
+import Axios from 'axios'
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({

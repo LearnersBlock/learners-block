@@ -301,7 +301,7 @@
 </template>
 
 <script lang="ts">
-import Axios from 'app/node_modules/axios'
+import Axios from 'axios'
 import { useQuasar } from 'quasar'
 import { useQuery } from '@vue/apollo-composable'
 import { defineComponent, ref } from 'vue'

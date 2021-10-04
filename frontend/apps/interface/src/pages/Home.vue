@@ -153,7 +153,7 @@
 </template>
 
 <script lang="ts">
-import Axios from 'app/node_modules/axios'
+import Axios from 'axios'
 import { useStore } from '../store'
 import { useQuasar } from 'quasar'
 import { computed, defineComponent, onMounted, ref } from 'vue'
