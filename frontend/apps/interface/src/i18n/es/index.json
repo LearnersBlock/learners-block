@@ -96,7 +96,7 @@
     "available_applications": "Aplicaciones disponibles",
     "app_store": "Tienda de aplicaciones",
     "application": "Aplicación",
-    "author": "Autoría",
+    "author": "Autor",
     "description": "Descripción",
     "installed": "Instalado",
     "install": "Instalar",
@@ -155,5 +155,7 @@
     "reset_database_description": "Restablezca la base de datos. Se eliminarán muchas de sus configuraciones y contraseñas almacenadas.",
     "app_installed": "Se ha instalado la aplicación. Puede tardar un rato en iniciarse y estar disponible.",
     "reset": "Restablecer",
-    "portainer_installing": "Se está instalando el Portainer. Esto puede demorar un poco…"
+    "portainer_installing": "Se está instalando el Portainer. Esto puede demorar un poco…",
+    "library_empty": "Tu biblioteca está vacía. Puede agregar contenido a través del Panel de Control.",
+    "no_apps_installed": "No hay aplicaciones instaladas en este dispositivo."
 }
