@@ -107,7 +107,7 @@
     "connection_reset_request": "El Learner’s Block intentará conectarse ahora con la red wifi. Puede conectarse a la misma red para utilizarlo. Si transcurrido un minuto el dispositivo aún no está disponible, reconéctese al Learner’s Block, compruebe la contraseña de la red y vuelva a intentarlo.",
     "network_connect_fail": "No se pudo conectar a la red.",
     "network_fetch_fail": "No se pudieron recuperar las redes disponibles.",
-    "no_networks": "No hay ninguna red wifi al alcance. Cerciórese de que las haya y reinicie el dispositivo.",
+    "no_networks": "No hay ninguna red wifi al alcance. Acérquese a una y pulse en el botón Actualizar.",
     "select_ssid": "Seleccionar red wifi",
     "user": "Usuario",
     "network_absent": "Si no puede ver su red, reinicie el dispositivo y vuelva a intentarlo.",
@@ -157,5 +157,6 @@
     "reset": "Restablecer",
     "portainer_installing": "Se está instalando el Portainer. Esto puede demorar un poco…",
     "library_empty": "Tu biblioteca está vacía. Puede agregar contenido a través del Panel de Control.",
-    "no_apps_installed": "No hay aplicaciones instaladas en este dispositivo."
+    "no_apps_installed": "No hay aplicaciones instaladas en este dispositivo.",
+    "refresh_not_compatible": "El dispositivo no es capaz de actualizar las redes. Reinícielo para renovar la lista de redes."
 }
