@@ -253,23 +253,6 @@
             </q-item>
           </template>
         </q-select>
-        <div class="w-90 q-ml-lg q-mt-sm text-grey-9">
-          <q-checkbox
-            v-model="directDownload"
-            left-label
-            size="xs"
-            :label="$t('direct_download')"
-          >
-            <q-tooltip
-              class="text-body2 text-center"
-              anchor="top middle"
-              self="bottom middle"
-              :offset="[20, 20]"
-            >
-              {{ $t('display_only_direct_download') }}
-            </q-tooltip>
-          </q-checkbox>
-        </div>
         <q-btn
           rounded
           color="primary"
@@ -278,12 +261,6 @@
         >
           {{ $t('reset') }}
         </q-btn>
-        <div
-          v-if="fetchedResourcesLength"
-          class="q-ml-md q-mt-md text-grey"
-        >
-          {{ $t('total_entries') }} {{ fetchedResourcesLength.resourcesConnection.aggregate.totalCount }}
-        </div>
         <q-separator class="q-mt-lg" />
         <div class="q-mt-sm text-grey text-center">
           {{ $t('powered_by') }} <a
@@ -322,9 +299,8 @@ import { GET_LANGUAGES } from '../gql/language/queries'
 import { GET_FORMATS } from '../gql/format/queries'
 import { GET_LEVELS } from '../gql/level/queries'
 import { GET_SUBJECTS } from '../gql/subject/queries'
-import { GET_RESOURCES_LENGTH } from '../gql/resource/queries'
 import { Loading, Quasar, useQuasar } from 'quasar'
-import { computed, defineComponent, onMounted, provide, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -338,10 +314,6 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
     const $router = useRouter()
     const $store = useStore()
-
-    // Provide directDownload status to Index.vue
-    const directDownload = ref(false)
-    provide('direct-download', directDownload)
 
     // Keyword input
     const keyword = ref<string>('')
@@ -412,10 +384,6 @@ export default defineComponent({
     const { result: fetchedSubjects, loading: fetchSubjectsLoading } = useQuery(GET_SUBJECTS)
     // Fetch level query
     const { result: fetchedLevels, loading: fetchLevelsLoading } = useQuery(GET_LEVELS)
-    // Fetch resources query
-    const {
-      result: fetchedResourcesLength
-    } = useQuery(GET_RESOURCES_LENGTH, {})
 
     onMounted(() => {
       if (onDevice.value) {
@@ -455,6 +423,23 @@ export default defineComponent({
       return $router.currentRoute.value.path === '/'
     })
 
+    function redirect (url) {
+      window.open(url, '_blank')
+    }
+
+    const resetInputs = async () => {
+      Loading.show()
+      window.scrollTo(0, 0)
+      keyword.value = ''
+      selectedLanguages.value = []
+      selectedFormats.value = []
+      selectedSubjects.value = []
+      selectedLevels.value = []
+      selectedCategories.value = []
+      await view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedCategories.value, selectedLanguages.value, selectedSubjects.value, selectedLevels.value, selectedCategories.value)
+      Loading.hide()
+    }
+
     // Method to call fetchFilteredResources from parent to child
     const searchResources = async () => {
       Loading.show()
@@ -478,32 +463,13 @@ export default defineComponent({
       }
     }
 
-    function redirect (url) {
-      window.open(url, '_blank')
-    }
-
-    const resetInputs = async () => {
-      Loading.show()
-      window.scrollTo(0, 0)
-      keyword.value = ''
-      selectedLanguages.value = []
-      selectedFormats.value = []
-      selectedSubjects.value = []
-      selectedLevels.value = []
-      selectedCategories.value = []
-      await view.value.fetchFilteredResources(keyword.value, selectedFormats.value, selectedCategories.value, selectedLanguages.value, selectedSubjects.value, selectedLevels.value, selectedCategories.value)
-      Loading.hide()
-    }
-
     return {
       changeLanguage,
-      directDownload,
       fetchedCategories,
       fetchCategoriesLoading,
       fetchedLanguages,
       fetchFormatsLoading,
       fetchLanguagesLoading,
-      fetchedResourcesLength,
       fetchedSubjects,
       fetchSubjectsLoading,
       fetchedLevels,

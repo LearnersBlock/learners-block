@@ -1,10 +1,13 @@
 <template ref="indexPage">
   <q-page class="row items-center justify-evenly">
-    <div v-if="!apiIsUp">
+    <div
+      v-if="!apiIsUp"
+      class="text-h3"
+    >
       {{ $t('under_maintenance') }}
     </div>
     <div
-      v-else-if="fetchResourcesLoading || (filteredResources.length == 0 && endOfResults == false)"
+      v-else-if="fetchResourcesLoading || (fetchedResources.length == 0 && endOfResults == false)"
     >
       <q-spinner
         color="primary"
@@ -41,7 +44,7 @@
           @load="loadMore"
         >
           <router-link
-            v-for="resource in filteredResources"
+            v-for="resource in fetchedResources.resources"
             :key="resource.id"
             class="resource q-mb-md items-center text-black"
             tag="div"
@@ -148,7 +151,7 @@
 /* eslint-disable vue/require-default-prop */
 import { useQuery } from '@vue/apollo-composable'
 import { GET_RESOURCES } from '../gql/resource/queries'
-import { computed, defineComponent, inject, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default defineComponent({
@@ -176,27 +179,26 @@ export default defineComponent({
   setup (props) {
     // Import required features
     const apiIsUp = ref<boolean>(true)
-    const { onError } = useQuery(GET_RESOURCES, { limit: 1 })
     const $store = useStore()
-
-    // Direct download boolean from MainLayout
-    const directDownload = ref<any>(inject('direct-download'))
 
     // Constants for resource fetching
     const endOfResults = ref<boolean>(false)
     const numberOfResults = ref<number>(40)
 
-    onError(() => {
-      apiIsUp.value = false
-    })
     // Read envs for page state
     const onDevice = ref<any>(process.env.ONDEVICE)
+
     // Fetch resources query
     const {
       result: fetchedResources,
       loading: fetchResourcesLoading,
-      refetch: fetchResources
+      refetch: fetchResources,
+      onError: apiError
     } = useQuery(GET_RESOURCES, { limit: numberOfResults.value }) as any
+
+    apiError(() => {
+      apiIsUp.value = false
+    })
 
     // On mount, enable loading and fetch resources
     onMounted(() => {
@@ -231,18 +233,6 @@ export default defineComponent({
       endOfResults.value = false
     }
 
-    const filteredResources = computed(() => {
-      if (directDownload.value) {
-        const response = fetchedResources.value.resources.filter(resource => resource.download_url)
-        if (response.length === 0 && endOfResults.value === false) {
-          loadMore(null, null)
-        }
-        return response
-      } else {
-        return fetchedResources.value.resources
-      }
-    })
-
     // Load more resources when reaching bottom of results
     async function loadMore (_index, done) {
       if (endOfResults.value) {
@@ -271,12 +261,10 @@ export default defineComponent({
 
     return {
       apiIsUp,
-      directDownload,
       endOfResults,
       fetchedResources,
       fetchFilteredResources,
       fetchResourcesLoading,
-      filteredResources,
       loadMore,
       onDevice,
       redirect

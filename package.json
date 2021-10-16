@@ -11,16 +11,16 @@
     "build": "quasar build"
   },
   "dependencies": {
-    "@quasar/extras": "^1.11.1",
+    "@quasar/extras": "^1.11.2",
     "axios": "^0.21.4",
     "core-js": "^3.16.2",
-    "quasar": "^2.1.0",
+    "quasar": "^2.1.5",
     "vue-i18n": "^9.1.4",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.0.0",
-    "@quasar/app": "^3.1.2",
+    "@quasar/app": "^3.1.4",
     "@quasar/quasar-app-extension-apollo": "^2.0.0-beta.3",
     "@types/node": "^16.7.1",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
