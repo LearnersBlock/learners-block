@@ -128,7 +128,6 @@
             </q-item-section>
             <q-item-section side>
               <q-btn
-                class="mr-3"
                 icon="edit"
                 outline
                 dense
