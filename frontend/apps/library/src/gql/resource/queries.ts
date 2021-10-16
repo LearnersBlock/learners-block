@@ -76,13 +76,3 @@ export const GET_RESOURCE = gql`
       }
   }
 `
-
-export const GET_RESOURCES_LENGTH = gql`
-  query resourcesConnection {
-    resourcesConnection {
-      aggregate {
-        totalCount
-      }
-    }
-  }
-`
