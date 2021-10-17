@@ -21,7 +21,6 @@
           :offset="[25, 20]"
         >
           <q-btn
-            class="text-subtitle2 text-weight-bold"
             rounded
             outline
             color="white"
