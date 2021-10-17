@@ -89,9 +89,6 @@ RUN chown -R nginx.nginx /run && \
   chown -R nobody.nobody public/storage/library/ && \
   chown -R nobody.nobody public/storage/website/
 
-# Enable Library OnDevice mode
-ENV ONDEVICE=TRUE
-
 # Disable USB support to prevent error message in dev env
 ENV UDEV=off
 
@@ -103,5 +100,4 @@ COPY /config/nginx/nginx.dev.conf /etc/nginx/nginx.conf
 
 # Start services
 CMD yarn install --cwd /app/public/interface_dev/ && \
-  yarn install --cwd /app/public/library/ && \ 
   exec supervisord -c /etc/supervisor/conf.d/supervisord.conf

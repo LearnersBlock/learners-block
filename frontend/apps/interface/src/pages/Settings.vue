@@ -98,7 +98,7 @@
             tag="a"
             target="_self"
             :disable="!internet"
-            @click="redirect('/library/')"
+            :to="{ name: 'library' }"
           >
             <q-tooltip
               v-if="!internet"

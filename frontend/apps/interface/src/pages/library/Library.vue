@@ -1,5 +1,5 @@
-<template ref="indexPage">
-  <q-page class="row items-center justify-evenly">
+<template>
+  <q-page class="row items-center justify-evenly mt-3">
     <div
       v-if="!apiIsUp"
       class="text-h3"
@@ -19,7 +19,6 @@
       class="resource_container"
     >
       <q-btn
-        v-if="onDevice"
         class="q-mb-md text-subtitle2 text-weight-bold"
         rounded
         outline
@@ -28,7 +27,7 @@
         text-color="primary"
         :label="$t('settings')"
         icon="arrow_back"
-        @click="redirect"
+        :to="{ name: 'settings' }"
       />
       <div
         v-if="fetchedResources.resources == '' && !fetchResourcesLoading"
@@ -48,7 +47,7 @@
             :key="resource.id"
             class="resource q-mb-md items-center text-black"
             tag="div"
-            :to="'/resource/' + resource.id"
+            :to="'/library/resource/' + resource.id"
           >
             <div v-if="resource">
               <q-badge
@@ -64,59 +63,63 @@
                 {{ $t(license.license.toLowerCase()) }}
               </q-badge>
             </div>
-            <div v-if="resource.logo && resource.logo.formats && resource.logo.formats.thumbnail && resource.logo.formats.thumbnail.url">
-              <q-img
-                :src="'https://library-api.learnersblock.org' + resource.logo.formats.thumbnail.url"
-                loading="lazy"
-                spinner-color="grey"
-                class="resource_image"
-              />
-            </div>
-            <div v-else>
-              <img
-                class="resource_image"
-                :src="resource.logo ? 'https://library-api.learnersblock.org' + resource.logo.url : require('../assets/default.jpg')"
-              >
-            </div>
-            <div class="resource_info">
-              <div
-                class="text-h4 resource_name"
-                dir="auto"
-              >
-                {{ resource.name }}
+            <div class="col-2">
+              <div v-if="resource.logo && resource.logo.formats && resource.logo.formats.thumbnail && resource.logo.formats.thumbnail.url">
+                <q-img
+                  :src="'https://library-api.learnersblock.org' + resource.logo.formats.thumbnail.url"
+                  loading="lazy"
+                  spinner-color="grey"
+                  class="resource_image"
+                />
               </div>
-              <div
-                class="text-body1"
-                dir="auto"
-              >
-                {{ resource.description }}
+              <div v-else>
+                <img
+                  class="resource_image"
+                  :src="resource.logo ? 'https://library-api.learnersblock.org' + resource.logo.url : require('../../assets/default.jpg')"
+                >
               </div>
-              <div class="resource_languages">
-                <div>
-                  <q-badge
-                    v-for="language in resource.languages"
-                    :key="language.id"
-                    class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
-                    color="secondary"
+            </div>
+            <div class="col">
+              <div class="resource_info">
+                <div
+                  class="text-h4 resource_name"
+                  dir="auto"
+                >
+                  {{ resource.name }}
+                </div>
+                <div
+                  class="text-body1"
+                  dir="auto"
+                >
+                  {{ resource.description }}
+                </div>
+                <div class="resource_languages">
+                  <div>
+                    <q-badge
+                      v-for="language in resource.languages"
+                      :key="language.id"
+                      class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
+                      color="secondary"
+                    >
+                      {{ $t(language.language) }}
+                    </q-badge>
+                  </div>
+                </div>
+                <div class="column resource_size text-center q-mb-xs">
+                  <div
+                    v-if="resource.size"
+                    class="col"
                   >
-                    {{ $t(language.language) }}
-                  </q-badge>
-                </div>
-              </div>
-              <div class="column resource_size text-center q-mb-xs">
-                <div
-                  v-if="resource.size"
-                  class="col"
-                >
-                  {{ $t('size') }} {{ resource.size }} GB
-                </div>
-                <div
-                  v-if="resource.download_url"
-                  style="line-height: 0px;"
-                >
-                  <q-badge color="secondary">
-                    {{ $t('direct_download') }}
-                  </q-badge>
+                    {{ $t('size') }} {{ resource.size }} GB
+                  </div>
+                  <div
+                    v-if="resource.download_url"
+                    style="line-height: 0px;"
+                  >
+                    <q-badge color="secondary">
+                      {{ $t('direct_download') }}
+                    </q-badge>
+                  </div>
                 </div>
               </div>
             </div>
@@ -150,43 +153,20 @@
 <script lang="ts">
 /* eslint-disable vue/require-default-prop */
 import { useQuery } from '@vue/apollo-composable'
-import { GET_RESOURCES } from '../gql/resource/queries'
+import { GET_RESOURCES } from '../../gql/resource/queries'
 import { defineComponent, onMounted, ref } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from '../../store'
 
 export default defineComponent({
-  name: 'PageIndex',
-  props: {
-    categories: {
-      type: Array
-    },
-    formats: {
-      type: Array
-    },
-    subjects: {
-      type: Array
-    },
-    levels: {
-      type: Array
-    },
-    keyword: {
-      type: String
-    },
-    languages: {
-      type: Array
-    }
-  },
-  setup (props) {
+  name: 'Library',
+  setup () {
     // Import required features
     const apiIsUp = ref<boolean>(true)
-    const $store = useStore()
+    const $store = useStore() as any
 
     // Constants for resource fetching
     const endOfResults = ref<boolean>(false)
     const numberOfResults = ref<number>(40)
-
-    // Read envs for page state
-    const onDevice = ref<any>(process.env.ONDEVICE)
 
     // Fetch resources query
     const {
@@ -194,7 +174,7 @@ export default defineComponent({
       loading: fetchResourcesLoading,
       refetch: fetchResources,
       onError: apiError
-    } = useQuery(GET_RESOURCES, { limit: numberOfResults.value }) as any
+    } = useQuery(GET_RESOURCES, { limit: numberOfResults.value })
 
     apiError(() => {
       apiIsUp.value = false
@@ -212,23 +192,9 @@ export default defineComponent({
     })
 
     // Enable loading and filter resources according to all inputs
-    const fetchFilteredResources = async (
-      keyword: string = props.keyword!,
-      formats: string[] = props.formats! as string[],
-      languages: string[] = props.languages as string[],
-      subjects: string[] = props.subjects as string[],
-      levels: string[] = props.levels as string[],
-      categories: string[] = props.categories as string[]) => {
+    async function fetchFilteredResources () {
       await fetchResources(
-        {
-          keyword,
-          languages,
-          formats,
-          subjects,
-          levels,
-          categories,
-          limit: $store.state.savedResources.limit
-        } as any)
+        { limit: $store.state.savedResources.limit })
       $store.commit('savedResources/updateResources', fetchedResources)
       endOfResults.value = false
     }
@@ -255,19 +221,12 @@ export default defineComponent({
       }
     }
 
-    function redirect () {
-      location.href = '/settings'
-    }
-
     return {
       apiIsUp,
       endOfResults,
       fetchedResources,
-      fetchFilteredResources,
       fetchResourcesLoading,
-      loadMore,
-      onDevice,
-      redirect
+      loadMore
     }
   }
 })
@@ -302,7 +261,6 @@ export default defineComponent({
        width: 10rem;
        height: auto;
        margin-bottom: 1.5rem;
-
       }
       @media screen and (max-width: 1680px) {
       width: 10rem;
@@ -353,7 +311,6 @@ export default defineComponent({
   }
 
   &_container {
-    position: absolute;
     top: 2rem;
     width: 90%;
   }
