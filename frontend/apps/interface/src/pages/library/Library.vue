@@ -49,20 +49,6 @@
             tag="div"
             :to="'/library/resource/' + resource.id"
           >
-            <div v-if="resource">
-              <q-badge
-                v-for="license in resource.licenses"
-                :key="license.id"
-                class="q-mt-sm q-mr-sm text-body2"
-                color="secondary"
-                floating
-                rounded
-                transparent
-                multi-line
-              >
-                {{ $t(license.license.toLowerCase()) }}
-              </q-badge>
-            </div>
             <div class="col-2">
               <div v-if="resource.logo && resource.logo.formats && resource.logo.formats.thumbnail && resource.logo.formats.thumbnail.url">
                 <q-img
@@ -111,14 +97,6 @@
                     class="col"
                   >
                     {{ $t('size') }} {{ resource.size }} GB
-                  </div>
-                  <div
-                    v-if="resource.download_url"
-                    style="line-height: 0px;"
-                  >
-                    <q-badge color="secondary">
-                      {{ $t('direct_download') }}
-                    </q-badge>
                   </div>
                 </div>
               </div>
@@ -258,12 +236,12 @@ export default defineComponent({
      @media only screen and (max-width: 960px) {
        margin: auto;
        margin-right: 0;
-       width: 10rem;
+       width: 7rem;
        height: auto;
        margin-bottom: 1.5rem;
       }
       @media screen and (max-width: 1680px) {
-      width: 10rem;
+      width: 7rem;
       height: auto;
       align-self: center;
       }

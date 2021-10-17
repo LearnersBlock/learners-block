@@ -1,5 +1,8 @@
 <template>
-  <q-page class="row justify-evenly q-mb-lg">
+  <q-page
+    class="row justify-evenly q-mb-lg"
+    style="width: 90vw"
+  >
     <!-- Loading Spinner -->
     <div
       v-if="fetchResourceLoading"
@@ -46,7 +49,7 @@
         >
       </div>
       <div
-        class="text-h2 resource_name"
+        class="text-h2 resource_name mt-5"
         dir="auto"
       >
         {{ fetchedResource.resource.name }}
@@ -86,6 +89,7 @@
               v-for="category in fetchedResource.resource.categories"
               :key="category.id"
               class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              multi-line
               color="secondary"
             >
               {{ $t(category.category) }}
@@ -104,6 +108,7 @@
               v-for="language in fetchedResource.resource.languages"
               :key="language.id"
               class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              multi-line
               color="secondary"
             >
               {{ $t(language.language) }}
@@ -122,6 +127,7 @@
               v-for="format in fetchedResource.resource.formats"
               :key="format.id"
               class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              multi-line
               color="secondary"
             >
               {{ format.type }}
@@ -162,6 +168,7 @@
               v-for="subject in fetchedResource.resource.subjects"
               :key="subject.id"
               class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              multi-line
               color="secondary"
             >
               {{ subject.subject }}
@@ -180,27 +187,10 @@
               v-for="level in fetchedResource.resource.levels"
               :key="level.id"
               class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              multi-line
               color="secondary"
             >
               {{ level.level }}
-            </q-badge>
-          </div>
-        </div>
-        <div
-          v-if="fetchedResource.resource.licenses && fetchedResource.resource.licenses.length"
-          class="resource_info q-mt-sm"
-        >
-          <div>
-            {{ $t('licenses') }}
-          </div>
-          <div>
-            <q-badge
-              v-for="license in fetchedResource.resource.licenses"
-              :key="license.id"
-              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
-              color="secondary"
-            >
-              {{ license.license }}
             </q-badge>
           </div>
         </div>
@@ -210,40 +200,29 @@
         color="primary"
         size="3em"
       />
-      <!-- Code for running on Learner's Block -->
-      <q-btn
-        v-if="fetchedResource.resource.author_website && !fetchedResource.resource.download_url"
-        class="q-mt-lg q-mb-lg"
-        glossy
-        rounded
-        unelevated
-        color="primary"
-        icon="pageview"
-        :label="$t('explore')"
-        @click="downloadZip(fetchedResource.resource.author_website)"
-      />
-      <q-btn
-        v-else-if="fetchedResource.resource.download_url"
-        class="q-mt-lg q-mb-lg"
-        glossy
-        rounded
-        unelevated
-        color="primary"
-        icon="download"
-        :label="exitLoop ? $t('download'): $t('cancel')"
-        @click="downloadFiles()"
-      />
-      <q-btn
-        v-if="fetchedResource.resource.sample"
-        class="q-mt-lg q-ml-sm q-mb-lg"
-        glossy
-        rounded
-        unelevated
-        color="primary"
-        icon="visibility"
-        :label="$t('sample')"
-        @click="viewSample"
-      />
+      <div class="mt-4">
+        <q-btn
+          class="q-mb-sm"
+          glossy
+          rounded
+          unelevated
+          color="primary"
+          icon="download"
+          :label="exitLoop ? $t('download'): $t('cancel')"
+          @click="downloadFiles()"
+        />
+        <q-btn
+          v-if="fetchedResource.resource.sample"
+          class="q-ml-sm q-mb-sm"
+          glossy
+          rounded
+          unelevated
+          color="primary"
+          icon="visibility"
+          :label="$t('sample')"
+          @click="viewSample"
+        />
+      </div>
       <q-linear-progress
         v-if="!exitLoop"
         size="30px"
@@ -371,10 +350,6 @@ export default defineComponent({
       }
     }
 
-    const downloadZip = (link) => {
-      window.open(link)
-    }
-
     function stopDownload () {
       exitLoop.value = true
       downloadedMb.value = 0
@@ -392,7 +367,6 @@ export default defineComponent({
       downloadProgress,
       downloadSpeed,
       downloadTransferred,
-      downloadZip,
       exitLoop,
       fetchedResource,
       fetchResourceLoading,
@@ -406,13 +380,13 @@ export default defineComponent({
 <style scoped lang="scss">
 .resource {
     &_image {
-        width: 11rem;
+        width: 10rem;
         margin-bottom: 1rem;
         @media only screen and (max-width: 1050px) {
             display: block;
             margin-left: auto;
             margin-right: auto;
-            width: 15rem;
+            width: 6rem;
       }
     }
 
