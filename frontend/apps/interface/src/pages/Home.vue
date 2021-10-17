@@ -174,7 +174,7 @@ export default defineComponent({
     // App Store
     const appStoreState = Axios.get(`${api.value}/v1/appstore/status`)
     const slide = ref<any>()
-    const slides = ref<any>({})
+    const slides = ref<Array<any>>([])
     const windowHostname = ref<string>(window.location.hostname)
 
     // Settings for the ui
@@ -238,7 +238,7 @@ export default defineComponent({
 
     function populateAppStore (res2) {
       // Populate app store data
-      const installedApps = res2.data.filter(obj => {
+      const installedApps: any = res2.data.filter(obj => {
         if (obj.status.toLowerCase() === 'installed' || obj.status.toLowerCase() === 'update_available') {
           // Set the port to be the inbound port only
           const jsonKey = Object.keys(obj.ports)
