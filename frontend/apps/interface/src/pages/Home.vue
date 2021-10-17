@@ -103,7 +103,7 @@
       <div v-if="slide && !settingsLoading">
         <q-item-label
           header
-          class="text-2xl mt-2"
+          class="text-2xl mt-2 text-center"
         >
           {{ $t('app_store') }}
         </q-item-label>
