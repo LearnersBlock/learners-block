@@ -117,7 +117,7 @@ export default defineComponent({
     const fabRight = ref<boolean>(false)
     const loading = ref<boolean>(true)
     const showMenu = ref<boolean>(true)
-    const tableOfContents = ref<any>([])
+    const tableOfContents = ref<Array<any>>([])
 
     // Fix for Safari where first page is not stored on load
     watch(() => $q.fullscreen.isActive, val => {
