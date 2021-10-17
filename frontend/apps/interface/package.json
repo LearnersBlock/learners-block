@@ -22,6 +22,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.0.0",
     "@quasar/app": "^3.1.4",
+    "@quasar/quasar-app-extension-apollo": "^2.0.0-beta.3",
     "@types/node": "^16.7.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",

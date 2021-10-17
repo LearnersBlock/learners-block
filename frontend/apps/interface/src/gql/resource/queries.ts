@@ -10,6 +10,7 @@ export const GET_RESOURCES = gql`
           categories: {id_in: $categories}
           languages: {id_in: $languages}
           formats: {id_in: $formats}
+          download_url_null: false
         }, sort: "published_at:desc",limit:$limit) {
           id
           name

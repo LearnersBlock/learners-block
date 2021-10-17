@@ -36,10 +36,6 @@ The development environment is accessible through:
 
 Note: Ensure Docker has access to sufficient 'CPUs' and memory via the Docker preferences page before running.
 
-#### Library
-
-Development of the Library interface takes place on a [separate repository](https://github.com/LearnersBlock/library), which is mirrored in this repository at `/frontend/apps/library`. By default, it points to the `main` branch. The Library is served as part of the Docker development environment with hot-reload enabled although pull requests should be made to the [Library repository](https://github.com/LearnersBlock/library). 
-
 #### Using the environments
 
 After the containers start, required Node modules will be installed and development services run. This may take some time on the first run, please be patient. 

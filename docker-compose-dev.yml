@@ -31,8 +31,7 @@ services:
     volumes:
       - 'asset_share:/app/public/interface_dev/public/asset_share'
       - 'file_storage:/app/public/storage'       
-      - './frontend/apps/interface:/app/public/interface_dev:cached'
-      - './frontend/apps/library:/app/public/library:cached'     
+      - './frontend/apps/interface:/app/public/interface_dev:cached'   
       - 'yarn_cache_frontend:/usr/local/share/.cache/yarn/'
 
 volumes:

@@ -15,12 +15,13 @@
       v-if="fetchedResource"
       class="resource_container q-mb-xl"
     >
-      <q-item class="back q-mt-md q-mr-sm">
+      <q-item class="q-mt-md q-mr-sm">
         <q-page-sticky
           position="top-left"
           :offset="[25, 20]"
         >
           <q-btn
+            class="text-subtitle2 text-weight-bold"
             rounded
             outline
             color="white"
@@ -42,7 +43,7 @@
       <div v-else>
         <img
           class="resource_image"
-          :src="fetchedResource.resource.logo ? 'https://library-api.learnersblock.org' + fetchedResource.resource.logo.url : require('../assets/default.jpg')"
+          :src="fetchedResource.resource.logo ? 'https://library-api.learnersblock.org' + fetchedResource.resource.logo.url : require('../../assets/default.jpg')"
         >
       </div>
       <div
@@ -211,97 +212,68 @@
         size="3em"
       />
       <!-- Code for running on Learner's Block -->
-      <div v-if="onDevice">
-        <q-btn
-          v-if="fetchedResource.resource.author_website && !fetchedResource.resource.download_url"
-          class="q-mt-lg q-mb-lg"
-          glossy
-          rounded
-          unelevated
-          color="primary"
-          icon="pageview"
-          :label="$t('explore')"
-          @click="downloadZip(fetchedResource.resource.author_website)"
-        />
-        <q-btn
-          v-else-if="fetchedResource.resource.download_url"
-          class="q-mt-lg q-mb-lg"
-          glossy
-          rounded
-          unelevated
-          color="primary"
-          icon="download"
-          :label="exitLoop ? $t('download'): $t('cancel')"
-          @click="downloadFiles(fetchedResource.resource.download_url)"
-        />
-        <q-btn
-          v-if="fetchedResource.resource.sample"
-          class="q-mt-lg q-ml-sm q-mb-lg"
-          glossy
-          rounded
-          unelevated
-          color="primary"
-          icon="visibility"
-          :label="$t('sample')"
-          @click="viewSample"
-        />
-        <q-linear-progress
-          v-if="!exitLoop"
-          size="30px"
-          :value="downloadProgress/100"
-          color="primary"
-        >
-          <div class="absolute-full flex flex-center">
-            <q-badge
-              v-if="downloadProgress"
-              class="q-mr-sm text-caption"
-              color="white"
-              text-color="black"
-              :label="`${Number(downloadProgress)} % `"
-            />
-            <q-badge
-              v-if="downloadProgress"
-              class="text-caption"
-              color="white"
-              text-color="black"
-              :label="`${Number(downloadedMb)} Mb`"
-            />
-          </div>
-        </q-linear-progress>
-      </div>
-      <div
-        v-else
-        class="q-mt-lg "
+      <q-btn
+        v-if="fetchedResource.resource.author_website && !fetchedResource.resource.download_url"
+        class="q-mt-lg q-mb-lg"
+        glossy
+        rounded
+        unelevated
+        color="primary"
+        icon="pageview"
+        :label="$t('explore')"
+        @click="downloadZip(fetchedResource.resource.author_website)"
+      />
+      <q-btn
+        v-else-if="fetchedResource.resource.download_url"
+        class="q-mt-lg q-mb-lg"
+        glossy
+        rounded
+        unelevated
+        color="primary"
+        icon="download"
+        :label="exitLoop ? $t('download'): $t('cancel')"
+        @click="downloadFiles()"
+      />
+      <q-btn
+        v-if="fetchedResource.resource.sample"
+        class="q-mt-lg q-ml-sm q-mb-lg"
+        glossy
+        rounded
+        unelevated
+        color="primary"
+        icon="visibility"
+        :label="$t('sample')"
+        @click="viewSample"
+      />
+      <q-linear-progress
+        v-if="!exitLoop"
+        size="30px"
+        :value="downloadProgress/100"
+        color="primary"
       >
-        <q-btn
-          v-if="fetchedResource.resource.download_url || fetchedResource.resource.author_website"
-          glossy
-          unelevated
-          color="primary"
-          :icon="fetchedResource.resource.download_url ? 'download': 'pageview'"
-          rounded
-          :label="fetchedResource.resource.download_url ? $t('download'): $t('explore')"
-          :disable-main-btn="!fetchedResource.resource.download_url"
-          @click="downloadZip(fetchedResource.resource.download_url ? fetchedResource.resource.download_url: fetchedResource.resource.author_website)"
-        />
-        <q-btn
-          v-if="fetchedResource.resource.sample"
-          class="q-ml-sm"
-          glossy
-          rounded
-          unelevated
-          color="primary"
-          icon="visibility"
-          :label="$t('sample')"
-          @click="viewSample"
-        />
-      </div>
+        <div class="absolute-full flex flex-center">
+          <q-badge
+            v-if="downloadProgress"
+            class="q-mr-sm text-caption"
+            color="white"
+            text-color="black"
+            :label="`${Number(downloadProgress)} % `"
+          />
+          <q-badge
+            v-if="downloadProgress"
+            class="text-caption"
+            color="white"
+            text-color="black"
+            :label="`${Number(downloadedMb)} Mb`"
+          />
+        </div>
+      </q-linear-progress>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import Axios from 'axios'
+import Axios from 'app/node_modules/axios'
 import { useQuasar } from 'quasar'
 import { useQuery } from '@vue/apollo-composable'
 import { defineComponent, ref } from 'vue'
@@ -326,7 +298,6 @@ export default defineComponent({
     const downloadTransferred = ref<any>()
     const exitLoop = ref<boolean>(true)
     const hostname = ref<any>(window.location.hostname)
-    const onDevice = ref<any>(process.env.ONDEVICE)
 
     function delay (ms: number) {
       return new Promise(resolve => setTimeout(resolve, ms))
@@ -427,7 +398,6 @@ export default defineComponent({
       fetchedResource,
       fetchResourceLoading,
       hostname,
-      onDevice,
       viewSample
     }
   }
@@ -440,6 +410,9 @@ export default defineComponent({
         width: 11rem;
         margin-bottom: 1rem;
         @media only screen and (max-width: 1050px) {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
             width: 15rem;
       }
     }
@@ -471,7 +444,7 @@ export default defineComponent({
     }
 
     &_container {
-        width: 80%;
+        min-width: 90%;
 
         @media only screen and (max-width: 900px) {
             width: 70%;
