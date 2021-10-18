@@ -1,16 +1,5 @@
 # Learner's Block Interface
-If choosing to develop locally, it is recommended to change:
-```
-const devAPI = 'http://0.0.0.0:9090'
-```
-to:
-```
-const devAPI = 'http://localhost:9090'
-```
-
-This will prevent errors about cookies being stored across domains when using the Quasar default load page of http://localhost:8081.
-
-Alternatively, ensure you navigate to the development page via http://0.0.0.0:8081 and not http://localhost:8081.
+If choosing to develop outside of the Docker environment, ensure you navigate to the development page via http://0.0.0.0:8081 and not http://localhost:8081 to prevent errors around cookies being stored across domains (CORS).
 
 ## Install the dependencies
 ```bash
