@@ -13,7 +13,7 @@
       class="resource_container"
     >
       <q-btn
-        class="q-mb-md"
+        class="q-mb-md text-body-1 text-weight-bold"
         rounded
         outline
         color="white"

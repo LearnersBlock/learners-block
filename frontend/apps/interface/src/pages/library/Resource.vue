@@ -24,6 +24,7 @@
           :offset="[25, 20]"
         >
           <q-btn
+            class="text-body-1 text-weight-bold"
             rounded
             outline
             color="white"
@@ -31,8 +32,7 @@
             text-color="primary"
             :label="$t('back')"
             icon="arrow_back"
-            :loading="backButtonLoading"
-            @click="backButtonLoading = true, $router.go(-1)"
+            :to="{ name: 'library' }"
           />
         </q-page-sticky>
       </q-item>
@@ -366,7 +366,6 @@ export default defineComponent({
     }
 
     return {
-      backButtonLoading: ref(false),
       downloadFiles,
       downloadedMb,
       downloadProgress,
