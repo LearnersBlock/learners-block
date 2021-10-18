@@ -20,10 +20,6 @@ export const GET_RESOURCES = gql`
             id
             language
           }
-          licenses {
-            id
-            license
-          }
           size
           logo {
             formats
@@ -52,10 +48,6 @@ export const GET_RESOURCE = gql`
           languages {
             id
             language
-          }
-          licenses {
-            id
-            license
           }
           subjects {
             id
