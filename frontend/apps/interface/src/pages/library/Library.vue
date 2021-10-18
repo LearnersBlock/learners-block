@@ -1,13 +1,7 @@
 <template>
   <q-page class="row items-center justify-evenly mt-3">
     <div
-      v-if="!apiIsUp"
-      class="text-h3"
-    >
-      {{ $t('under_maintenance') }}
-    </div>
-    <div
-      v-else-if="fetchResourcesLoading || (fetchedResources.length == 0 && endOfResults == false)"
+      v-if="fetchResourcesLoading || (fetchedResources.length == 0 && endOfResults == false)"
     >
       <q-spinner
         color="primary"
@@ -139,7 +133,6 @@ export default defineComponent({
   name: 'Library',
   setup () {
     // Import required features
-    const apiIsUp = ref<boolean>(true)
     const $store = useStore() as any
 
     // Constants for resource fetching
@@ -150,13 +143,8 @@ export default defineComponent({
     const {
       result: fetchedResources,
       loading: fetchResourcesLoading,
-      refetch: fetchResources,
-      onError: apiError
+      refetch: fetchResources
     } = useQuery(GET_RESOURCES, { limit: numberOfResults.value })
-
-    apiError(() => {
-      apiIsUp.value = false
-    })
 
     // On mount, enable loading and fetch resources
     onMounted(() => {
@@ -200,7 +188,6 @@ export default defineComponent({
     }
 
     return {
-      apiIsUp,
       endOfResults,
       fetchedResources,
       fetchResourcesLoading,
