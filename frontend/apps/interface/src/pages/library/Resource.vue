@@ -251,11 +251,12 @@
 </template>
 
 <script lang="ts">
-import Axios from 'app/node_modules/axios'
+import Axios from 'axios'
 import { useQuasar } from 'quasar'
 import { useQuery } from '@vue/apollo-composable'
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { GET_RESOURCE } from 'src/gql/resource/queries'
+import { useStore } from '../../store'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
@@ -263,19 +264,23 @@ export default defineComponent({
   setup () {
     // Import required features
     const $q = useQuasar()
+    const route = useRoute()
+    const $store = useStore() as any
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
-    const route = useRoute()
 
     // Fetch resources
     const { result: fetchedResource, loading: fetchResourceLoading } = useQuery(GET_RESOURCE, { id: route.params.id })
 
+    // Set rquired constants
+    const api = computed(() => {
+      return $store.getters.GET_API
+    })
     const downloadedMb = ref<any>()
     const downloadProgress = ref<any>()
     const downloadSpeed = ref<any>()
     const downloadTransferred = ref<any>()
     const exitLoop = ref<boolean>(true)
-    const hostname = ref<any>(window.location.hostname)
 
     function delay (ms: number) {
       return new Promise(resolve => setTimeout(resolve, ms))
@@ -284,11 +289,11 @@ export default defineComponent({
     async function downloadFiles () {
       try {
         if (exitLoop.value === false) {
-          Axios.get(`http://${hostname.value}:9090/v1/download/stop`)
+          Axios.get(`${api.value}/v1/download/stop`)
           stopDownload()
         } else {
           // Start the download process
-          await Axios.post(`http://${hostname.value}:9090/v1/download/fetch`, { download_url: fetchedResource.value.resource.download_url },
+          await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value.resource.download_url },
             {
               validateStatus: function (status) {
                 if (status !== 200) {
@@ -304,7 +309,7 @@ export default defineComponent({
           const position = ref<any>(0)
           const progress = ref<any>('')
           const xhr = new XMLHttpRequest()
-          xhr.open('GET', `http://${hostname.value}:9090/v1/download/stream`)
+          xhr.open('GET', `${api.value}/v1/download/stream`)
           xhr.send()
 
           exitLoop.value = false
@@ -370,7 +375,6 @@ export default defineComponent({
       exitLoop,
       fetchedResource,
       fetchResourceLoading,
-      hostname,
       viewSample
     }
   }
