@@ -111,7 +111,7 @@
               multi-line
               color="secondary"
             >
-              {{ $t(language.language) }}
+              {{ language.language }}
             </q-badge>
           </div>
         </div>

@@ -87,7 +87,7 @@
                       class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
                       color="secondary"
                     >
-                      {{ $t(language.language) }}
+                      {{ language.language }}
                     </q-badge>
                   </div>
                 </div>
