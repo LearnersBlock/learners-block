@@ -147,7 +147,11 @@ export default defineComponent({
 
     function loadEpub () {
       if (!epubFile.value) {
-        $q.notify({ type: 'negative', message: `${t('error')} Did you pass a URL to a file?` })
+        $q.notify({
+          type: 'negative',
+          timeout: 0,
+          message: `${t('error')} Did you pass a URL to a file?`
+        })
         loading.value = false
         return
       }

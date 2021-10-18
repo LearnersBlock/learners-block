@@ -71,7 +71,8 @@ export default defineComponent({
         .catch((e: { message: never}) => {
           $q.notify({
             type: 'negative',
-            message: e.message
+            message: e.message,
+            timeout: 0
           })
           submitting.value = false
         })

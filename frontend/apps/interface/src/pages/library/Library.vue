@@ -123,17 +123,21 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable vue/require-default-prop */
+import { useQuasar } from 'quasar'
 import { useQuery } from '@vue/apollo-composable'
 import { GET_RESOURCES } from '../../gql/resource/queries'
 import { defineComponent, onMounted, ref } from 'vue'
 import { useStore } from '../../store'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'Library',
   setup () {
     // Import required features
+    const $q = useQuasar()
     const $store = useStore() as any
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { t } = useI18n()
 
     // Constants for resource fetching
     const endOfResults = ref<boolean>(false)
@@ -143,8 +147,18 @@ export default defineComponent({
     const {
       result: fetchedResources,
       loading: fetchResourcesLoading,
-      refetch: fetchResources
+      refetch: fetchResources,
+      onError: apiError
     } = useQuery(GET_RESOURCES, { limit: numberOfResults.value })
+
+    // Error handler for when online API is unavailable
+    apiError(() => {
+      $q.notify({
+        type: 'negative',
+        message: t('library_api_down'),
+        timeout: 0
+      })
+    })
 
     // On mount, enable loading and fetch resources
     onMounted(() => {
