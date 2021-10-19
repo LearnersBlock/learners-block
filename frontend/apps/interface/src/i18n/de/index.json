@@ -198,5 +198,6 @@
     "paid": "Kostenpflichtig",
     "categories": "Kategorien:",
     "free": "Kostenlos",
-    "freemium": "Freemium"
+    "freemium": "Freemium",
+    "library_api_down": "Sie können die Online-Bibliothek nicht erreichen. Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
 }

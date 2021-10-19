@@ -198,5 +198,6 @@
     "categories": "Catégories :",
     "free": "Gratuit",
     "freemium": "Semi-payant",
-    "paid": "Payant"
+    "paid": "Payant",
+    "library_api_down": "Impossible d'accéder à la bibliothèque en ligne. Vérifiez votre connexion Internet et réessayez."
 }
