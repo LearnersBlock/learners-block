@@ -1,7 +1,7 @@
 <template>
   <q-page class="row items-center justify-evenly mt-3">
     <div
-      v-if="fetchResourcesLoading || (fetchedResources.length == 0 && endOfResults == false)"
+      v-if="fetchResourcesLoading || (fetchedResources && fetchedResources.resources.length == 0 && endOfResults == false)"
     >
       <q-spinner
         color="primary"
@@ -24,7 +24,7 @@
         :to="{ name: 'settings' }"
       />
       <div
-        v-if="fetchedResources.resources == '' && !fetchResourcesLoading"
+        v-if="!fetchedResources.resources.length && !fetchResourcesLoading"
         class="text-h3 text-center text-grey"
       >
         {{ $t('no_results_found') }}
@@ -144,12 +144,30 @@ export default defineComponent({
     const numberOfResults = ref<number>(40)
 
     // Fetch resources query
+    interface ApolloResource {
+      name: string;
+      description: string;
+      languages: Array<{ id: any; language: string }>;
+      id: number;
+      logo: any;
+      resources: any;
+      size: any;
+    }
+
+    interface ApolloResources {
+      resources: ApolloResource[];
+    }
+
+    interface ApolloVars {
+      limit: number;
+    }
+
     const {
       result: fetchedResources,
       loading: fetchResourcesLoading,
       refetch: fetchResources,
       onError: apiError
-    } = useQuery(GET_RESOURCES, { limit: numberOfResults.value })
+    } = useQuery<ApolloResources, ApolloVars>(GET_RESOURCES, { limit: numberOfResults.value })
 
     // Error handler for when online API is unavailable
     apiError(() => {

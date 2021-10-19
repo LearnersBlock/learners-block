@@ -255,7 +255,7 @@ import Axios from 'axios'
 import { useQuasar } from 'quasar'
 import { useQuery } from '@vue/apollo-composable'
 import { computed, defineComponent, ref } from 'vue'
-import { GET_RESOURCE } from 'src/gql/resource/queries'
+import { GET_RESOURCE } from '../../gql/resource/queries'
 import { useStore } from '../../store'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -270,7 +270,38 @@ export default defineComponent({
     const { t } = useI18n()
 
     // Fetch resources
-    const { result: fetchedResource, loading: fetchResourceLoading } = useQuery(GET_RESOURCE, { id: route.params.id })
+    interface ApolloResource {
+      author: string;
+      // eslint-disable-next-line camelcase
+      author_website: any;
+      categories: Array<{ id: any; category: any }>;
+      description: string;
+      // eslint-disable-next-line camelcase
+      download_url: any;
+      formats: Array<{ id: any; type: any }>;
+      host: string;
+      languages: Array<{ id: any; language: any }>;
+      levels: Array<{ id: any; level: any }>;
+      logo: any;
+      name: string;
+      resource: any;
+      sample: any;
+      size: any;
+      subjects: Array<{ id: any; subject: any }>;
+    }
+
+    interface ApolloResources {
+      resource: ApolloResource;
+    }
+
+    interface ApolloVars {
+      id: any;
+    }
+
+    const {
+      result: fetchedResource,
+      loading: fetchResourceLoading
+    } = useQuery<ApolloResources, ApolloVars>(GET_RESOURCE, { id: route.params.id })
 
     // Set rquired constants
     const api = computed(() => {
@@ -293,7 +324,7 @@ export default defineComponent({
           stopDownload()
         } else {
           // Start the download process
-          await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value.resource.download_url },
+          await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value?.resource.download_url },
             {
               validateStatus: function (status) {
                 if (status !== 200) {
@@ -362,7 +393,7 @@ export default defineComponent({
     }
 
     const viewSample = () => {
-      window.open(fetchedResource.value.resource.sample)
+      window.open(fetchedResource.value?.resource.sample)
     }
 
     return {
