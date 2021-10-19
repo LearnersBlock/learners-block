@@ -198,5 +198,6 @@
     "categories": "Categorie:",
     "free": "Gratuito",
     "freemium": "Freemium",
-    "paid": "A pagamento"
+    "paid": "A pagamento",
+    "library_api_down": "Impossibile raggiungere la Raccolta in linea. Controlla la tua connessione internet e riprova."
 }
