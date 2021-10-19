@@ -198,5 +198,6 @@
     "paid": "Paid",
     "freemium": "Freemium",
     "free": "Free",
-    "categories": "Categories:"
+    "categories": "Categories:",
+    "library_api_down": "Unable to reach the online Library. Check your internet connection and try again."
 }
