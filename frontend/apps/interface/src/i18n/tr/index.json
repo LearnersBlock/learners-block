@@ -198,5 +198,6 @@
     "freemium": "Yarı Ücretli",
     "paid": "Ücretli",
     "subjects": "Konular:",
-    "category": "Kategori:"
+    "category": "Kategori:",
+    "library_api_down": "Çevrim içi kitaplığa ulaşılamıyor. İnternet bağlantınızı denetleyin ve yeniden deneyin."
 }
