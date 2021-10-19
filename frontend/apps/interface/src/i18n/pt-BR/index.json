@@ -198,5 +198,6 @@
     "free": "Gratuito",
     "paid": "Pago",
     "subjects": "Assuntos:",
-    "category": "Categoria:"
+    "category": "Categoria:",
+    "library_api_down": "Não foi possível entrar em contato com a biblioteca online. Verifique a sua conexão com a internet e tente novamente."
 }
