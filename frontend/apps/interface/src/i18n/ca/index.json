@@ -151,5 +151,17 @@
     "subjects": "Temes:",
     "category": "Categoria:",
     "direct_download": "Baixada directa",
-    "enable_rtl": "Utilitza el mode de dreta a esquerra"
+    "enable_rtl": "Utilitza el mode de dreta a esquerra",
+    "click_toggle": "Feu clic a un element a sota per a obrir-ne l’administració. Utilitzeu els controls al costat dret per a mostrar o amagar els components respectius de la pàgina d’inici.",
+    "connected": "Connectat",
+    "files_settings_description": "Gestioneu els fitxers al Block. Només els usuaris amb la sessió iniciada els poden suprimir.",
+    "no_apps_installed": "No hi ha cap aplicació instal·lada al dispositiu.",
+    "extract": "Extreu",
+    "move_copy": "Mou o copia",
+    "overwrite_warning": "Se sobreescriuran els fitxers existents. Voleu continuar?",
+    "hide_button": "Botó Amaga",
+    "change_path_warning": "Sou a punt de canviar la pàgina d’inici del dispositiu. Per a tornar a obtenir accés a la pàgina Paràmetres després de fer aquest canvi, visiteu «http://url-del-dispositiu/settings» al navegador.",
+    "choose_start_page": "Trieu una pàgina d’inici",
+    "refresh_not_compatible": "El dispositiu no ha estat capaç d’actualitzar les xarxes. Reinicieu-lo per a actualitzar la llista de xarxes.",
+    "library_empty": "La biblioteca és buida. Podeu afegir-hi contingut mitjançant el Tauler de control."
 }
