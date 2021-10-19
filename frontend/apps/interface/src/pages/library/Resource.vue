@@ -324,17 +324,7 @@ export default defineComponent({
           stopDownload()
         } else {
           // Start the download process
-          await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value?.resource.download_url },
-            {
-              validateStatus: function (status) {
-                if (status !== 200) {
-                  $q.notify({ type: 'negative', message: t('error') })
-                  throw new Error()
-                } else {
-                  return status === 200
-                }
-              }
-            })
+          await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value?.resource.download_url })
 
           // Monitor the download process through stream
           const position = ref<any>(0)
