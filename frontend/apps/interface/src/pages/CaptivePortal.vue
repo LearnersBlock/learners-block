@@ -1,28 +1,31 @@
 <template>
-  <div>
-    <div class="text-4xl text-gray-600 text-center ml-2 mr-2">
-      <center class="mb-5">
-        <img
-          alt=""
-          width="100"
-          src="../assets/lb-logo.svg"
-        >
-      </center>
+  <div class="m-3">
+    <div class="text-center">
+      <q-img
+        src="../assets/lb-logo.svg"
+        style="max-width: 175px"
+      />
+    </div>
+    <div class="text-4xl text-gray-600 text-center mt-2">
       {{ $t('welcome_lb') }}
-    </div><br>
-    <div class="text-xl text-center text-gray-500 ml-2 mr-2">
-      {{ $t('visit_to_begin') }}
-      <br><br>
-      {{ hostname }}
-      <span
-        class="material-icons text-h6 mb-1 q-ml-sm cursor-pointer clipboard-sampleUrl"
-        @click="copyUrl();$q.notify($t('url_copied'));"
-      >
-        content_copy
-        <q-tooltip class="text-caption text-center">
-          {{ $t('copy_to_clipboard') }}
-        </q-tooltip>
-      </span>
+    </div>
+    <div class="text-xl text-center text-gray-500 mt-2">
+      <div>
+        {{ $t('visit_to_begin') }}
+      </div>
+      <div class="mt-4 ml-2">
+        {{ hostname }}
+        <q-icon
+          class="cursor-pointer"
+          name="content_copy"
+          size="sm"
+          @click="copyUrl();$q.notify($t('url_copied'));"
+        >
+          <q-tooltip class="text-caption text-center">
+            {{ $t('copy_to_clipboard') }}
+          </q-tooltip>
+        </q-icon>
+      </div>
     </div>
   </div>
 </template>

@@ -186,7 +186,7 @@
                 round
                 dense
                 :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-                @click="props.toggleFullscreen"
+                @click="props.toggleFullscreen()"
               >
                 <q-tooltip
                   class="text-caption text-center"
@@ -604,7 +604,7 @@ export default defineComponent({
       { name: 'delete', field: 'delete' },
       { name: 'info', field: 'info' },
       { name: 'extension', field: 'extension' }
-    ]
+    ] as any
 
     const selectorColumns = [
       {

@@ -819,17 +819,25 @@
         </div>
         <div
           v-if="!sysInfoLoading"
-          class="flex flex-col text-center text-gray pb-5 text-caption"
+          class="flex flex-col text-center text-gray pb-5 text-caption text-gray-600"
         >
-          <span class="text-gray-600"><span>{{ $t('total_storage') }} </span> {{ sysInfo.storage.total }}</span>
-          <span class="text-gray-600"><span>{{ $t('available_storage') }} </span> {{ sysInfo.storage.available }}</span>
-          <span class="text-gray-600"><span>{{ $t('version') }} </span> {{ sysInfo.versions.lb }}</span>
+          <div>
+            {{ $t('total_storage') }} {{ sysInfo.storage.total }}
+          </div>
+          <div>
+            {{ $t('available_storage') }} {{ sysInfo.storage.available }}
+          </div>
+          <div>
+            {{ $t('version') }} {{ sysInfo.versions.lb }}
+          </div>
         </div>
         <div
           v-else
           class="flex flex-col text-center text-gray pb-5"
         >
-          <span class="text-gray-600"><span>Loading...</span>{{ sysInfo.versions.lb }}</span>
+          <div class="text-gray-600">
+            Loading...
+          </div>
         </div>
       </div>
     </div>
@@ -845,7 +853,6 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
-  name: 'Settings',
   setup () {
     // Import required features
     const $q = useQuasar()
@@ -870,8 +877,8 @@ export default defineComponent({
     const loading = ref<boolean>(false)
     const loginPasswordStatus = ref<boolean>(false)
     const loginPasswordToggle = ref<boolean>(false)
-    const newHostname = ref<string>('')
-    const newStartPath = ref<string>('')
+    const newHostname = ref<any>('')
+    const newStartPath = ref<any>('')
     const pagesString = [
       t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('app_store_app'), t('custom_start_page')
     ]
@@ -886,7 +893,7 @@ export default defineComponent({
     const $router = useRouter()
     const settingPassword = ref<boolean>(false)
     const setWifiPasswordDialog = ref<boolean>(false)
-    const startPage = ref<string>('')
+    const startPage = ref<any>('')
     const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
@@ -934,7 +941,7 @@ export default defineComponent({
       { name: 'version', label: t('version'), field: 'version_name', align: 'left' },
       { name: 'ports', field: 'ports' },
       { name: 'status', field: 'status', sortable: true, align: 'center' }
-    ]
+    ] as any
 
     const rows = ref<any>(null)
 
