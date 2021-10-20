@@ -16,7 +16,6 @@ import Axios from 'axios'
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  name: 'App',
   setup () {
     const apiIsUp = ref<boolean>(true)
 

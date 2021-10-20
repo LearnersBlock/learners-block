@@ -84,7 +84,6 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
-  name: 'MainLayout',
   setup () {
     // Import required features
     const $q = useQuasar()

@@ -27,7 +27,6 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'Error404',
   setup () {
     const urlCode = <string>(window.location.pathname.split('/').pop())
 

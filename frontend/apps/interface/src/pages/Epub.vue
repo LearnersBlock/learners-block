@@ -99,7 +99,6 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
-  name: 'EpubReader',
   setup () {
     // Import required features
     const $q = useQuasar()
