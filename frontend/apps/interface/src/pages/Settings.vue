@@ -54,7 +54,6 @@
           </q-item-label>
           <!-- File Manager -->
           <q-item
-            v-ripple
             clickable
             :to="{ name: 'filemanager', params: { data: 'fileshare'} }"
           >
@@ -93,7 +92,6 @@
           </q-item>
           <!-- Library -->
           <q-item
-            v-ripple
             clickable
             tag="a"
             target="_self"
@@ -165,7 +163,6 @@
           </q-item>
           <!-- Website -->
           <q-item
-            v-ripple
             clickable
             :to="{ name: 'filemanager', params: { data: 'website'} }"
           >
@@ -214,7 +211,6 @@
           </q-item-label>
           <q-card flat>
             <q-item
-              v-ripple
               clickable
               :disable="settingPassword || togglesLoading"
               @click="setLoginPassword()"
@@ -253,7 +249,6 @@
             </q-item>
             <!-- Wifi Passwords -->
             <q-item
-              v-ripple
               clickable
               :disable="settingPassword || togglesLoading"
               @click="setWifiPassword()"
