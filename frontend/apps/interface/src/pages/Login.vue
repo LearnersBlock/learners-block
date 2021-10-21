@@ -81,8 +81,7 @@ export default defineComponent({
     return {
       login,
       password,
-      submitting,
-      username
+      submitting
     }
   }
 })

@@ -93,7 +93,6 @@ export default defineComponent({
 
     // Set constants
     const currentPath = ref<any>($router.currentRoute.value.path)
-    const leftDrawerOpen = ref(false)
     const languages = ref([
       // Language updates must be changed here and in the webpackInclude magic comment below
       {
@@ -186,7 +185,6 @@ export default defineComponent({
       changeLanguage,
       currentPath,
       isAuthenticated,
-      leftDrawerOpen,
       languages,
       logout,
       settings

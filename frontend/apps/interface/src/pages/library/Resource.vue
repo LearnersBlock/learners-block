@@ -309,8 +309,6 @@ export default defineComponent({
     })
     const downloadedMb = ref<any>()
     const downloadProgress = ref<any>()
-    const downloadSpeed = ref<any>()
-    const downloadTransferred = ref<any>()
     const exitLoop = ref<boolean>(true)
 
     function delay (ms: number) {
@@ -390,8 +388,6 @@ export default defineComponent({
       downloadFiles,
       downloadedMb,
       downloadProgress,
-      downloadSpeed,
-      downloadTransferred,
       exitLoop,
       fetchedResource,
       fetchResourceLoading,

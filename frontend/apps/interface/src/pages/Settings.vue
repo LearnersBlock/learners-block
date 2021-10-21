@@ -97,7 +97,7 @@
             clickable
             tag="a"
             target="_self"
-            :disable="!internet"
+            :disable="!internet || wifiLoading"
             :to="{ name: 'library' }"
           >
             <q-tooltip
@@ -149,14 +149,14 @@
             </q-item-section>
             <q-item-section side>
               <q-toggle
-                v-if="!libraryLoading && !wifiLoading"
+                v-if="!libraryLoading"
                 v-model="library"
                 icon="import_contacts"
                 :disable="togglesLoading"
                 @update:model-value="updateLibrary"
               />
               <q-spinner
-                v-if="libraryLoading || wifiLoading"
+                v-if="libraryLoading"
                 color="primary"
                 size="2em"
                 class="mt-1 mr-2"
@@ -874,7 +874,6 @@ export default defineComponent({
     })
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(true)
-    const loading = ref<boolean>(false)
     const loginPasswordStatus = ref<boolean>(false)
     const loginPasswordToggle = ref<boolean>(false)
     const newHostname = ref<any>('')
@@ -892,7 +891,6 @@ export default defineComponent({
     const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
     const $router = useRouter()
     const settingPassword = ref<boolean>(false)
-    const setWifiPasswordDialog = ref<boolean>(false)
     const startPage = ref<any>('')
     const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
@@ -902,10 +900,8 @@ export default defineComponent({
     const website = ref<boolean>(false)
     const websiteLoading = ref<boolean>(true)
     const wifi = ref<boolean>(false)
-    const wifiPassword = ref<string>('')
     const wifiPasswordStatus = ref<boolean>(false)
     const wifiPasswordToggle = ref<boolean>(false)
-    const wifiPasswordValid = ref()
     const wifiLoading = ref<boolean>(true)
     const windowHostname = ref<string>(window.location.hostname)
 
@@ -1545,7 +1541,6 @@ export default defineComponent({
       internet,
       library,
       libraryLoading,
-      loading,
       loginPasswordStatus,
       loginPasswordToggle,
       newHostname,
@@ -1557,7 +1552,6 @@ export default defineComponent({
       portainerLoading,
       portainerUnavailable,
       pruneSystemFiles,
-      redirect,
       refreshApps,
       regexp,
       resetDatabase,
@@ -1566,7 +1560,6 @@ export default defineComponent({
       setStartPage,
       setWifiPassword,
       settingPassword,
-      setWifiPasswordDialog,
       systemMaintenance,
       startPage,
       startPathValid,
@@ -1585,10 +1578,8 @@ export default defineComponent({
       websiteLoading,
       wifi,
       wifiLoading,
-      wifiPassword,
       wifiPasswordStatus,
       wifiPasswordToggle,
-      wifiPasswordValid,
       wifiWarn,
       windowHostname
     }

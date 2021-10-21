@@ -1011,7 +1011,6 @@ export default defineComponent({
       rows,
       searchTable: ref(false),
       selected,
-      selectedItem,
       selectorColumns,
       selectorObjPath,
       selectorRows,
