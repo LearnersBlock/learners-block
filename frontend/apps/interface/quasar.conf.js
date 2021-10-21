@@ -114,12 +114,18 @@ module.exports = configure(function (ctx) {
         'Cookies',
         'Dialog',
         'Loading',
+        'LoadingBar',
         'LocalStorage',
         'Notify',
         'SessionStorage'
       ],
       config: {
-        notify: { classes: 'text-body1' }
+        notify: { classes: 'text-body1' },
+        loadingBar: {
+          color: 'secondary',
+          size: '7px',
+          position: 'bottom'
+        }
       }
     },
     // animations: 'all', // --- includes all animations
