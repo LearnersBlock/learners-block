@@ -13,7 +13,7 @@ When running the Controller outside of our Docker development environment, a .en
 
 ```
 # Redundant in development environment but required to start
-DEFAULT_SSID=Learners-Block
+DEFAULT_SSID="Learner's Block"
 
 # Redundant in development environment but required to start
 DEFAULT_HOSTNAME=lb  
