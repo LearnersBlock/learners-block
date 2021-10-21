@@ -321,7 +321,6 @@
                 @save="rename(props.row.name, newName)"
               >
                 <q-input
-                  ref="renameValid"
                   v-model="scope.value"
                   dense
                   autofocus
@@ -460,18 +459,11 @@
     <!-- File Selector -->
     <q-dialog
       v-model="fileSelector"
-      @hide="selectorRows = null"
+      @hide="selectorRows = []"
     >
       <q-card style="max-width: 95vw;">
-        <q-inner-loading :showing="loading">
-          <q-spinner-gears
-            size="50px"
-            color="primary"
-          />
-        </q-inner-loading>
         <q-card-section class="row items-center justify-center">
           <q-table
-            v-if="selectorRows"
             table-style="width: 75vw;"
             hide-bottom
             flat
@@ -574,7 +566,7 @@ export default defineComponent({
     })
 
     const checkRowExistence = nameParam => rows.value.some(({ name }) => name === nameParam)
-    const currentPath = ref<any>('')
+    const currentPath = ref<string>('')
     const delayUpload = ref<boolean>(false)
     const fileSelector = ref<boolean>(false)
     const fileSize = ref<number>(0)
@@ -585,14 +577,13 @@ export default defineComponent({
     const loadingFileSize = ref<boolean>(false)
     const loginState = $store.getters.isAuthenticated
     const loginToken = ref<string>(Axios.defaults.headers.common.Authorization)
-    const renameValid = ref()
     const rootPath = ref<any>()
-    const rows = ref<any>(null)
+    const rows = ref<Array<any>>([])
     const objPath = ref<Array<any>>([])
     const selected = ref<Array<any>>([])
     const selectedItem = ref<Array<any>>([])
     const selectorObjPath = ref<Array<any>>([])
-    const selectorRows = ref<any>(null)
+    const selectorRows = ref<Array<any>>([])
     const unzipLoading = ref<boolean>(false)
     const visibleColumns = ref<Array<any>>([])
     const windowHostname = ref<string>(window.location.origin)
@@ -986,7 +977,7 @@ export default defineComponent({
       fetchFileSize,
       fileSelector,
       fileSize,
-      filter: ref(''),
+      filter: ref<string>(),
       filterFiles,
       invalidCharacters,
       loading,
@@ -996,20 +987,19 @@ export default defineComponent({
       mobileRenameFile,
       moveCopyItem,
       newFolderPrompt,
-      newName: ref<any>(''),
+      newName: ref<string>(),
       objPath,
       onUploaderRejected,
       onRowClick,
       onSelectorRowClick,
       openFileSelector,
       rename,
-      renameValid,
       resetSlide ({ reset }) {
         reset()
       },
       rootPath,
       rows,
-      searchTable: ref(false),
+      searchTable: ref<boolean>(false),
       selected,
       selectorColumns,
       selectorObjPath,
@@ -1018,7 +1008,7 @@ export default defineComponent({
       unzipLoading,
       updateRows,
       updateSelectorRows,
-      uploaderDialog: ref(false),
+      uploaderDialog: ref<boolean>(false),
       uploadFailed,
       visibleColumns
     }
