@@ -1,10 +1,8 @@
-from common.errors import print_message
 from common.models import User
 from common.processes import check_internet
 from common.wifi import wifi
 from flask import request
 from flask_jwt_extended import jwt_required
-from flask_restful import abort
 from flask_restful import Resource
 import threading
 
@@ -89,19 +87,5 @@ class wifi_set_password(Resource):
         lb_database = User.query.filter_by(username='lb').first()
         lb_database.wifi_password = content["wifi_password"]
         lb_database.save_to_db()
-
-        # If connected, restart Wi-Fi-Connect
-        connected = wifi.check_connection()
-        if not connected:
-            try:
-                wifi.forget(conn_name='HOTSPOT')
-                wifi.start_hotspot()
-            except Exception as ex:
-                print_message('wifi_set_password',
-                              'Failed starting wifi-connect',
-                              ex)
-                abort(500, status=500,
-                      message='Wifi-connect failed to launch',
-                      error=str(ex))
 
         return {'message': 'success'}, 200

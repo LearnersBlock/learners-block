@@ -1238,7 +1238,7 @@ export default defineComponent({
           settingPassword.value = true
           Axios.post(`${api.value}/v1/wifi/set_password`, { wifi_password: '' }).then((response) => {
             if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('login_disabled') })
+              $q.notify({ type: 'positive', message: t('wifi_login_disabled') })
               wifiPasswordStatus.value = false
               wifiPasswordToggle.value = false
             } else {
@@ -1267,7 +1267,7 @@ export default defineComponent({
             wifi_password: data
           }).then((response) => {
             if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('password_set_success') })
+              $q.notify({ type: 'positive', message: t('wifi_password_set_success') })
               wifiPasswordStatus.value = true
               wifiPasswordToggle.value = true
               settingPassword.value = false
