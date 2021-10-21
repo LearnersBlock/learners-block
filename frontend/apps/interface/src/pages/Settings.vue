@@ -306,12 +306,13 @@
           </q-item-label>
           <q-btn
             v-model="wifi"
+            class="ml-3 mr-3 mt-1 mb-2 text-lg full-width"
+            icon="wifi"
             outline
             rounded
             :loading="wifiLoading"
             no-caps
             color="primary"
-            class="ml-3 mr-3 mt-1 mb-2 text-lg full-width"
             :disable="wifiLoading"
             :label="!wifi ? $t('connect'): $t('disconnect')"
             @click="wifiWarn"
