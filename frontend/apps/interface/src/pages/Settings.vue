@@ -640,7 +640,7 @@
               v-model="newHostname"
               class="ml-1 mr-1 full-width"
               filled
-              :label="$t('choose_name')"
+              :label="$t('enter_name')"
               :placeholder="$t('your_new_name')"
               :rules="[(val) =>
                 !val.includes(' ') &&

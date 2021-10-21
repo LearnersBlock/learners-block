@@ -74,7 +74,7 @@ export default route<StateInterface>(function ({ store }) {
     if (error.response) {
       if (error.response.status === 401 || error.response.status === 422) {
         store.dispatch('LOGOUT')
-        Router.push('/login')
+        Router.replace('/login')
         Notify.create({ type: 'negative', message: i18n.global.t('login_again') })
       } else {
         Notify.create({ type: 'negative', message: `${i18n.global.t('error')} ${error.response.message}` })

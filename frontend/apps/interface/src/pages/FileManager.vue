@@ -7,7 +7,7 @@
       size="sm"
       color="white"
       text-color="primary"
-      class="mt-1 mb-2 text-body-1 text-weight-bold"
+      class="mt-1 mb-1 text-body-1 text-weight-bold"
       outline
       :label="$t('back')"
       icon="arrow_back"
@@ -22,7 +22,7 @@
       wrap-cells
       :loading="loading"
       :rows="rows"
-      :rows-per-page-options="[20, 50, 100]"
+      :rows-per-page-options="[50, 75, 100]"
       :columns="columns"
       :no-data-label="$t('empty_folder')"
       :no-results-label="$t('empty_folder')"
@@ -34,17 +34,17 @@
     >
       <!-- Toolbar -->
       <template #top="props">
-        <div class="full-width row reverse-wrap justify-between items-center">
-          <div class="mt-1">
+        <div class="flex row full-width row reverse-wrap justify-between items-center">
+          <div class="col-auto m-1">
             <q-breadcrumbs v-if="!objPath[0]">
               <q-breadcrumbs-el
-                class="cursor-pointer"
+                class="cursor-pointer mb-1"
                 icon="home"
               />
             </q-breadcrumbs>
             <q-breadcrumbs v-else>
               <q-breadcrumbs-el
-                class="cursor-pointer"
+                class="cursor-pointer mb-1"
                 icon="home"
                 color="gray-800"
                 @click="objPath.splice(0,objPath.length), updateRows()"
@@ -59,8 +59,7 @@
             </q-breadcrumbs>
           </div>
           <div
-            class="mb-2"
-            style="margin-left: auto"
+            class="col-auto ml-3 mb-1"
           >
             <div>
               <q-btn
@@ -241,7 +240,7 @@
               {{ props.value }}
               <!-- Zip button -->
               <q-btn
-                v-if="loginState && $q.screen.gt.sm && props.row.extension == '.zip' || props.row.extension == '.gz'"
+                v-if="loginState && $q.screen.gt.sm && (props.row.extension == '.zip' || props.row.extension == '.gz')"
                 class="ml-1"
                 :loading="unzipLoading"
                 round
@@ -316,7 +315,7 @@
               <q-popup-edit
                 v-slot="scope"
                 v-model="props.row.name"
-                :title="$t('choose_name')"
+                :title="$t('enter_name')"
                 buttons
                 auto-save
                 @save="rename(props.row.name, newName)"
@@ -408,6 +407,7 @@
           <!-- Mobile menu for right of row -->
           <div v-if="loginState && !$q.screen.gt.sm">
             <q-btn
+              :loading="unzipLoading"
               round
               size="xs"
               flat
@@ -460,8 +460,15 @@
     <!-- File Selector -->
     <q-dialog
       v-model="fileSelector"
+      @hide="selectorRows = null"
     >
       <q-card style="max-width: 95vw;">
+        <q-inner-loading :showing="loading">
+          <q-spinner-gears
+            size="50px"
+            color="primary"
+          />
+        </q-inner-loading>
         <q-card-section class="row items-center justify-center">
           <q-table
             v-if="selectorRows"
@@ -489,7 +496,7 @@
               </div>
               <div class="mt-2">
                 <q-btn
-                  icon="arrow_back_ios"
+                  icon="keyboard_arrow_up"
                   color="gray-800"
                   outline
                   rounded
@@ -590,32 +597,36 @@ export default defineComponent({
     const visibleColumns = ref<Array<any>>([])
     const windowHostname = ref<string>(window.location.origin)
 
-    const columns = [
-      {
-        name: 'name',
-        required: true,
-        label: t('name'),
-        align: 'left',
-        field: row => row.name,
-        format: val => `${val}`
-      },
-      { name: 'move', field: 'move' },
-      { name: 'rename', field: 'rename' },
-      { name: 'delete', field: 'delete' },
-      { name: 'info', field: 'info' },
-      { name: 'extension', field: 'extension' }
-    ] as any
+    const columns = computed(() =>
+      [
+        {
+          name: 'name',
+          required: true,
+          label: t('name'),
+          align: 'left',
+          field: row => row.name,
+          format: val => `${val}`
+        },
+        { name: 'move', field: 'move' },
+        { name: 'rename', field: 'rename' },
+        { name: 'delete', field: 'delete' },
+        { name: 'info', field: 'info' },
+        { name: 'extension', field: 'extension' }
+      ]
+    ) as any
 
-    const selectorColumns = [
-      {
-        name: 'name',
-        required: true,
-        label: t('name'),
-        align: 'left',
-        field: row => row.name,
-        format: val => `${val}`
-      }
-    ]
+    const selectorColumns = computed(() =>
+      [
+        {
+          name: 'name',
+          required: true,
+          label: t('name'),
+          align: 'left',
+          field: row => row.name,
+          format: val => `${val}`
+        }
+      ]
+    ) as any
 
     // Adjust visible columns when screen is rotated
     watch(() => $q.screen.gt.sm, size => {
@@ -668,10 +679,12 @@ export default defineComponent({
     }
 
     async function confirmOverwrite (item, rows) {
+      // Check if item already exists
       const itemCheck = item.filter(obj => {
         return rows.some(({ name }) => name === obj.name)
       })
 
+      // If item exists show warning
       if (itemCheck.length > 0) {
         if (await new Promise(resolve => $q.dialog({
           title: t('confirm'),
@@ -683,7 +696,7 @@ export default defineComponent({
           return false
         }
       } else {
-        return false
+        return true
       }
     }
 
@@ -723,10 +736,10 @@ export default defineComponent({
 
     function mobileRenameFile (currentName) {
       $q.dialog({
-        title: t('select_folder'),
-        message: t('select_folder'),
+        title: t('rename'),
+        message: t('enter_name'),
         prompt: {
-          model: '',
+          model: currentName,
           isValid: val => val !== ''
         },
         cancel: true
@@ -767,8 +780,8 @@ export default defineComponent({
 
     function newFolderPrompt () {
       $q.dialog({
-        title: t('choose_name'),
-        message: t('choose_name'),
+        title: t('new_folder'),
+        message: t('enter_name'),
         prompt: {
           model: '',
           isValid: val => val !== ''
@@ -872,6 +885,8 @@ export default defineComponent({
 
     function openFileSelector (obj) {
       selectedItem.value = obj
+      selectorObjPath.value = []
+      selectorObjPath.value = selectorObjPath.value.concat(objPath.value)
       updateSelectorRows()
       fileSelector.value = true
     }
@@ -906,7 +921,9 @@ export default defineComponent({
         path: objPath.value,
         root: rootPath.value
       }).then((response) => {
-        if (response.data.message === 'error') {
+        if (response.status === 401 || response.status === 422) {
+          $router.replace('/login')
+        } else if (response.data.message === 'error') {
           $q.notify({ type: 'negative', message: t('error') })
         } else {
           $q.notify({ type: 'positive', message: `${t('extracted_to')} ${response.data.new_path}` })
