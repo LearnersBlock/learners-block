@@ -6,7 +6,7 @@
     <q-form
       class="mb-5 flex flex-col"
       :style="$q.screen.gt.sm ? 'min-width: 40vw' : 'min-width: 90vw'"
-      @submit="connect"
+      @submit="connect()"
     >
       <q-select
         v-model="wifiSsid"
