@@ -38,21 +38,27 @@
           <div class="col-auto m-1">
             <q-breadcrumbs v-if="!objPath[0]">
               <q-breadcrumbs-el
+                v-ripple
                 class="cursor-pointer mb-1"
                 icon="home"
+                clickable
               />
             </q-breadcrumbs>
             <q-breadcrumbs v-else>
               <q-breadcrumbs-el
+                v-ripple
                 class="cursor-pointer mb-1"
                 icon="home"
+                clickable
                 color="gray-800"
                 @click="objPath.splice(0,objPath.length), updateRows()"
               />
               <q-breadcrumbs-el
                 v-for="path in objPath"
                 :key="path.value"
+                v-ripple
                 class="cursor-pointer"
+                clickable
                 :label="path"
                 @click="objPath.length = objPath.indexOf(path) +1, updateRows()"
               />
