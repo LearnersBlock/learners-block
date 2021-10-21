@@ -22,7 +22,7 @@
       wrap-cells
       :loading="loading"
       :rows="rows"
-      :rows-per-page-options="[50, 75, 100]"
+      :rows-per-page-options="[50, 75, 100, 0]"
       :columns="columns"
       :no-data-label="$t('empty_folder')"
       :no-results-label="$t('empty_folder')"
