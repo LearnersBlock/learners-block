@@ -15,16 +15,16 @@
       </div>
       <div class="mt-4 ml-2">
         {{ hostname }}
-        <q-icon
-          class="cursor-pointer"
-          name="content_copy"
+        <q-btn
+          icon="content_copy"
+          flat
           size="sm"
           @click="copyUrl();$q.notify($t('url_copied'));"
         >
           <q-tooltip class="text-caption text-center">
             {{ $t('copy_to_clipboard') }}
           </q-tooltip>
-        </q-icon>
+        </q-btn>
       </div>
     </div>
   </div>

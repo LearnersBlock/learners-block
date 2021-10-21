@@ -21,15 +21,15 @@
             to="/"
           />
         </q-toolbar-title>
-        <q-item
-          clickable
-          class="flex items-center"
+        <q-btn
+          class="ml-3 mr-3"
+          icon="translate"
+          color="primary"
+          padding="0"
+          outline
+          flat
+          dense
         >
-          <q-icon
-            name="translate"
-            color="primary"
-            size="sm"
-          />
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item
@@ -43,30 +43,28 @@
               </q-item>
             </q-list>
           </q-menu>
-        </q-item>
-        <q-item
-          class="flex items-center"
-          clickable
+        </q-btn>
+        <q-btn
+          class="ml-3 mr-3"
+          icon="settings"
+          color="primary"
+          padding="0"
+          outline
+          flat
+          dense
           @click="settings"
-        >
-          <q-icon
-            name="settings"
-            color="primary"
-            size="sm"
-          />
-        </q-item>
-        <q-item
+        />
+        <q-btn
           v-if="isAuthenticated"
-          class="flex items-center"
-          clickable
+          class="ml-3 mr-3"
+          icon="logout"
+          color="primary"
+          padding="0"
+          outline
+          flat
+          dense
           @click="logout"
-        >
-          <q-icon
-            name="logout"
-            color="primary"
-            size="sm"
-          />
-        </q-item>
+        />
       </q-toolbar>
     </q-header>
     <q-page-container>
