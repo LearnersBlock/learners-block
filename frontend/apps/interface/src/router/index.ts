@@ -62,7 +62,7 @@ export default route<StateInterface>(function ({ store }) {
     }
     if ((to.name === 'settings' || to.name === 'wifi') && !store.getters.isAuthenticated) {
       await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).catch(() => {
-        next('/login')
+        next({ name: 'login', params: { data: to.name as string } })
       })
     }
     next()
@@ -70,17 +70,17 @@ export default route<StateInterface>(function ({ store }) {
 
   axios.interceptors.response.use(function (response) {
     return response
-  }, function (error) {
+  }, async function (error) {
     if (error.response) {
       if (error.response.status === 401 || error.response.status === 422) {
-        store.dispatch('LOGOUT')
-        Router.replace('/login')
-        Notify.create({ type: 'negative', message: i18n.global.t('login_again') })
+        await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).catch(() => {
+          Router.replace('/login')
+          Notify.create({ type: 'negative', message: i18n.global.t('login_again') })
+        })
       } else {
         Notify.create({ type: 'negative', message: `${i18n.global.t('error')} ${error.response.message}` })
       }
     }
-    return Promise.reject(error)
   })
   return Router
 })

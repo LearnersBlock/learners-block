@@ -4,6 +4,7 @@ export interface AuthStateInterface {
   api: string,
   token: string
 }
+const AxiosOverride = Axios.create()
 const auth = {
   state: <AuthStateInterface>{
     api: '',
@@ -27,7 +28,7 @@ const auth = {
   },
   actions: {
     LOGIN: async ({ commit, getters }: { commit: any, getters: any }, payload: { username: string, password: string }) => {
-      const response = await Axios.post(`${getters.GET_API}/v1/auth/log_in`, payload).catch(() => {
+      const response = await AxiosOverride.post(`${getters.GET_API}/v1/auth/log_in`, payload).catch(() => {
         throw Error('Wrong credentials')
       })
       if (response.status === 200) {

@@ -40,13 +40,14 @@
 import { useQuasar } from 'quasar'
 import { useStore } from '../store'
 import { defineComponent, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup () {
     // Import required features
     const $q = useQuasar()
+    const route = useRoute()
     const $router = useRouter()
     const $store = useStore()
 
@@ -66,7 +67,11 @@ export default defineComponent({
             type: 'positive',
             message: t('login_successfull')
           })
-          $router.replace('/settings')
+          if (route.params.data) {
+            $router.replace({ name: route.params.data as string })
+          } else {
+            $router.replace('/settings')
+          }
         })
         .catch((e: { message: never}) => {
           $q.notify({
