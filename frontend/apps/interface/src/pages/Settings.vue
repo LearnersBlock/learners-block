@@ -1237,13 +1237,15 @@ export default defineComponent({
         }).onOk(() => {
           settingPassword.value = true
           Axios.post(`${api.value}/v1/wifi/set_password`, { wifi_password: '' }).then((response) => {
-            if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('wifi_login_disabled') })
-              wifiPasswordStatus.value = false
-              wifiPasswordToggle.value = false
-            } else {
-              $q.notify({ type: 'negative', message: t('error') })
-              wifiPasswordToggle.value = true
+            if (response) {
+              if (response.status === 200) {
+                $q.notify({ type: 'positive', message: t('wifi_login_disabled') })
+                wifiPasswordStatus.value = false
+                wifiPasswordToggle.value = false
+              } else {
+                $q.notify({ type: 'negative', message: t('error') })
+                wifiPasswordToggle.value = true
+              }
             }
             settingPassword.value = false
           })
@@ -1266,11 +1268,13 @@ export default defineComponent({
           Axios.post(`${api.value}/v1/wifi/set_password`, {
             wifi_password: data
           }).then((response) => {
-            if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('wifi_password_set_success') })
-              wifiPasswordStatus.value = true
-              wifiPasswordToggle.value = true
-              settingPassword.value = false
+            if (response) {
+              if (response.status === 200) {
+                $q.notify({ type: 'positive', message: t('wifi_password_set_success') })
+                wifiPasswordStatus.value = true
+                wifiPasswordToggle.value = true
+                settingPassword.value = false
+              }
             }
           })
         }).onCancel(() => {
