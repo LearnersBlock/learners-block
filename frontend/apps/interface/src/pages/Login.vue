@@ -68,7 +68,7 @@ export default defineComponent({
             message: t('login_successfull')
           })
           if (route.params.data) {
-            $router.replace({ name: route.params.data as string })
+            $router.replace(route.params.data as string)
           } else {
             $router.replace('/settings')
           }

@@ -842,6 +842,7 @@
 
 <script lang="ts">
 import Axios from 'axios'
+import { AxiosOverride } from 'src/boot/axios'
 import { useQuasar } from 'quasar'
 import { useStore } from '../store'
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
@@ -1134,9 +1135,7 @@ export default defineComponent({
       }).onOk(() => {
         systemMaintenance.value = true
         $q.loading.show()
-        // Create new Axios instance to override default interceptor
-        const resetDb = Axios.create({ timeout: 4000 })
-        resetDb.get(`${api.value}/v1/system/reset_database`).catch(() => {
+        AxiosOverride.get(`${api.value}/v1/system/reset_database`, { timeout: 4000 }).catch(() => {
           resetDatabaseLoop()
         })
       })
