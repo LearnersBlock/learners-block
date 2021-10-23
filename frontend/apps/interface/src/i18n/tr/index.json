@@ -199,5 +199,9 @@
     "paid": "Ücretli",
     "subjects": "Konular:",
     "category": "Kategori:",
-    "library_api_down": "Çevrim içi kitaplığa ulaşılamıyor. İnternet bağlantınızı denetleyin ve yeniden deneyin."
+    "library_api_down": "Çevrim içi kitaplığa ulaşılamıyor. İnternet bağlantınızı denetleyin ve yeniden deneyin.",
+    "enter_name": "Bir ad girin",
+    "searching_networks": "Yakındaki ağlar aranıyor…",
+    "wifi_login_disabled": "Wi-Fi parolanız devre dışı bırakıldı. Değişiklikleri uygulamak için aygıtınızı yeniden başlatın.",
+    "wifi_password_set_success": "Wi-Fi parolanız ayarlandı. Değişiklikleri uygulamak için aygıtınızı yeniden başlatın."
 }
