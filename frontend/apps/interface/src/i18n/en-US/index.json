@@ -15,7 +15,7 @@
     "back": "Back",
     "cancel": "Cancel",
     "change_hostname_warning": "Are you sure you want to change the URL and Wi-Fi SSID?",
-    "change_path_warning": "You are about to change the start page of your device. To regain access to the Settings page after this change, visit 'http://your-device-url/settings' in your browser.",
+    "change_path_warning": "You are about to change the start page of your device. To regain access to the Settings page after this change, visit:",
     "chapter": "Chapter",
     "choose_name": "Choose a name",
     "choose_new_path": "Enter a new path",
@@ -203,5 +203,5 @@
     "enter_name": "Enter a name",
     "searching_networks": "Searching for nearby networks…",
     "wifi_login_disabled": "Your Wi-Fi password has been disabled. Restart your device to apply the changes.",
-    "wifi_password_set_success": "Your Wi-Fi password has been set. Restart your device for this to take effect."
+    "wifi_password_set_success": "Your Wi-Fi password has been set. Restart your device to apply the changes."
 }
