@@ -57,7 +57,7 @@
     "website_settings_description": "Faça o upload dos arquivos de seu site para permitir que outros usem seu site offline.",
     "website_description": "Acesse o site aqui.",
     "website": "Site da web",
-    "visit_to_begin": "Visite o Learner's Block no seu navegador para começar a usar seu Block.",
+    "visit_to_begin": "Insira a seguinte URL no seu navegador para começar a usar o seu Learner’s Block:",
     "version": "Versão:",
     "url_copied": "Endereço copiado para a Área de Transferência",
     "total_storage": "Armazenamento Total:",
@@ -68,7 +68,7 @@
     "chapter": "Capítulo",
     "previous": "Anterior",
     "next": "Próximo",
-    "change_path_warning": "Você está prestes a mudar a página inicial do seu dispositivo. Para recuperar o acesso à página de Configurações após essa alteração, visite 'http://your-device-url/settings' no seu navegador.",
+    "change_path_warning": "Você está prestes a mudar a página inicial do seu dispositivo. Para recuperar o acesso à página de Configurações após essa alteração, visite:",
     "update_available": "Atualização Disponível",
     "invalid_wifi_entry": "Senhas de Wi-Fi devem conter 8 caracteres ou mais e não podem conter espaços.",
     "invalid_entry": "Entrada inválida.",
@@ -110,7 +110,7 @@
     "author_colon": "Autor:",
     "connection_reset_request": "O Learner's Block agora tentará se conectar à rede Wi-Fi. Você pode se conectar à mesma rede para usar o seu Bloco. Se o dispositivo não estiver disponível após um minuto, reconecte-se ao seu Bloco de Aprendizes, verifique sua senha wi-fi e tente novamente.",
     "network_connect_fail": "Falha ao conectar à rede.",
-    "network_fetch_fail": "Falha ao buscar redes disponíveis.",
+    "network_fetch_fail": "Falha ao buscar redes disponíveis. Reinicie o seu dispositivo e tente novamente.",
     "no_networks": "Nenhuma rede Wi-Fi está disponível dentro do alcance. Certifique-se de que ela existe e clique no botão de atualização.",
     "select_ssid": "Selecione a rede Wi-Fi",
     "user": "Usuário",
@@ -199,5 +199,9 @@
     "paid": "Pago",
     "subjects": "Assuntos:",
     "category": "Categoria:",
-    "library_api_down": "Não foi possível entrar em contato com a biblioteca online. Verifique a sua conexão com a internet e tente novamente."
+    "library_api_down": "Não foi possível entrar em contato com a biblioteca online. Verifique a sua conexão com a internet e tente novamente.",
+    "enter_name": "Insira um nome",
+    "wifi_login_disabled": "A sua senha do Wi-Fi foi desativada. Reinicie o seu dispositivo para aplicar as alterações.",
+    "wifi_password_set_success": "A senha do seu Wi-Fi foi definida. Reinicie o dispositivo para aplicar as alterações.",
+    "searching_networks": "Buscando por redes mais próximas…"
 }
