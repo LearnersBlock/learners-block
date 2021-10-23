@@ -476,12 +476,11 @@
       <!-- Advanced Features -->
       <div
         v-if="tab == 'advanced'"
-        class="mt-3 pd-5"
+        class="mt-1 pd-2"
         style="min-width: 70vw"
       >
         <q-list
           dense
-          padding
         >
           <q-item-label
             header
@@ -490,13 +489,14 @@
               {{ $t('choose_start_page') }}
             </q-item-section>
           </q-item-label>
-          <q-item class="mb-6">
+          <q-item class="mb-1">
             <q-select
               v-if="!filesLoading"
               v-model="startPage"
               class="full-width"
               :loading="startPage"
               rounded
+              dense
               outlined
               transition-duration="1"
               :options="pages"
@@ -504,38 +504,47 @@
             />
           </q-item>
           <!-- Custom start page -->
-          <q-item v-if="customStartPageInput">
-            <q-slide-transition :duration="2000">
-              <q-input
-                v-if="customStartPageInput"
-                ref="startPathValid"
-                v-model="newStartPath"
-                class="ml-1 mr-1 full-width"
-                filled
-                :label="$t('choose_new_path')"
-                :placeholder="$t('your_new_path')"
-                :rules="[(value) =>
-                  !value.substr(0,1).includes('/') &&
-                  !value.substr(-1).includes('/') &&
-                  !value.includes(' ') &&
-                  !value.includes('\\')
-                  || $t('invalid_path_input')]"
+          <q-slide-transition :duration="2000">
+            <div v-show="customStartPageInput">
+              <q-item
+                class="justify-center"
               >
-                <template #after>
-                  <q-btn
-                    class="mt-1"
-                    round
-                    dense
-                    flat
-                    color="primary"
-                    icon="check_circle_outline"
-                    :disable="newStartPath "
-                    @click="newStartPathWarn"
-                  />
-                </template>
-              </q-input>
-            </q-slide-transition>
-          </q-item>
+                <q-input
+                  ref="startPathValid"
+                  v-model="newStartPath"
+                  class="mt-1 ml-1 mr-1 fit ml-2 mr-2"
+                  filled
+                  dense
+                  hide-bottom-space
+                  :label="$t('choose_new_path')"
+                  :placeholder="$t('your_new_path')"
+                  :rules="[(value) =>
+                    !value.substr(0,1).includes('/') &&
+                    !value.substr(-1).includes('/') &&
+                    !value.includes(' ') &&
+                    !value.includes('\\')
+                    || $t('invalid_path_input')]"
+                >
+                  <template #after>
+                    <q-btn
+                      class="mt-1"
+                      padding="0"
+                      round
+                      dense
+                      flat
+                      color="primary"
+                      icon="check_circle_outline"
+                      :disable="newStartPath "
+                      @click="newStartPathWarn"
+                    />
+                  </template>
+                </q-input>
+              </q-item>
+            </div>
+          </q-slide-transition>
+          <q-separator
+            class="mr-3 ml-3 mt-4"
+          />
           <!-- Choose App as default path -->
           <q-dialog
             v-model="appStorePageInput"
@@ -592,10 +601,11 @@
                         >
                           <q-btn
                             v-close-popup
-                            class="mb-1 mt-1"
+                            class="mb-2 mt-2"
                             size="sm"
+                            rounded
                             unelevated
-                            color="primary"
+                            color="secondary"
                             :label="$t('set_custom_startpage')"
                             @click="storeStartPage(props.row)"
                           />
@@ -616,11 +626,7 @@
               </q-card-actions>
             </q-card>
           </q-dialog>
-          <q-separator
-            class="mr-3 ml-3"
-            spaced
-          />
-          <!-- Set Hostname -->
+          <!-- Set Hostname/URL/WiFi SSID -->
           <q-item-label
             header
           >
@@ -632,8 +638,10 @@
             <q-input
               ref="hostnameValid"
               v-model="newHostname"
-              class="ml-1 mr-1 full-width"
+              class="ml-1 mr-1 full-width mb-4"
               filled
+              dense
+              hide-bottom-space
               :label="$t('enter_name')"
               :placeholder="$t('your_new_name')"
               :rules="[(val) =>
@@ -646,6 +654,7 @@
               <template #after>
                 <q-btn
                   class="mt-1"
+                  padding="0"
                   round
                   dense
                   flat
@@ -659,8 +668,7 @@
             </q-input>
           </q-item>
           <q-separator
-            class="mr-3 ml-3"
-            spaced
+            class="mr-3 ml-3 mb-1"
           />
           <!-- Portainer -->
           <q-item-label
@@ -669,7 +677,7 @@
           >
             {{ $t('portainer') }}
           </q-item-label>
-          <q-item class="mb-5">
+          <q-item>
             <q-tooltip
               v-if="portainerUnavailable && !portainerLoading"
               class="text-caption text-center"
@@ -808,7 +816,7 @@
         </q-list>
         <q-separator spaced />
         <!-- System Info -->
-        <div class="text-center text-xl mt-6 text-gray-600">
+        <div class="text-center text-xl mt-4 text-gray-600">
           {{ $t('system_info') }}
         </div>
         <div

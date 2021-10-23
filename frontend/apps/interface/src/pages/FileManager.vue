@@ -339,6 +339,7 @@
                   v-model="scope.value"
                   dense
                   autofocus
+                  hide-bottom-space
                   :rules="[(val) =>
                     !invalidCharacters.some(el => val.includes(el))
                     || $t('invalid_filemanager_string')]"
