@@ -117,6 +117,7 @@ class wifi_forget_all(Resource):
 class wifi_list_access_points(Resource):
     @jwt_required()
     def get(self):
+        time.sleep(4)
         # Demo routes
         ssids = [{"ssid": "My House", "security": "WPA",
                   "strength": 70},
