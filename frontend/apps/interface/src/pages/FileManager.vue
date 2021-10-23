@@ -678,13 +678,21 @@ export default defineComponent({
           if (ePub) {
             $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
           } else {
-            window.location.href = `/storage/${encodedCurrentPath}/${encodedRowName}`
+            // Uses window.open to open a new window. Otherwise a user hits the back button to return
+            // to the FileManager from the opened item and loses their folder position.
+            window.open(
+              `/storage/${encodedCurrentPath}/${encodedRowName}`,
+              '_blank'
+            )
           }
         } else {
           if (ePub) {
             $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
           } else {
-            window.location.href = `/storage/${encodedRowName}`
+            window.open(
+              `/storage/${encodedRowName}`,
+              '_blank'
+            )
           }
         }
       }
@@ -866,13 +874,19 @@ export default defineComponent({
           if (ePub) {
             $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
           } else {
-            window.location.href = `/storage/${encodedCurrentPath}/${encodedRowName}`
+            window.open(
+              `/storage/${encodedCurrentPath}/${encodedRowName}`,
+              '_blank'
+            )
           }
         } else {
           if (ePub) {
             $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
           } else {
-            window.location.href = `/storage/${encodedRowName}`
+            window.open(
+              `/storage/${encodedRowName}`,
+              '_blank'
+            )
           }
         }
       } else if (row.format === 'folder') {
