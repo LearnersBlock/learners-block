@@ -656,9 +656,39 @@ export default defineComponent({
       } else {
         visibleColumns.value = ['info']
       }
+
       await updateRows()
+
+      // Auto open files starting with --auto-open
+      if (!loginState) {
+        checkAutoOpenFile()
+      }
       $q.loading.hide()
     })
+
+    function checkAutoOpenFile () {
+      const stringExists = rows.value.findIndex(({ name }) => name.substring(0, 11) === '--auto-open')
+      if (stringExists > -1) {
+        const fileName = rows.value[stringExists].name
+        const index = fileName.lastIndexOf('.') as number
+        const ePub = fileName.substring(index + 1).toLowerCase() === 'epub'
+        const encodedCurrentPath = encodeURIComponent(currentPath.value)
+        const encodedRowName = encodeURIComponent(fileName)
+        if (encodedCurrentPath) {
+          if (ePub) {
+            $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
+          } else {
+            window.location.href = `/storage/${encodedCurrentPath}/${encodedRowName}`
+          }
+        } else {
+          if (ePub) {
+            $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
+          } else {
+            window.location.href = `/storage/${encodedRowName}`
+          }
+        }
+      }
+    }
 
     function checkCharacters (files) {
       return files.filter(file => !invalidCharacters.value.some(el => file.name.includes(el)))
@@ -851,27 +881,7 @@ export default defineComponent({
         updateRows().then(() => {
           // Auto open files starting with --auto-open
           if (!loginState) {
-            const stringExists = rows.value.findIndex(({ name }) => name.substring(0, 11) === '--auto-open')
-            if (stringExists > -1) {
-              const fileName = rows.value[stringExists].name
-              const index = fileName.lastIndexOf('.') as number
-              const ePub = fileName.substring(index + 1).toLowerCase() === 'epub'
-              const encodedCurrentPath = encodeURIComponent(currentPath.value)
-              const encodedRowName = encodeURIComponent(fileName)
-              if (encodedCurrentPath) {
-                if (ePub) {
-                  $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
-                } else {
-                  window.location.href = `/storage/${encodedCurrentPath}/${encodedRowName}`
-                }
-              } else {
-                if (ePub) {
-                  $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
-                } else {
-                  window.location.href = `/storage/${encodedRowName}`
-                }
-              }
-            }
+            checkAutoOpenFile()
           }
         })
       }

@@ -539,7 +539,6 @@
           <!-- Choose App as default path -->
           <q-dialog
             v-model="appStorePageInput"
-            persistent
           >
             <q-card style="width: 700px; max-width: 80vw;">
               <q-card-section class="row items-center">
