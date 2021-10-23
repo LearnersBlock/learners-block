@@ -1,15 +1,17 @@
 import axios from 'axios'
+import { i18n } from '../boot/i18n'
+import { Loading, Notify } from 'quasar'
 import { route } from 'quasar/wrappers'
+import routes from './routes'
+import { AxiosOverride } from 'src/boot/axios'
+import { StateInterface } from '../store'
+import { ref } from 'vue'
 import {
   createMemoryHistory,
   createRouter,
   createWebHashHistory,
   createWebHistory
 } from 'vue-router'
-import { StateInterface } from '../store'
-import routes from './routes'
-import { Loading, Notify } from 'quasar'
-import { i18n } from '../boot/i18n'
 
 /*
  * If not building with SSR mode, you can
@@ -56,15 +58,20 @@ export default route<StateInterface>(function ({ store }) {
   })
 
   Router.beforeEach(async (to, _, next) => {
+    // Set the API string on each request for user throughout app
     store.commit('SET_API', 'http://' + window.location.hostname + ':9090')
+    // If there is a token store but not logged in, re-validate it
     if (!store.getters.isAuthenticated && sessionStorage.getItem('learners-block-token') !== null) {
       await store.dispatch('VERIFY_LOGIN', sessionStorage.getItem('learners-block-token'))
     }
+    // If protected route
     if ((to.name === 'settings' || to.name === 'wifi') && !store.getters.isAuthenticated) {
+      // Try logging in without a password, and if error then redirect to login page
       await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).catch(() => {
-        next({ name: 'login', params: { data: to.name as string } })
+        next({ name: 'login', params: { data: to.fullPath } })
       })
     }
+    // If login successful, allow access.
     next()
   })
 
@@ -72,13 +79,32 @@ export default route<StateInterface>(function ({ store }) {
     return response
   }, async function (error) {
     if (error.response) {
+      // If an auth error
       if (error.response.status === 401 || error.response.status === 422) {
-        await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).catch(() => {
-          Router.replace('/login')
+        const overrideResponse = ref<any>()
+        // Try logging in again in case of a token timeout and no password set
+        await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).then(async () => {
+          const originalRequestConfig = error.config
+          // remove old token to force use of new one
+          delete originalRequestConfig.headers.Authorization
+          // Retry request with new Auth header
+          overrideResponse.value = await AxiosOverride(originalRequestConfig).catch(() => {
+            Notify.create({ type: 'negative', message: i18n.global.t('error') })
+          })
+        }).catch(() => {
+          Router.replace({ name: 'login', params: { data: Router.currentRoute.value.fullPath } })
           Notify.create({ type: 'negative', message: i18n.global.t('login_again') })
         })
+        // If a successful response, return promise
+        if (overrideResponse.value) {
+          return Promise.resolve(overrideResponse.value)
+        } else {
+          return Promise.reject(error)
+        }
+      // If a non-auth related error code, report an error
       } else {
         Notify.create({ type: 'negative', message: `${i18n.global.t('error')} ${error.response.message}` })
+        return Promise.reject(error)
       }
     }
   })

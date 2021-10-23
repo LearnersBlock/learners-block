@@ -7,8 +7,11 @@ declare module '@vue/runtime-core' {
   }
 }
 
+// Override function to skip interceptors
+const AxiosOverride = axios.create()
+
 export default boot(({ app }) => {
   app.config.globalProperties.$axios = axios
 })
 
-export { axios }
+export { axios, AxiosOverride }

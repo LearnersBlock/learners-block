@@ -1,10 +1,10 @@
 import Axios from 'axios'
+import { AxiosOverride } from 'src/boot/axios'
 
 export interface AuthStateInterface {
   api: string,
   token: string
 }
-const AxiosOverride = Axios.create()
 const auth = {
   state: <AuthStateInterface>{
     api: '',
@@ -35,6 +35,7 @@ const auth = {
         const token = response.data.token
         sessionStorage.setItem('learners-block-token', token)
         Axios.defaults.headers.common.Authorization = `Bearer ${token}`
+        AxiosOverride.defaults.headers.common.Authorization = `Bearer ${token}`
         commit('SET_TOKEN', token)
         return true
       }
@@ -46,6 +47,7 @@ const auth = {
       if (response.status === 200) {
         sessionStorage.removeItem('learners-block-token')
         Axios.defaults.headers.common.Authorization = null
+        AxiosOverride.defaults.headers.common.Authorization = null
         commit('SET_TOKEN', null)
       }
     },
@@ -58,6 +60,7 @@ const auth = {
       if (response.data.logged_in === true) {
         commit('SET_TOKEN', payload)
         Axios.defaults.headers.common.Authorization = `Bearer ${payload}`
+        AxiosOverride.defaults.headers.common.Authorization = `Bearer ${payload}`
       } else {
         dispatch('LOGOUT')
       }
