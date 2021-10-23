@@ -200,5 +200,8 @@
     "free": "Free",
     "categories": "Categories:",
     "library_api_down": "Unable to reach the online Library. Check your internet connection and try again.",
-    "enter_name": "Enter a name"
+    "enter_name": "Enter a name",
+    "searching_networks": "Searching for nearby networks…",
+    "wifi_login_disabled": "Your Wi-Fi password has been disabled. Restart your device to apply the changes.",
+    "wifi_password_set_success": "Your Wi-Fi password has been set. Restart your device for this to take effect."
 }
