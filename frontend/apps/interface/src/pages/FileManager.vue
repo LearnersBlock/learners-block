@@ -139,6 +139,7 @@
                   no-thumbnails
                   with-credentials
                   :readonly="delayUpload"
+                  auto-upload
                   :filter="checkCharacters"
                   :url="api + '/v1/filemanager/upload'"
                   :headers="[{name: 'rootPath', value: rootPath}, {name: 'savePath', value: JSON.stringify(objPath)}, {name: 'Authorization', value: loginToken}]"

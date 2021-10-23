@@ -306,7 +306,7 @@
           </q-item-label>
           <q-btn
             v-model="wifi"
-            class="ml-3 mr-3 mt-1 mb-2 text-lg full-width"
+            class="ml-3 mr-3 mt-1 mb-2 text-base full-width"
             icon="wifi"
             outline
             rounded
@@ -332,7 +332,7 @@
           wrap-cells
           :loading="!appTableVisible"
           :rows="rows"
-          :rows-per-page-options="[5, 10, 20]"
+          :rows-per-page-options="[5, 10, 20, 0]"
           :grid="$q.screen.xs"
           :no-data-label="$t('no_apps_to_display')"
           :no-results-label="$t('no_apps_to_display')"
@@ -425,7 +425,7 @@
                     color="primary"
                   />
                   <br>
-                  <strong>{{ props.row.name }}</strong>
+                  <strong>{{ props.row.long_name }}</strong>
                 </q-card-section>
                 <q-separator />
                 <q-list
@@ -552,7 +552,7 @@
                   separator="cell"
                   style="width: 700px; max-width: 80vw;"
                   :grid="$q.screen.xs"
-                  :rows-per-page-options="[5, 10]"
+                  :rows-per-page-options="[0]"
                   :rows="rows"
                   :table-class="appTableVisible ? 'text-black': 'text-white'"
                   :columns="columns"
@@ -583,21 +583,18 @@
                   <template #item="props">
                     <div class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4">
                       <q-card>
-                        <q-card-section class="text-center">
-                          <strong>{{ props.row.name }}</strong>
+                        <q-card-section class="text-center text-body1 text-weight-bold q-pa-none mt-2">
+                          {{ props.row.long_name }}
                         </q-card-section>
                         <q-separator />
                         <q-list
                           dense
                           class="text-center"
                         >
-                          <div>
-                            {{ $t('author_colon') }} {{ props.row.author_site }}
-                          </div>
                           <q-btn
                             v-close-popup
-                            class="mb-1"
-                            size="xs"
+                            class="mb-1 mt-1"
+                            size="sm"
                             unelevated
                             color="primary"
                             :label="$t('set_custom_startpage')"
@@ -740,7 +737,7 @@
               <q-item-section side>
                 <div class="row items-center">
                   <q-icon
-                    color="red"
+                    color="accent"
                     name="warning"
                   />
                 </div>
@@ -812,7 +809,7 @@
         </q-list>
         <q-separator spaced />
         <!-- System Info -->
-        <div class="text-center text-xl mt-6 mb-4 text-gray-600">
+        <div class="text-center text-xl mt-6 text-gray-600">
           {{ $t('system_info') }}
         </div>
         <div
