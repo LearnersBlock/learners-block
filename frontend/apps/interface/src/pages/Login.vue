@@ -77,7 +77,10 @@ export default defineComponent({
           $q.notify({
             type: 'negative',
             message: e.message,
-            timeout: 0
+            timeout: 0,
+            actions: [
+              { label: t('close'), color: 'black', handler: () => { /* ... */ } }
+            ]
           })
           submitting.value = false
         })

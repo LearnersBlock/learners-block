@@ -488,6 +488,9 @@
             <q-item-section class="text-h6">
               {{ $t('choose_start_page') }}
             </q-item-section>
+            <q-item-section>
+              {{ $t('start_page_desc') }}
+            </q-item-section>
           </q-item-label>
           <q-item class="mb-1">
             <q-select
@@ -633,6 +636,9 @@
             <q-item-section class="text-h6">
               {{ $t('set_hostname_desc') }}
             </q-item-section>
+            <q-item-section>
+              {{ $t('url_wifi_desc') }}
+            </q-item-section>
           </q-item-label>
           <q-item>
             <q-input
@@ -664,6 +670,15 @@
                   :disable="newHostname"
                   @click="hostnameWarn"
                 />
+              </template>
+              <template
+                v-if="newHostname"
+                #hint
+              >
+                <div class="text-caption text-gray-800">
+                  <div>{{ $t('your_new_url') }} <span class="text-primary">'http://{{ newHostname }}.local'</span></div>
+                  <div>{{ $t('your_new_ssid') }} <span class="text-primary">'{{ newHostname }}'</span></div>
+                </div>
               </template>
             </q-input>
           </q-item>
@@ -1473,7 +1488,18 @@ export default defineComponent({
         Axios.post(`${api.value}/v1/supervisor/host_config`, {
           hostname: newHostname.value
         }).then(() => {
-          $q.notify({ type: 'positive', message: t('hostname_changed_notification') })
+          $q.notify({
+            type: 'positive',
+            message: t('hostname_changed_notification'),
+            timeout: 0,
+            actions: [
+              {
+                label: t('close'),
+                color: 'white',
+                handler: () => { /* ... */ }
+              }
+            ]
+          })
           hostnameChanging.value = false
         })
       }

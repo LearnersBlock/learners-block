@@ -173,7 +173,10 @@ export default defineComponent({
       $q.notify({
         type: 'negative',
         message: t('library_api_down'),
-        timeout: 0
+        timeout: 0,
+        actions: [
+          { label: t('close'), color: 'black', handler: () => { /* ... */ } }
+        ]
       })
     })
 
