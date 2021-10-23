@@ -93,7 +93,11 @@ export default route<StateInterface>(function ({ store }) {
           })
         }).catch(() => {
           Router.replace({ name: 'login', params: { data: Router.currentRoute.value.fullPath } })
-          Notify.create({ type: 'negative', message: i18n.global.t('login_again') })
+          Notify.create({
+            type: 'negative',
+            message: i18n.global.t('login_again'),
+            timeout: 1500
+          })
         })
         // If a successful response, return promise
         if (overrideResponse.value) {
