@@ -683,7 +683,7 @@
             </q-input>
           </q-item>
           <q-separator
-            class="mr-3 ml-3 mb-1"
+            class="mr-3 ml-3"
           />
           <!-- Portainer -->
           <q-item-label
@@ -692,7 +692,7 @@
           >
             {{ $t('portainer') }}
           </q-item-label>
-          <q-item>
+          <q-item class="mb-3">
             <q-tooltip
               v-if="portainerUnavailable && !portainerLoading"
               class="text-caption text-center"
@@ -714,6 +714,9 @@
             <q-item-section bottom>
               <q-item-label>
                 {{ $t('portainer_settings_description') }}
+              </q-item-label>
+              <q-item-label caption>
+                {{ $t('portainer_desc') }}
               </q-item-label>
               <q-item-label
                 v-if="portainer && !portainerLoading"
