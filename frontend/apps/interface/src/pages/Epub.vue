@@ -30,6 +30,15 @@
         <q-fab-action
           label-position="left"
           color="primary"
+          icon="arrow_back"
+          text-color="white"
+          :label="$t('back')"
+          :disable="draggingFab"
+          @click="$router.back()"
+        />
+        <q-fab-action
+          label-position="left"
+          color="primary"
           icon="minimize"
           text-color="white"
           :label="$t('hide_button')"
