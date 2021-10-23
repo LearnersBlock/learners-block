@@ -331,13 +331,14 @@
           flat
           wrap-cells
           :loading="!appTableVisible"
-          :grid="$q.screen.xs"
-          :rows-per-page-options="[5, 10, 20]"
           :rows="rows"
+          :rows-per-page-options="[5, 10, 20]"
+          :grid="$q.screen.xs"
+          :no-data-label="$t('no_apps_to_display')"
+          :no-results-label="$t('no_apps_to_display')"
           :table-class="appTableVisible ? 'text-black': 'text-white'"
           :columns="columns"
           row-key="application"
-          :no-data-label="$t('no_apps_to_display')"
         >
           <template #loading>
             <q-inner-loading
@@ -558,7 +559,8 @@
                   :visible-columns="visibleColumns"
                   filter="installed"
                   row-key="application"
-                  :no-data-label="$t('no_apps_to_display')"
+                  :no-data-label="$t('no_apps_installed')"
+                  :no-results-label="$t('no_apps_installed')"
                 >
                   <template
                     v-if="appTableVisible"
@@ -1292,7 +1294,7 @@ export default defineComponent({
       } else {
         $q.dialog({
           title: t('confirm'),
-          message: t('change_path_warning'),
+          message: `${t('change_path_warning')} http://${windowHostname.value}/settings`,
           cancel: true,
           persistent: true
         }).onOk(() => {

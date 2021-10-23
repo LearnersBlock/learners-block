@@ -202,7 +202,7 @@ export default defineComponent({
     }
 
     async function fetchNetworks () {
-      $q.loading.show()
+      $q.loading.show({ message: t('searching_networks') })
       await Axios.get(`http://${hostname.value}:9090/v1/wifi/list_access_points`).then((response) => {
         refreshCompatible.value = response.data.compatible
         ssids.value = response.data.ssids
