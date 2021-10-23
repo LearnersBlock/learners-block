@@ -199,5 +199,9 @@
     "free": "Gratuito",
     "freemium": "Freemium",
     "paid": "A pagamento",
-    "library_api_down": "Impossibile raggiungere la Raccolta in linea. Controlla la tua connessione internet e riprova."
+    "library_api_down": "Impossibile raggiungere la Raccolta in linea. Controlla la tua connessione internet e riprova.",
+    "wifi_login_disabled": "La tua password Wi-Fi è stata disabilitata. Riavvia il tuo dispositivo per applicare le modifiche.",
+    "wifi_password_set_success": "La tua password Wi-Fi è stata impostata. Riavvia il tuo dispositivo per applicare le modifiche.",
+    "enter_name": "Inserisci un nome",
+    "searching_networks": "Ricerca di reti vicine…"
 }

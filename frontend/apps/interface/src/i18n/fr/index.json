@@ -36,7 +36,7 @@
     "home": "Accueil",
     "files_description": "Parcourir les fichiers ici.",
     "files": "Fichiers",
-    "error": "Une erreur est survenue.",
+    "error": "Une erreur s’est produite.",
     "enable_components_in": "Vous pouvez activer les composants dans le Panneau de configuration.",
     "disconnected": "Déconnecté",
     "disconnect_wifi": "Êtes-vous sûr(e) de vouloir vous déconnecter du Wi-Fi ?",
@@ -97,7 +97,7 @@
     "app_store": "Magasin d’applications",
     "application": "Application",
     "no_apps_to_display": "Il n’y a aucune application à afficher. Essayez de rafraîchir votre base de données d’applications avec l’icône ci-dessus.",
-    "author": "Auteur",
+    "author": "Auteur(e)",
     "description": "Description",
     "this_may_take_time": "Ceci peut prendre un certain temps en fonction de la vitesse de votre connexion.",
     "app_store_app": "Appli de magasin d’applications",
@@ -199,5 +199,9 @@
     "free": "Gratuit",
     "freemium": "Semi-payant",
     "paid": "Payant",
-    "library_api_down": "Impossible d'accéder à la bibliothèque en ligne. Vérifiez votre connexion Internet et réessayez."
+    "library_api_down": "Impossible d'accéder à la bibliothèque en ligne. Vérifiez votre connexion Internet et réessayez.",
+    "wifi_login_disabled": "Votre mot de passe Wi-Fi a été désactivé. Redémarrez votre appareil pour appliquer les modifications.",
+    "wifi_password_set_success": "Votre mot de passe Wi-Fi a été défini. Redémarrez votre appareil pour appliquer les modifications.",
+    "enter_name": "Entrez un nom",
+    "searching_networks": "Recherche de réseaux proches…"
 }

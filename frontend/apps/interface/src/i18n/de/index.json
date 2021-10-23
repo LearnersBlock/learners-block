@@ -199,5 +199,9 @@
     "categories": "Kategorien:",
     "free": "Kostenlos",
     "freemium": "Freemium",
-    "library_api_down": "Sie können die Online-Bibliothek nicht erreichen. Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
+    "library_api_down": "Sie können die Online-Bibliothek nicht erreichen. Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.",
+    "wifi_login_disabled": "Ihr Wi-Fi-Passwort wurde deaktiviert. Starten Sie Ihr Gerät neu, um die Änderungen zu übernehmen.",
+    "wifi_password_set_success": "Ihr Wi-Fi-Passwort wurde festgelegt. Starten Sie Ihr Gerät neu, um die Änderungen zu übernehmen.",
+    "enter_name": "Geben Sie einen Namen ein",
+    "searching_networks": "Suche nach Netzwerken in der Nähe …"
 }
