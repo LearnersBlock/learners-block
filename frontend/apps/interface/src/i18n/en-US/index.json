@@ -203,5 +203,9 @@
     "enter_name": "Enter a name",
     "searching_networks": "Searching for nearby networks…",
     "wifi_login_disabled": "Your Wi-Fi password has been disabled. Restart your device to apply the changes.",
-    "wifi_password_set_success": "Your Wi-Fi password has been set. Restart your device to apply the changes."
+    "wifi_password_set_success": "Your Wi-Fi password has been set. Restart your device to apply the changes.",
+    "url_wifi_desc": "Change the URL used to access your Block, and how your Block appears in people's list of Wi-Fi networks.",
+    "your_new_url": "Your new url will be:",
+    "your_new_ssid": "Your new Wi-Fi SSID will be:",
+    "portainer_desc": "A GUI to manage custom Docker containers on your Block."
 }
