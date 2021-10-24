@@ -29,23 +29,8 @@ class settings_set_ui(Resource):
         # Fetch current settings toggle and field status
         lb_database = User.query.filter_by(username='lb').first()
 
-        if "files" in content:
-            if content["files"].lower() == "true":
-                lb_database.files = True
-            else:
-                lb_database.files = False
-        if "library" in content:
-            if content["library"].lower() == "true":
-                lb_database.library = True
-            else:
-                lb_database.library = False
-        if "website" in content:
-            if content["website"].lower() == "true":
-                lb_database.website = True
-            else:
-                lb_database.website = False
-        if "start_page" in content:
-            lb_database.start_page = content["start_page"]
+        for key, value in content.items():
+            setattr(lb_database, key, value)
 
         lb_database.save_to_db()
 

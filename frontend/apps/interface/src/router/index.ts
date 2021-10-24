@@ -60,7 +60,7 @@ export default route<StateInterface>(function ({ store }) {
   Router.beforeEach(async (to, _, next) => {
     // Set the API string on each request for user throughout app
     store.commit('SET_API', 'http://' + window.location.hostname + ':9090')
-    // If there is a token store but not logged in, re-validate it
+    // If there is a token stored but user is not logged in, re-validate it
     if (!store.getters.isAuthenticated && sessionStorage.getItem('learners-block-token') !== null) {
       await store.dispatch('VERIFY_LOGIN', sessionStorage.getItem('learners-block-token'))
     }

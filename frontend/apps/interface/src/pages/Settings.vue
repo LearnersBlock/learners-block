@@ -651,7 +651,7 @@
               :label="$t('enter_name')"
               :placeholder="$t('your_new_name')"
               :rules="[(val) =>
-                !val.includes(' ') &&
+                !val.includes(' ') && // Spaces are not allowed in hostnames
                 val.length <= 32
                 && val === val.toLowerCase()
                 && regexp.test(val)
@@ -1480,7 +1480,7 @@ export default defineComponent({
     const updateFiles = async () => {
       filesLoading.value = true
       await Axios.post(`${api.value}/v1/settings/set_ui`, {
-        files: files.value ? 'TRUE' : 'FALSE'
+        files: !!files.value
       })
       filesLoading.value = false
     }
@@ -1511,7 +1511,7 @@ export default defineComponent({
     const updateLibrary = async () => {
       libraryLoading.value = true
       await Axios.post(`${api.value}/v1/settings/set_ui`, {
-        library: library.value ? 'TRUE' : 'FALSE'
+        library: !!library.value
       })
       libraryLoading.value = false
     }
@@ -1535,7 +1535,7 @@ export default defineComponent({
     const updateWebsite = async () => {
       websiteLoading.value = true
       await Axios.post(`${api.value}/v1/settings/set_ui`, {
-        website: website.value ? 'TRUE' : 'FALSE'
+        website: !!website.value
       })
       websiteLoading.value = false
     }
