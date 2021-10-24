@@ -33,53 +33,39 @@ class wifi:
                       password=None, conn_name='LBNETWORK'):
 
         if conn_type is None or ssid is None:
-            print_message('connect_to_AP', 'Missing '
-                          'args conn_type.')
+            print_message('connect_to_AP', 'Missing args conn_type.')
             return False
 
         # Remove existing HOTSPOT if it exists
         if conn_name == 'HOTSPOT':
             wifi.forget(conn_name='HOTSPOT')
 
+        # Hotspot that we turn on so we can show our captured portal
+        # to let the user select an AP and provide credentials.
         try:
-            # This is the hotspot that we turn on so we can show
-            # ourcaptured portal to let the user select an AP and
-            # provide credentials.
+            # String for no password
+            hotspot_dict = {
+                '802-11-wireless': {'band': 'bg',
+                                    'mode': 'ap',
+                                    'ssid': ssid},
+                'connection': {'autoconnect': False,
+                               'id': conn_name,
+                               'interface-name': 'wlan0',
+                               'type': '802-11-wireless',
+                               'uuid': str(uuid.uuid4())},
+                'ipv4': {'address-data':
+                         [{'address': '192.168.42.1', 'prefix': 24}],
+                         'addresses': [['192.168.42.1', 24, '0.0.0.0']],
+                         'method': 'manual'},
+                'ipv6': {'method': 'auto'}
+            }
+
+            # Include a key-mgmt string if setting a password
             if password:
-                # Include a key-mgmt string for setting password
-                hotspot_dict = {
-                    '802-11-wireless': {'band': 'bg',
-                                        'mode': 'ap',
-                                        'ssid': ssid},
-                    '802-11-wireless-security':
-                        {'key-mgmt': 'wpa-psk', 'psk': password},
-                    'connection': {'autoconnect': False,
-                                   'id': conn_name,
-                                   'interface-name': 'wlan0',
-                                   'type': '802-11-wireless',
-                                   'uuid': str(uuid.uuid4())},
-                    'ipv4': {'address-data':
-                             [{'address': '192.168.42.1', 'prefix': 24}],
-                             'addresses': [['192.168.42.1', 24, '0.0.0.0']],
-                             'method': 'manual'},
-                    'ipv6': {'method': 'auto'}
-                }
-            else:
-                hotspot_dict = {
-                    '802-11-wireless': {'band': 'bg',
-                                        'mode': 'ap',
-                                        'ssid': ssid},
-                    'connection': {'autoconnect': False,
-                                   'id': conn_name,
-                                   'interface-name': 'wlan0',
-                                   'type': '802-11-wireless',
-                                   'uuid': str(uuid.uuid4())},
-                    'ipv4': {'address-data':
-                             [{'address': '192.168.42.1', 'prefix': 24}],
-                             'addresses': [['192.168.42.1', 24, '0.0.0.0']],
-                             'method': 'manual'},
-                    'ipv6': {'method': 'auto'}
-                }
+                password_key_mgmt = {'802-11-wireless-security':
+                                     {'key-mgmt': 'wpa-psk', 'psk': password}}
+
+                hotspot_dict.update(password_key_mgmt)
 
             # "MIT SECURE" network.
             enterprise_dict = {
@@ -185,8 +171,8 @@ class wifi:
                 print('Connection is live.')
                 return True
 
-        except Exception as e:
-            print(f'Connection error {e}')
+        except Exception as ex:
+            print_message('connect_to_AP', 'Connection failed.', ex)
 
         print_message('connect_to_AP', 'Connection failed.')
         return False
@@ -206,6 +192,8 @@ class wifi:
             print_message('wifi.forget', 'Failed to delete network. '
                           'Trying reset all.', ex)
             wifi.forget_all()
+
+        # Ensure NetworkManager is available before starting new hotspot
         time.sleep(2)
 
         # Start HOTSPOT for new connections
@@ -237,10 +225,12 @@ class wifi:
 
     # Get user specified hotspot SSID.
     def get_hotspot_SSID():
-        # Check default hostname variables is not empty, and set if it is
+        # Check default hostname variable is not empty, and set if it is
         try:
             os.environ['DEFAULT_HOSTNAME']
-        except Exception:
+        except Exception as ex:
+            print_message('wifi.get_hotspot_SSID', 'No DEFAULT_SSID',
+                          ex)
             os.environ['DEFAULT_HOSTNAME'] = 'lb'
 
         # Get the current hostname of the container, and
@@ -250,23 +240,16 @@ class wifi:
                                               capture_output=True,
                                               text=True).stdout.rstrip()
         except Exception as ex:
-            print_message('wifi.get_hotspot_SSID', 'Failed to set hostname. '
+            print_message('wifi.get_hotspot_SSID', 'Failed to get hostname. '
                           'Setting a default instead.', ex)
             current_hostname = os.environ['DEFAULT_HOSTNAME']
 
-        # Check the current hostname variable is not empty, and set if it is
-        try:
-            current_hostname
-        except Exception as ex:
-            print_message('wifi.get_hotspot_SSID', 'Error getting hostname. '
-                          'Setting a default instead.', ex)
-            current_hostname = os.environ['DEFAULT_HOSTNAME']
-
-        # If default SSID is active then provide default SSID
+        # If default hostname is active then provide default SSID
         if current_hostname == os.environ['DEFAULT_HOSTNAME']:
-            current_hostname = os.environ["DEFAULT_SSID"]
-
-        return current_hostname
+            return os.environ["DEFAULT_SSID"]
+        # Otherwise return the hostname to use as an SSID
+        else:
+            return current_hostname
 
     # Return a list of available SSIDs and their security type,
     # or [] for none available or error.
@@ -276,13 +259,6 @@ class wifi:
 
         # Fetch current hotspot name
         currentSSID = wifi.get_hotspot_SSID()
-
-        # Bit flags we use when decoding what we get back from NetMan
-        NM_SECURITY_NONE = 0x0
-        NM_SECURITY_WEP = 0x1
-        NM_SECURITY_WPA = 0x2
-        NM_SECURITY_WPA2 = 0x4
-        NM_SECURITY_ENTERPRISE = 0x8
 
         ssids = []  # list to be returned
 
@@ -295,7 +271,7 @@ class wifi:
                 # combinations of the NM_802_11_AP_SEC_* bit flags.
                 # https://developer.gnome.org/NetworkManager/1.2/nm-dbus-types.html#NM80211ApSecurityFlags
 
-                security = NM_SECURITY_NONE
+                security = 'NONE'
 
                 # Based on a subset of the flag settings determine which
                 # type of security this AP uses.
@@ -305,38 +281,21 @@ class wifi:
                 if ap.Flags & NetworkManager.NM_802_11_AP_FLAGS_PRIVACY and \
                         ap.WpaFlags == AP_SEC and \
                         ap.RsnFlags == AP_SEC:
-                    security = NM_SECURITY_WEP
+                    security = 'WEP'
 
                 if ap.WpaFlags != AP_SEC:
-                    security = NM_SECURITY_WPA
+                    security = 'WPA'
 
                 if ap.RsnFlags != AP_SEC:
-                    security = NM_SECURITY_WPA2
+                    security = 'WPA2'
 
                 if ap.WpaFlags & \
                     NetworkManager.NM_802_11_AP_SEC_KEY_MGMT_802_1X or \
                         ap.RsnFlags & \
                         NetworkManager.NM_802_11_AP_SEC_KEY_MGMT_802_1X:
-                    security = NM_SECURITY_ENTERPRISE
+                    security = 'ENTERPRISE'
 
-                # Decode flag into a display string
-                security_str = ''
-                if security == NM_SECURITY_NONE:
-                    security_str = 'NONE'
-
-                if security & NM_SECURITY_WEP:
-                    security_str = 'WEP'
-
-                if security & NM_SECURITY_WPA:
-                    security_str = 'WPA'
-
-                if security & NM_SECURITY_WPA2:
-                    security_str = 'WPA2'
-
-                if security & NM_SECURITY_ENTERPRISE:
-                    security_str = 'ENTERPRISE'
-
-                entry = {"ssid": ap.Ssid, "security": security_str,
+                entry = {"ssid": ap.Ssid, "security": security,
                          "strength": int(ap.Strength)}
 
                 # Do not add duplicates to the list

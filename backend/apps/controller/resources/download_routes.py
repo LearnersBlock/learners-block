@@ -51,8 +51,8 @@ class download_fetch(Resource):
         # Set the download path
         filePath = os.path.realpath('.') + '/storage/library/' + \
             url.split('/')[-1]
-        with open(filePath, 'wb') as file:
 
+        with open(filePath, 'wb') as file:
             # Set vars
             global download_terminated
             downloaded_bytes = 0
