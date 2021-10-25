@@ -3,6 +3,7 @@ from common.processes import curl
 from common.wifi import wifi
 from common.errors import print_message
 from resources.supervisor_routes import supervisor_update
+import config
 import subprocess
 import sys
 import threading
@@ -40,7 +41,7 @@ def dnsmasq():
 def handle_exit(*args):
     # Ensure Wi-Fi connections are shutdown softly
     try:
-        wifi.forget(conn_name='HOTSPOT')
+        wifi.forget(conn_name=config.hotspot_name)
     except Exception as ex:
         print_message('handle_exit', 'Failed to terminate wifi processes. ',
                       ex)

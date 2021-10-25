@@ -31,6 +31,7 @@ from resources.system_routes import system_portainer
 from resources.system_routes import system_prune
 from resources.system_routes import system_reset_database
 import atexit
+import config
 import os
 import signal
 import subprocess
@@ -65,13 +66,8 @@ def create_app():
     # Initalise and configure Flask
     app = Flask(__name__)
 
-    # Import relevant config
-    if os.environ['FLASK_ENV'].lower() == "production":
-        from config import Production
-        app.config.from_object(Production)
-    else:
-        from config import Development
-        app.config.from_object(Development)
+    # Import app context from config file
+    app.config.from_object(config.context)
 
     # Allow CORS
     CORS(app)

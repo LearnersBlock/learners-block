@@ -4,6 +4,7 @@ from common.wifi import wifi
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
+import config
 import threading
 
 
@@ -48,7 +49,7 @@ class wifi_forget(Resource):
             }, 409
 
         wifi_forget_thread = threading.Thread(target=wifi.forget,
-                                              args=('LBNETWORK',),
+                                              args=(config.ap_name,),
                                               name='wifi_forget_thread')
         wifi_forget_thread.start()
 

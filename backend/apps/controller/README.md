@@ -12,12 +12,6 @@ Install the required dependencies for development mode:
 When running the Controller outside of our Docker development environment, a .env file is utilised. The default settings should be fine for most cases, but a brief description of each setting is provided here:
 
 ```
-# Redundant in development environment but required to start
-DEFAULT_SSID="Learner's Block"
-
-# Redundant in development environment but required to start
-DEFAULT_HOSTNAME=lb  
-
 # Set the Python environment to development/debug
 FLASK_ENV=development  
 

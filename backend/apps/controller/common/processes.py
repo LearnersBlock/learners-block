@@ -1,11 +1,18 @@
 from common.errors import print_message
+from dotenv import dotenv_values
+from dotenv import load_dotenv
 from flask_restful import abort
 import os
 import requests
+import secrets
 import shutil
 import signal
 import socket
 import time
+
+
+# Initialise dotenv for writing secrets key
+load_dotenv()
 
 
 def check_internet(host="8.8.8.8", port=53, timeout=6):
@@ -123,6 +130,16 @@ def database_recover():
     except Exception as ex:
         print_message('database_recover',
                       'Failed to delete the database. ', ex)
+
+
+# Fetch secret key of generate if absent
+def get_secret_key():
+    # Generate secret key
+    if not dotenv_values("db/.secret_key"):
+        with open('./db/.secret_key', 'w') as secret_file:
+            secret_file.write("SECRET_KEY = " + secrets.token_hex(32))
+    key = dotenv_values("./db/.secret_key")
+    return key["SECRET_KEY"]
 
 
 def human_size(nbytes):

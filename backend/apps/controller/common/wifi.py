@@ -1,6 +1,7 @@
 from common.errors import print_message
 from common.models import User
 from run import app
+import config
 import os
 import subprocess
 import time
@@ -33,15 +34,16 @@ class wifi:
                       ssid=None,
                       username=None,
                       password=None,
-                      conn_name='LBNETWORK'):
+                      conn_name=config.ap_name):
 
         if conn_type is None or ssid is None:
             print_message('connect_to_AP', 'Missing arg conn_type.')
             return False
 
-        # Remove existing HOTSPOT if it exists
-        if conn_name == 'HOTSPOT':
-            wifi.forget(conn_name='HOTSPOT')
+        # Remove existing HOTSPOT if it exists and set vars for new hotspot
+        if conn_type == config.type_hotspot:
+            conn_name = config.hotspot_name
+            wifi.forget(conn_name=config.hotspot_name)
 
         try:
             # Hotspot for user to connect to device
@@ -111,15 +113,15 @@ class wifi:
                 'ipv6': {'method': 'auto'}
             }
 
-            if conn_type.lower() == 'hotspot':
+            if conn_type == config.type_hotspot:
                 conn_dict = hotspot_dict
-            elif conn_type.lower() == 'none':
+            elif conn_type == config.type_none:
                 conn_dict = none_dict
-            elif (conn_type.lower() == 'wep' or
-                    conn_type.lower() == 'wpa' or
-                    conn_type.lower() == 'wpa2'):
+            elif (conn_type == config.type_wep or
+                    conn_type == config.type_wpa or
+                    conn_type == config.type_wpa2):
                 conn_dict = passwd_dict
-            elif conn_type.lower() == 'enterprise':
+            elif conn_type == config.type_enterprise:
                 conn_dict = enterprise_dict
             else:
                 print_message('connect_to_AP', 'Invalid conn_type.')
@@ -171,7 +173,7 @@ class wifi:
         print_message('connect_to_AP', 'Connection failed.')
         return False
 
-    def forget(conn_name='LBNETWORK'):
+    def forget(conn_name=config.ap_name):
         # Find and delete the hotspot connection
         try:
             connections = NetworkManager.Settings.ListConnections()
@@ -189,7 +191,7 @@ class wifi:
             wifi.forget_all()
 
         # If a hotspot is needed then start it
-        if conn_name == 'LBNETWORK':
+        if conn_name == config.ap_name:
             # Ensure NetworkManager is ready before starting new hotspot
             time.sleep(5)
 
@@ -219,14 +221,6 @@ class wifi:
 
     # Get user specified hotspot SSID.
     def get_hotspot_SSID():
-        # Check default hostname variable is not empty, and set if it is
-        try:
-            os.environ['DEFAULT_HOSTNAME']
-        except Exception as ex:
-            print_message('wifi.get_hotspot_SSID', 'No DEFAULT_SSID',
-                          ex)
-            os.environ['DEFAULT_HOSTNAME'] = 'lb'
-
         # Get the current hostname of the container, and
         # set a default on failure
         try:
@@ -236,11 +230,11 @@ class wifi:
         except Exception as ex:
             print_message('wifi.get_hotspot_SSID', 'Failed to get hostname. '
                           'Setting a default instead.', ex)
-            current_hostname = os.environ['DEFAULT_HOSTNAME']
+            current_hostname = config.default_hostname
 
         # If default hostname is active then provide default SSID
-        if current_hostname == os.environ['DEFAULT_HOSTNAME']:
-            return os.environ["DEFAULT_SSID"]
+        if current_hostname == config.default_hostname:
+            return config.default_ssid
         # Otherwise return the hostname to use as an SSID
         else:
             return current_hostname
@@ -260,7 +254,7 @@ class wifi:
             if dev.DeviceType != NetworkManager.NM_DEVICE_TYPE_WIFI:
                 continue
             for ap in dev.GetAccessPoints():
-                security = 'NONE'
+                security = config.type_none
 
                 # Based on a subset of the AP_SEC flag settings
                 # (https://developer.gnome.org/NetworkManager/1.2/nm-dbus-types.html#NM80211ApSecurityFlags)
@@ -269,19 +263,19 @@ class wifi:
                 if ap.Flags & NetworkManager.NM_802_11_AP_FLAGS_PRIVACY and \
                         ap.WpaFlags == AP_SEC and \
                         ap.RsnFlags == AP_SEC:
-                    security = 'WEP'
+                    security = config.type_wep
 
                 if ap.WpaFlags != AP_SEC:
-                    security = 'WPA'
+                    security = config.type_wpa
 
                 if ap.RsnFlags != AP_SEC:
-                    security = 'WPA2'
+                    security = config.type_wpa2
 
                 if ap.WpaFlags & \
                     NetworkManager.NM_802_11_AP_SEC_KEY_MGMT_802_1X or \
                         ap.RsnFlags & \
                         NetworkManager.NM_802_11_AP_SEC_KEY_MGMT_802_1X:
-                    security = 'ENTERPRISE'
+                    security = config.type_enterprise
 
                 entry = {"ssid": ap.Ssid,
                          "security": security,
@@ -323,8 +317,7 @@ class wifi:
             print_message('wifi.start_hotspot', 'Error refreshing '
                           'network points. Starting hotspot anyway', ex)
 
-        return wifi.connect_to_AP(conn_type='HOTSPOT',
+        return wifi.connect_to_AP(conn_type=config.type_hotspot,
                                   ssid=wifi.get_hotspot_SSID(),
                                   username=None,
-                                  password=wifi.get_hotspot_password(),
-                                  conn_name='HOTSPOT')
+                                  password=wifi.get_hotspot_password())
