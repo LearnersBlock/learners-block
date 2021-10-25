@@ -30,7 +30,7 @@ RUN install_packages \
 # Install SupervisorD
 RUN pip install supervisor==4.2.2 --no-deps --no-cache-dir
 
-# Install Nginx and PHP-FPM
+# Install NGINX and PHP-FPM
 RUN install_packages \
   curl \
   nginx \

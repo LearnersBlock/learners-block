@@ -83,7 +83,7 @@ class download_fetch(Resource):
                     "mbytes": int(float(downloaded_bytes/1000000)),
                 })
 
-        # Set file permission for access via NGINX and PhP
+        # Set file permission for access via NGINX and PHP
         if os.path.isfile(filePath):
             os.chown(filePath, 65534, 65534)
 

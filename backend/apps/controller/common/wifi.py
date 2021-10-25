@@ -62,7 +62,7 @@ class wifi:
                 'ipv6': {'method': 'auto'}
             }
 
-            # Include a key-mgmt string in Hotspot if setting a password
+            # Include a key-mgmt string in hotspot if setting a password
             if password:
                 password_key_mgmt = {'802-11-wireless-security':
                                      {'key-mgmt': 'wpa-psk', 'psk': password}}
@@ -158,7 +158,7 @@ class wifi:
             while dev.State != NetworkManager.NM_DEVICE_STATE_ACTIVATED:
                 time.sleep(1)
                 loop_count += 1
-                if loop_count > 30:  # only wait 30 seconds max
+                if loop_count > 30:  # Only wait 30 seconds max
                     break
 
             if dev.State == NetworkManager.NM_DEVICE_STATE_ACTIVATED:
@@ -205,7 +205,7 @@ class wifi:
                 # Delete the identified connection
                 connection.Delete()
 
-        # Launch wifi hotspot
+        # Launch Wi-FI hotspot
         wifi.start_hotspot()
 
         return True
@@ -245,7 +245,7 @@ class wifi:
         # Fetch current hotspot name
         currentSSID = wifi.get_hotspot_SSID()
 
-        ssids = []  # list to be returned
+        ssids = []  # List to be returned
 
         for dev in NetworkManager.NetworkManager.GetDevices():
             if dev.DeviceType != NetworkManager.NM_DEVICE_TYPE_WIFI:

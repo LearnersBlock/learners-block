@@ -26,7 +26,7 @@ if [[ -z $ID_FS_UUID_ENC ]]; then
   ID_FS_UUID_ENC="none"
 fi
 
-# Check all the variable are now full
+# Check all the variables are now full
 if [[ -z $ID_BUS || -z $ID_FS_TYPE || -z $ID_FS_UUID_ENC || -z $ID_FS_LABEL_ENC ]]; then
   echo "Unmount devices: Could not get device information: $DEVNAME" > /proc/1/fd/2
   exit 1
@@ -35,7 +35,7 @@ fi
 # Construct the mount point path
 MOUNT_POINT=/app/public/storage/fileshare/USB-$ID_BUS-$ID_FS_LABEL_ENC-$ID_FS_UUID_ENC
 
-# Unmount device
+# Unmount the device
 if findmnt -rno SOURCE,TARGET $DEVNAME >/dev/null; then
   echo "Unmount devices: Unmounting device - Source: $DEVNAME - Destination: $MOUNT_POINT" > /proc/1/fd/1
   umount -f -l $MOUNT_POINT

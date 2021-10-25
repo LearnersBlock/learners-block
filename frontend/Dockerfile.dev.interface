@@ -13,7 +13,7 @@ RUN apk add \
   grep \
   util-linux 
   
-# Install Nginx and PHP-FPM
+# Install NGINX and PHP-FPM
 RUN apk add \
   curl \
   nginx \
@@ -79,7 +79,7 @@ COPY --chown=nginx /config/nginx/assets/web.png public/storage/website/web.png
 
 # --------------- ## End mirror of production file ## -------------- #
 
-# Create dev-env asset_share
+# Create dev env asset_share
 RUN mkdir -p public/interface_dev/public/asset_share/assets
 
 # Set file permissions 

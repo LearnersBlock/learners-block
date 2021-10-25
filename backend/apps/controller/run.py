@@ -145,7 +145,7 @@ if __name__ == '__main__':
 
         logger.info("Api-v1 - Starting API (Production)...")
 
-        # Ensure soft shutdown to term wifi-connect
+        # Ensure soft shutdown to terminate wifi-connect
         atexit.register(handle_exit, None, None)
         signal.signal(signal.SIGHUP, handle_sigterm)
         signal.signal(signal.SIGINT, handle_sigterm)

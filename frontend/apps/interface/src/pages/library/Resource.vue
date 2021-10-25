@@ -303,7 +303,7 @@ export default defineComponent({
       loading: fetchResourceLoading
     } = useQuery<ApolloResources, ApolloVars>(GET_RESOURCE, { id: route.params.id })
 
-    // Set rquired constants
+    // Set required constants
     const api = computed(() => {
       return $store.getters.GET_API
     })
@@ -324,7 +324,7 @@ export default defineComponent({
           // Start the download process
           await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value?.resource.download_url })
 
-          // Monitor the download process through stream
+          // Monitor the download process through the stream
           const position = ref<any>(0)
           const progress = ref<any>('')
           const xhr = new XMLHttpRequest()

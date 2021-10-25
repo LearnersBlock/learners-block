@@ -127,7 +127,7 @@ def update_new_apps(app_list):
                      'author_site': app_list[app]['author_site'],
                      'logo': database_logo_path}
 
-        # Add/Update entry in database
+        # Add/update entry in database
         if lb_database is None:
             lb_database = App_Store(**app_entry)
         else:

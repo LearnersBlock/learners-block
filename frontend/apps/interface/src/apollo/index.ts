@@ -11,9 +11,7 @@ export /* async */ function getClientOptions (
     <ApolloClientOptions<unknown>>{
       link: createHttpLink({
         uri:
-          process.env.GRAPHQL_URI ||
-          // Change to your graphql endpoint.
-          'https://library-api.learnersblock.org/graphql'
+          process.env.GRAPHQL_URI || 'https://library-api.learnersblock.org/graphql'
       }),
 
       cache: new InMemoryCache()

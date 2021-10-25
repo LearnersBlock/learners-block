@@ -126,7 +126,7 @@ def database_recover():
         logger.exception("Failed to delete the database.")
 
 
-# Fetch secret key of generate if absent
+# Fetch the secret key or generate one if it is absent
 def get_secret_key():
     # Generate secret key
     if not dotenv_values("db/.secret_key"):

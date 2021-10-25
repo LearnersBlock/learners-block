@@ -2,7 +2,7 @@ from common.errors import logger
 import docker
 import os
 
-# Import relevant unix path
+# Import relevant UNIX path
 if os.environ['FLASK_ENV'].lower() == "production":
     client = docker.DockerClient(base_url='unix://var/run/balena-engine.sock')
 else:

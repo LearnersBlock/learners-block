@@ -967,7 +967,7 @@ export default defineComponent({
     })
 
     function apiCall () {
-      // API calls for Axios Spread
+      // API calls for Axios spread
       const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connection_status`)
       const fetchedPortainerSettings = Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'status' })
       const settingsUi = Axios.get(`${api.value}/v1/settings/get_ui`)
@@ -1008,7 +1008,7 @@ export default defineComponent({
         $q.notify({ type: 'negative', message: t('error') })
       })
 
-      // Fetch settings UI configuration
+      // Fetch Settings UI configuration
       Axios.all([settingsUi, verifyUserPasswordState]).then(Axios.spread(function (res1, res2) {
         // Set settings toggle status
         currentStartPage.value = res1.data.start_page
@@ -1031,7 +1031,8 @@ export default defineComponent({
         // Stop loading toggles
         togglesLoading.value = false
 
-        // Fetch available apps from database, then populate start page which relies on populated rows
+        // Fetch available apps from database, then populate the
+        // start page which relies on rows being populated above
         fetchApps().then(() => setStartPage())
 
         filesLoading.value = false
@@ -1042,7 +1043,7 @@ export default defineComponent({
         $q.notify({ type: 'negative', message: t('error') })
       })
 
-      // Set SysInfo status
+      // Fetch System Info status
       Axios.get(`${api.value}/v1/system/info`).then((response) => {
         sysInfo.value = response.data
         sysInfoLoading.value = false

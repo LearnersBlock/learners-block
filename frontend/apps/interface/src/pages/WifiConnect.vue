@@ -159,8 +159,8 @@ export default defineComponent({
         type: wifiSsid.value.security,
         username: username.value
       }).catch(function (error) {
-        // Only return an error if the request failed to send
-        // A timeout is expected as the device is connecting to new network
+        // Only return an error if the request failed to send. A timout
+        // is expected as the device is connecting to a new network
         if (error.response && !error.request) {
           console.log(error)
           $q.notify({

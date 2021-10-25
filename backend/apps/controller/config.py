@@ -18,7 +18,7 @@ type_wpa2 = 'WPA2'
 type_enterprise = 'ENTERPRISE'
 
 
-# App ontext object for importing in to Flask
+# App context object for importing in to Flask
 class context:
     # JWT Auth
     JWT_TOKEN_LOCATION = ["headers", "cookies"]

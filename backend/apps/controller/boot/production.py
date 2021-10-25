@@ -72,7 +72,7 @@ def launch_wifi(self):
         except Exception:
             logger.exception('Wifi-connect failed to launch')
 
-    # If internet available (Ethernet or WiFi) request update
+    # If internet available (Ethernet or Wi-Fi) request update
     if check_internet():
         try:
             supervisor_update().get()
