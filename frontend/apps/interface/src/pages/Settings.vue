@@ -1492,11 +1492,11 @@ export default defineComponent({
         const hostnameResult = Axios.post(`${api.value}/v1/supervisor/host_config`, {
           hostname: newHostname.value
         })
-        const ssidResut = Axios.post(`${api.value}/v1/wifi/set_ssid`, {
+        const ssidResult = Axios.post(`${api.value}/v1/wifi/set_ssid`, {
           ssid: newHostname.value
         })
 
-        Promise.all([hostnameResult, ssidResut]).then(function () {
+        Promise.all([hostnameResult, ssidResult]).then(function () {
           $q.notify({
             type: 'positive',
             message: t('hostname_changed_notification'),

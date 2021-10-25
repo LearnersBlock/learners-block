@@ -146,7 +146,8 @@ class wifi_set_password(Resource):
     def post(self):
         content = request.get_json()
 
-        lb_database = User.query.filter_by(username='lb').first()
+        lb_database = User.query.filter_by(username=config.default_hostname
+                                           ).first()
         lb_database.wifi_password = content["wifi_password"]
         lb_database.save_to_db()
 
@@ -158,10 +159,11 @@ class wifi_set_ssid(Resource):
     def post(self):
         content = request.get_json()
 
-        if content["ssid"] == 'lb':
+        if content["ssid"] == config.default_hostname:
             content["ssid"] = config.default_ssid
 
-        lb_database = User.query.filter_by(username='lb').first()
+        lb_database = User.query.filter_by(username=config.default_hostname
+                                           ).first()
         lb_database.wifi_ssid = content["hostname"]
         lb_database.save_to_db()
 

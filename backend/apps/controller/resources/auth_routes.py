@@ -13,6 +13,7 @@ from flask_jwt_extended import set_access_cookies
 from flask_jwt_extended import unset_jwt_cookies
 from flask_jwt_extended import verify_jwt_in_request
 from flask_restful import Resource
+import config
 
 
 # Refresh token on each authorised request
@@ -36,7 +37,8 @@ class auth_log_in(Resource):
     def post(self):
         content = request.get_json()
 
-        lb_database = User.query.filter_by(username='lb').first()
+        lb_database = User.query.filter_by(username=config.default_hostname
+                                           ).first()
         verify_password = User.verify_password(content["password"],
                                                lb_database.password)
 
@@ -65,7 +67,8 @@ class auth_set_password(Resource):
     def post(self):
         content = request.get_json()
 
-        lb_database = User.query.filter_by(username='lb').first()
+        lb_database = User.query.filter_by(username=config.default_hostname
+                                           ).first()
         hashed_password = User.hash_password(content["password"])
         lb_database.password = hashed_password
         lb_database.save_to_db()
@@ -85,7 +88,8 @@ class auth_verify_login(Resource):
 
 class auth_verify_user_password_state(Resource):
     def get(self):
-        lb_database = User.query.filter_by(username='lb').first()
+        lb_database = User.query.filter_by(username=config.default_hostname
+                                           ).first()
 
         # Check if there is a user password set
         verified_password = User.verify_password(' ',

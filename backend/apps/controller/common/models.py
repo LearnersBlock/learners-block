@@ -17,7 +17,7 @@ default_password = \
 def init_database():
     try:
         db.create_all()
-        if not User.query.filter_by(username='lb').first():
+        if not User.query.filter_by(username=config.default_hostname).first():
             lb_database = User(password=default_password)
             db.session.add(lb_database)
             db.session.commit()
@@ -33,9 +33,13 @@ class App_Store(db.Model):
                      unique=True,
                      nullable=False)
 
-    long_name = db.Column(db.Text,
-                          unique=False,
-                          nullable=False)
+    author_site = db.Column(db.String,
+                            unique=False,
+                            nullable=True)
+
+    dependencies = db.Column(db.String,
+                             unique=False,
+                             nullable=True)
 
     env_vars = db.Column(db.String,
                          unique=False,
@@ -45,42 +49,38 @@ class App_Store(db.Model):
                       unique=False,
                       nullable=False)
 
-    ports = db.Column(db.Integer,
-                      unique=False,
-                      nullable=False)
-
     info = db.Column(db.String,
                      unique=False,
                      nullable=False)
-
-    volumes = db.Column(db.String,
-                        unique=False,
-                        nullable=True)
-
-    dependencies = db.Column(db.String,
-                             unique=False,
-                             nullable=True)
-
-    version_name = db.Column(db.Text,
-                             unique=False,
-                             nullable=False)
-
-    version = db.Column(db.Integer,
-                        unique=False,
-                        nullable=False)
-
-    author_site = db.Column(db.String,
-                            unique=False,
-                            nullable=True)
 
     logo = db.Column(db.String,
                      unique=False,
                      nullable=True)
 
+    long_name = db.Column(db.Text,
+                          unique=False,
+                          nullable=False)
+
+    ports = db.Column(db.Integer,
+                      unique=False,
+                      nullable=False)
+
+    version = db.Column(db.Integer,
+                        unique=False,
+                        nullable=False)
+
+    version_name = db.Column(db.Text,
+                             unique=False,
+                             nullable=False)
+
     status = db.Column(db.String,
                        unique=False,
                        server_default='install',
                        nullable=False)
+
+    volumes = db.Column(db.String,
+                        unique=False,
+                        nullable=True)
 
     def __repr__(self):
         return '<App_Store %r>' % self.name
@@ -99,13 +99,18 @@ class User(db.Model):
                    primary_key=True)
     username = db.Column(db.String,
                          unique=True,
-                         server_default='lb',
+                         server_default=config.default_hostname,
                          nullable=False)
 
     password = db.Column(db.String,
                          unique=False,
                          server_default=str(default_password),
                          nullable=False)
+
+    allow_password_reset = db.Column(db.Boolean,
+                                     unique=False,
+                                     server_default=expression.true(),
+                                     nullable=False)
 
     files = db.Column(db.Boolean,
                       unique=False,
@@ -122,23 +127,18 @@ class User(db.Model):
                         server_default=expression.true(),
                         nullable=False)
 
-    allow_password_reset = db.Column(db.Boolean,
-                                     unique=False,
-                                     server_default=expression.true(),
-                                     nullable=False)
-
     start_page = db.Column(db.String,
                            unique=False,
                            server_default=str('/'),
                            nullable=False)
 
-    wifi_ssid = db.Column(db.String,
-                          server_default=str(config.default_ssid),
-                          unique=False)
-
     wifi_password = db.Column(db.String,
                               unique=False,
                               nullable=True)
+
+    wifi_ssid = db.Column(db.String,
+                          server_default=str(config.default_ssid),
+                          unique=False)
 
     def __repr__(self):
         return '<User %r>' % self.username

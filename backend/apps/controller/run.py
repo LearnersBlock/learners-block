@@ -93,15 +93,16 @@ def first_launch():
                                         text=True).stdout.rstrip()
     if not os.path.isfile(pidfile):
         # Run tasks on first launch
-        # Set hostname to 'lb'
+        # Set hostname to default
         open(pidfile, 'w').write(pid)
 
         logger.info('Created first launch PID.')
 
-        if container_hostname != 'lb':
+        if container_hostname != config.default_hostname:
             curl(method="patch",
                  path="/v1/device/host-config?apikey=",
-                 string='{"network": {"hostname": "lb"}}',
+                 string='{"network": {"hostname": "%s"}}' %
+                 (config.default_hostname),
                  supervisor_retries=20)
 
             logger.info('Set hostname on first boot. Restarting.')
