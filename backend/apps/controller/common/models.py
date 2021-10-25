@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import expression
 import bcrypt
+import config
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -130,6 +131,10 @@ class User(db.Model):
                            unique=False,
                            server_default=str('/'),
                            nullable=False)
+
+    wifi_ssid = db.Column(db.String,
+                          server_default=str(config.default_ssid),
+                          unique=False)
 
     wifi_password = db.Column(db.String,
                               unique=False,

@@ -141,7 +141,7 @@ if __name__ == '__main__':
             supervisor_update, supervisor_uuid
         from resources.wifi_routes import wifi_connect, \
             wifi_connection_status, wifi_forget, wifi_forget_all, \
-            wifi_list_access_points, wifi_set_password
+            wifi_list_access_points, wifi_set_password, wifi_set_ssid
 
         logger.info("Api-v1 - Starting API (Production)...")
 
@@ -165,7 +165,8 @@ if __name__ == '__main__':
             supervisor_host_config, supervisor_journal_logs, \
             supervisor_update, supervisor_uuid, system_hostname, \
             wifi_connect, wifi_connection_status, wifi_forget, \
-            wifi_forget_all, wifi_list_access_points, wifi_set_password
+            wifi_forget_all, wifi_list_access_points, wifi_set_password, \
+            wifi_set_ssid
 
         logger.info("Api-v1 - Starting API (Development)...")
 
@@ -230,6 +231,7 @@ if __name__ == '__main__':
     api.add_resource(wifi_forget_all, '/v1/wifi/forget_all')
     api.add_resource(wifi_list_access_points, '/v1/wifi/list_access_points')
     api.add_resource(wifi_set_password, '/v1/wifi/set_password')
+    api.add_resource(wifi_set_ssid, '/v1/wifi/set_ssid')
 
     # Initialise and start
     api.init_app(app)

@@ -90,3 +90,18 @@ class wifi_set_password(Resource):
         lb_database.save_to_db()
 
         return {'message': 'success'}, 200
+
+
+class wifi_set_ssid(Resource):
+    @jwt_required()
+    def post(self):
+        content = request.get_json()
+
+        if content["ssid"] == 'lb':
+            content["ssid"] = config.default_ssid
+
+        lb_database = User.query.filter_by(username='lb').first()
+        lb_database.wifi_ssid = content["ssid"]
+        lb_database.save_to_db()
+
+        return {'message': 'success'}, 200

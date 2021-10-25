@@ -4,6 +4,7 @@ from common.processes import check_internet
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
+import config
 import subprocess
 import time
 
@@ -38,10 +39,11 @@ class supervisor_host_config(Resource):
     def post(self):
         content = request.get_json()
         time.sleep(3)
-        logger.info(f"Hostname changed to '{content['hostname']}'")
+        logger.info(f"Hostname/Wi-Fi SSID changed to '{content['hostname']}'")
         return {
             'status': 200,
-            'message': f"Hostname changed to '{content['hostname']}'"
+            'message': "Hostname/Wi-Fi SSID changed"
+            f"to '{content['hostname']}'"
         }, 200
 
 
@@ -142,9 +144,25 @@ class wifi_list_access_points(Resource):
 class wifi_set_password(Resource):
     @jwt_required()
     def post(self):
-        global wifistatus
         content = request.get_json()
+
         lb_database = User.query.filter_by(username='lb').first()
         lb_database.wifi_password = content["wifi_password"]
         lb_database.save_to_db()
-        return {'status': 200, 'running': wifistatus}, 200
+
+        return {'status': 200, 'running': 'success'}, 200
+
+
+class wifi_set_ssid(Resource):
+    @jwt_required()
+    def post(self):
+        content = request.get_json()
+
+        if content["ssid"] == 'lb':
+            content["ssid"] = config.default_ssid
+
+        lb_database = User.query.filter_by(username='lb').first()
+        lb_database.wifi_ssid = content["hostname"]
+        lb_database.save_to_db()
+
+        return {'status': 200, 'running': 'success'}, 200

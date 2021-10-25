@@ -190,7 +190,7 @@ export default defineComponent({
 
     async function apiCallAwait () {
       $q.loading.show()
-      await Axios.all([settingsState, appStoreState]).then(Axios.spread(function (res1, res2) {
+      await Promise.all([settingsState, appStoreState]).then(function ([res1, res2]) {
         // Redirect for Learner's Block Start Page
         if (res1.data.start_page === '/') {
           settings.value = res1.data
@@ -231,7 +231,7 @@ export default defineComponent({
             }, 2000)
           }
         }
-      })).catch(e => {
+      }).catch(e => {
         console.log(e.message)
       })
     }

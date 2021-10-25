@@ -218,23 +218,10 @@ class wifi:
 
     # Get user specified hotspot SSID.
     def get_hotspot_SSID():
-        # Get the current hostname of the container, and
-        # set a default on failure
-        try:
-            current_hostname = subprocess.run(["hostname"],
-                                              capture_output=True,
-                                              text=True).stdout.rstrip()
-        except Exception:
-            logger.exception("Failed to get hostname. "
-                             "Setting a default instead.")
-            current_hostname = config.default_hostname
+        # Get the current SSID from the database
+        lb_database = User.query.filter_by(username='lb').first()
 
-        # If default hostname is active then provide default SSID
-        if current_hostname == config.default_hostname:
-            return config.default_ssid
-        # Otherwise return the hostname to use as an SSID
-        else:
-            return current_hostname
+        return lb_database.wifi_ssid
 
     # Return a list of available SSIDs and their security type,
     # or [] for none available or error.

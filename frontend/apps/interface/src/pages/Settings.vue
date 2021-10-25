@@ -653,7 +653,6 @@
               :rules="[(val) =>
                 !val.includes(' ') && // Spaces are not allowed in hostnames
                 val.length <= 32
-                && val === val.toLowerCase()
                 && regexp.test(val)
                 || $t('invalid_input')]"
             >
@@ -676,7 +675,7 @@
                 #hint
               >
                 <div class="text-caption text-gray-800">
-                  <div>{{ $t('your_new_url') }} <span class="text-primary">'http://{{ newHostname }}.local'</span></div>
+                  <div>{{ $t('your_new_url') }} <span class="text-primary">'http://{{ newHostname.toLowerCase() }}.local'</span></div>
                   <div>{{ $t('your_new_ssid') }} <span class="text-primary">'{{ newHostname }}'</span></div>
                 </div>
               </template>
@@ -909,7 +908,7 @@ export default defineComponent({
     const portainerUnavailable = ref<boolean>(true)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
-    const regexp = ref(new RegExp('^[a-z0-9-_]*$'))
+    const regexp = ref(new RegExp('^[A-Za-z0-9-_]*$'))
     const $router = useRouter()
     const settingPassword = ref<boolean>(false)
     const startPage = ref<any>('')
@@ -974,7 +973,7 @@ export default defineComponent({
       const verifyUserPasswordState = Axios.get(`${api.value}/v1/auth/verify_user_password_state`)
 
       // Group dependent calls together for Portainer and Connection Status
-      Axios.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(Axios.spread(function (res1, res2) {
+      Promise.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(function ([res1, res2]) {
         // Set connection status
         if (res1.data.wifi) {
           wifi.value = true
@@ -1003,13 +1002,13 @@ export default defineComponent({
 
         portainerLoading.value = false
         wifiLoading.value = false
-      })).catch(e => {
+      }).catch(e => {
         console.log(e.message)
         $q.notify({ type: 'negative', message: t('error') })
       })
 
       // Fetch Settings UI configuration
-      Axios.all([settingsUi, verifyUserPasswordState]).then(Axios.spread(function (res1, res2) {
+      Promise.all([settingsUi, verifyUserPasswordState]).then(function ([res1, res2]) {
         // Set settings toggle status
         currentStartPage.value = res1.data.start_page
         files.value = res1.data.files
@@ -1038,7 +1037,7 @@ export default defineComponent({
         filesLoading.value = false
         libraryLoading.value = false
         websiteLoading.value = false
-      })).catch(e => {
+      }).catch(e => {
         console.log(e.message)
         $q.notify({ type: 'negative', message: t('error') })
       })
@@ -1489,9 +1488,15 @@ export default defineComponent({
     const updateHostname = () => {
       if (newHostname.value) {
         hostnameChanging.value = true
-        Axios.post(`${api.value}/v1/supervisor/host_config`, {
+
+        const hostnameResult = Axios.post(`${api.value}/v1/supervisor/host_config`, {
           hostname: newHostname.value
-        }).then(() => {
+        })
+        const ssidResut = Axios.post(`${api.value}/v1/wifi/set_ssid`, {
+          ssid: newHostname.value
+        })
+
+        Promise.all([hostnameResult, ssidResut]).then(function () {
           $q.notify({
             type: 'positive',
             message: t('hostname_changed_notification'),
@@ -1505,6 +1510,9 @@ export default defineComponent({
             ]
           })
           hostnameChanging.value = false
+        }).catch(e => {
+          console.log(e.message)
+          $q.notify({ type: 'negative', message: t('error') })
         })
       }
     }
