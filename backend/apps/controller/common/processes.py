@@ -1,6 +1,5 @@
-from common.errors import print_message
+from common.errors import logger
 from dotenv import dotenv_values
-from dotenv import load_dotenv
 from flask_restful import abort
 import os
 import requests
@@ -9,10 +8,6 @@ import shutil
 import signal
 import socket
 import time
-
-
-# Initialise dotenv for writing secrets key
-load_dotenv()
 
 
 def check_internet(host="8.8.8.8", port=53, timeout=6):
@@ -50,8 +45,8 @@ def check_supervisor(supervisor_retries, timeout):
                       message='Supervisor returned error code.')
 
         except Exception as ex:
-            print(f'Waiting for Balena Supervisor to be ready. '
-                  f'Retry {str(retry)}.')
+            logger.info(f'Waiting for Balena Supervisor to be ready. '
+                        f'Retry {str(retry)}.')
 
             if retry == supervisor_retries:
                 abort(408, status=408,
@@ -103,7 +98,7 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
                 timeout=timeout
             )
     except Exception as ex:
-        print_message('curl', 'Curl request timed out', ex)
+        logger.exception("Curl request timed out.")
         abort(408, status=408,
               message=str(ex))
 
@@ -119,7 +114,7 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
 def database_recover():
     # Resetting database
-    print_message('database_recover', 'Deleting database and restarting.')
+    logger.info("Deleting database and restarting.")
 
     # Remove the .db file. It will be rebuilt fresh on next boot.
     # While this is a drastic step, it ensures devices do not
@@ -127,17 +122,16 @@ def database_recover():
     try:
         os.remove(os.path.realpath('.') + "/db/sqlite.db")
         os.kill(os.getpid(), signal.SIGTERM)
-    except Exception as ex:
-        print_message('database_recover',
-                      'Failed to delete the database. ', ex)
+    except Exception:
+        logger.exception("Failed to delete the database.")
 
 
 # Fetch secret key of generate if absent
 def get_secret_key():
     # Generate secret key
     if not dotenv_values("db/.secret_key"):
-        with open('./db/.secret_key', 'w') as secret_file:
-            secret_file.write("SECRET_KEY = " + secrets.token_hex(32))
+        with open('./db/.secret_key', 'w') as secrets_file:
+            secrets_file.write("SECRET_KEY = " + secrets.token_hex(32))
     key = dotenv_values("./db/.secret_key")
     return key["SECRET_KEY"]
 

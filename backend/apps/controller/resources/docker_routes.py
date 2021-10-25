@@ -1,4 +1,4 @@
-from common.errors import print_message
+from common.errors import logger
 from common.docker import docker_py
 from common.models import App_Store
 from flask import request
@@ -26,7 +26,7 @@ class docker_pull(Resource):
                                       network=content["name"],
                                       detach=True)
 
-                print_message('docker_pull', deps["response"])
+                logger.info(deps["response"])
 
         # Pull latest containers and run them
         response = docker_py.pull(env_vars=content["env_vars"],
@@ -57,8 +57,7 @@ class docker_remove(Resource):
         if content["dependencies"]:
             for dependency in content["dependencies"]:
                 deps = docker_py.remove(name=dependency)
-
-                print_message('docker_remove', deps["response"])
+                logger.info(deps["response"])
 
         # Remove main container
         response = docker_py.remove(name=content["name"])
@@ -94,7 +93,7 @@ class docker_run(Resource):
                                      network=content["name"],
                                      detach=True)
 
-                print_message('docker_run', deps["response"])
+                logger.info(deps["response"])
 
         # Run the primary container
         response = docker_py.run(env_vars=content["env_vars"],

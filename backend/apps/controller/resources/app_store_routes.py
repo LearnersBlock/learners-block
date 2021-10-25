@@ -1,6 +1,6 @@
 from common.app_store import update_existing_app_status
 from common.app_store import update_new_apps
-from common.errors import print_message
+from common.errors import logger
 from common.models import App_Store
 from flask_jwt_extended import jwt_required
 from flask_restful import abort
@@ -22,7 +22,7 @@ class appstore_get_apps(Resource):
                                     timeout=8).json()
 
         except Exception as ex:
-            print_message('appstore_get_apps', 'Failed loading app list', ex)
+            logger.exception("Failed loading app list.")
             abort(408, status=408, message='error', error=str(ex))
 
         update_existing_app_status(app_list)

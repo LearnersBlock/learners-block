@@ -1,7 +1,7 @@
+from common.errors import logger
 from common.processes import check_internet
 from common.processes import curl
 from common.wifi import wifi
-from common.errors import print_message
 from resources.supervisor_routes import supervisor_update
 import config
 import subprocess
@@ -31,8 +31,7 @@ def dnsmasq():
     try:
         subprocess.Popen(args)
     except Exception as ex:
-        print_message('dnsmasq_process', 'Failed to start dnsmasq.',
-                      ex)
+        logger.exception('Failed to start dnsmasq.')
         return ex
 
     return True
@@ -42,11 +41,10 @@ def handle_exit(*args):
     # Ensure Wi-Fi connections are shutdown softly
     try:
         wifi.forget(conn_name=config.hotspot_name)
-    except Exception as ex:
-        print_message('handle_exit', 'Failed to terminate wifi processes. ',
-                      ex)
+    except Exception:
+        logger.exception('Failed to terminate wifi processes.')
 
-    print_message('handle_exit', 'Finshed the exit process.')
+    logger.info('Finshed the exit process.')
 
 
 def handle_sigterm(*args):
@@ -60,9 +58,9 @@ def launch_wifi(self):
     # Check if already connected to Wi-Fi
     try:
         connected = wifi.check_connection()
-    except Exception as ex:
-        print_message("launch_wifi", "Error checking wifi connection. Starting \
-            wifi-connect in order to allow debugging", ex)
+    except Exception:
+        logger.exception('Error checking wifi connection. Starting \
+            wifi-connect in order to allow debugging')
         connected = None
 
     # If not connected, start Wi-Fi-Connect
@@ -70,19 +68,18 @@ def launch_wifi(self):
         try:
             # Launch Wi-Fi Connect
             wifi.start_hotspot()
-            print('Api-v1 - API Started - Launched wifi-connect.')
-        except Exception as ex:
-            print_message("launch_wifi",
-                          'Wifi-connect failed to launch.', ex)
+            logger.info("Api-v1 - API Started - Launched wifi-connect.")
+        except Exception:
+            logger.exception('Wifi-connect failed to launch')
 
     # If internet available (Ethernet or WiFi) request update
     if check_internet():
         try:
             supervisor_update().get()
-            print('Api-v1 - API Started - Internet available, '
-                  'software update request made.')
-        except Exception as ex:
-            print_message("launch_wifi", 'Software update failed.', ex)
+            logger.info('Api-v1 - API Started - Internet available, '
+                        'software update request made.')
+        except Exception:
+            logger.exception('Software update failed.')
 
 
 def startup():
@@ -101,21 +98,20 @@ def startup():
         # Check container and device hostname match
         if container_hostname != \
                 device_hostname["json_response"]["network"]["hostname"]:
-            print("Api-v1 - Container hostname and device hostname do not "
-                  "match. Likely a hostname change has been performed. Balena "
-                  "Supervisor should detect this and rebuild the container "
-                  "shortly. Waiting 30 seconds before continuing anyway.")
+            logger.info("Api-v1 - Container hostname and device hostname do "
+                        "not match. Likely a hostname change has been "
+                        "performed. Balena Supervisor should detect this "
+                        "and rebuild the container shortly. Waiting 30"
+                        "seconds before continuing anyway.")
             time.sleep(30)
 
-    except Exception as ex:
-        print_message("startup",
-                      "Failed to compare hostnames, starting anyway.", ex)
+    except Exception:
+        logger.exception('Failed to compare hostnames, starting anyway.')
 
     # Start dnsmasq permanently
     start_dnsmasq = dnsmasq()
     if start_dnsmasq is not True:
-        print_message("startup",
-                      "dnsmasq failed to start.", start_dnsmasq)
+        logger.info("dnsmasq failed to start. " + start_dnsmasq)
 
     # Start the launch_wifi process as a thread to avoid delays
     # to booting device
@@ -125,6 +121,5 @@ def startup():
                                        name='wifi_thread')
         wifi_thread.start()
 
-    except Exception as ex:
-        print_message("startup",
-                      "Failed during wifi_thread. Continuing for debug.", ex)
+    except Exception:
+        logger.exception("Failed during wifi_thread. Continuing for debug.")

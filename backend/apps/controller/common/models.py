@@ -1,4 +1,4 @@
-from common.errors import print_message
+from common.errors import logger
 from common.processes import database_recover
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -20,11 +20,8 @@ def init_database():
             lb_database = User(password=default_password)
             db.session.add(lb_database)
             db.session.commit()
-    except Exception as ex:
-        print_message('init_database',
-                      'Database error. '
-                      'Trying to recover.',
-                      ex)
+    except Exception:
+        logger.exception("Database error. Trying to recover.")
         database_recover()
 
 

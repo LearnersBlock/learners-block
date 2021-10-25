@@ -1,3 +1,4 @@
+from common.errors import logger
 from common.docker import docker_py
 from common.models import App_Store
 from common.processes import curl
@@ -7,7 +8,6 @@ from dotenv import dotenv_values
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
-from common.errors import print_message
 from werkzeug import serving
 import json
 import os
@@ -136,17 +136,16 @@ class system_prune(Resource):
                                                [dependency]
                                                ["image"],
                                                network=app.name)
-            except Exception as ex:
-                print_message('system_prune', deps["response"], ex)
+            except Exception:
+                logger.exception(deps["response"])
 
             docker_py.prune(image=app.image, network=app.name)
 
         # Prune Portainer image
         try:
             docker_py.prune(image=portainer_image)
-        except Exception as ex:
-            print_message('system_prune',
-                          'Failed to remove Portainer image.', ex)
+        except Exception:
+            logger.exception("Failed to remove Portainer image.")
 
         return {'status': 200, 'message': 'done'}, 200
 

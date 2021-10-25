@@ -1,10 +1,6 @@
-from common.errors import print_message
-from dotenv import load_dotenv
+from common.errors import logger
 import docker
 import os
-
-# Import .env file to make env vars available from os.environ
-load_dotenv()
 
 # Import relevant unix path
 if os.environ['FLASK_ENV'].lower() == "production":
@@ -54,7 +50,7 @@ class docker_py():
                                      volumes=volumes,
                                      network=network)
         except Exception as ex:
-            print_message('docker.pull', 'Failed to pull container', ex)
+            logger.exception("Failed to pull container.")
             return {"response": str(ex), "status_code": 500}
 
         return {"response": str(response), "status_code": 200}
@@ -65,7 +61,7 @@ class docker_py():
             container.stop()
             container.remove()
         except Exception as ex:
-            print_message('docker.remove', 'Failed to remove container', ex)
+            logger.exception("Failed to remove container.")
             return {"response": str(ex), "status_code": 500}
 
         return {"response": "done", "status_code": 200}
@@ -94,7 +90,7 @@ class docker_py():
                                              restart_policy={"Name": "always"},
                                              command=command)
         except Exception as ex:
-            print_message('docker.run', 'Failed to run container', ex)
+            logger.exception("Failed to run container.")
             return {"response": str(ex), "status_code": 500}
 
         return {"response": str(response), "status_code": 200}

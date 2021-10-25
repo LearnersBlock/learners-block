@@ -1,3 +1,4 @@
+from common.errors import logger
 from common.models import User
 from common.processes import check_internet
 from flask import request
@@ -16,11 +17,11 @@ def wifi_toggle():
     global wifistatus
 
     if wifistatus is False:
-        print("WiFi is now up")
+        logger.info("WiFi is now up")
         wifistatus = True
 
     elif wifistatus is True:
-        print("WiFi is now down")
+        logger.info("WiFi is now down")
         wifistatus = False
 
     return "This is a dev function, not for production. " \
@@ -37,7 +38,7 @@ class supervisor_host_config(Resource):
     def post(self):
         content = request.get_json()
         time.sleep(3)
-        print(f"Hostname changed to '{content['hostname']}'")
+        logger.info(f"Hostname changed to '{content['hostname']}'")
         return {
             'status': 200,
             'message': f"Hostname changed to '{content['hostname']}'"

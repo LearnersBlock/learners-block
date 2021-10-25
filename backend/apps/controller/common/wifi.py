@@ -1,4 +1,4 @@
-from common.errors import print_message
+from common.errors import logger
 from common.models import User
 from run import app
 import config
@@ -20,9 +20,8 @@ class wifi:
             run = subprocess.run(["iw", "dev", "wlan0", "link"],
                                  capture_output=True,
                                  text=True).stdout.rstrip()
-        except Exception as ex:
-            print_message("check_connection", "Failed checking connection. "
-                          "Returning False.", ex)
+        except Exception:
+            logger.exception("Failed checking connection. Returning False.")
             return False
 
         if run.lower()[:13] == "not connected":
@@ -37,7 +36,7 @@ class wifi:
                       conn_name=config.ap_name):
 
         if conn_type is None or ssid is None:
-            print_message('connect_to_AP', 'Missing arg conn_type.')
+            logger.error("Missing arg conn_type.")
             return False
 
         # Remove existing HOTSPOT if it exists and set vars for new hotspot
@@ -124,11 +123,11 @@ class wifi:
             elif conn_type == config.type_enterprise:
                 conn_dict = enterprise_dict
             else:
-                print_message('connect_to_AP', 'Invalid conn_type.')
+                logger.error("Invalid conn_type.")
                 return False
 
             NetworkManager.Settings.AddConnection(conn_dict)
-            print(f"Added connection of type {conn_type}")
+            logger.info(f"Added connection of type {conn_type}")
 
             # Find this connection and its device
             connections = NetworkManager.Settings.ListConnections()
@@ -146,16 +145,15 @@ class wifi:
                 if dev.DeviceType == dtype:
                     break
             else:
-                print_message('connect_to_AP', 'No suitable and '
-                              f"available {ctype} device found.")
+                logger.error(f"No suitable and available {ctype} device found")
                 return False
 
             # Connect
             NetworkManager.NetworkManager.ActivateConnection(conn, dev, "/")
-            print("Activated connection.")
+            logger.info("Activated connection.")
 
             # Wait for ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
-            print('Waiting for connection to become active...')
+            logger.info("Waiting for connection to become active...")
             loop_count = 0
             while dev.State != NetworkManager.NM_DEVICE_STATE_ACTIVATED:
                 time.sleep(1)
@@ -164,13 +162,13 @@ class wifi:
                     break
 
             if dev.State == NetworkManager.NM_DEVICE_STATE_ACTIVATED:
-                print('Connection is live.')
+                logger.info("Connection is live.")
                 return True
 
-        except Exception as ex:
-            print_message('connect_to_AP', 'Connection failed.', ex)
+        except Exception:
+            logger.exception("Connection failed.")
 
-        print_message('connect_to_AP', 'Connection failed.')
+        logger.error("Connection failed.")
         return False
 
     def forget(conn_name=config.ap_name):
@@ -184,9 +182,8 @@ class wifi:
                 conn = connections[conn_name]
                 conn.Delete()
 
-        except Exception as ex:
-            print_message('wifi.forget', 'Failed to delete network. '
-                          'Trying reset all.', ex)
+        except Exception:
+            logger.exception("Failed to delete network. Trying reset all.")
             time.sleep(5)  # Delay to allow time for error to resolve
             wifi.forget_all()
 
@@ -227,9 +224,9 @@ class wifi:
             current_hostname = subprocess.run(["hostname"],
                                               capture_output=True,
                                               text=True).stdout.rstrip()
-        except Exception as ex:
-            print_message('wifi.get_hotspot_SSID', 'Failed to get hostname. '
-                          'Setting a default instead.', ex)
+        except Exception:
+            logger.exception("Failed to get hostname. "
+                             "Setting a default instead.")
             current_hostname = config.default_hostname
 
         # If default hostname is active then provide default SSID
@@ -302,10 +299,8 @@ class wifi:
             subprocess.check_output(
                 ["iw", "dev", "wlan0", "scan"])
             return True
-        except subprocess.CalledProcessError as ex:
-            print_message('wifi.refresh_networks',
-                          'Error refreshing '
-                          'network points.', ex)
+        except subprocess.CalledProcessError:
+            logger.exception("Error refreshing network points")
             return False
 
     def start_hotspot():
@@ -313,9 +308,9 @@ class wifi:
         # possible before the hotspot is started and therefore called here.
         try:
             wifi.refresh_networks()
-        except Exception as ex:
-            print_message('wifi.start_hotspot', 'Error refreshing '
-                          'network points. Starting hotspot anyway', ex)
+        except Exception:
+            logger.exception("Error refreshing betwork points. "
+                             "Starting hotspot anyway.")
 
         return wifi.connect_to_AP(conn_type=config.type_hotspot,
                                   ssid=wifi.get_hotspot_SSID(),

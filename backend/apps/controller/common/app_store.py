@@ -1,5 +1,5 @@
+from common.errors import logger
 from common.docker import docker_py
-from common.errors import print_message
 from common.models import App_Store
 import json
 import os
@@ -30,11 +30,9 @@ def update_existing_app_status(app_list):
                                         [dependency]
                                         ["image"],
                                         network=db_entry.name)
-                    except Exception as ex:
-                        print_message('appstore_get_apps',
-                                      'Dependency image may already '
-                                      'have been pruned',
-                                      ex)
+                    except Exception:
+                        logger.exception("Dependency image may already have "
+                                         "been pruned.")
 
             # Remove the main container and image
             docker_py.remove(name=db_entry.name)
@@ -42,20 +40,16 @@ def update_existing_app_status(app_list):
             try:
                 docker_py.prune(image=db_entry.image,
                                 network=db_entry.name)
-            except Exception as ex:
-                print_message('appstore_get_apps',
-                              'Image may already have been '
-                              'pruned',
-                              ex)
+            except Exception:
+                logger.exception("Image may already have been pruned.")
 
             # If a logo was downloaded then remove it
             if db_entry.logo and os.path.exists(os.path.realpath('.') +
                                                 db_entry.logo):
                 try:
                     os.remove(os.path.realpath('.') + db_entry.logo)
-                except FileNotFoundError as ex:
-                    print_message('appstore_get_apps',
-                                  'failed deleting image', ex)
+                except FileNotFoundError:
+                    logger.exception("Failed deleting image.")
 
             # Remove the application entry from local database
             App_Store.query.filter_by(name=db_entry.name).delete()
@@ -65,7 +59,7 @@ def update_existing_app_status(app_list):
         elif db_entry.status.lower() == "installed" and \
                 db_entry.version < app_list[db_entry.name]['version']:
 
-            print('Update available for ' + str(db_entry.name))
+            logger.info('Update available for ' + str(db_entry.name))
 
             # Change the database entry to update_available
             lb_database = App_Store.query.filter_by(name=db_entry.name).first()
@@ -115,11 +109,9 @@ def update_new_apps(app_list):
                         for chunk in r:
                             f.write(chunk)
                 else:
-                    print_message('appstore_get_apps',
-                                  f"failed fetching image: {r.status_code}")
-            except Exception as ex:
-                print_message('appstore_get_apps',
-                              'failed saving image', ex)
+                    logger.warning(f"failed fetching image: {r.status_code}")
+            except Exception:
+                logger.exception("Failed saving image.")
 
         # Set the object for submitting to database
         app_entry = {'name': app,

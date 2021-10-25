@@ -1,4 +1,4 @@
-from common.errors import print_message
+from common.errors import logger
 from common.processes import human_size
 from flask import request
 from flask_jwt_extended import jwt_required
@@ -184,8 +184,8 @@ class filemanager_unzip(Resource):
                 shutil.unpack_archive(os.path.join(path,
                                                    content['file']),
                                       os.path.join(path, new_path))
-            except Exception as ex:
-                print_message('filemanager_unzip', 'Failed extracting', ex)
+            except Exception:
+                logger.exception("Failed extracting.")
                 os._exit(1)
             os._exit(0)
         else:

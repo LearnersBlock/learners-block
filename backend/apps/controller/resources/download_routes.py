@@ -1,4 +1,4 @@
-from common.errors import print_message
+from common.errors import logger
 from flask import request
 from flask import Response
 from flask_jwt_extended import jwt_required
@@ -34,18 +34,17 @@ class download_fetch(Resource):
     def download_file(self, url):
         try:
             resp = requests.get(url, stream=True, timeout=5)
-        except Exception as ex:
-            print_message('download_file', 'Failed downloading file', ex)
+        except Exception:
+            logger.exception("Failed downloading file.")
             download_stop.get(self, response='failed download')
             return
 
         # Get length of file for progress reporting
         try:
             total = int(resp.headers.get('content-length', 0))
-        except Exception as ex:
+        except Exception:
             # If cannot get file length, set to 0 to avoid errors
-            print_message('donwload_files',
-                          'failed getting content-length', ex)
+            logger.exception("Failed getting content-length.")
             total = 0
 
         # Set the download path

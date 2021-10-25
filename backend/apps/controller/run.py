@@ -1,5 +1,5 @@
 from common.errors import errors
-from common.errors import print_message
+from common.errors import logger
 from common.models import db
 from common.models import migrate
 from common.processes import curl
@@ -96,23 +96,20 @@ def first_launch():
         # Set hostname to 'lb'
         open(pidfile, 'w').write(pid)
 
-        print_message('first_launch',
-                      'Created first launch PID.')
+        logger.info('Created first launch PID.')
 
         if container_hostname != 'lb':
-            response = curl(method="patch",
-                            path="/v1/device/host-config?apikey=",
-                            string='{"network": {"hostname": "lb"}}',
-                            supervisor_retries=20)
+            curl(method="patch",
+                 path="/v1/device/host-config?apikey=",
+                 string='{"network": {"hostname": "lb"}}',
+                 supervisor_retries=20)
 
-            print_message('first_launch',
-                          'Set hostname on first boot. Restarting',
-                          str(response))
+            logger.info('Set hostname on first boot. Restarting.')
 
-            response = curl(method="post-json",
-                            path="/v1/reboot?apikey=",
-                            string='("force", "true")',
-                            supervisor_retries=20)
+            curl(method="post-json",
+                 path="/v1/reboot?apikey=",
+                 string='("force", "true")',
+                 supervisor_retries=20)
 
 
 # Create Flask app instance
@@ -146,7 +143,7 @@ if __name__ == '__main__':
             wifi_connection_status, wifi_forget, wifi_forget_all, \
             wifi_list_access_points, wifi_set_password
 
-        print("Api-v1 - Starting API (Production)...")
+        logger.info("Api-v1 - Starting API (Production)...")
 
         # Ensure soft shutdown to term wifi-connect
         atexit.register(handle_exit, None, None)
@@ -160,8 +157,8 @@ if __name__ == '__main__':
         # Execute startup processes
         try:
             startup()
-        except Exception as ex:
-            print_message('__name__', 'Fail on startup.', ex)
+        except Exception:
+            logger.exception('Fail on startup.')
     else:
         # Import development routes
         from resources.dev_routes import supervisor_device, \
@@ -170,7 +167,7 @@ if __name__ == '__main__':
             wifi_connect, wifi_connection_status, wifi_forget, \
             wifi_forget_all, wifi_list_access_points, wifi_set_password
 
-        print("Api-v1 - Starting API (Development)...")
+        logger.info("Api-v1 - Starting API (Development)...")
 
     # Configure endpoints #
 

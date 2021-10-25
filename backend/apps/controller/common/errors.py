@@ -1,12 +1,21 @@
-# Message formatter for printing standard messages from functions
-def print_message(function='Unspecified', message='None', ex=None):
-    if ex is None:
-        print('function: ' + str(function) + "; message: " +
-              str(message), flush=True)
-    else:
-        print('function: ' + str(function) + "; message: " +
-              str(message) + "; error: " + str(ex), flush=True)
+import logging
+import os
 
+# Create custom logger
+logger = logging.getLogger('syslog')
+syslog = logging.StreamHandler()
+formatter = logging.Formatter('[%(asctime)s] - [%(levelname)s] - [%(module)s:'
+                              '%(lineno)d] - %(message)s', "%Y-%m-%d %H:%M:%S")
+syslog.setFormatter(formatter)
+logger.addHandler(syslog)
+logger.setLevel(logging.WARNING)
+
+# Change default logging mode when in development environmnets
+if "BALENA_APP_NAME" in os.environ and \
+        os.environ['BALENA_APP_NAME'].lower() == "lb-dev":
+    logger.setLevel(logging.DEBUG)
+elif os.environ['FLASK_ENV'].lower() == "development":
+    logger.setLevel(logging.DEBUG)
 
 # Custom error messages for Flask-RESTful to return
 errors = {
