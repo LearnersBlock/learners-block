@@ -121,6 +121,7 @@ def update_new_apps(app_list):
                 print_message('appstore_get_apps',
                               'failed saving image', ex)
 
+        # Set the object for submitting to database
         app_entry = {'name': app,
                      'long_name': app_list[app]['long_name'],
                      'env_vars': json.dumps(app_list[app]['env_vars']),

@@ -21,7 +21,7 @@ class wifi:
                                  text=True).stdout.rstrip()
         except Exception as ex:
             print_message("check_connection", "Failed checking connection. "
-                          "Returning False to force wifi-connect start", ex)
+                          "Returning False.", ex)
             return False
 
         if run.lower()[:13] == "not connected":
@@ -29,21 +29,22 @@ class wifi:
         else:
             return True
 
-    def connect_to_AP(*args, conn_type=None, ssid=None, username=None,
-                      password=None, conn_name='LBNETWORK'):
+    def connect_to_AP(conn_type=None,
+                      ssid=None,
+                      username=None,
+                      password=None,
+                      conn_name='LBNETWORK'):
 
         if conn_type is None or ssid is None:
-            print_message('connect_to_AP', 'Missing args conn_type.')
+            print_message('connect_to_AP', 'Missing arg conn_type.')
             return False
 
         # Remove existing HOTSPOT if it exists
         if conn_name == 'HOTSPOT':
             wifi.forget(conn_name='HOTSPOT')
 
-        # Hotspot that we turn on so we can show our captured portal
-        # to let the user select an AP and provide credentials.
         try:
-            # String for no password
+            # Hotspot for user to connect to device
             hotspot_dict = {
                 '802-11-wireless': {'band': 'bg',
                                     'mode': 'ap',
@@ -60,7 +61,7 @@ class wifi:
                 'ipv6': {'method': 'auto'}
             }
 
-            # Include a key-mgmt string if setting a password
+            # Include a key-mgmt string in Hotspot if setting a password
             if password:
                 password_key_mgmt = {'802-11-wireless-security':
                                      {'key-mgmt': 'wpa-psk', 'psk': password}}
@@ -110,29 +111,22 @@ class wifi:
                 'ipv6': {'method': 'auto'}
             }
 
-            conn_dict = None
-            conn_str = ''
-
             if conn_type.lower() == 'hotspot':
                 conn_dict = hotspot_dict
-                conn_str = 'HOTSPOT'
             elif conn_type.lower() == 'none':
                 conn_dict = none_dict
-                conn_str = 'OPEN'
+            elif (conn_type.lower() == 'wep' or
+                    conn_type.lower() == 'wpa' or
+                    conn_type.lower() == 'wpa2'):
+                conn_dict = passwd_dict
             elif conn_type.lower() == 'enterprise':
                 conn_dict = enterprise_dict
-                conn_str = 'ENTERPRISE'
             else:
-                conn_dict = passwd_dict
-                conn_str = 'WEP/WPA/WPA2'
-
-            if conn_dict is None:
-                print_message('connect_to_AP', 'Missing '
-                              'Invalid conn_type.')
+                print_message('connect_to_AP', 'Invalid conn_type.')
                 return False
 
             NetworkManager.Settings.AddConnection(conn_dict)
-            print(f"Added connection of type {conn_str}")
+            print(f"Added connection of type {conn_type}")
 
             # Find this connection and its device
             connections = NetworkManager.Settings.ListConnections()
@@ -154,7 +148,7 @@ class wifi:
                               f"available {ctype} device found.")
                 return False
 
-            # And connect
+            # Connect
             NetworkManager.NetworkManager.ActivateConnection(conn, dev, "/")
             print("Activated connection.")
 
@@ -191,13 +185,14 @@ class wifi:
         except Exception as ex:
             print_message('wifi.forget', 'Failed to delete network. '
                           'Trying reset all.', ex)
+            time.sleep(5)  # Delay to allow time for error to resolve
             wifi.forget_all()
 
-        # Ensure NetworkManager is available before starting new hotspot
-        time.sleep(2)
-
-        # Start HOTSPOT for new connections
+        # If a hotspot is needed then start it
         if conn_name == 'LBNETWORK':
+            # Ensure NetworkManager is ready before starting new hotspot
+            time.sleep(5)
+
             wifi.start_hotspot()
         return True
 
@@ -208,7 +203,6 @@ class wifi:
         for connection in connections:
             if connection.GetSettings()["connection"]["type"] \
                     == "802-11-wireless":
-
                 # Delete the identified connection
                 connection.Delete()
 
@@ -266,17 +260,11 @@ class wifi:
             if dev.DeviceType != NetworkManager.NM_DEVICE_TYPE_WIFI:
                 continue
             for ap in dev.GetAccessPoints():
-
-                # Get Flags, WpaFlags and RsnFlags, all are
-                # combinations of the NM_802_11_AP_SEC_* bit flags.
-                # https://developer.gnome.org/NetworkManager/1.2/nm-dbus-types.html#NM80211ApSecurityFlags
-
                 security = 'NONE'
 
-                # Based on a subset of the flag settings determine which
-                # type of security this AP uses.
-                # Determine what input we need from the user
-                # to connect to any given AP.
+                # Based on a subset of the AP_SEC flag settings
+                # (https://developer.gnome.org/NetworkManager/1.2/nm-dbus-types.html#NM80211ApSecurityFlags)
+                # determine which type of security this AP uses.
                 AP_SEC = NetworkManager.NM_802_11_AP_SEC_NONE
                 if ap.Flags & NetworkManager.NM_802_11_AP_FLAGS_PRIVACY and \
                         ap.WpaFlags == AP_SEC and \
@@ -295,7 +283,8 @@ class wifi:
                         NetworkManager.NM_802_11_AP_SEC_KEY_MGMT_802_1X:
                     security = 'ENTERPRISE'
 
-                entry = {"ssid": ap.Ssid, "security": security,
+                entry = {"ssid": ap.Ssid,
+                         "security": security,
                          "strength": int(ap.Strength)}
 
                 # Do not add duplicates to the list
@@ -320,14 +309,14 @@ class wifi:
                 ["iw", "dev", "wlan0", "scan"])
             return True
         except subprocess.CalledProcessError as ex:
-            print_message('wifi.refresh_networks', 'Error refreshing '
+            print_message('wifi.refresh_networks',
+                          'Error refreshing '
                           'network points.', ex)
             return False
 
     def start_hotspot():
-        # On some devices, fetching available wifi networks in the area
-        # is only possible before the hotspot is started. Therefore
-        # the fetch is activated here to improve user experience later
+        # On some devices, fetching available wifi networks in the area is only
+        # possible before the hotspot is started and therefore called here.
         try:
             wifi.refresh_networks()
         except Exception as ex:
