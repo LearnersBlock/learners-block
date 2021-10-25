@@ -651,7 +651,6 @@
               :label="$t('enter_name')"
               :placeholder="$t('your_new_name')"
               :rules="[(val) =>
-                !val.includes(' ') && // Spaces are not allowed in hostnames
                 val.length <= 32
                 && regexp.test(val)
                 || $t('invalid_input')]"
@@ -675,7 +674,7 @@
                 #hint
               >
                 <div class="text-caption text-gray-800">
-                  <div>{{ $t('your_new_url') }} <span class="text-primary">'http://{{ newHostname.toLowerCase() }}.local'</span></div>
+                  <div>{{ $t('your_new_url') }} <span class="text-primary">'http://{{ newHostname.replaceAll(" ", "").toLowerCase() }}.local'</span></div>
                   <div>{{ $t('your_new_ssid') }} <span class="text-primary">'{{ newHostname }}'</span></div>
                 </div>
               </template>
@@ -908,7 +907,7 @@ export default defineComponent({
     const portainerUnavailable = ref<boolean>(true)
     // Regular expression for input validation
     // eslint-disable-next-line prefer-regex-literals
-    const regexp = ref(new RegExp('^[A-Za-z0-9-_]*$'))
+    const regexp = ref(new RegExp('^[A-Za-z0-9-_]'))
     const $router = useRouter()
     const settingPassword = ref<boolean>(false)
     const startPage = ref<any>('')

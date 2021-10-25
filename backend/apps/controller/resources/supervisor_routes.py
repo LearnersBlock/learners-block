@@ -18,10 +18,12 @@ class supervisor_host_config(Resource):
     def post(self):
         content = request.get_json()
 
+        hostname = content["hostname"].lower().replace(" ", "")
+
         response = curl(method="patch",
                         path="/v1/device/host-config?apikey=",
                         string='{"network": {"hostname": "%s"}}' %
-                        (content["hostname"].lower()))
+                        (hostname))
 
         return {
             'status': response["status_code"],
