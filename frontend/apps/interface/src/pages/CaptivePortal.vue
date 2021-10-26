@@ -17,6 +17,7 @@
         {{ hostname }}
         <q-btn
           icon="content_copy"
+          padding="0"
           flat
           size="sm"
           @click="copyUrl();$q.notify($t('url_copied'));"
