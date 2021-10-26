@@ -1,6 +1,6 @@
 import config
-import logger
 import threading
+from common.errors import logger
 from common.models import User
 from common.processes import check_connection
 from common.processes import check_internet

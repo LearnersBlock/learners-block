@@ -3,23 +3,29 @@ import os
 from common.errors import logger
 from flask_restful import abort
 
-# Import relevant UNIX path
-if os.environ['FLASK_ENV'].lower() == "production":
-    client = docker.DockerClient(base_url='unix://var/run/balena-engine.sock')
-else:
-    client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+try:
+    # Import relevant UNIX path
+    if os.environ['FLASK_ENV'].lower() == "production":
+        client = \
+            docker.DockerClient(base_url='unix://var/run/balena-engine.sock')
+    else:
+        client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+except Exception:
+    logger.error('Docker socket is missing.')
+    pass
 
 
+# Check Docker is available before sending the request
 def docker_ping(func):
     def inner(*args, **kwargs):
         try:
             client.ping()
             return func(*args, **kwargs)
         except docker.errors.APIError:
-            logger.error('Docker UNIX socket is down.')
+            logger.error('Docker UNIX socket is unreachable.')
             abort(502,
                   status=502,
-                  message='Docker service is not available.',)
+                  message='Docker service is unreachable.',)
     return inner
 
 
