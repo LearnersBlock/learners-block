@@ -1172,7 +1172,7 @@ export default defineComponent({
     }
 
     async function resetDatabaseLoop () {
-      while (true) {
+      for (let i = 0; i < 10; i++) {
         const xhr = new XMLHttpRequest()
         xhr.open('GET', `${api.value}`)
         xhr.timeout = 2000
@@ -1185,6 +1185,7 @@ export default defineComponent({
           break
         }
       }
+      $q.notify({ type: 'positive', message: t('api_down') })
     }
 
     function setStartPage () {
