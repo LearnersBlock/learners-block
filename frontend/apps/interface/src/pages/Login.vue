@@ -10,9 +10,18 @@
       <q-input
         v-model="password"
         filled
+        :type="isPwd ? 'password' : 'text'"
         :label="$t('password')"
-        type="password"
-      />
+      >
+        <template #append>
+          <q-icon
+            :name="isPwd ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd = !isPwd"
+          />
+        </template>
+      </q-input>
+
       <q-btn
         :label="$t('login')"
         class="mt-4"
@@ -87,6 +96,7 @@ export default defineComponent({
     }
 
     return {
+      isPwd: ref(true),
       login,
       password,
       submitting
