@@ -1,11 +1,13 @@
+import config
+import logger
+import threading
 from common.models import User
+from common.processes import check_connection
 from common.processes import check_internet
 from common.wifi import wifi
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
-import config
-import threading
 
 
 class wifi_connect(Resource):
@@ -30,7 +32,7 @@ class wifi_connect(Resource):
 class wifi_connection_status(Resource):
     def get(self):
         return {'status': 200,
-                'wifi': wifi.check_connection(),
+                'wifi': check_connection(),
                 'internet': check_internet()}, 200
 
 
@@ -38,7 +40,7 @@ class wifi_forget(Resource):
     @jwt_required()
     def get(self):
         # Check and store the current connection state
-        connection_state = wifi.check_connection()
+        connection_state = check_connection()
 
         # If the device is connected to a wifi network
         if not connection_state:
@@ -89,6 +91,8 @@ class wifi_set_password(Resource):
                                            ).first()
         lb_database.wifi_password = content["wifi_password"]
         lb_database.save_to_db()
+
+        logger.info(f'Wi-Fi password set to {content["wifi_password"]}')
 
         return {'message': 'success'}, 200
 

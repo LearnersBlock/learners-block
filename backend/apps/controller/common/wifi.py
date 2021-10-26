@@ -1,11 +1,11 @@
-from common.errors import logger
-from common.models import User
-from run import app
 import config
 import os
 import subprocess
 import time
 import uuid
+from common.errors import logger
+from common.models import User
+from run import app
 
 
 if os.environ['FLASK_ENV'].lower() == "production":
@@ -15,20 +15,6 @@ if os.environ['FLASK_ENV'].lower() == "production":
 
 
 class wifi:
-    def check_connection():
-        try:
-            run = subprocess.run(["iw", "dev", "wlan0", "link"],
-                                 capture_output=True,
-                                 text=True).stdout.rstrip()
-        except Exception:
-            logger.exception("Failed checking connection. Returning False.")
-            return False
-
-        if run.lower()[:13] == "not connected":
-            return False
-        else:
-            return True
-
     def connect_to_AP(conn_type=None,
                       ssid=None,
                       username=None,
