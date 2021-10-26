@@ -1397,8 +1397,23 @@ export default defineComponent({
             appTableVisible.value = true
           }).catch(function (error) {
             if (error.response) {
-              console.log(error.response.data)
-              $q.notify({ type: 'negative', message: t('error') })
+              if (error.response.status === 408) {
+                $q.notify({
+                  type: 'negative',
+                  timeout: 0,
+                  actions: [
+                    {
+                      label: t('close'),
+                      color: 'white',
+                      handler: () => { /* ... */ }
+                    }
+                  ],
+                  message: t('docker_down')
+                })
+              } else {
+                console.log(error.response.data)
+                $q.notify({ type: 'negative', message: t('error') })
+              }
             }
             fetchApps()
             appTableVisible.value = true
@@ -1426,8 +1441,23 @@ export default defineComponent({
             appTableVisible.value = true
           }).catch(function (error) {
             if (error.response) {
-              console.log(error.response.data)
-              $q.notify({ type: 'negative', message: t('error') })
+              if (error.response.status === 408) {
+                $q.notify({
+                  type: 'negative',
+                  timeout: 0,
+                  actions: [
+                    {
+                      label: t('close'),
+                      color: 'white',
+                      handler: () => { /* ... */ }
+                    }
+                  ],
+                  message: t('docker_down')
+                })
+              } else {
+                console.log(error.response.data)
+                $q.notify({ type: 'negative', message: t('error') })
+              }
             }
             fetchApps()
             appTableVisible.value = true
@@ -1474,8 +1504,23 @@ export default defineComponent({
             appTableVisible.value = true
           }).catch(function (error) {
             if (error.response) {
-              console.log(error.response.data)
-              $q.notify({ type: 'negative', message: t('error') })
+              if (error.response.status === 408) {
+                $q.notify({
+                  type: 'negative',
+                  timeout: 0,
+                  actions: [
+                    {
+                      label: t('close'),
+                      color: 'white',
+                      handler: () => { /* ... */ }
+                    }
+                  ],
+                  message: t('docker_down')
+                })
+              } else {
+                console.log(error.response.data)
+                $q.notify({ type: 'negative', message: t('error') })
+              }
             }
             fetchApps()
             appTableVisible.value = true
