@@ -35,7 +35,7 @@
       <!-- Toolbar -->
       <template #top="props">
         <div class="flex row full-width row reverse-wrap justify-between items-center">
-          <div class="col-auto m-1">
+          <div class="col-auto m-1 mt-2">
             <q-breadcrumbs v-if="!objPath[0]">
               <q-breadcrumbs-el
                 v-ripple
