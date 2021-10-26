@@ -1008,9 +1008,6 @@ export default defineComponent({
 
         portainerLoading.value = false
         wifiLoading.value = false
-      }).catch(e => {
-        console.log(e.message)
-        $q.notify({ type: 'negative', message: t('error') })
       })
 
       // Fetch Settings UI configuration
@@ -1043,18 +1040,12 @@ export default defineComponent({
         filesLoading.value = false
         libraryLoading.value = false
         websiteLoading.value = false
-      }).catch(e => {
-        console.log(e.message)
-        $q.notify({ type: 'negative', message: t('error') })
       })
 
       // Fetch System Info status
       Axios.get(`${api.value}/v1/system/info`).then((response) => {
         sysInfo.value = response.data
         sysInfoLoading.value = false
-      }).catch(e => {
-        console.log(e.message)
-        $q.notify({ type: 'negative', message: t('error') })
       })
     }
 
@@ -1216,15 +1207,11 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           settingPassword.value = true
-          Axios.post(`${api.value}/v1/auth/set_password`, { password: ' ' }).then((response) => {
-            if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('login_disabled') })
-              loginPasswordStatus.value = false
-              loginPasswordToggle.value = false
-            } else {
-              $q.notify({ type: 'negative', message: t('error') })
-              loginPasswordToggle.value = true
-            }
+          Axios.post(`${api.value}/v1/auth/set_password`, { password: ' ' }).then(() => {
+            $q.notify({ type: 'positive', message: t('login_disabled') })
+            loginPasswordStatus.value = false
+            loginPasswordToggle.value = false
+
             settingPassword.value = false
           })
         }).onCancel(() => {
@@ -1243,13 +1230,11 @@ export default defineComponent({
           settingPassword.value = true
           Axios.post(`${api.value}/v1/auth/set_password`, {
             password: data
-          }).then((response) => {
-            if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('password_set_success') })
-              loginPasswordStatus.value = true
-              loginPasswordToggle.value = true
-              settingPassword.value = false
-            }
+          }).then(() => {
+            $q.notify({ type: 'positive', message: t('password_set_success') })
+            loginPasswordStatus.value = true
+            loginPasswordToggle.value = true
+            settingPassword.value = false
           })
         }).onCancel(() => {
           loginPasswordToggle.value = false
@@ -1266,17 +1251,10 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           settingPassword.value = true
-          Axios.post(`${api.value}/v1/wifi/set_password`, { wifi_password: '' }).then((response) => {
-            if (response) {
-              if (response.status === 200) {
-                $q.notify({ type: 'positive', message: t('wifi_login_disabled') })
-                wifiPasswordStatus.value = false
-                wifiPasswordToggle.value = false
-              } else {
-                $q.notify({ type: 'negative', message: t('error') })
-                wifiPasswordToggle.value = true
-              }
-            }
+          Axios.post(`${api.value}/v1/wifi/set_password`, { wifi_password: '' }).then(() => {
+            $q.notify({ type: 'positive', message: t('wifi_login_disabled') })
+            wifiPasswordStatus.value = false
+            wifiPasswordToggle.value = false
             settingPassword.value = false
           })
         }).onCancel(() => {
@@ -1297,15 +1275,11 @@ export default defineComponent({
           settingPassword.value = true
           Axios.post(`${api.value}/v1/wifi/set_password`, {
             wifi_password: data
-          }).then((response) => {
-            if (response) {
-              if (response.status === 200) {
-                $q.notify({ type: 'positive', message: t('wifi_password_set_success') })
-                wifiPasswordStatus.value = true
-                wifiPasswordToggle.value = true
-                settingPassword.value = false
-              }
-            }
+          }).then(() => {
+            $q.notify({ type: 'positive', message: t('wifi_password_set_success') })
+            wifiPasswordStatus.value = true
+            wifiPasswordToggle.value = true
+            settingPassword.value = false
           })
         }).onCancel(() => {
           wifiPasswordToggle.value = false
@@ -1376,45 +1350,22 @@ export default defineComponent({
             ports: row.ports,
             volumes: row.volumes,
             dependencies: row.dependencies
-          }).then(function (response) {
-            if (response.status === 200) {
-              $q.notify({
-                type: 'positive',
-                timeout: 0,
-                actions: [
-                  {
-                    label: t('close'),
-                    color: 'white',
-                    handler: () => { /* ... */ }
-                  }
-                ],
-                message: t('app_installed')
-              })
-            } else {
-              $q.notify({ type: 'negative', message: t('error') })
-            }
+          }).then(function () {
+            $q.notify({
+              type: 'positive',
+              timeout: 0,
+              actions: [
+                {
+                  label: t('close'),
+                  color: 'white',
+                  handler: () => { /* ... */ }
+                }
+              ],
+              message: t('app_installed')
+            })
             fetchApps()
             appTableVisible.value = true
-          }).catch(function (error) {
-            if (error.response) {
-              if (error.response.status === 408) {
-                $q.notify({
-                  type: 'negative',
-                  timeout: 0,
-                  actions: [
-                    {
-                      label: t('close'),
-                      color: 'white',
-                      handler: () => { /* ... */ }
-                    }
-                  ],
-                  message: t('docker_down')
-                })
-              } else {
-                console.log(error.response.data)
-                $q.notify({ type: 'negative', message: t('error') })
-              }
-            }
+          }).catch(function () {
             fetchApps()
             appTableVisible.value = true
           })
@@ -1431,34 +1382,11 @@ export default defineComponent({
           Axios.post(`${api.value}/v1/docker/remove`, {
             name: row.name,
             dependencies: row.dependencies
-          }).then(function (response) {
-            if (response.status === 200) {
-              $q.notify({ type: 'positive', message: t('success') })
-            } else {
-              $q.notify({ type: 'negative', message: t('error') })
-            }
+          }).then(function () {
+            $q.notify({ type: 'positive', message: t('success') })
             fetchApps()
             appTableVisible.value = true
-          }).catch(function (error) {
-            if (error.response) {
-              if (error.response.status === 408) {
-                $q.notify({
-                  type: 'negative',
-                  timeout: 0,
-                  actions: [
-                    {
-                      label: t('close'),
-                      color: 'white',
-                      handler: () => { /* ... */ }
-                    }
-                  ],
-                  message: t('docker_down')
-                })
-              } else {
-                console.log(error.response.data)
-                $q.notify({ type: 'negative', message: t('error') })
-              }
-            }
+          }).catch(function () {
             fetchApps()
             appTableVisible.value = true
           })
@@ -1483,45 +1411,22 @@ export default defineComponent({
             ports: row.ports,
             volumes: row.volumes,
             dependencies: row.dependencies
-          }).then(function (response) {
-            if (response.status === 200) {
-              $q.notify({
-                type: 'positive',
-                timeout: 0,
-                actions: [
-                  {
-                    label: t('close'),
-                    color: 'white',
-                    handler: () => { /* ... */ }
-                  }
-                ],
-                message: t('app_installed')
-              })
-            } else {
-              $q.notify({ type: 'negative', message: t('error') })
-            }
+          }).then(function () {
+            $q.notify({
+              type: 'positive',
+              timeout: 0,
+              actions: [
+                {
+                  label: t('close'),
+                  color: 'white',
+                  handler: () => { /* ... */ }
+                }
+              ],
+              message: t('app_installed')
+            })
             fetchApps()
             appTableVisible.value = true
-          }).catch(function (error) {
-            if (error.response) {
-              if (error.response.status === 408) {
-                $q.notify({
-                  type: 'negative',
-                  timeout: 0,
-                  actions: [
-                    {
-                      label: t('close'),
-                      color: 'white',
-                      handler: () => { /* ... */ }
-                    }
-                  ],
-                  message: t('docker_down')
-                })
-              } else {
-                console.log(error.response.data)
-                $q.notify({ type: 'negative', message: t('error') })
-              }
-            }
+          }).catch(function () {
             fetchApps()
             appTableVisible.value = true
           })
@@ -1565,9 +1470,6 @@ export default defineComponent({
           setTimeout(() => {
             hostnameChanging.value = false
           }, 5000)
-        }).catch(e => {
-          console.log(e.message)
-          $q.notify({ type: 'negative', message: t('error') })
         })
       }
     }

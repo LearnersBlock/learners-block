@@ -103,11 +103,15 @@ export default route<StateInterface>(function ({ store }) {
         if (overrideResponse.value) {
           return Promise.resolve(overrideResponse.value)
         } else {
+          // If all error captures fail, return a rejected promise
           return Promise.reject(error)
         }
       // If a non-auth related error code, report an error
       } else {
-        Notify.create({ type: 'negative', message: `${i18n.global.t('error')} ${error.response.message}` })
+        if (error && error.response) {
+          console.log(error.response)
+          Notify.create({ type: 'negative', message: `${i18n.global.t('error')} ${error.response.data.message}` })
+        }
         return Promise.reject(error)
       }
     }

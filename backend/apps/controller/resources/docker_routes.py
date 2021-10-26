@@ -26,7 +26,7 @@ class docker_pull(Resource):
                                       network=content["name"],
                                       detach=True)
 
-                logger.info(deps["response"])
+                logger.info(deps["message"])
 
         # Pull latest containers and run them
         response = docker_py.pull(env_vars=content["env_vars"],
@@ -45,7 +45,7 @@ class docker_pull(Resource):
         lb_database.status = 'installed'
         lb_database.save_to_db()
 
-        return {"response": response["response"]}, response["status_code"]
+        return {"message": response["message"]}, response["status_code"]
 
 
 class docker_remove(Resource):
@@ -57,7 +57,7 @@ class docker_remove(Resource):
         if content["dependencies"]:
             for dependency in content["dependencies"]:
                 deps = docker_py.remove(name=dependency)
-                logger.info(deps["response"])
+                logger.info(deps["message"])
 
         # Remove main container
         response = docker_py.remove(name=content["name"])
@@ -70,7 +70,7 @@ class docker_remove(Resource):
         lb_database.status = 'install'
         lb_database.save_to_db()
 
-        return {"response": response["response"]}, response["status_code"]
+        return {"message": response["message"]}, response["status_code"]
 
 
 class docker_run(Resource):
@@ -93,7 +93,7 @@ class docker_run(Resource):
                                      network=content["name"],
                                      detach=True)
 
-                logger.info(deps["response"])
+                logger.info(deps["message"])
 
         # Run the primary container
         response = docker_py.run(env_vars=content["env_vars"],
@@ -112,4 +112,4 @@ class docker_run(Resource):
         lb_database.status = 'installed'
         lb_database.save_to_db()
 
-        return {"response": response["response"]}, response["status_code"]
+        return {"message": response["message"]}, response["status_code"]

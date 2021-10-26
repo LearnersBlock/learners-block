@@ -952,9 +952,7 @@ export default defineComponent({
         path: objPath.value,
         root: rootPath.value
       }).then((response) => {
-        if (response.status === 401 || response.status === 422) {
-          $router.replace('/login')
-        } else if (response.data.message === 'error') {
+        if (response.data.message === 'error') {
           $q.notify({ type: 'negative', message: t('error') })
         } else {
           $q.notify({ type: 'positive', message: `${t('extracted_to')} ${response.data.new_path}` })
@@ -992,9 +990,6 @@ export default defineComponent({
         root: rootPath.value
       }).then((response) => {
         selectorRows.value = response.data.rows
-      }).catch(function (error) {
-        console.log(error)
-        $q.notify({ type: 'negative', message: t('error') })
       })
       loading.value = false
     }
