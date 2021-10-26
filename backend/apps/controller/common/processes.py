@@ -1,6 +1,4 @@
-from common.errors import logger
-from dotenv import dotenv_values
-from flask_restful import abort
+import config
 import datetime
 import os
 import requests
@@ -8,7 +6,26 @@ import secrets
 import shutil
 import signal
 import socket
+import subprocess
 import time
+from common.errors import logger
+from dotenv import dotenv_values
+from flask_restful import abort
+
+
+def check_connection():
+    try:
+        run = subprocess.run(["iw", "dev", "wlan0", "link"],
+                             capture_output=True,
+                             text=True).stdout.rstrip()
+    except Exception:
+        logger.exception("Failed checking connection. Returning False.")
+        return False
+
+    if run.lower()[:13] == "not connected":
+        return False
+    else:
+        return True
 
 
 def check_internet(host="8.8.8.8", port=53, timeout=6):
@@ -109,13 +126,30 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
     except Exception:
         return {"status_code": response.status_code, "text": response.text}
 
+    logger.debug(f"Curl request: {response.status_code}")
+
     return {"status_code": response.status_code, "text": response.text,
             "json_response": response.json()}
 
 
 def database_recover():
     # Resetting database
-    logger.info("Deleting database and restarting.")
+    logger.warning("Deleting database and restarting.")
+
+    try:
+        # Get current hostname
+        container_hostname = subprocess.run(["hostname"],
+                                            capture_output=True,
+                                            check=True,
+                                            text=True).stdout.rstrip()
+
+        # If the container hostname is not the default, remove
+        # the run.pid to false it back to default on next boot
+        if container_hostname is not config.default_hostname:
+            os.remove('/app/db/run.pid')
+    except Exception:
+        logger.exception('Failed to delete run.pid. Continuing...')
+        pass
 
     # Rename the .db file. A new one will be rebuilt fresh on next boot.
     # While this is a drastic step, it ensures devices do not
