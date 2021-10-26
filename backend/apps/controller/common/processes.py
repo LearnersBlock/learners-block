@@ -1,6 +1,7 @@
 from common.errors import logger
 from dotenv import dotenv_values
 from flask_restful import abort
+import datetime
 import os
 import requests
 import secrets
@@ -116,11 +117,15 @@ def database_recover():
     # Resetting database
     logger.info("Deleting database and restarting.")
 
-    # Remove the .db file. It will be rebuilt fresh on next boot.
+    # Rename the .db file. A new one will be rebuilt fresh on next boot.
     # While this is a drastic step, it ensures devices do not
     # get bricked in the field.
     try:
-        os.remove(os.path.realpath('.') + "/db/sqlite.db")
+        path = os.path.realpath('.') + "/db/"
+
+        os.rename(path + "sqlite.db",
+                  path + f"sqlite.db - {str(datetime.datetime.now())}")
+
         os.kill(os.getpid(), signal.SIGTERM)
     except Exception:
         logger.exception("Failed to delete the database.")
