@@ -18,6 +18,7 @@ class supervisor_host_config(Resource):
     def post(self):
         content = request.get_json()
 
+        # Remove spaces from string and convert to lowercase
         hostname = content["hostname"].lower().replace(" ", "")
 
         response = curl(method="patch",

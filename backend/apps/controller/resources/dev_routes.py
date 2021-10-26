@@ -38,8 +38,12 @@ class supervisor_host_config(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
-        time.sleep(3)
-        logger.info(f"Hostname/Wi-Fi SSID changed to '{content['hostname']}'")
+
+        # Trim whitespace at begining and end of string
+        content["hostname"] = content["hostname"].strip()
+
+        time.sleep(2)
+        logger.info(f"Hostname changed to '{content['hostname']}'")
         return {
             'status': 200,
             'message': "Hostname/Wi-Fi SSID changed"
@@ -159,12 +163,17 @@ class wifi_set_ssid(Resource):
     def post(self):
         content = request.get_json()
 
+        # Trim whitespace at begining and end of string
+        content["ssid"] = content["ssid"].strip()
+
         if content["ssid"] == config.default_hostname:
             content["ssid"] = config.default_ssid
 
         lb_database = User.query.filter_by(username=config.default_hostname
                                            ).first()
-        lb_database.wifi_ssid = content["hostname"]
+        lb_database.wifi_ssid = content["ssid"]
         lb_database.save_to_db()
+
+        logger.info(f"Wi-Fi SSID changed to '{content['ssid']}'")
 
         return {'status': 200, 'running': 'success'}, 200

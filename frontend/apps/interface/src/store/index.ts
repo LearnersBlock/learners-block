@@ -41,11 +41,11 @@ export default store(function (/* { ssrContext } */) {
     modules: {
       auth,
       savedResources
-    }
+    },
 
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
-    // strict: !!process.env.DEBUGGING
+    strict: !!process.env.DEBUGGING
   })
 
   return Store

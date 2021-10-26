@@ -98,6 +98,9 @@ class wifi_set_ssid(Resource):
     def post(self):
         content = request.get_json()
 
+        # Trim whitespace at begining and end of string
+        content["ssid"] = content["ssid"].strip()
+
         if content["ssid"] == config.default_hostname:
             content["ssid"] = config.default_ssid
 
