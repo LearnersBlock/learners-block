@@ -11,7 +11,7 @@
     "library_settings_description": "Baixe conteúdo da biblioteca Learner's Block.",
     "library_description": "Explore conteúdo baixado da biblioteca aqui.",
     "library": "Biblioteca",
-    "invalid_input": "URL e SSID do Wi-Fi devem ser: No máximo 32 caracteres; minúsculos; sem espaços; sem caracteres especiais além de ‘_’ e ‘-’",
+    "invalid_input": "No máximo 32 caracteres; minúsculos; sem espaços; sem caracteres especiais além de ‘_’ e ‘-’",
     "invalid_hostname": "Você submeteu uma URL e um SSID do Wi-Fi inválidos. Por favor, tente novamente.",
     "hostname_changed_notification": "Seus URL e SSID do Wi-Fi foram atualizados. Por favor, reinicie o Block para isso ter efeito.",
     "hostname": "Nome de anfitrião",
@@ -40,7 +40,7 @@
     "set_hostname": "Definir SSID do Wi-Fi e URL",
     "set": "Definir",
     "portainer_starting_at": "Portainer iniciando em:",
-    "portainer_settings_description": "Ativar ou desativar o Portainer.",
+    "portainer_settings_description": "Ativa ou desativa o Portainer",
     "portainer": "Portainer",
     "password_set_success": "Sua senha foi definida",
     "makerspace_settings_description": "Faça download do conteúdo da sua conta Makerspace.",
@@ -203,5 +203,9 @@
     "enter_name": "Insira um nome",
     "wifi_login_disabled": "A sua senha do Wi-Fi foi desativada. Reinicie o seu dispositivo para aplicar as alterações.",
     "wifi_password_set_success": "A senha do seu Wi-Fi foi definida. Reinicie o dispositivo para aplicar as alterações.",
-    "searching_networks": "Buscando por redes mais próximas…"
+    "searching_networks": "Buscando por redes mais próximas…",
+    "your_new_url": "A sua nova url será:",
+    "your_new_ssid": "O seu novo Wi-Fi SSID será:",
+    "portainer_desc": "Uma interface para gerenciar os recipientes Docker personalizados no seu Bloco.",
+    "url_wifi_desc": "Altere a URL usada para acessar o seu Bloco e como o seu Bloco aparece na lista das redes Wi-Fi das pessoas."
 }
