@@ -1516,7 +1516,10 @@ export default defineComponent({
               }
             ]
           })
-          hostnameChanging.value = false
+          // Add delay before returning response to ensure hostname has had time to apply
+          setTimeout(() => {
+            hostnameChanging.value = false
+          }, 5000)
         }).catch(e => {
           console.log(e.message)
           $q.notify({ type: 'negative', message: t('error') })
