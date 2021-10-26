@@ -61,7 +61,7 @@
     "invalid_entry": "Invalid entry.",
     "invalid_filemanager_string": "You entered an invalid name. The following characters are not compatible: '/', '\\0'",
     "invalid_hostname": "You have submitted an invalid URL and Wi-Fi SSID. Please try again.",
-    "invalid_input": "Maximum of 32 characters; lowercase; no spaces and no special characters other than '_' and '-'",
+    "invalid_input": "Maximum of 32 characters and no special characters other than '_' and '-'",
     "invalid_path_input": "Your path must not start or end with a '/' and cannot contain spaces.",
     "invalid_upload_string": "entries contain an invalid name and will not be uploaded. The following characters are not compatible: '/', '\\0'",
     "invalid_wifi_entry": "Wi-Fi passwords must be 8 characters or more and contain no spaces.",
