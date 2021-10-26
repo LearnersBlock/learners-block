@@ -1,3 +1,5 @@
+import json
+import requests
 from common.app_store import update_existing_app_status
 from common.app_store import update_new_apps
 from common.errors import logger
@@ -5,8 +7,6 @@ from common.models import App_Store
 from flask_jwt_extended import jwt_required
 from flask_restful import abort
 from flask_restful import Resource
-import json
-import requests
 
 app_store_url = ("https://raw.githubusercontent.com/"
                  "LearnersBlock/app-store/main/"

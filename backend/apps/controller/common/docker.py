@@ -1,6 +1,6 @@
-from common.errors import logger
 import docker
 import os
+from common.errors import logger
 
 # Import relevant UNIX path
 if os.environ['FLASK_ENV'].lower() == "production":

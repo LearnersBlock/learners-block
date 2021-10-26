@@ -1,10 +1,10 @@
-from common.errors import logger
-from common.docker import docker_py
-from common.models import App_Store
 import json
 import os
 import requests
 import shutil
+from common.errors import logger
+from common.docker import docker_py
+from common.models import App_Store
 
 
 # For all the existing apps in the database, handle updates
@@ -23,6 +23,7 @@ def update_existing_app_status(app_list):
                 for dependency in json_dep:
                     # Stop and remove the dependency containers
                     docker_py.remove(name=dependency)
+                    logger.debug(f'Removed container: {dependency}')
 
                     # Remove related dependency images
                     try:
@@ -30,16 +31,21 @@ def update_existing_app_status(app_list):
                                         [dependency]
                                         ["image"],
                                         network=db_entry.name)
+                        logger.debug("Pruned container: "
+                                     f"{json_dep['dependency']}")
                     except Exception:
                         logger.exception("Dependency image may already have "
                                          "been pruned.")
 
             # Remove the main container and image
             docker_py.remove(name=db_entry.name)
+            logger.debug(f"Removed container: {db_entry.name}")
 
             try:
                 docker_py.prune(image=db_entry.image,
                                 network=db_entry.name)
+                logger.debug("Pruned container: "
+                             f"{db_entry.image}")
             except Exception:
                 logger.exception("Image may already have been pruned.")
 

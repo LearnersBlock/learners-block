@@ -1,12 +1,12 @@
+import config
+import subprocess
+import time
 from common.errors import logger
 from common.models import User
 from common.processes import check_internet
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
-import config
-import subprocess
-import time
 
 
 # Set default Wi-Fi status for mock endpoint

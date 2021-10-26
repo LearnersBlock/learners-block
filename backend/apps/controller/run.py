@@ -1,3 +1,8 @@
+import atexit
+import config
+import os
+import signal
+import subprocess
 from common.errors import errors
 from common.errors import logger
 from common.models import db
@@ -30,11 +35,6 @@ from resources.system_routes import system_info
 from resources.system_routes import system_portainer
 from resources.system_routes import system_prune
 from resources.system_routes import system_reset_database
-import atexit
-import config
-import os
-import signal
-import subprocess
 
 
 # Apply fix to Flask-Restful not aligned with JWT exceptions
