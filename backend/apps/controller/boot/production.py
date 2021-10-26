@@ -1,13 +1,14 @@
-from common.errors import logger
-from common.processes import check_internet
-from common.processes import curl
-from common.wifi import wifi
-from resources.supervisor_routes import supervisor_update
 import config
 import subprocess
 import sys
 import threading
 import time
+from common.errors import logger
+from common.processes import check_connection
+from common.processes import check_internet
+from common.processes import curl
+from common.wifi import wifi
+from resources.supervisor_routes import supervisor_update
 
 
 def dnsmasq():
@@ -57,7 +58,7 @@ def launch_wifi(self):
 
     # Check if already connected to Wi-Fi
     try:
-        connected = wifi.check_connection()
+        connected = check_connection()
     except Exception:
         logger.exception('Error checking wifi connection. Starting \
             wifi-connect in order to allow debugging')

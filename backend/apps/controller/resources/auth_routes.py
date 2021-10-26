@@ -1,3 +1,4 @@
+import config
 from common.models import User
 from datetime import datetime
 from datetime import timedelta
@@ -13,7 +14,6 @@ from flask_jwt_extended import set_access_cookies
 from flask_jwt_extended import unset_jwt_cookies
 from flask_jwt_extended import verify_jwt_in_request
 from flask_restful import Resource
-import config
 
 
 # Refresh token on each authorised request

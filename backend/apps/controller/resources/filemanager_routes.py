@@ -1,3 +1,6 @@
+import json
+import os
+import shutil
 from common.errors import logger
 from common.processes import human_size
 from flask import request
@@ -5,9 +8,6 @@ from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from natsort import os_sorted
 from pathlib import Path
-import json
-import os
-import shutil
 
 
 # System fileshare root

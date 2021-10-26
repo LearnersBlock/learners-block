@@ -1,3 +1,6 @@
+import json
+import os
+import shutil
 from common.errors import logger
 from common.docker import docker_py
 from common.models import App_Store
@@ -9,9 +12,6 @@ from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from werkzeug import serving
-import json
-import os
-import shutil
 
 # Portainer version for LB system
 portainer_image = "portainer/portainer-ce:2.6.3-alpine"
@@ -41,6 +41,9 @@ class system_hostname(Resource):
     def get(self):
         device_hostname = curl(method="get",
                                path="/v1/device/host-config?apikey=")
+
+        logger.debug(f'System hostname is {device_hostname}')
+
         return {
             'status': 200,
             'hostname': device_hostname["json_response"]
@@ -96,12 +99,16 @@ class system_portainer(Resource):
                                              volumes=volumes,
                                              command=command)
 
+            logger.debug(f'Portainer status: {container_status}')
+
             return {"installed": container_status["response"]}, \
                 container_status["status_code"]
 
         elif content['cmd'] == 'remove':
             # Remove the container (but not the image)
             container_status = docker_py.remove(name="portainer")
+
+            logger.debug(f'Portainer status: {container_status}')
 
             return {"installed": container_status["response"]}, \
                 container_status["status_code"]

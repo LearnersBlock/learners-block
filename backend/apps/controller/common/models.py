@@ -1,10 +1,10 @@
+import bcrypt
+import config
 from common.errors import logger
 from common.processes import database_recover
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import expression
-import bcrypt
-import config
 
 db = SQLAlchemy()
 migrate = Migrate()
