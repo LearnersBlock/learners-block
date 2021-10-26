@@ -675,7 +675,14 @@
               >
                 <div class="text-caption text-gray-800">
                   <div>{{ $t('your_new_url') }} <span class="text-primary">'http://{{ newHostname.replaceAll(" ", "").toLowerCase() }}.local'</span></div>
-                  <div>{{ $t('your_new_ssid') }} <span class="text-primary">'{{ newHostname }}'</span></div>
+                  <div
+                    v-if="newHostname=='lb'"
+                  >
+                    {{ $t('your_new_ssid') }} <span class="text-primary">'Learner's Block'</span>
+                  </div>
+                  <div v-else>
+                    {{ $t('your_new_ssid') }} <span class="text-primary">'{{ newHostname }}'</span>
+                  </div>
                 </div>
               </template>
             </q-input>
