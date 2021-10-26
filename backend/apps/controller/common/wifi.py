@@ -220,8 +220,9 @@ class wifi:
     # Get user specified hotspot SSID.
     def get_hotspot_SSID():
         # Get the current SSID from the database
-        lb_database = User.query.filter_by(username=config.default_hostname
-                                           ).first()
+        with app.app_context():
+            lb_database = User.query.filter_by(username=config.default_hostname
+                                               ).first()
 
         return lb_database.wifi_ssid
 
