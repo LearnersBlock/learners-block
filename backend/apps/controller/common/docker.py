@@ -1,6 +1,7 @@
 import docker
 import os
 from common.errors import logger
+from flask_restful import abort
 
 # Import relevant UNIX path
 if os.environ['FLASK_ENV'].lower() == "production":
@@ -9,13 +10,28 @@ else:
     client = docker.DockerClient(base_url='unix://var/run/docker.sock')
 
 
+def docker_ping(func):
+    def inner(*args, **kwargs):
+        try:
+            client.ping()
+            return func(*args, **kwargs)
+        except docker.errors.APIError:
+            logger.error('Docker UNIX connect is down.')
+            abort(408,
+                  status=408,
+                  message='Docker Ping Failed')
+    return inner
+
+
 class docker_py():
+    @docker_ping
     def image_status(image):
         if client.images.list(image):
             return True
         else:
             return False
 
+    @docker_ping
     def prune(image, network=None):
         try:
             client.images.remove(image=image)
@@ -34,6 +50,7 @@ class docker_py():
 
         return {"response": "done", "status_code": 200}
 
+    @docker_ping
     def pull(env_vars, image, name, ports, volumes, network, detach=True):
         try:
             container = client.containers.get(name)
@@ -55,6 +72,7 @@ class docker_py():
 
         return {"response": str(response), "status_code": 200}
 
+    @docker_ping
     def remove(name):
         try:
             container = client.containers.get(name)
@@ -66,6 +84,7 @@ class docker_py():
 
         return {"response": "done", "status_code": 200}
 
+    @docker_ping
     def run(image, name, ports={}, volumes={}, detach=True, network='lbsystem',
             env_vars={}, privileged=False, command='', labels={}):
         # If network doesn't yet exist, create it
@@ -95,6 +114,7 @@ class docker_py():
 
         return {"response": str(response), "status_code": 200}
 
+    @docker_ping
     def status(name):
         try:
             container = client.containers.get(name)
