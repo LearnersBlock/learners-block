@@ -101,7 +101,7 @@ class system_portainer(Resource):
 
             logger.debug(f'Portainer status: {container_status}')
 
-            return {"installed": container_status["response"]}, \
+            return {"installed": container_status["message"]}, \
                 container_status["status_code"]
 
         elif content['cmd'] == 'remove':
@@ -110,15 +110,15 @@ class system_portainer(Resource):
 
             logger.debug(f'Portainer status: {container_status}')
 
-            return {"installed": container_status["response"]}, \
+            return {"installed": container_status["message"]}, \
                 container_status["status_code"]
 
         elif content['cmd'] == 'status':
             # Fetch container status and check if image exists on the system
             container_status = docker_py.status(name="portainer")
 
-            if container_status['response'] is not False:
-                return {"installed": container_status["response"]}, \
+            if container_status['message'] is not False:
+                return {"installed": container_status["message"]}, \
                         container_status["status_code"]
             else:
                 image_status = docker_py.image_status(portainer_image)
@@ -144,7 +144,7 @@ class system_prune(Resource):
                                                ["image"],
                                                network=app.name)
             except Exception:
-                logger.exception(deps["response"])
+                logger.exception(deps["message"])
 
             docker_py.prune(image=app.image, network=app.name)
 

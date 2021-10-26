@@ -16,10 +16,10 @@ def docker_ping(func):
             client.ping()
             return func(*args, **kwargs)
         except docker.errors.APIError:
-            logger.error('Docker UNIX connect is down.')
-            abort(408,
-                  status=408,
-                  message='Docker Ping Failed')
+            logger.error('Docker UNIX socket is down.')
+            abort(502,
+                  status=502,
+                  message='Docker service is not available.',)
     return inner
 
 
@@ -48,7 +48,7 @@ class docker_py():
             # Pass if network had already been removed
             pass
 
-        return {"response": "done", "status_code": 200}
+        return {"message": "done", "status_code": 200}
 
     @docker_ping
     def pull(env_vars, image, name, ports, volumes, network, detach=True):
@@ -68,9 +68,9 @@ class docker_py():
                                      network=network)
         except Exception as ex:
             logger.exception("Failed to pull container.")
-            return {"response": str(ex), "status_code": 500}
+            return {"message": str(ex), "status_code": 500}
 
-        return {"response": str(response), "status_code": 200}
+        return {"message": str(response), "status_code": 200}
 
     @docker_ping
     def remove(name):
@@ -80,9 +80,9 @@ class docker_py():
             container.remove()
         except Exception as ex:
             logger.exception("Failed to remove container.")
-            return {"response": str(ex), "status_code": 500}
+            return {"message": str(ex), "status_code": 500}
 
-        return {"response": "done", "status_code": 200}
+        return {"message": "done", "status_code": 200}
 
     @docker_ping
     def run(image, name, ports={}, volumes={}, detach=True, network='lbsystem',
@@ -110,14 +110,14 @@ class docker_py():
                                              command=command)
         except Exception as ex:
             logger.exception("Failed to run container.")
-            return {"response": str(ex), "status_code": 500}
+            return {"message": str(ex), "status_code": 500}
 
-        return {"response": str(response), "status_code": 200}
+        return {"message": str(response), "status_code": 200}
 
     @docker_ping
     def status(name):
         try:
             container = client.containers.get(name)
         except docker.errors.NotFound:
-            return {"response": False, "status_code": 200}
-        return {"response": str(container.status), "status_code": 200}
+            return {"message": False, "status_code": 200}
+        return {"message": str(container.status), "status_code": 200}

@@ -60,7 +60,8 @@ def check_supervisor(supervisor_retries, timeout):
             else:
                 abort(supervisor_status.status_code,
                       status=supervisor_status.status_code,
-                      message='Supervisor returned error code.')
+                      message='Supervisor returned error code.',
+                      error=str(supervisor_status.text))
 
         except Exception as ex:
             logger.info(f'Waiting for Balena Supervisor to be ready. '
@@ -68,7 +69,8 @@ def check_supervisor(supervisor_retries, timeout):
 
             if retry == supervisor_retries:
                 abort(408, status=408,
-                      message=str(ex))
+                      message='Supervisor unavailable.',
+                      error=str(ex))
 
             time.sleep(2)
             retry = retry + 1
@@ -117,18 +119,20 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
             )
     except Exception as ex:
         logger.exception("Curl request timed out.")
-        abort(408, status=408,
-              message=str(ex))
+        abort(408,
+              status=408,
+              message='Curl request failed',
+              error=str(ex))
 
     # Check if response is JSON and if not return it as text
     try:
         response.json()
     except Exception:
-        return {"status_code": response.status_code, "text": response.text}
+        return {"status_code": response.status_code, "message": response.text}
 
     logger.debug(f"Curl request: {response.status_code}")
 
-    return {"status_code": response.status_code, "text": response.text,
+    return {"status_code": response.status_code, "message": response.text,
             "json_response": response.json()}
 
 

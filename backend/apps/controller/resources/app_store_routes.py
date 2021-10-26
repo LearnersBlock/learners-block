@@ -23,7 +23,10 @@ class appstore_get_apps(Resource):
 
         except Exception as ex:
             logger.exception("Failed loading app list.")
-            abort(408, status=408, message='error', error=str(ex))
+            abort(408,
+                  status=408,
+                  message='Failed to fetch apps.',
+                  error=str(ex))
 
         update_existing_app_status(app_list)
 

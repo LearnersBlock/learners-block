@@ -31,7 +31,7 @@ class supervisor_host_config(Resource):
 
         return {
             'status': response["status_code"],
-            'message': response["text"]
+            'message': response["message"]
         }, response["status_code"]
 
 
@@ -42,7 +42,7 @@ class supervisor_journal_logs(Resource):
                         string='("follow", "false", "all", "true", \
                             "format", "short")')
 
-        return response["text"], response["status_code"]
+        return response["message"], response["status_code"]
 
 
 class supervisor_update(Resource):
@@ -54,7 +54,7 @@ class supervisor_update(Resource):
                         string='("force", "true")')
 
         return {'status': response["status_code"],
-                'message': response["text"]}, response["status_code"]
+                'message': response["message"]}, response["status_code"]
 
 
 class supervisor_uuid(Resource):
