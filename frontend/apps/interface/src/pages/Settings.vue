@@ -1446,30 +1446,36 @@ export default defineComponent({
       if (newHostname.value) {
         hostnameChanging.value = true
 
-        const hostnameResult = Axios.post(`${api.value}/v1/supervisor/host_config`, {
-          hostname: newHostname.value
-        })
-        const ssidResult = Axios.post(`${api.value}/v1/wifi/set_ssid`, {
-          ssid: newHostname.value
-        })
+        // Change the hostname first to ensure success before changing Wi-Fi SSID. Otherwise
+        // if the hostname change fails, the two will be out of sync. The chances of Wi-Fi
+        // SSID failing are significantly less than the hostname.
 
-        Promise.all([hostnameResult, ssidResult]).then(function () {
-          $q.notify({
-            type: 'positive',
-            message: t('hostname_changed_notification'),
-            timeout: 0,
-            actions: [
-              {
-                label: t('close'),
-                color: 'white',
-                handler: () => { /* ... */ }
-              }
-            ]
+        // Submit request for hostname change
+        Axios.post(`${api.value}/v1/supervisor/host_config`, {
+          hostname: newHostname.value
+        }).then(function () {
+          // If the hostname change is successful, request change for Wi-Fi SSID
+          Axios.post(`${api.value}/v1/wifi/set_ssid`, {
+            ssid: newHostname.value
+          }).then(function () {
+            // Add delay before returning response to ensure hostname has had time to apply
+            setTimeout(() => {
+            // If Wi-Fi SSID also successful, return success message
+              $q.notify({
+                type: 'positive',
+                message: t('hostname_changed_notification'),
+                timeout: 0,
+                actions: [
+                  {
+                    label: t('close'),
+                    color: 'white',
+                    handler: () => { /* ... */ }
+                  }
+                ]
+              })
+              hostnameChanging.value = false
+            }, 5000)
           })
-          // Add delay before returning response to ensure hostname has had time to apply
-          setTimeout(() => {
-            hostnameChanging.value = false
-          }, 5000)
         })
       }
     }

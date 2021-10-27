@@ -150,7 +150,8 @@ def database_recover():
         # If the container hostname is not the default, remove
         # the run.pid to false it back to default on next boot
         if container_hostname is not config.default_hostname:
-            os.remove('/app/db/run.pid')
+            hostname_reset()
+
     except Exception:
         logger.exception('Failed to delete run.pid. Continuing...')
         pass
@@ -177,6 +178,14 @@ def get_secret_key():
             secrets_file.write("SECRET_KEY = " + secrets.token_hex(32))
     key = dotenv_values("./db/.secret_key")
     return key["SECRET_KEY"]
+
+
+def hostname_reset():
+    # Remove run.pid to force reset of hostname
+    try:
+        os.remove('/app/db/run.pid')
+    except Exception:
+        logger.exception('Failed deleting run.pid')
 
 
 def human_size(nbytes):
