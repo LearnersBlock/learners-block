@@ -39,6 +39,21 @@ export default route<StateInterface>(function ({ store }) {
     )
   })
 
+  function notifyError (message) {
+    Notify.create({
+      type: 'negative',
+      message: message,
+      timeout: 0,
+      actions: [
+        {
+          label: `${i18n.global.t('close')}`,
+          color: 'white',
+          handler: () => { /* ... */ }
+        }
+      ]
+    })
+  }
+
   axios.defaults.withCredentials = true
 
   Router.beforeResolve((to, _from, next) => {
@@ -79,7 +94,10 @@ export default route<StateInterface>(function ({ store }) {
     return response
   }, async function (error) {
     if (error.response) {
-      // If an auth error
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+
+      // If an auth related error
       if (error.response.status === 401 || error.response.status === 422) {
         const overrideResponse = ref<any>()
         // Try logging in again in case of a token timeout and no password set
@@ -89,7 +107,7 @@ export default route<StateInterface>(function ({ store }) {
           delete originalRequestConfig.headers.Authorization
           // Retry request with new Auth header
           overrideResponse.value = await AxiosOverride(originalRequestConfig).catch(() => {
-            Notify.create({ type: 'negative', message: i18n.global.t('error') })
+            notifyError(i18n.global.t('error'))
           })
         }).catch(() => {
           Router.replace({ name: 'login', params: { data: Router.currentRoute.value.fullPath } })
@@ -108,12 +126,24 @@ export default route<StateInterface>(function ({ store }) {
         }
       // If a non-auth related error code, report an error
       } else {
-        if (error && error.response) {
-          console.log(error.response)
-          Notify.create({ type: 'negative', message: `${i18n.global.t('error')} ${error.response.data.message}` })
+        console.log(error.response)
+        if (error.response.data.message) {
+          notifyError(`${i18n.global.t('error')} ${error.response.data.message}`)
+        } else {
+          notifyError(`${i18n.global.t('error')} ${error.response.statusText}`)
         }
-        return Promise.reject(error)
       }
+      return Promise.reject(error)
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      console.log(error.request)
+      notifyError(`${i18n.global.t('error')}`)
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log('Error', error.message)
+      notifyError(`${i18n.global.t('error')} ${error.message}`)
     }
   })
   return Router
