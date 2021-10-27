@@ -93,7 +93,7 @@ class docker_run(Resource):
                                      network=content["name"],
                                      detach=True)
 
-                logger.info(deps["message"])
+                logger.debug(deps["message"])
 
         # Run the primary container
         response = docker_py.run(env_vars=content["env_vars"],

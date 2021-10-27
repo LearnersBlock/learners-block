@@ -11,7 +11,7 @@ try:
     else:
         client = docker.DockerClient(base_url='unix://var/run/docker.sock')
 except Exception:
-    logger.error('Docker socket is missing.')
+    logger.error('Docker socket is unavailable.')
     pass
 
 
@@ -22,7 +22,7 @@ def docker_ping(func):
             client.ping()
             return func(*args, **kwargs)
         except docker.errors.APIError:
-            logger.error('Docker UNIX socket is unreachable.')
+            logger.exception('Docker UNIX socket is unreachable.')
             abort(502,
                   status=502,
                   message='Docker service is unreachable.',)
@@ -32,16 +32,19 @@ def docker_ping(func):
 class docker_py():
     @docker_ping
     def image_status(image):
-        if client.images.list(image):
-            return True
-        else:
-            return False
+        try:
+            if client.images.list(image):
+                return True
+            else:
+                return False
+        except docker.errors.APIError:
+            logger.exception('Failed getting image status.')
 
     @docker_ping
     def prune(image, network=None):
         try:
             client.images.remove(image=image)
-        except docker.errors.ImageNotFound:
+        except Exception:
             # If image was never downloaded then continue
             pass
 
@@ -72,6 +75,9 @@ class docker_py():
                                      ports=ports,
                                      volumes=volumes,
                                      network=network)
+        except docker.errors.NotFound as ex:
+            logger.exception("Docker image not found.")
+            return {"message": str(ex), "status_code": 500}
         except Exception as ex:
             logger.exception("Failed to pull container.")
             return {"message": str(ex), "status_code": 500}
@@ -84,6 +90,9 @@ class docker_py():
             container = client.containers.get(name)
             container.stop()
             container.remove()
+        except docker.errors.NotFound as ex:
+            logger.exception("Docker image not found.")
+            return {"message": str(ex), "status_code": 500}
         except Exception as ex:
             logger.exception("Failed to remove container.")
             return {"message": str(ex), "status_code": 500}
@@ -114,6 +123,12 @@ class docker_py():
                                              network=network,
                                              restart_policy={"Name": "always"},
                                              command=command)
+        except docker.errors.ContainerError as ex:
+            logger.exception("Container exited with non-zero code.")
+            return {"message": str(ex), "status_code": 500}
+        except docker.errors.ImageNotFound as ex:
+            logger.exception("Docker image not found.")
+            return {"message": str(ex), "status_code": 500}
         except Exception as ex:
             logger.exception("Failed to run container.")
             return {"message": str(ex), "status_code": 500}
