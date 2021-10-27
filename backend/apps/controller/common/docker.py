@@ -7,9 +7,11 @@ try:
     # Import relevant UNIX path
     if os.environ['FLASK_ENV'].lower() == "production":
         client = \
-            docker.DockerClient(base_url='unix://var/run/balena-engine.sock')
+            docker.DockerClient(base_url='unix://var/run/balena-engine.sock',
+                                tls=False)
     else:
-        client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+        client = docker.DockerClient(base_url='unix://var/run/docker.sock',
+                                     tls=False)
 except Exception:
     logger.error('Docker socket is unavailable.')
     pass
