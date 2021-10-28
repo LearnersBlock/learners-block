@@ -26,14 +26,14 @@ class wifi_connect(Resource):
                                username=content["username"],
                                password=content["passphrase"])
 
-        return {'status': 200, 'message': 'Accepted'}, 200
+        return {'status': 200, 'message': 'Accepted'}
 
 
 class wifi_connection_status(Resource):
     def get(self):
         return {'status': 200,
                 'wifi': check_connection(),
-                'internet': check_internet()}, 200
+                'internet': check_internet()}
 
 
 class wifi_forget(Resource):
@@ -94,7 +94,7 @@ class wifi_set_password(Resource):
 
         logger.info(f'Wi-Fi password set to {content["wifi_password"]}')
 
-        return {'message': 'success'}, 200
+        return {'message': 'success'}
 
 
 class wifi_set_ssid(Resource):
@@ -113,4 +113,4 @@ class wifi_set_ssid(Resource):
         lb_database.wifi_ssid = content["ssid"]
         lb_database.save_to_db()
 
-        return {'message': 'success'}, 200
+        return {'message': 'success'}

@@ -34,7 +34,7 @@ def log_request(self, *args, **kwargs):
 class system_health_check(Resource):
     def get(self):
         serving.WSGIRequestHandler.log_request = log_request
-        return {'status': 200, 'message': 'ok'}, 200
+        return {'status': 200, 'message': 'ok'}
 
 
 class system_hostname(Resource):
@@ -42,7 +42,7 @@ class system_hostname(Resource):
         device_hostname = curl(method="get",
                                path="/v1/device/host-config?apikey=")
 
-        logger.debug(f'System hostname is {device_hostname}')
+        logger.debug(f'System hostname status: {device_hostname}')
 
         return {
             'status': 200,
@@ -50,7 +50,7 @@ class system_hostname(Resource):
             ["network"]
             ["hostname"],
             'message': "OK"
-        }, 200
+        }
 
 
 class system_info(Resource):
@@ -101,8 +101,7 @@ class system_portainer(Resource):
 
             logger.debug(f'Portainer status: {container_status}')
 
-            return {"installed": container_status["message"]}, \
-                container_status["status_code"]
+            return {"installed": container_status}
 
         elif content['cmd'] == 'remove':
             # Remove the container (but not the image)
@@ -110,20 +109,17 @@ class system_portainer(Resource):
 
             logger.debug(f'Portainer status: {container_status}')
 
-            return {"installed": container_status["message"]}, \
-                container_status["status_code"]
+            return {"installed": container_status}
 
         elif content['cmd'] == 'status':
             # Fetch container status and check if image exists on the system
             container_status = docker_py.status(name="portainer")
 
-            if container_status['message'] is not False:
-                return {"installed": container_status["message"]}, \
-                        container_status["status_code"]
+            if container_status is not False:
+                return {"installed": container_status}
             else:
                 image_status = docker_py.image_status(portainer_image)
-                return {"installed": False, "image": image_status}, \
-                    container_status["status_code"]
+                return {"installed": False, "image": image_status}
 
 
 class system_prune(Resource):
@@ -139,12 +135,12 @@ class system_prune(Resource):
                 if app.dependencies:
                     json_dep = json.loads(app.dependencies)
                     for dependency in json_dep:
-                        deps = docker_py.prune(image=json_dep
-                                               [dependency]
-                                               ["image"],
-                                               network=app.name)
+                        docker_py.prune(image=json_dep
+                                        [dependency]
+                                        ["image"],
+                                        network=app.name)
             except Exception:
-                logger.exception(deps["message"])
+                logger.exception('Failed pruning app store dependencies.')
 
             docker_py.prune(image=app.image, network=app.name)
 
@@ -154,7 +150,7 @@ class system_prune(Resource):
         except Exception:
             logger.exception("Failed to remove Portainer image.")
 
-        return {'status': 200, 'message': 'done'}, 200
+        return {'status': 200, 'message': 'done'}
 
 
 class system_reset_database(Resource):

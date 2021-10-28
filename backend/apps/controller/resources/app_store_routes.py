@@ -2,10 +2,10 @@ import json
 import requests
 from common.app_store import update_existing_app_status
 from common.app_store import update_new_apps
+from common.errors import AppStoreFetchFailed
 from common.errors import logger
 from common.models import App_Store
 from flask_jwt_extended import jwt_required
-from flask_restful import abort
 from flask_restful import Resource
 
 app_store_url = ("https://raw.githubusercontent.com/"
@@ -21,18 +21,15 @@ class appstore_get_apps(Resource):
             app_list = requests.get(app_store_url,
                                     timeout=8).json()
 
-        except Exception as ex:
-            logger.exception("Failed loading app list.")
-            abort(408,
-                  status=408,
-                  message='Failed to fetch apps.',
-                  error=str(ex))
+        except Exception:
+            logger.exception("Failed fetching app list from Git.")
+            raise AppStoreFetchFailed
 
         update_existing_app_status(app_list)
 
         update_new_apps(app_list)
 
-        return {'message': 'done'}, 200
+        return {'message': 'done'}
 
 
 class appstore_status(Resource):
@@ -67,4 +64,4 @@ class appstore_status(Resource):
             database_entries.append(entry)
 
         # Return a list of all the database entries
-        return database_entries, 200
+        return database_entries

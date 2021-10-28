@@ -2,6 +2,8 @@ import json
 import os
 import shutil
 from common.errors import logger
+from common.errors import FileManagerExtractFail
+from common.errors import FileManagerInvalidString
 from common.processes import human_size
 from flask import request
 from flask_jwt_extended import jwt_required
@@ -60,7 +62,7 @@ class filemanager_delete(Resource):
             elif item['format'] == 'folder':
                 shutil.rmtree(os.path.join(path, item['name']))
             else:
-                return {'message': 'error, invalid type.'}, 500
+                raise FileManagerInvalidString
 
         return {'message': 'success'}
 
@@ -178,6 +180,7 @@ class filemanager_unzip(Resource):
         pid = os.fork()
 
         if pid == 0:
+            # Inside the Fork
             try:
                 os.setuid(65534)
 
@@ -189,11 +192,12 @@ class filemanager_unzip(Resource):
                 os._exit(1)
             os._exit(0)
         else:
+            # Outside the Fork, wait for return code
             _, status = os.waitpid(pid, 0)
             if status == 0:
                 return {'message': 'done', 'new_path': new_path}
             else:
-                return {'message': 'error'}
+                raise FileManagerExtractFail
 
 
 class filemanager_upload(Resource):

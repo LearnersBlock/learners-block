@@ -35,6 +35,7 @@ class download_fetch(Resource):
         try:
             resp = requests.get(url, stream=True, timeout=5)
         except Exception:
+            # As this runs in a thread, no use aborting or raising error
             logger.exception("Failed downloading file.")
             download_stop.get(self, response='failed download')
             return
@@ -44,6 +45,7 @@ class download_fetch(Resource):
             total = int(resp.headers.get('content-length', 0))
         except Exception:
             # If cannot get file length, set to 0 to avoid errors
+            # As this runs in a thread, no use aborting or raising error
             logger.exception("Failed getting content-length.")
             total = 0
 
@@ -66,6 +68,7 @@ class download_fetch(Resource):
                     try:
                         os.remove(filePath)
                     except Exception:
+                        # If none of the was downloaded then continue
                         pass
                     break
                 size = file.write(data)
@@ -90,7 +93,7 @@ class download_fetch(Resource):
         # Reset global var for next use
         download_log = True
 
-        return {'message': 'process complete'}, 200
+        return {'message': 'process complete'}
 
 
 class download_stop(Resource):
@@ -99,7 +102,7 @@ class download_stop(Resource):
         global download_terminated
         download_terminated = response
 
-        return {'status': 200, 'message': 'terminate request sent'}, 200
+        return {'status': 200, 'message': 'terminate request sent'}
 
 
 class download_stream(Resource):
