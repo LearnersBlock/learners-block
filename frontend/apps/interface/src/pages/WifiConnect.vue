@@ -123,6 +123,7 @@
 
 <script lang="ts">
 import Axios from 'axios'
+import { AxiosOverride } from 'src/boot/axios'
 import { useQuasar } from 'quasar'
 import { defineComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -151,7 +152,7 @@ export default defineComponent({
     // Send connect request
     function connect () {
       submitting.value = true
-      Axios.post(`http://${hostname.value}:9090/v1/wifi/connect`, {
+      AxiosOverride.post(`http://${hostname.value}:9090/v1/wifi/connect`, {
         hiddenNetworkName: hiddenNetworkName.value,
         hiddenSecurity: hiddenSecurity.value,
         passphrase: password.value,
@@ -159,9 +160,9 @@ export default defineComponent({
         type: wifiSsid.value.security,
         username: username.value
       }).catch(function (error) {
-        // Only return an error if the request failed to send. A timout
-        // is expected as the device is connecting to a new network
-        if (error.response && !error.request) {
+        // Only return an error if there was a response. A timout
+        // is expected as the device is connecting to a new network.
+        if (error.response) {
           console.log(error)
           $q.notify({
             type: 'negative',
