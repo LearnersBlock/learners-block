@@ -44,7 +44,7 @@ export default defineComponent({
   setup () {
     // Import required features
     const $store = useStore()
-    const hostname = ref<string>('')
+    const hostname = ref<string>()
     const api = computed(() => {
       return $store.getters.GET_API
     })
@@ -54,7 +54,9 @@ export default defineComponent({
     })
 
     const copyUrl = () => {
-      copyToClipboard(hostname.value)
+      if (hostname.value) {
+        copyToClipboard(hostname.value)
+      }
     }
 
     const fetchHostname = async () => {

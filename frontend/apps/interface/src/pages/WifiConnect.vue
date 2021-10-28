@@ -150,9 +150,9 @@ export default defineComponent({
     })
 
     // Send connect request
-    function connect () {
+    async function connect () {
       submitting.value = true
-      AxiosOverride.post(`http://${hostname.value}:9090/v1/wifi/connect`, {
+      await AxiosOverride.post(`http://${hostname.value}:9090/v1/wifi/connect`, {
         hiddenNetworkName: hiddenNetworkName.value,
         hiddenSecurity: hiddenSecurity.value,
         passphrase: password.value,

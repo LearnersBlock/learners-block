@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import time
 from common.errors import logger
 from common.docker import docker_py
 from common.models import App_Store
@@ -70,6 +71,7 @@ class system_portainer(Resource):
     def post(self):
         content = request.get_json()
 
+        # Portainer variables
         name = "portainer"
         ports = {"9000/tcp": 9000, "8000/tcp": 8000}
         privileged = True
@@ -156,6 +158,8 @@ class system_prune(Resource):
 class system_reset_database(Resource):
     @jwt_required()
     def get(self):
+        # Add delay to ensure request is processed.
+        time.sleep(5)
         database_recover()
 
         return {'message': 'Forcing an error to activate polling.'}, 410
