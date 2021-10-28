@@ -1159,9 +1159,9 @@ export default defineComponent({
       await Axios.get(`${api.value}/v1/appstore/get_apps`)
       await Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
         rows.value = availableApps.data
-        appTableVisible.value = true
       }
       )
+      appTableVisible.value = true
     }
 
     function resetDatabase () {
@@ -1189,7 +1189,7 @@ export default defineComponent({
 
         await delay(2000)
         if (xhr.status === 200) {
-          await delay(3000)
+          await delay(7000)
           redirect('/')
           break
         }
@@ -1456,15 +1456,16 @@ export default defineComponent({
       filesLoading.value = false
     }
 
-    const updateHostname = () => {
+    const updateHostname = async () => {
       if (newHostname.value) {
         hostnameChanging.value = true
+        $q.loading.show()
 
         // Change the Wi-Fi SSID first otherwise the container is killed by the hostname
         // change before it can recieve the request.
 
         // Set new Wi-Fi SSID
-        Axios.post(`${api.value}/v1/wifi/set_ssid`, {
+        await Axios.post(`${api.value}/v1/wifi/set_ssid`, {
           ssid: newHostname.value
         }).then(function () {
           // If the Wi-Fi SSID change is successful, request change for hostname.
@@ -1498,6 +1499,7 @@ export default defineComponent({
           })
         })
         hostnameChanging.value = false
+        $q.loading.hide()
       }
     }
 
