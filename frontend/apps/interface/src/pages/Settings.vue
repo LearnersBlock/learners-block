@@ -1115,6 +1115,23 @@ export default defineComponent({
       }
     }
 
+    function notifyConnected () {
+      setTimeout(() => {
+        $q.notify({
+          type: 'positive',
+          message: t('hostname_changed_notification'),
+          timeout: 0,
+          actions: [
+            {
+              label: t('close'),
+              color: 'white',
+              handler: () => { /* ... */ }
+            }
+          ]
+        })
+      }, 10000)
+    }
+
     function pruneSystemFiles () {
       $q.dialog({
         title: t('confirm'),
@@ -1446,24 +1463,30 @@ export default defineComponent({
       if (newHostname.value) {
         hostnameChanging.value = true
 
-        // Change the hostname first to ensure success before changing Wi-Fi SSID. Otherwise
-        // if the hostname change fails, the two will be out of sync. The chances of Wi-Fi
-        // SSID failing are significantly less than the hostname.
+        // Change the Wi-Fi SSID first otherwise the container is killed by the hostname
+        // change before it can recieve the request.
 
-        // Submit request for hostname change
-        Axios.post(`${api.value}/v1/supervisor/host_config`, {
-          hostname: newHostname.value
+        // Set new Wi-Fi SSID
+        Axios.post(`${api.value}/v1/wifi/set_ssid`, {
+          ssid: newHostname.value
         }).then(function () {
-          // If the hostname change is successful, request change for Wi-Fi SSID
-          Axios.post(`${api.value}/v1/wifi/set_ssid`, {
-            ssid: newHostname.value
+          // If the Wi-Fi SSID change is successful, request change for hostname.
+          // Use the AxiosOverride as it is going to timeout when connected via the Wi-Fi hotspot.
+          AxiosOverride.post(`${api.value}/v1/supervisor/host_config`, {
+            hostname: newHostname.value,
+            timeout: 4000
           }).then(function () {
-            // Add delay before returning response to ensure hostname has had time to apply
-            setTimeout(() => {
-            // If Wi-Fi SSID also successful, return success message
+            notifyConnected()
+          }).catch(function (error) {
+            // Return positive message if there was no response. A timout
+            // is expected as the device is connecting to a new network.
+            if (!error.response) {
+              // Add delay before returning response to ensure hostname has had time to apply
+              notifyConnected()
+            } else {
               $q.notify({
-                type: 'positive',
-                message: t('hostname_changed_notification'),
+                type: 'negative',
+                message: t('error'),
                 timeout: 0,
                 actions: [
                   {
@@ -1473,10 +1496,11 @@ export default defineComponent({
                   }
                 ]
               })
-              hostnameChanging.value = false
-            }, 5000)
+              console.log(error)
+            }
           })
         })
+        hostnameChanging.value = false
       }
     }
 

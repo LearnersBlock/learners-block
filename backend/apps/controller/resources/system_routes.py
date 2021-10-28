@@ -47,8 +47,8 @@ class system_hostname(Resource):
         return {
             'status': 200,
             'hostname': device_hostname["json_response"]
-            ["network"]
-            ["hostname"],
+                                       ["network"]
+                                       ["hostname"],
             'message': "OK"
         }
 
