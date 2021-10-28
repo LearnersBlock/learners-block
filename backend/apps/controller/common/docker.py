@@ -138,7 +138,7 @@ class docker_py():
     @docker_ntp_check
     def run(image, name, ports={}, volumes={}, detach=True, network='lbsystem',
             env_vars={}, privileged=False, command='', labels={}):
-        # If network doesn't yet exist, create it
+        # If network doesn't yet exist then create it
         try:
             client.networks.create(network,
                                    driver="bridge",
@@ -159,6 +159,9 @@ class docker_py():
                                              network=network,
                                              restart_policy={"Name": "always"},
                                              command=command)
+        except docker.errors.NotFound:
+            logger.exception("Docker image not found.")
+            raise DockerImageNotFound
         except docker.errors.ContainerError:
             logger.exception("Container exited with non-zero code.")
             raise DockerContainerException
@@ -166,7 +169,7 @@ class docker_py():
             logger.exception("Docker image not found.")
             raise DockerImageNotFound
         except Exception:
-            logger.exception("Failed to run container.")
+            logger.exception("Failed to run container. Unknown error.")
             raise DockerException
 
         return str(response)

@@ -164,6 +164,7 @@ export default defineComponent({
         delay: 300 // ms
       })
       await $store.dispatch('LOGOUT')
+      // Catching errors to facilitate auto login
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       await $router.replace('/').catch(() => {})
       $q.loading.hide()
@@ -173,6 +174,7 @@ export default defineComponent({
       $q.loading.show({
         delay: 300 // ms
       })
+      // Catching errors to facilitate auto login
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       await $router.push('/settings').catch(() => {})
 
