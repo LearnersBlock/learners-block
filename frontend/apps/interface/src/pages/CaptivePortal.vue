@@ -9,7 +9,10 @@
     <div class="text-4xl text-gray-600 text-center mt-2">
       {{ $t('welcome_lb') }}
     </div>
-    <div class="text-xl text-center text-gray-500 mt-2">
+    <div
+      v-if="hostname"
+      class="text-xl text-center text-gray-500 mt-2"
+    >
       <div>
         {{ $t('visit_to_begin') }}
       </div>
