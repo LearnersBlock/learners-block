@@ -87,36 +87,32 @@ def first_launch():
     # Set PID file for monitoring whether there has already been a first boot
     pidfile = "/app/db/run.pid"
 
-    try:
-        pid = str(os.getpid())
+    pid = str(os.getpid())
 
-        container_hostname = subprocess.run(["hostname"],
-                                            capture_output=True,
-                                            check=True,
-                                            text=True).stdout.rstrip()
-        if not os.path.isfile(pidfile):
-            # Run tasks on first launch
-            # Set hostname to default
-            open(pidfile, 'w').write(pid)
+    container_hostname = subprocess.run(["hostname"],
+                                        capture_output=True,
+                                        check=True,
+                                        text=True).stdout.rstrip()
+    if not os.path.isfile(pidfile):
+        # Run tasks on first launch
+        # Set hostname to default
+        open(pidfile, 'w').write(pid)
 
-            logger.info('Created first launch PID.')
+        logger.info('Created first launch PID.')
 
-            if container_hostname != config.default_hostname:
-                curl(method="patch",
-                     path="/v1/device/host-config?apikey=",
-                     string='{"network": {"hostname": "%s"}}' %
-                     (config.default_hostname),
-                     supervisor_retries=20)
+        if container_hostname != config.default_hostname:
+            curl(method="patch",
+                 path="/v1/device/host-config?apikey=",
+                 string='{"network": {"hostname": "%s"}}' %
+                 (config.default_hostname),
+                 supervisor_retries=20)
 
-                logger.info('Set hostname on first boot. Restarting.')
+            logger.info('Set hostname on first boot. Restarting.')
 
-                curl(method="post-json",
-                     path="/v1/reboot?apikey=",
-                     string='("force", "true")',
-                     supervisor_retries=20)
-    except Exception:
-        logger.error('Error in first launch boot process.')
-        # Continuing to allow boot for debugging.
+            curl(method="post-json",
+                 path="/v1/reboot?apikey=",
+                 string='("force", "true")',
+                 supervisor_retries=20)
 
 
 # Create Flask app instance
@@ -159,14 +155,18 @@ if __name__ == '__main__':
         signal.signal(signal.SIGTERM, handle_sigterm)
 
         # Check if first launch
-        first_launch()
+        try:
+            first_launch()
+        except Exception:
+            logger.error('Error in first launch boot process.')
+            # Continuing to allow boot for debugging.
 
         # Execute startup processes
         try:
             startup()
         except Exception:
             logger.exception('Fail on startup.')
-            # Allowing API still still come up for debugging
+            # Allowing API to still come up for debugging
     else:
         # Import development routes
         from resources.dev_routes import supervisor_device, \
