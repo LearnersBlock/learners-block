@@ -255,7 +255,7 @@
               <!-- Zip button -->
               <q-btn
                 v-if="loginState && $q.screen.gt.sm && (props.row.extension == '.zip' || props.row.extension == '.gz')"
-                class="ml-1"
+                class="ml-2"
                 :loading="unzipLoading"
                 round
                 outline

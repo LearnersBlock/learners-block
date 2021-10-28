@@ -99,7 +99,7 @@
             :to="{ name: 'library' }"
           >
             <q-tooltip
-              v-if="!internet"
+              v-if="!internet && !wifiLoading"
               class="text-caption text-center"
               anchor="top middle"
               self="center middle"
@@ -373,6 +373,7 @@
               round
               size="xs"
               icon="refresh"
+              :disable="wifiLoading"
               @click="internet ? refreshApps(): $q.notify({ type: 'negative', message: $t('need_connection') })"
             />
           </template>
@@ -971,6 +972,7 @@ export default defineComponent({
       apiCall()
     })
 
+    // Populate variables on first load of page
     function apiCall () {
       // API calls for Axios spread
       const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connection_status`)
@@ -1049,6 +1051,7 @@ export default defineComponent({
       })
     }
 
+    // Set the page a user will see on first load
     const changeStartPage = () => {
       if (startPage.value === t('lb_welcome_page') || startPage.value === t('file_manager') || startPage.value === t('library') || startPage.value === t('website')) {
         customStartPageInput.value = false
@@ -1065,10 +1068,17 @@ export default defineComponent({
       storeStartPage(null)
     }
 
-    const connectDisconnectWifi = async () => {
+    // Function for calling delays throughout
+    function delay (ms: number) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+
+    // Forget current Wi-Fi connection
+    const disconnectWifi = async () => {
       await Axios.get(`${api.value}/v1/wifi/forget`)
     }
 
+    // Fetch a list of apps as stored in the local database. Does not query the online database
     async function fetchApps () {
       appTableVisible.value = false
       await Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
@@ -1078,10 +1088,7 @@ export default defineComponent({
       )
     }
 
-    function delay (ms: number) {
-      return new Promise(resolve => setTimeout(resolve, ms))
-    }
-
+    // Verify that the user wants to change the hostname
     function hostnameWarn () {
       if (hostnameValid.value.validate() && newHostname.value !== '') {
         $q.dialog({
@@ -1097,6 +1104,8 @@ export default defineComponent({
       }
     }
 
+    // When changing the default start path of the device, warn the user and inform
+    // how to undo the change
     function newStartPathWarn () {
       if (startPathValid.value.validate() && newStartPath.value !== '') {
         $q.dialog({
@@ -1115,6 +1124,7 @@ export default defineComponent({
       }
     }
 
+    // Notify that the hostname has been changed
     function notifyConnected () {
       setTimeout(() => {
         $q.notify({
@@ -1132,6 +1142,7 @@ export default defineComponent({
       }, 10000)
     }
 
+    // Remove unused system files such as Docker images
     function pruneSystemFiles () {
       $q.dialog({
         title: t('confirm'),
@@ -1150,10 +1161,12 @@ export default defineComponent({
       })
     }
 
+    // A simple redirect to another page
     function redirect (path) {
       location.href = path
     }
 
+    // Fetch list of new apps from the online database and update local databse
     async function refreshApps () {
       appTableVisible.value = false
       await Axios.get(`${api.value}/v1/appstore/get_apps`)
@@ -1164,6 +1177,7 @@ export default defineComponent({
       appTableVisible.value = true
     }
 
+    // Reset the SQLite database
     function resetDatabase () {
       $q.dialog({
         title: t('confirm'),
@@ -1180,6 +1194,8 @@ export default defineComponent({
       })
     }
 
+    // Check for when the API is back up after the SQLite database reset, and when ready forward
+    // user back to first page
     async function resetDatabaseLoop () {
       for (let i = 0; i < 10; i++) {
         const xhr = new XMLHttpRequest()
@@ -1197,6 +1213,7 @@ export default defineComponent({
       $q.notify({ type: 'positive', message: t('api_down') })
     }
 
+    // Set the custom start page menu to the currently selected start page
     function setStartPage () {
       if (currentStartPage.value === '/') {
         startPage.value = t('lb_welcome_page')
@@ -1216,6 +1233,7 @@ export default defineComponent({
       }
     }
 
+    // Change the password used to access the Control Panel (also known as the settings panel)
     function setLoginPassword () {
       if (loginPasswordStatus.value) {
         $q.dialog({
@@ -1259,6 +1277,7 @@ export default defineComponent({
       }
     }
 
+    // Set a password for accessing the Wi-Fi
     function setWifiPassword () {
       if (wifiPasswordStatus.value) {
         $q.dialog({
@@ -1304,6 +1323,7 @@ export default defineComponent({
       }
     }
 
+    // Commit the passed start page to the database
     async function storeStartPage (rows) {
       if (startPage.value === t('lb_welcome_page')) {
         await Axios.post(`${api.value}/v1/settings/set_ui`, {
@@ -1346,6 +1366,7 @@ export default defineComponent({
       }
     }
 
+    // Toggle through the various states for the passed application (install, installed, update etc.)
     function toggleApp (row) {
       if (row.status.toLowerCase() === 'install') {
         if (!internet.value) {
@@ -1448,6 +1469,7 @@ export default defineComponent({
       }
     }
 
+    // Update files toggle
     const updateFiles = async () => {
       filesLoading.value = true
       await Axios.post(`${api.value}/v1/settings/set_ui`, {
@@ -1456,6 +1478,7 @@ export default defineComponent({
       filesLoading.value = false
     }
 
+    // Update the Wi-Fi SSID and Hostname
     const updateHostname = async () => {
       if (newHostname.value) {
         hostnameChanging.value = true
@@ -1503,6 +1526,7 @@ export default defineComponent({
       }
     }
 
+    // Update library toggle
     const updateLibrary = async () => {
       libraryLoading.value = true
       await Axios.post(`${api.value}/v1/settings/set_ui`, {
@@ -1511,6 +1535,7 @@ export default defineComponent({
       libraryLoading.value = false
     }
 
+    // Toggle between Portainer being enabled or disabled
     const updatePortainer = async () => {
       portainerLoading.value = true
       if (portainer.value) {
@@ -1533,6 +1558,7 @@ export default defineComponent({
       portainerLoading.value = false
     }
 
+    // Update website toggle
     const updateWebsite = async () => {
       websiteLoading.value = true
       await Axios.post(`${api.value}/v1/settings/set_ui`, {
@@ -1541,6 +1567,7 @@ export default defineComponent({
       websiteLoading.value = false
     }
 
+    // Warn before setting a password for the Wi-Fi hotspot
     function wifiWarn () {
       if (wifi.value === false) {
         $router.push('/wifi')
@@ -1552,7 +1579,7 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           wifiLoading.value = true
-          connectDisconnectWifi()
+          disconnectWifi()
           // Add delay to improve user interaction
           setTimeout(() => {
             wifi.value = false
