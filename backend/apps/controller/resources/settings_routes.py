@@ -20,7 +20,7 @@ class settings_get_ui(Resource):
                 'library': lb_database.library,
                 'website': lb_database.website,
                 'start_page': lb_database.start_page,
-                'wifi_password_set': wifi_password}, 200
+                'wifi_password_set': wifi_password}
 
 
 class settings_set_ui(Resource):
@@ -37,4 +37,4 @@ class settings_set_ui(Resource):
 
         lb_database.save_to_db()
 
-        return {'message': 'done'}, 200
+        return {'message': 'done'}

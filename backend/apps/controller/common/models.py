@@ -22,7 +22,7 @@ def init_database():
             db.session.add(lb_database)
             db.session.commit()
     except Exception:
-        logger.exception("Database error. Trying to recover.")
+        logger.exception("Database error during initialisation.")
         database_recover()
 
 

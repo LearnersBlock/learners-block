@@ -31,11 +31,9 @@ def dnsmasq():
 
     try:
         subprocess.Popen(args)
-    except Exception as ex:
+    except Exception:
         logger.exception('Failed to start dnsmasq.')
-        return ex
-
-    return True
+        # Allow pass to facilitate software updates
 
 
 def handle_exit(*args):
@@ -57,28 +55,17 @@ def launch_wifi(self):
     time.sleep(10)
 
     # Check if already connected to Wi-Fi
-    try:
-        connected = check_connection()
-    except Exception:
-        logger.exception('Error checking wifi connection. Starting \
-            wifi-connect in order to allow debugging')
-        connected = None
+    connected = check_connection()
 
     # If not connected, start Wi-Fi-Connect
     if not connected:
-        try:
-            # Launch Wi-Fi Connect
-            wifi.start_hotspot()
-            logger.info("Api-v1 - API Started - Launched wifi-connect.")
-        except Exception:
-            logger.exception('Wifi-connect failed to launch')
+        wifi.start_hotspot()
+        logger.info("Api-v1 - API Started - Launched wifi-connect.")
 
     # If internet available (Ethernet or Wi-Fi) request update
     if check_internet():
         try:
             supervisor_update().get()
-            logger.info('Api-v1 - API Started - Internet available, '
-                        'software update request made.')
         except Exception:
             logger.exception('Software update failed.')
 
@@ -107,20 +94,15 @@ def startup():
             time.sleep(30)
 
     except Exception:
-        logger.exception('Failed to compare hostnames, starting anyway.')
+        logger.exception('Failed to compare hostnames.')
+        # Starting anyway to allow debugging
 
     # Start dnsmasq permanently
-    start_dnsmasq = dnsmasq()
-    if start_dnsmasq is not True:
-        logger.info("dnsmasq failed to start. " + start_dnsmasq)
+    dnsmasq()
 
     # Start the launch_wifi process as a thread to avoid delays
     # to booting device
-    try:
-        wifi_thread = threading.Thread(target=launch_wifi,
-                                       args=(1,),
-                                       name='wifi_thread')
-        wifi_thread.start()
-
-    except Exception:
-        logger.exception("Failed during wifi_thread. Continuing for debug.")
+    wifi_thread = threading.Thread(target=launch_wifi,
+                                   args=(1,),
+                                   name='wifi_thread')
+    wifi_thread.start()

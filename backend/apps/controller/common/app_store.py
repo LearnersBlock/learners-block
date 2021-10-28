@@ -55,7 +55,7 @@ def update_existing_app_status(app_list):
                 try:
                     os.remove(os.path.realpath('.') + db_entry.logo)
                 except FileNotFoundError:
-                    logger.exception("Failed deleting image.")
+                    logger.exception("Failed deleting logo, logo not found.")
 
             # Remove the application entry from local database
             App_Store.query.filter_by(name=db_entry.name).delete()

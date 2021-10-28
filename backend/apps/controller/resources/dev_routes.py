@@ -31,7 +31,7 @@ def wifi_toggle():
 
 class supervisor_device(Resource):
     def get(self):
-        return {'message': 'output'}, 200
+        return {'message': 'output'}
 
 
 class supervisor_host_config(Resource):
@@ -48,7 +48,7 @@ class supervisor_host_config(Resource):
             'status': 200,
             'message': "Hostname/Wi-Fi SSID changed"
             f"to '{content['hostname']}'"
-        }, 200
+        }
 
 
 class system_hostname(Resource):
@@ -59,7 +59,7 @@ class system_hostname(Resource):
             'status': 200,
             'hostname': container_hostname,
             'message': "OK"
-        }, 200
+        }
 
 
 class supervisor_journal_logs(Resource):
@@ -90,7 +90,7 @@ class wifi_connection_status(Resource):
         global wifistatus
         time.sleep(1.5)
         return {'status': 200, 'wifi': wifistatus,
-                'internet': check_internet()}, 200
+                'internet': check_internet()}
 
 
 class wifi_forget(Resource):
@@ -155,7 +155,7 @@ class wifi_set_password(Resource):
         lb_database.wifi_password = content["wifi_password"]
         lb_database.save_to_db()
 
-        return {'status': 200, 'running': 'success'}, 200
+        return {'status': 200, 'running': 'success'}
 
 
 class wifi_set_ssid(Resource):
@@ -176,4 +176,4 @@ class wifi_set_ssid(Resource):
 
         logger.info(f"Wi-Fi SSID changed to '{content['ssid']}'")
 
-        return {'status': 200, 'running': 'success'}, 200
+        return {'status': 200, 'running': 'success'}

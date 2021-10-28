@@ -4,6 +4,7 @@ import subprocess
 import time
 import uuid
 from common.errors import logger
+from common.errors import WifiApFail
 from common.models import User
 from run import app
 
@@ -22,8 +23,8 @@ class wifi:
                       conn_name=config.ap_name):
 
         if conn_type is None or ssid is None:
-            logger.error("Missing arg conn_type.")
-            return False
+            logger.error("Missing arguments conn_type and/or ssid.")
+            raise WifiApFail
 
         # Remove existing HOTSPOT if it exists and set vars for new hotspot
         if conn_type == config.type_hotspot:
@@ -110,7 +111,7 @@ class wifi:
                 conn_dict = enterprise_dict
             else:
                 logger.error("Invalid conn_type.")
-                return False
+                raise WifiApFail
 
             NetworkManager.Settings.AddConnection(conn_dict)
             logger.info(f"Added connection of type {conn_type}")
@@ -132,7 +133,7 @@ class wifi:
                     break
             else:
                 logger.error(f"No suitable and available {ctype} device found")
-                return False
+                raise WifiApFail
 
             # Connect
             NetworkManager.NetworkManager.ActivateConnection(conn, dev, "/")
@@ -153,9 +154,7 @@ class wifi:
 
         except Exception:
             logger.exception("Connection failed.")
-
-        logger.error("Connection failed.")
-        return False
+            raise WifiApFail
 
     def forget(conn_name=config.ap_name):
         # Find and delete the hotspot connection
@@ -215,7 +214,9 @@ class wifi:
     # Return a list of available SSIDs and their security type,
     # or [] for none available or error.
     def list_access_points():
-        # Run IW to reduce chance of empty SSID list
+        # Run IW to reduce chance of empty SSID list. Storing result
+        # to return so that if IW does not work on this device the refresh
+        # button will be disabled.
         refresh_status = wifi.refresh_networks()
 
         # Fetch current hotspot name
@@ -276,17 +277,16 @@ class wifi:
                 ["iw", "dev", "wlan0", "scan"])
             return True
         except subprocess.CalledProcessError:
-            logger.exception("Error refreshing network points")
+            logger.exception("Error refreshing network points.")
+            return False
+        except Exception:
+            logger.exception("Unknown error refreshing networks.")
             return False
 
     def start_hotspot():
         # On some devices, fetching available wifi networks in the area is only
         # possible before the hotspot is started and therefore called here.
-        try:
-            wifi.refresh_networks()
-        except Exception:
-            logger.exception("Error refreshing betwork points. "
-                             "Starting hotspot anyway.")
+        wifi.refresh_networks()
 
         return wifi.connect_to_AP(conn_type=config.type_hotspot,
                                   ssid=wifi.get_hotspot_SSID(),

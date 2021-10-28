@@ -29,10 +29,8 @@ class supervisor_host_config(Resource):
                         string='{"network": {"hostname": "%s"}}' %
                         (hostname))
 
-        return {
-            'status': response["status_code"],
-            'message': response["message"]
-        }, response["status_code"]
+        return {'status': response["status_code"],
+                'message': response["message"]}, response["status_code"]
 
 
 class supervisor_journal_logs(Resource):
@@ -47,7 +45,7 @@ class supervisor_journal_logs(Resource):
 
 class supervisor_update(Resource):
     def get(self):
-        logger.debug('Supervisor update requested')
+        logger.debug('Supervisor update requested.')
 
         response = curl(method="post-json",
                         path="/v1/update?apikey=",

@@ -9,6 +9,8 @@ import socket
 import subprocess
 import time
 from common.errors import logger
+from common.errors import SupervisorCurlFailed
+from common.errors import SupervisorUnreachable
 from dotenv import dotenv_values
 from flask_restful import abort
 
@@ -19,7 +21,8 @@ def check_connection():
                              capture_output=True,
                              text=True).stdout.rstrip()
     except Exception:
-        logger.exception("Failed checking connection. Returning False.")
+        logger.exception("Failed checking connection. Returning False to"
+                         "allow continuing.")
         return False
 
     if run.lower()[:13] == "not connected":
@@ -32,8 +35,10 @@ def check_internet(host="8.8.8.8", port=53, timeout=6):
     try:
         socket.setdefaulttimeout(timeout)
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+        # If there is a connection return True
         return True
     except socket.error:
+        # If there isn't a connection return False
         return False
 
 
@@ -63,14 +68,13 @@ def check_supervisor(supervisor_retries, timeout):
                       message='Supervisor returned error code.',
                       error=str(supervisor_status.text))
 
-        except Exception as ex:
+        except Exception:
             logger.info(f'Waiting for Balena Supervisor to be ready. '
                         f'Retry {str(retry)}.')
 
             if retry == supervisor_retries:
-                abort(408, status=408,
-                      message='Supervisor unavailable.',
-                      error=str(ex))
+                logger.error('Supervisor could not be reached.')
+                raise SupervisorUnreachable
 
             time.sleep(2)
             retry = retry + 1
@@ -80,6 +84,8 @@ def check_supervisor(supervisor_retries, timeout):
 
 def curl(supervisor_retries=8, timeout=5, **cmd):
     check_supervisor(supervisor_retries, timeout)
+
+    logger.debug(f"Curl commands = {cmd}")
 
     # Process curl request
     try:
@@ -117,28 +123,29 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
                 headers={"Content-Type": "application/json"},
                 timeout=timeout
             )
-    except Exception as ex:
-        logger.exception("Curl request timed out.")
-        abort(408,
-              status=408,
-              message='Curl request failed',
-              error=str(ex))
+    except Exception:
+        logger.exception("Supervisor curl request timed out.")
+        raise SupervisorCurlFailed
 
     # Check if response is JSON and if not return it as text
     try:
         response.json()
     except Exception:
-        return {"status_code": response.status_code, "message": response.text}
+        # Return successful JSON response
+        return {"status_code": response.status_code,
+                "message": response.text}
 
     logger.debug(f"Curl request: {response.status_code}")
 
-    return {"status_code": response.status_code, "message": response.text,
+    # Return non-JSON response
+    return {"status_code": response.status_code,
+            "message": response.text,
             "json_response": response.json()}
 
 
 def database_recover():
     # Resetting database
-    logger.warning("Deleting database and restarting.")
+    logger.warning("Database error. Deleting database and restarting.")
 
     try:
         # Get current hostname
@@ -154,7 +161,6 @@ def database_recover():
 
     except Exception:
         logger.exception('Failed to delete run.pid. Continuing...')
-        pass
 
     # Rename the .db file. A new one will be rebuilt fresh on next boot.
     # While this is a drastic step, it ensures devices do not

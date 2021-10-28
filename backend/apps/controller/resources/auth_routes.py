@@ -46,7 +46,7 @@ class auth_log_in(Resource):
 
         if username != lb_database.username or verify_password is not \
                 True:
-            return {"message": "Invalid or password"}, 401
+            return {"message": "Invalid username or password"}, 401
         access_token = create_access_token(identity=username)
         response = jsonify({"message": "login successful",
                             "token": access_token})
@@ -73,7 +73,7 @@ class auth_set_password(Resource):
         lb_database.password = hashed_password
         lb_database.save_to_db()
 
-        return {'message': 'done'}, 200
+        return {'message': 'done'}
 
 
 class auth_verify_login(Resource):
@@ -83,6 +83,7 @@ class auth_verify_login(Resource):
         except Exception:
             return {'logged_in': False}
 
+        # Return logged in status and identity
         return {'logged_in': True, 'user': get_jwt_identity()}
 
 
@@ -95,4 +96,4 @@ class auth_verify_user_password_state(Resource):
         verified_password = User.verify_password(' ',
                                                  lb_database.password)
 
-        return {'default_login_password_set': not verified_password}, 200
+        return {'default_login_password_set': not verified_password}

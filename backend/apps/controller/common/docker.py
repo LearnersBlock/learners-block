@@ -1,6 +1,11 @@
 import docker
 import ntplib
 import os
+from common.errors import DockerContainerException
+from common.errors import DockerException
+from common.errors import DockerImageStatus
+from common.errors import DockerImageNotFound
+from common.errors import DockerSocket
 from common.errors import logger
 from flask_restful import abort
 
@@ -31,7 +36,6 @@ def docker_ntp_check(func):
         except Exception:
             logger.exception('Failed to check time with NTP server.')
             # In event of connection error, allowing Docker to try anyway
-            pass
 
         return func(*args, **kwargs)
 
@@ -51,9 +55,7 @@ def docker_ping(func):
             client.ping()
         except Exception:
             logger.exception('Docker UNIX socket is unreachable.')
-            abort(502,
-                  status=502,
-                  message='Docker service is unreachable.')
+            raise DockerSocket
 
         return func(*args, **kwargs)
 
@@ -70,6 +72,7 @@ class docker_py():
                 return False
         except docker.errors.APIError:
             logger.exception('Failed getting image status.')
+            raise DockerImageStatus
 
     @docker_ping
     def prune(image, network=None):
@@ -88,7 +91,7 @@ class docker_py():
             # Pass if network had already been removed
             pass
 
-        return {"message": "done", "status_code": 200}
+        return True
 
     @docker_ping
     @docker_ntp_check
@@ -107,14 +110,14 @@ class docker_py():
                                      ports=ports,
                                      volumes=volumes,
                                      network=network)
-        except docker.errors.NotFound as ex:
+        except docker.errors.NotFound:
             logger.exception("Docker image not found.")
-            return {"message": str(ex), "status_code": 500}
-        except Exception as ex:
+            raise DockerImageNotFound
+        except Exception:
             logger.exception("Failed to pull container.")
-            return {"message": str(ex), "status_code": 500}
+            raise DockerException
 
-        return {"message": str(response), "status_code": 200}
+        return str(response)
 
     @docker_ping
     def remove(name):
@@ -122,14 +125,14 @@ class docker_py():
             container = client.containers.get(name)
             container.stop()
             container.remove()
-        except docker.errors.NotFound as ex:
+        except docker.errors.NotFound:
             logger.exception("Docker image not found.")
-            return {"message": str(ex), "status_code": 500}
-        except Exception as ex:
+            raise DockerImageNotFound
+        except Exception:
             logger.exception("Failed to remove container.")
-            return {"message": str(ex), "status_code": 500}
+            raise DockerException
 
-        return {"message": "done", "status_code": 200}
+        return True
 
     @docker_ping
     @docker_ntp_check
@@ -156,17 +159,17 @@ class docker_py():
                                              network=network,
                                              restart_policy={"Name": "always"},
                                              command=command)
-        except docker.errors.ContainerError as ex:
+        except docker.errors.ContainerError:
             logger.exception("Container exited with non-zero code.")
-            return {"message": str(ex), "status_code": 500}
-        except docker.errors.ImageNotFound as ex:
+            raise DockerContainerException
+        except docker.errors.ImageNotFound:
             logger.exception("Docker image not found.")
-            return {"message": str(ex), "status_code": 500}
-        except Exception as ex:
+            raise DockerImageNotFound
+        except Exception:
             logger.exception("Failed to run container.")
-            return {"message": str(ex), "status_code": 500}
+            raise DockerException
 
-        return {"message": str(response), "status_code": 200}
+        return str(response)
 
     @docker_ping
     def status(name):
@@ -174,6 +177,6 @@ class docker_py():
             container = client.containers.get(name)
         except docker.errors.NotFound:
             # Returns here if the container does not exist
-            return {"message": False, "status_code": 200}
+            return False
 
-        return {"message": str(container.status), "status_code": 200}
+        return str(container.status)
