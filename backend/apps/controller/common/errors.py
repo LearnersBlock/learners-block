@@ -90,7 +90,7 @@ errors = {
          "status": 502
      },
     "FileManagerExtractFail": {
-         "message": "Failed to .",
+         "message": "Failed to extract archive.",
          "status": 500
      },
     "FileManagerInvalidString": {
