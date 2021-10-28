@@ -103,13 +103,15 @@ export default route<StateInterface>(function ({ store }) {
         // Try logging in again in case of a token timeout and no password set
         await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).then(async () => {
           const originalRequestConfig = error.config
-          // remove old token to force use of new one
+          // Remove old token to force use of new one
           delete originalRequestConfig.headers.Authorization
           // Retry request with new Auth header
           overrideResponse.value = await AxiosOverride(originalRequestConfig).catch(() => {
+            // Should be no reason to reach this error
             notifyError(i18n.global.t('error'))
           })
         }).catch(() => {
+          // If unable to login with default username and password
           Router.replace({ name: 'login', params: { data: Router.currentRoute.value.fullPath } })
           Notify.create({
             type: 'negative',
