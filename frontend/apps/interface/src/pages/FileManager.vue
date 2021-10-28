@@ -139,7 +139,6 @@
                   no-thumbnails
                   with-credentials
                   :readonly="delayUpload"
-                  auto-upload
                   :filter="checkCharacters"
                   :url="api + '/v1/filemanager/upload'"
                   :headers="[{name: 'rootPath', value: rootPath}, {name: 'savePath', value: JSON.stringify(objPath)}, {name: 'Authorization', value: loginToken}]"
@@ -996,7 +995,8 @@ export default defineComponent({
 
     async function uploadFailed (response) {
       if (response.xhr.status === 401) {
-        await $router.replace('/login')
+        $q.notify({ type: 'negative', message: t('login_again') })
+        await $router.replace('/settings')
       } else {
         $q.notify({ type: 'negative', message: t('error') })
       }
