@@ -332,7 +332,7 @@
           wrap-cells
           :loading="!appTableVisible"
           :rows="rows"
-          :rows-per-page-options="[5, 10, 20, 0]"
+          :rows-per-page-options="[10, 20, 0]"
           :grid="$q.screen.xs"
           :no-data-label="$t('no_apps_to_display')"
           :no-results-label="$t('no_apps_to_display')"
@@ -402,7 +402,13 @@
                   color="primary"
                   :label="$t(props.value)"
                   @click="toggleApp(props.row)"
-                />
+                >
+                  <q-badge
+                    v-if="props.row.status == 'update_available'"
+                    color="accent"
+                    floating
+                  />
+                </q-btn>
               </div>
             </q-td>
           </template>
@@ -453,7 +459,13 @@
                     color="primary"
                     :label="$t(props.row.status)"
                     @click="toggleApp(props.row)"
-                  />
+                  >
+                    <q-badge
+                      v-if="props.row.status == 'update_available'"
+                      color="accent"
+                      floating
+                    />
+                  </q-btn>
                 </q-list>
               </q-card>
             </div>
