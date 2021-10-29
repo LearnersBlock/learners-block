@@ -857,7 +857,7 @@
         </div>
         <div
           v-if="!sysInfoLoading"
-          class="flex flex-col text-center text-gray pb-5 text-caption text-gray-600"
+          class="flex flex-col text-center text-gray pb-5 items-center text-caption text-gray-600"
         >
           <div>
             {{ $t('total_storage') }} {{ sysInfo.storage.total }}
@@ -867,6 +867,36 @@
           </div>
           <div>
             {{ $t('version') }} {{ sysInfo.versions.lb }}
+          </div>
+          <div
+            v-if="!wifiLoading"
+            class="row"
+          >
+            <q-icon
+              v-if="devMode"
+              class="mr-1"
+              color="primary"
+              name="developer_mode"
+              size="xs"
+            />
+            <q-icon
+              v-if="internet && !wifi"
+              class="mr-1"
+              color="primary"
+              name="cable"
+              size="xs"
+            />
+            <q-icon
+              class="mr-1"
+              :color="wifi ? 'primary' : 'accent'"
+              :name="wifi ? 'wifi' : 'wifi_off'"
+              size="xs"
+            />
+            <q-icon
+              :color="internet ? 'primary' : 'accent'"
+              :name="internet ? 'public' : 'public_off'"
+              size="xs"
+            />
           </div>
         </div>
         <div
@@ -903,6 +933,7 @@ export default defineComponent({
     const appTableVisible = ref(false)
     const currentStartPage = ref<any>()
     const customStartPageInput = ref<boolean>(false)
+    const devMode = ref<boolean>(false)
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(true)
     const hostnameChanging = ref<boolean>(false)
@@ -1031,6 +1062,7 @@ export default defineComponent({
         files.value = res1.data.files
         website.value = res1.data.website
         library.value = res1.data.library
+        devMode.value = res1.data.dev_mode
 
         // Check if disable wifi password button should be visible
         if (res1.data.wifi_password_set) {
@@ -1626,6 +1658,7 @@ export default defineComponent({
       changeStartPage,
       columns,
       customStartPageInput,
+      devMode,
       files,
       filesLoading,
       hostnameChanging,
