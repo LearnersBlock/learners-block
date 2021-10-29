@@ -54,11 +54,8 @@ def launch_wifi(self):
     # Delay to allow a pre-configured connection to connect
     time.sleep(10)
 
-    # Check if already connected to Wi-Fi
-    connected = check_connection()
-
     # If not connected, start Wi-Fi-Connect
-    if not connected:
+    if not check_connection():
         wifi.start_hotspot()
         logger.info("Api-v1 - API Started - Launched wifi-connect.")
 

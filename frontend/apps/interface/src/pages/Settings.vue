@@ -105,7 +105,7 @@
               self="center middle"
               :offset="[10, 10]"
             >
-              {{ $t('need_connection') }}
+              {{ $t('need_internet_connection') }}
             </q-tooltip>
             <q-item-section
               top
@@ -374,7 +374,7 @@
               size="xs"
               icon="refresh"
               :disable="wifiLoading"
-              @click="internet ? refreshApps(): $q.notify({ type: 'negative', message: $t('need_connection') })"
+              @click="internet ? refreshApps(): $q.notify({ type: 'negative', message: $t('need_internet_connection') })"
             />
           </template>
           <template
@@ -718,7 +718,7 @@
               self="center middle"
               :offset="[10, 10]"
             >
-              {{ $t('need_connection') }}
+              {{ $t('need_internet_connection') }}
             </q-tooltip>
             <q-item-section
               top
@@ -1382,7 +1382,7 @@ export default defineComponent({
     function toggleApp (row) {
       if (row.status.toLowerCase() === 'install') {
         if (!internet.value) {
-          $q.notify({ type: 'negative', message: t('need_connection') })
+          $q.notify({ type: 'negative', message: t('need_internet_connection') })
           return
         }
         $q.dialog({
@@ -1441,7 +1441,7 @@ export default defineComponent({
         })
       } else if (row.status.toLowerCase() === 'update_available') {
         if (!internet.value) {
-          $q.notify({ type: 'negative', message: t('need_connection') })
+          $q.notify({ type: 'negative', message: t('need_internet_connection') })
           return
         }
         $q.dialog({
