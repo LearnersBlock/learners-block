@@ -1,8 +1,19 @@
 import config
+import os
 from common.models import User
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
+
+
+# Change default logging mode when in development environmnets
+if "BALENA_APP_NAME" in os.environ and \
+        os.environ['BALENA_APP_NAME'].lower() == "lb-dev":
+    dev_mode = True
+elif os.environ['FLASK_ENV'].lower() == "development":
+    dev_mode = True
+else:
+    dev_mode = False
 
 
 class settings_get_ui(Resource):
@@ -20,7 +31,8 @@ class settings_get_ui(Resource):
                 'library': lb_database.library,
                 'website': lb_database.website,
                 'start_page': lb_database.start_page,
-                'wifi_password_set': wifi_password}
+                'wifi_password_set': wifi_password,
+                'dev_mode': dev_mode}
 
 
 class settings_set_ui(Resource):
