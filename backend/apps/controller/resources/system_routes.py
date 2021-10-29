@@ -78,7 +78,7 @@ class system_portainer(Resource):
         labels = {"io.balena.features.balena-socket": "1",
                   "portainer": "hidden"}
 
-        # Mount to standard docker if in dev env
+        # Connect to standard docker if in dev env
         if os.environ['FLASK_ENV'].lower() == "production":
             volumes = \
                 ['/var/run/balena-engine.sock:/var/run/balena-engine.sock',

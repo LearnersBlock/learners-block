@@ -1379,12 +1379,31 @@ export default defineComponent({
     }
 
     // Toggle through the various states for the passed application (install, installed, update etc.)
-    function toggleApp (row) {
+    async function toggleApp (row) {
       if (row.status.toLowerCase() === 'install') {
+        // If the internet is not available, cannot pull images
         if (!internet.value) {
-          $q.notify({ type: 'negative', message: t('need_internet_connection') })
-          return
+          // If the image already exists, it can still install
+          const imageExists = await AxiosOverride.post(`${api.value}/v1/docker/image`, {
+            image: row.image
+          }).then(function (res) {
+            if (res.data.image) {
+              return true
+            } else {
+              return false
+            }
+          }).catch(function () {
+            return false
+          })
+
+          // If the image doesn't exist, exit the function and notify the user
+          if (!imageExists) {
+            $q.notify({ type: 'negative', message: t('need_internet_connection') })
+            return
+          }
         }
+
+        // Prompt user to confirm install
         $q.dialog({
           title: `${t('install')} ${row.long_name}`,
           message: t('are_you_sure'),
