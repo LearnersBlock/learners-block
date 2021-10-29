@@ -15,6 +15,7 @@ from flask_restful import Api as _Api
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended.exceptions import JWTExtendedException
 from jwt.exceptions import PyJWTError
+from resources.docker_routes import docker_image
 from resources.docker_routes import docker_pull
 from resources.docker_routes import docker_remove
 from resources.docker_routes import docker_run
@@ -193,6 +194,7 @@ if __name__ == '__main__':
                      '/v1/auth/verify_user_password_state')
 
     # Docker
+    api.add_resource(docker_image, '/v1/docker/image')
     api.add_resource(docker_pull, '/v1/docker/pull')
     api.add_resource(docker_remove, '/v1/docker/remove')
     api.add_resource(docker_run, '/v1/docker/run')

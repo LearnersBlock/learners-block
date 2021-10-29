@@ -6,6 +6,14 @@ from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
 
+class docker_image(Resource):
+    def post(self):
+        content = request.get_json()
+
+        image_status = docker_py.image_status(content["image"])
+        return {"image": image_status}
+
+
 class docker_pull(Resource):
     @jwt_required()
     def post(self):
