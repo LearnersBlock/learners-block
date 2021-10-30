@@ -207,5 +207,7 @@
     "url_wifi_desc": "Change the URL used to access your Block, and how your Block appears in people's list of Wi-Fi networks.",
     "your_new_url": "Your new url will be:",
     "your_new_ssid": "Your new Wi-Fi SSID will be:",
-    "portainer_desc": "A GUI to manage custom Docker containers on your Block."
+    "portainer_desc": "A GUI to manage custom Docker containers on your Block.",
+    "need_internet_connection": "You need an internet connection to use these features. If you are connected, try refreshing the page.",
+    "api_unavailable": "Your Block is still loading. This page will reload when it is ready."
 }
