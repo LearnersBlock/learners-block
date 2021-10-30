@@ -19,19 +19,16 @@ RUN yarn build
 ## Compile container
 FROM balenalib/%%BALENA_ARCH%%-alpine-python:3.8.10-3.13-20210603
 
-# Install packages #
+# Install SupervisorD
+RUN pip install supervisor==4.2.2 --no-cache-dir
 
-# Add mount dependencies
+# Install packages
 RUN install_packages \
+  # Add USB mount dependencies
   findmnt \
   grep \
-  util-linux
-
-# Install SupervisorD
-RUN pip install supervisor==4.2.2 --no-deps --no-cache-dir
-
-# Install NGINX and PHP-FPM
-RUN install_packages \
+  util-linux \
+  # Install NGINX and PHP-FPM
   curl \
   nginx \
   php8 \

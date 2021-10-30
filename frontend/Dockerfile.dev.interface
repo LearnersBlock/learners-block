@@ -7,14 +7,13 @@ RUN apk add supervisor
 # --------------- ## Mirror of production file ## -------------- #
 # ----------- 'install_packages' switched for 'apk add' --------- #
 
-# Add mount dependencies
+# Install packages
 RUN apk add \
+  # Add USB mount dependencies
   findmnt \
   grep \
-  util-linux 
-  
-# Install NGINX and PHP-FPM
-RUN apk add \
+  util-linux \
+  # Install NGINX and PHP-FPM
   curl \
   nginx \
   php8 \
@@ -35,18 +34,6 @@ RUN apk add \
   php8-xmlreader \
   php8-zlib \
   && rm /etc/nginx/conf.d/default.conf
-
-# Install File Manager dependencies
-RUN apk add \
-  libbz2 \
-  libzip \
-  libcap \
-  openldap-dev \
-  php8-bz2 \
-  php8-fileinfo \
-  php8-ldap \
-  php8-posix \
-  php8-zip
 
 # Set application directory 
 WORKDIR /app/

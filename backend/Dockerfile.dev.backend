@@ -10,7 +10,6 @@ RUN apk add \
   glib \
   iw \
   libffi-dev \
-  musl \
   py3-icu
 
 # Set env variables
