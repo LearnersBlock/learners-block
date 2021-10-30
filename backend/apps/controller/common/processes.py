@@ -2,7 +2,6 @@ import config
 import datetime
 import os
 import requests
-import secrets
 import shutil
 import signal
 import socket
@@ -11,7 +10,6 @@ import time
 from common.errors import logger
 from common.errors import SupervisorCurlFailed
 from common.errors import SupervisorUnreachable
-from dotenv import dotenv_values
 from flask_restful import abort
 
 
@@ -174,16 +172,6 @@ def database_recover():
         os.kill(os.getpid(), signal.SIGTERM)
     except Exception:
         logger.exception("Failed to delete the database.")
-
-
-# Fetch the secret key or generate one if it is absent
-def get_secret_key():
-    # Generate secret key
-    if not dotenv_values("db/.secret_key"):
-        with open('./db/.secret_key', 'w') as secrets_file:
-            secrets_file.write("SECRET_KEY = " + secrets.token_hex(32))
-    key = dotenv_values("./db/.secret_key")
-    return key["SECRET_KEY"]
 
 
 def hostname_reset():
