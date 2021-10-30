@@ -1,11 +1,14 @@
 ## Build Python packages to avoid need for builds in main image
 FROM balenalib/%%BALENA_ARCH%%-alpine-python:3.8.10-3.13-build-20210603 AS python-buildstep
 
+# Prevent pip 'warn script location' warnings. Equivalent to --no-warn-script-location
+ENV PATH=/root/.local/bin:$PATH
+
 # Copy Python requirements file
 COPY apps/controller/requirements.txt /tmp/
 
 # Install packages into a directory
-RUN pip install --user -r /tmp/requirements.txt --upgrade --no-warn-script-location
+RUN pip install --user -r /tmp/requirements.txt --no-cache-dir
 
 
 ## Compile container

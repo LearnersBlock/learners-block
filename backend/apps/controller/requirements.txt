@@ -18,15 +18,12 @@ charset-normalizer==2.0.7
     # via requests
 click==8.0.3
     # via flask
-dbus-python==1.2.16
-    # via
-    #   -r requirements.in
-    #   python-networkmanager
+dbus-python==1.2.18
+    # via python-networkmanager
 docker==5.0.3
     # via -r requirements.in
 flask==2.0.2
     # via
-    #   -r requirements.in
     #   flask-cors
     #   flask-jwt-extended
     #   flask-migrate
@@ -34,9 +31,9 @@ flask==2.0.2
     #   flask-sqlalchemy
 flask-cors==3.0.10
     # via -r requirements.in
-flask-jwt-extended==4.2.1
+flask-jwt-extended==4.3.1
     # via -r requirements.in
-flask-migrate==3.0.1
+flask-migrate==3.1.0
     # via -r requirements.in
 flask-restful==0.3.9
     # via -r requirements.in
@@ -50,7 +47,7 @@ idna==3.3
     # via requests
 importlib-metadata==4.8.1
     # via alembic
-importlib-resources==5.3.0
+importlib-resources==5.4.0
     # via alembic
 itsdangerous==2.0.1
     # via flask
@@ -70,7 +67,7 @@ pycparser==2.20
     # via cffi
 pyjwt==2.3.0
     # via flask-jwt-extended
-python-dotenv==0.17.1
+python-dotenv==0.19.1
     # via -r requirements.in
 python-networkmanager==2.2
     # via -r requirements.in
