@@ -2,6 +2,11 @@ import os
 import secrets
 from datetime import timedelta
 from dotenv import dotenv_values
+from dotenv import load_dotenv
+
+# Import .env file to make those env vars available from os.environ.
+# Vars imported from .env are overridden by local envs.
+load_dotenv()
 
 # Access point names
 ap_name = 'LBNETWORK'
@@ -15,7 +20,8 @@ default_hostname = 'lb'
 if "BALENA_APP_NAME" in os.environ and \
         os.environ['BALENA_APP_NAME'].lower() == "lb-dev":
     dev_mode = True
-elif os.environ['FLASK_ENV'].lower() == "development":
+elif "FLASK_ENV" in os.environ and \
+        os.environ['FLASK_ENV'].lower() == "development":
     dev_mode = True
 else:
     dev_mode = False
