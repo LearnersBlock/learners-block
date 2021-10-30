@@ -63,7 +63,7 @@
     "makerspace_description": "Parcourez le Makerspace ici.",
     "library_description": "Parcourez les contenus téléchargés de la bibliothèque ici.",
     "makerspace": "Makerspace",
-    "hostname_changed_notification": "Votre URL et le SSID Wi-Fi ont été mis à jour. Veuillez redémarrer le Block pour que ceci prenne effet.",
+    "hostname_changed_notification": "Votre URL et votre SSID Wi-Fi ont été mis à jour. Il se peut que vous deviez redémarrer le Block pour que ceci prenne effet.",
     "click_toggle": "Cliquez sur un élément ci-dessous pour ouvrir l'administration. Utilisez les boutons commutateurs sur la droite pour afficher ou masquer les composants de la page d'accueil.",
     "chapter": "Chapitre",
     "previous": "Précédent",
@@ -74,7 +74,7 @@
     "full_screen": "Plein écran",
     "swipe_up_for_menu": "Balayez vers le haut pour retrouver le menu.",
     "hide_button": "Masquer le bouton",
-    "login_again": "Vous avez été déconnecté·e. Veuillez essayer de vous reconnecter.",
+    "login_again": "Vous avez été déconnecté(e). Veuillez réessayer.",
     "select_chapter": "Sélectionner un chapitre",
     "download": "Télécharger",
     "your_new_name": "votre-nouveau-nom",
@@ -207,5 +207,7 @@
     "your_new_ssid": "Votre nouveau SSID Wi-Fi sera :",
     "portainer_desc": "Une interface graphique pour gérer les conteneurs Docker personnalisés sur votre Block.",
     "your_new_url": "Votre nouvelle URL sera :",
-    "url_wifi_desc": "Modifiez l’URL utilisée pour accéder à votre Block et la manière dont celui-ci apparaît dans la liste des réseaux Wi-Fi des personnes."
+    "url_wifi_desc": "Modifiez l’URL utilisée pour accéder à votre Block et la manière dont celui-ci apparaît dans la liste des réseaux Wi-Fi des personnes.",
+    "need_internet_connection": "Vous devez avoir une connexion Internet pour utiliser ces fonctions. Si vous êtes connecté(e), essayez d’actualiser la page.",
+    "api_unavailable": "Votre Block est en cours de chargement. Cette page sera rechargée dès qu’elle sera prête."
 }

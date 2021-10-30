@@ -42,7 +42,7 @@
     "library": "Biblioteca",
     "invalid_input": "Massimo 32 caratteri e nessun carattere speciale diverso da _ e -",
     "invalid_hostname": "Hai inviato un URL e un SSID Wi-Fi non validi. Si prega di riprovare.",
-    "hostname_changed_notification": "Il tuo URL e il tuo SSID Wi-Fi sono stati aggiornati. Si prega di riavviare il Block perché questo abbia effetto.",
+    "hostname_changed_notification": "Il tuo URL e SSID Wi-Fi sono stati aggiornati. Potrebbe essere necessario riavviare il Blocco perché questo abbia effetto.",
     "hostname": "Nome host",
     "home": "Pagina principale",
     "files_description": "Sfoglia i file qui.",
@@ -74,7 +74,7 @@
     "swipe_up_for_menu": "Scorri verso l'alto per tornare al menu.",
     "click_swipe_instruction": "Clicca e scorri per sfogliare la pagina.",
     "swipe_instruction": "Scorri a sinistra o destra per sfogliare la pagina.",
-    "login_again": "Sei stato disconnesso/a. Prova ad accedere di nuovo.",
+    "login_again": "Sei stato disconnesso/a. Si prega di riprovare.",
     "select_chapter": "Seleziona un capitolo",
     "download": "Scarica",
     "your_new_name": "il-tuo-nuovo-nome",
@@ -207,5 +207,7 @@
     "your_new_url": "Il tuo nuovo URL sarà:",
     "your_new_ssid": "Il tuo nuovo SSID Wi-Fi sarà:",
     "url_wifi_desc": "Cambia l’URL usato per accedere al tuo Block e come il tuo Block appare nella lista delle reti Wi-Fi delle persone.",
-    "portainer_desc": "Un’interfaccia utente grafica per gestire i contenitori Docker personalizzati sul tuo Block."
+    "portainer_desc": "Un’interfaccia utente grafica per gestire i contenitori Docker personalizzati sul tuo Block.",
+    "need_internet_connection": "Hai bisogno di una connessione internet per utilizzare queste funzioni. Se sei connesso/a, prova ad aggiornare la pagina.",
+    "api_unavailable": "Il tuo Block si sta ancora caricando. Questa pagina verrà ricaricata quando sarà pronta."
 }
