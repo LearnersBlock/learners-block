@@ -207,5 +207,7 @@
     "your_new_url": "A sua nova url será:",
     "your_new_ssid": "O seu novo Wi-Fi SSID será:",
     "portainer_desc": "Uma interface para gerenciar os recipientes Docker personalizados no seu Bloco.",
-    "url_wifi_desc": "Altere a URL usada para acessar o seu Bloco e como o seu Bloco aparece na lista das redes Wi-Fi das pessoas."
+    "url_wifi_desc": "Altere a URL usada para acessar o seu Bloco e como o seu Bloco aparece na lista das redes Wi-Fi das pessoas.",
+    "need_internet_connection": "É preciso uma conexão de internet para usar estas características. Caso esteja conectado, tente atualizar a página.",
+    "api_unavailable": "O seu bloco ainda está carregando. Esta página será recarregada assim que estiver pronta."
 }
