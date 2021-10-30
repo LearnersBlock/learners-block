@@ -207,5 +207,7 @@
     "url_wifi_desc": "Block'unuza erişmek için kullanılan URL'yi ve Block'unuzun kişilerin Wi-Fi ağları listesinde nasıl göründüğünü değiştirin.",
     "your_new_url": "Yeni URL'niz:",
     "your_new_ssid": "Yeni Wi-Fi SSID'niz:",
-    "portainer_desc": "Block'unuzdaki özel Docker konteynerlerini yönetmek için bir grafiksel kullanıcı arayüzü."
+    "portainer_desc": "Block'unuzdaki özel Docker konteynerlerini yönetmek için bir grafiksel kullanıcı arayüzü.",
+    "need_internet_connection": "Bu özellikleri kullanmak için internet bağlantınızın olması gerekir. Bağlıysanız, sayfayı yenilemeyi deneyin.",
+    "api_unavailable": "Block'unuz hala yükleniyor. Hazır olduğunda bu sayfa yeniden yüklenecektir."
 }
