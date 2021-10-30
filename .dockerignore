@@ -20,7 +20,8 @@
 **/src-bex/www
 **/src-bex/js/core
 
-# local env files
+# Local env files
+.env
 .env.local
 .env.*.local
 **/__pycache__
