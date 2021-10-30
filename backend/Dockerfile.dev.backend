@@ -19,7 +19,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Install required packages
 COPY apps/controller/requirements-dev.txt /tmp/
-RUN pip install -r /tmp/requirements-dev.txt --upgrade --no-deps --force-reinstall --no-cache-dir
+RUN pip install -r /tmp/requirements-dev.txt --no-cache-dir
 
 # Launch
 CMD ["sh", "start.sh"]
