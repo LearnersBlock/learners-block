@@ -38,7 +38,7 @@
     "library": "Bibliothek",
     "invalid_input": "Maximal 32 Zeichen und keine anderen Sonderzeichen als _ und -",
     "invalid_hostname": "Sie haben eine ungültige URL und Wi-Fi SSID angegeben. Bitte versuchen Sie es erneut.",
-    "hostname_changed_notification": "Ihre URL und Wi-Fi SSID wurde aktualisiert. Bitte starten Sie den Block neu, damit dies wirksam wird.",
+    "hostname_changed_notification": "Ihre URL und Wi-Fi SSID wurden aktualisiert. Möglicherweise müssen Sie den Block neu starten, damit dies wirksam wird.",
     "hostname": "Hostname",
     "home": "Startseite",
     "files_description": "Hier Dateien durchsuchen.",
@@ -74,7 +74,7 @@
     "full_screen": "Vollbild",
     "swipe_up_for_menu": "Wischen Sie nach oben, um das Menü wieder anzuzeigen.",
     "hide_button": "Schaltfläche ausblenden",
-    "login_again": "Sie sind abgemeldet worden. Bitte versuchen Sie, sich erneut anzumelden.",
+    "login_again": "Sie wurden abgemeldet. Bitte versuchen Sie es erneut.",
     "select_chapter": "Kapitel auswählen",
     "download": "Herunterladen",
     "your_new_name": "Ihr-neuer-Name",
@@ -207,5 +207,7 @@
     "url_wifi_desc": "Ändern Sie die URL, die für den Zugriff auf Ihren Block verwendet wird, und wie Ihr Block in der Liste der Wi-Fi-Netzwerke anderer Personen erscheint.",
     "your_new_ssid": "Ihre neue Wi-Fi-SSID lautet:",
     "portainer_desc": "Eine grafische Benutzeroberfläche zur Verwaltung benutzerdefinierter Docker-Container auf Ihrem Block.",
-    "your_new_url": "Ihre neue URL lautet:"
+    "your_new_url": "Ihre neue URL lautet:",
+    "need_internet_connection": "Sie benötigen eine Internetverbindung, um diese Funktionen nutzen zu können. Wenn Sie eine Verbindung haben, versuchen Sie, die Seite zu aktualisieren.",
+    "api_unavailable": "Ihr Block wird noch geladen. Diese Seite wird neu geladen, wenn sie fertig ist."
 }
