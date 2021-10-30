@@ -1,5 +1,5 @@
+import config
 import json
-import os
 import shutil
 import time
 from common.errors import logger
@@ -79,16 +79,16 @@ class system_portainer(Resource):
                   "portainer": "hidden"}
 
         # Connect to standard docker if in dev env
-        if os.environ['FLASK_ENV'].lower() == "production":
+        if config.dev_mode:
+            volumes = ['/var/run/docker.sock:/var/run/docker.sock',
+                       'portainer_data:/data']
+            command = "-H unix://var/run/docker.sock " \
+                      "-l portainer=hidden"
+        else:
             volumes = \
                 ['/var/run/balena-engine.sock:/var/run/balena-engine.sock',
                  'portainer_data:/data']
             command = "-H unix://var/run/balena-engine.sock " \
-                      "-l portainer=hidden"
-        else:
-            volumes = ['/var/run/docker.sock:/var/run/docker.sock',
-                       'portainer_data:/data']
-            command = "-H unix://var/run/docker.sock " \
                       "-l portainer=hidden"
 
         if content['cmd'] == 'start':

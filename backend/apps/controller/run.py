@@ -8,7 +8,6 @@ from common.errors import logger
 from common.models import db
 from common.models import migrate
 from common.processes import curl
-from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api as _Api
@@ -51,9 +50,6 @@ class Api(_Api):
                 pass  # Fall through to original handler
         return original_handler(e)
 
-
-# Import .env file to make env vars available from os.environ
-load_dotenv()
 
 # Load extensions
 jwt = JWTManager()
@@ -136,7 +132,7 @@ if __name__ == '__main__':
         init_database()
 
     # Load and launch based on dev or prod mode
-    if os.environ['FLASK_ENV'].lower() == "production":
+    if not config.dev_mode:
         # Import production routes
         from boot.production import handle_exit, handle_sigterm, startup
         from resources.system_routes import system_hostname

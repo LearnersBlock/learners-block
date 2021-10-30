@@ -1,6 +1,6 @@
+import config
 import docker
 import ntplib
-import os
 from common.errors import DockerContainerException
 from common.errors import DockerException
 from common.errors import DockerImageStatus
@@ -12,10 +12,10 @@ from flask_restful import abort
 
 
 # Import relevant UNIX path
-if os.environ['FLASK_ENV'].lower() == "production":
-    client_path = 'unix://var/run/balena-engine.sock'
-else:
+if config.dev_mode:
     client_path = 'unix://var/run/docker.sock'
+else:
+    client_path = 'unix://var/run/balena-engine.sock'
 
 # Initiate NTP Library
 ntp = ntplib.NTPClient()

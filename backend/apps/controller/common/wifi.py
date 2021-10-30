@@ -1,5 +1,4 @@
 import config
-import os
 import subprocess
 import time
 import uuid
@@ -9,7 +8,7 @@ from common.models import User
 from run import app
 
 
-if os.environ['FLASK_ENV'].lower() == "production":
+if not config.dev_mode:
     from dbus.mainloop.glib import DBusGMainLoop
     import NetworkManager
     DBusGMainLoop(set_as_default=True)
