@@ -1,5 +1,7 @@
-from common.processes import get_secret_key
+import os
+import secrets
 from datetime import timedelta
+from dotenv import dotenv_values
 
 # Access point names
 ap_name = 'LBNETWORK'
@@ -9,6 +11,15 @@ hotspot_name = 'HOTSPOT'
 default_ssid = "Learner's Block"
 default_hostname = 'lb'
 
+# Set dev env variables
+if "BALENA_APP_NAME" in os.environ and \
+        os.environ['BALENA_APP_NAME'].lower() == "lb-dev":
+    dev_mode = True
+elif os.environ['FLASK_ENV'].lower() == "development":
+    dev_mode = True
+else:
+    dev_mode = False
+
 # Wi-Fi modes
 type_hotspot = 'HOTSPOT'
 type_none = 'NONE'
@@ -16,6 +27,16 @@ type_wep = 'WEP'
 type_wpa = 'WPA'
 type_wpa2 = 'WPA2'
 type_enterprise = 'ENTERPRISE'
+
+
+# Fetch the secret key or generate one if it is absent
+def get_secret_key():
+    # Generate secret key
+    if not dotenv_values("db/.secret_key"):
+        with open('./db/.secret_key', 'w') as secrets_file:
+            secrets_file.write("SECRET_KEY = " + secrets.token_hex(32))
+    key = dotenv_values("./db/.secret_key")
+    return key["SECRET_KEY"]
 
 
 # App context object for importing in to Flask
