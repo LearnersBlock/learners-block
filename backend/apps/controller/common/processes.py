@@ -80,6 +80,13 @@ def check_supervisor(supervisor_retries, timeout):
     return {'status': 200, 'message': 'Supervisor up'}
 
 
+def container_hostname():
+    return subprocess.run(["hostname"],
+                          capture_output=True,
+                          check=True,
+                          text=True).stdout.rstrip()
+
+
 def curl(supervisor_retries=8, timeout=5, **cmd):
     check_supervisor(supervisor_retries, timeout)
 
@@ -141,20 +148,47 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
             "json_response": response.json()}
 
 
+def device_host_config(hostname, **kwargs):
+    try:
+        new_hostname = curl(method="patch",
+                            path="/v1/device/host-config?apikey=",
+                            string='{"network": {"hostname": "%s"}}' %
+                            (hostname),
+                            **kwargs)
+    except Exception:
+        logger.exception('Error fetching device hostname.')
+        return False
+
+    return new_hostname
+
+
+def device_hostname(**kwargs):
+    try:
+        device_hostname = curl(method="get",
+                               path="/v1/device/host-config?apikey=",
+                               **kwargs)
+    except Exception:
+        logger.exception('Error fetching device hostname.')
+        return False
+
+    return device_hostname["json_response"]["network"]["hostname"]
+
+
+def device_reboot():
+    curl(method="post-json",
+         path="/v1/reboot?apikey=",
+         string='("force", "true")',
+         supervisor_retries=20)
+
+
 def database_recover():
     # Resetting database
     logger.warning("Database error. Deleting database and restarting.")
 
     try:
-        # Get current hostname
-        container_hostname = subprocess.run(["hostname"],
-                                            capture_output=True,
-                                            check=True,
-                                            text=True).stdout.rstrip()
-
         # If the container hostname is not the default, remove
         # the run.pid to false it back to default on next boot
-        if container_hostname is not config.default_hostname:
+        if container_hostname() is not config.default_hostname:
             hostname_reset()
 
     except Exception:

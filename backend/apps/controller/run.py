@@ -2,12 +2,13 @@ import atexit
 import config
 import os
 import signal
-import subprocess
 from common.errors import errors
 from common.errors import logger
 from common.models import db
 from common.models import migrate
-from common.processes import curl
+from common.processes import container_hostname
+from common.processes import device_host_config
+from common.processes import device_reboot
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api as _Api
@@ -32,6 +33,7 @@ from resources.filemanager_routes import filemanager_unzip
 from resources.filemanager_routes import filemanager_upload
 from resources.system_routes import system_health_check
 from resources.system_routes import system_info
+from resources.system_routes import system_hostname
 from resources.system_routes import system_portainer
 from resources.system_routes import system_prune
 from resources.system_routes import system_reset_database
@@ -86,10 +88,6 @@ def first_launch():
 
     pid = str(os.getpid())
 
-    container_hostname = subprocess.run(["hostname"],
-                                        capture_output=True,
-                                        check=True,
-                                        text=True).stdout.rstrip()
     if not os.path.isfile(pidfile):
         # Run tasks on first launch
         # Set hostname to default
@@ -97,19 +95,12 @@ def first_launch():
 
         logger.info('Created first launch PID.')
 
-        if container_hostname != config.default_hostname:
-            curl(method="patch",
-                 path="/v1/device/host-config?apikey=",
-                 string='{"network": {"hostname": "%s"}}' %
-                 (config.default_hostname),
-                 supervisor_retries=20)
+        if container_hostname() != config.default_hostname:
+            device_host_config(config.default_hostname, supervisor_retries=20)
 
             logger.info('Set hostname on first boot. Restarting.')
 
-            curl(method="post-json",
-                 path="/v1/reboot?apikey=",
-                 string='("force", "true")',
-                 supervisor_retries=20)
+            device_reboot()
 
 
 # Create Flask app instance
@@ -132,10 +123,18 @@ if __name__ == '__main__':
         init_database()
 
     # Load and launch based on dev or prod mode
-    if not config.dev_mode:
+    if config.dev_mode:
+        # Import development routes
+        from resources.dev_routes import supervisor_device, \
+            supervisor_host_config, supervisor_journal_logs, \
+            supervisor_update, supervisor_uuid, wifi_connect, \
+            wifi_connection_status, wifi_forget, wifi_forget_all,\
+            wifi_list_access_points, wifi_set_password, wifi_set_ssid
+
+        logger.info("Api-v1 - Starting API (Development)...")
+    else:
         # Import production routes
         from boot.production import handle_exit, handle_sigterm, startup
-        from resources.system_routes import system_hostname
         from resources.supervisor_routes import supervisor_device, \
             supervisor_host_config, supervisor_journal_logs, \
             supervisor_update, supervisor_uuid
@@ -164,16 +163,6 @@ if __name__ == '__main__':
         except Exception:
             logger.exception('Fail on startup.')
             # Allowing API to still come up for debugging
-    else:
-        # Import development routes
-        from resources.dev_routes import supervisor_device, \
-            supervisor_host_config, supervisor_journal_logs, \
-            supervisor_update, supervisor_uuid, system_hostname, \
-            wifi_connect, wifi_connection_status, wifi_forget, \
-            wifi_forget_all, wifi_list_access_points, wifi_set_password, \
-            wifi_set_ssid
-
-        logger.info("Api-v1 - Starting API (Development)...")
 
     # Configure endpoints #
 
@@ -224,8 +213,8 @@ if __name__ == '__main__':
 
     # System
     api.add_resource(system_health_check, '/')
-    api.add_resource(system_hostname, '/v1/system/hostname')
     api.add_resource(system_info, '/v1/system/info')
+    api.add_resource(system_hostname, '/v1/system/hostname')
     api.add_resource(system_portainer, '/v1/system/portainer')
     api.add_resource(system_prune, '/v1/system/prune')
     api.add_resource(system_reset_database, '/v1/system/reset_database')

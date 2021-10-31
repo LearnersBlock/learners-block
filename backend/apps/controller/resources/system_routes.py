@@ -5,7 +5,7 @@ import time
 from common.errors import logger
 from common.docker import docker_py
 from common.models import App_Store
-from common.processes import curl
+from common.processes import container_hostname
 from common.processes import database_recover
 from common.processes import human_size
 from dotenv import dotenv_values
@@ -16,6 +16,12 @@ from werkzeug import serving
 
 # Portainer version for LB system
 portainer_image = "portainer/portainer-ce:2.6.3-alpine"
+
+# Portainer volumes and CMD
+volumes = [f"{config.socket_path}:{config.socket_path}",
+           "portainer_data:/data"]
+command = f"-H unix:/{config.socket_path} " \
+            "-l portainer=hidden"
 
 # Import .version file
 version = dotenv_values(".version")
@@ -40,18 +46,7 @@ class system_health_check(Resource):
 
 class system_hostname(Resource):
     def get(self):
-        device_hostname = curl(method="get",
-                               path="/v1/device/host-config?apikey=")
-
-        logger.debug(f'System hostname status: {device_hostname}')
-
-        return {
-            'status': 200,
-            'hostname': device_hostname["json_response"]
-                                       ["network"]
-                                       ["hostname"],
-            'message': "OK"
-        }
+        return {'hostname': container_hostname()}
 
 
 class system_info(Resource):
@@ -77,19 +72,6 @@ class system_portainer(Resource):
         privileged = True
         labels = {"io.balena.features.balena-socket": "1",
                   "portainer": "hidden"}
-
-        # Connect to standard docker if in dev env
-        if config.dev_mode:
-            volumes = ['/var/run/docker.sock:/var/run/docker.sock',
-                       'portainer_data:/data']
-            command = "-H unix://var/run/docker.sock " \
-                      "-l portainer=hidden"
-        else:
-            volumes = \
-                ['/var/run/balena-engine.sock:/var/run/balena-engine.sock',
-                 'portainer_data:/data']
-            command = "-H unix://var/run/balena-engine.sock " \
-                      "-l portainer=hidden"
 
         if content['cmd'] == 'start':
             # Run the primary container

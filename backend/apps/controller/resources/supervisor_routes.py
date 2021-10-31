@@ -1,6 +1,7 @@
 import os
 from common.errors import logger
 from common.processes import curl
+from common.processes import device_host_config
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
@@ -22,12 +23,9 @@ class supervisor_host_config(Resource):
         # Remove spaces from string and convert to lowercase
         hostname = content["hostname"].lower().replace(" ", "")
 
-        logger.debug(f'Changing hostname to {hostname}')
+        logger.debug(f'Attempting to change hostname to {hostname}')
 
-        response = curl(method="patch",
-                        path="/v1/device/host-config?apikey=",
-                        string='{"network": {"hostname": "%s"}}' %
-                        (hostname))
+        response = device_host_config(hostname)
 
         return {'status': response["status_code"],
                 'message': response["message"]}, response["status_code"]

@@ -1,4 +1,5 @@
 import config
+import NetworkManager
 import subprocess
 import time
 import uuid
@@ -7,11 +8,8 @@ from common.errors import WifiApFail
 from common.models import User
 from run import app
 
-
-if not config.dev_mode:
-    from dbus.mainloop.glib import DBusGMainLoop
-    import NetworkManager
-    DBusGMainLoop(set_as_default=True)
+from dbus.mainloop.glib import DBusGMainLoop
+DBusGMainLoop(set_as_default=True)
 
 
 class wifi:

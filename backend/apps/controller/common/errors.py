@@ -1,5 +1,6 @@
 import config
 import logging
+import os
 
 # Create custom logger
 logger = logging.getLogger('syslog')
@@ -11,7 +12,8 @@ logger.addHandler(syslog)
 logger.setLevel(logging.WARNING)
 
 # Change default logging mode when in development environmnets
-if config.dev_mode:
+if config.dev_mode or ("BALENA_APP_NAME" in os.environ and
+   os.environ['BALENA_APP_NAME'].lower() == "lb-dev"):
     logger.setLevel(logging.DEBUG)
 
 

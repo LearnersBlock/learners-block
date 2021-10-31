@@ -16,11 +16,14 @@ hotspot_name = 'HOTSPOT'
 default_ssid = "Learner's Block"
 default_hostname = 'lb'
 
+# If the device is running on Balena set the Docker socket
+if "BALENA_HOST_OS_VERSION" in os.environ:
+    socket_path = '/var/run/balena-engine.sock'
+else:
+    socket_path = '/var/run/docker.sock'
+
 # Set dev env variables
-if "BALENA_APP_NAME" in os.environ and \
-        os.environ['BALENA_APP_NAME'].lower() == "lb-dev":
-    dev_mode = True
-elif "FLASK_ENV" in os.environ and \
+if "FLASK_ENV" in os.environ and \
         os.environ['FLASK_ENV'].lower() == "development":
     dev_mode = True
 else:

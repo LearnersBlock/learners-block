@@ -6,7 +6,8 @@ import time
 from common.errors import logger
 from common.processes import check_connection
 from common.processes import check_internet
-from common.processes import curl
+from common.processes import container_hostname
+from common.processes import device_hostname
 from common.wifi import wifi
 from resources.supervisor_routes import supervisor_update
 
@@ -70,19 +71,9 @@ def launch_wifi(self):
 def startup():
     # Check hostname in container is same as device
     try:
-        # Fetch container hostname
-        container_hostname = subprocess.run(["hostname"], capture_output=True,
-                                            check=True,
-                                            text=True).stdout.rstrip()
-
-        # Fetch device hostname from Balena Supervisor
-        device_hostname = curl(method="get",
-                               path="/v1/device/host-config?apikey=",
-                               supervisor_retries=20)
-
         # Check container and device hostname match
-        if container_hostname != \
-                device_hostname["json_response"]["network"]["hostname"]:
+        if container_hostname() != \
+                device_hostname(supervisor_retries=20):
             logger.info("Api-v1 - Container hostname and device hostname do "
                         "not match. Likely a hostname change has been "
                         "performed. Balena Supervisor should detect this "
