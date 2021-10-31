@@ -103,7 +103,7 @@ class download_stop(Resource):
         global download_terminated
         download_terminated = response
 
-        return {'status': 200, 'message': 'terminate request sent'}
+        return {'message': 'terminate request sent'}
 
 
 class download_stream(Resource):

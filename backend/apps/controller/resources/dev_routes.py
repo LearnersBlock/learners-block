@@ -44,7 +44,6 @@ class supervisor_host_config(Resource):
         time.sleep(2)
         logger.info(f"Hostname changed to '{content['hostname']}'")
         return {
-            'status': 200,
             'message': "Hostname/Wi-Fi SSID changed"
             f"to '{content['hostname']}'"
         }
@@ -57,7 +56,7 @@ class supervisor_journal_logs(Resource):
 
 class supervisor_state(Resource):
     def get(self):
-        supervisor_status = True
+        supervisor_state = True
 
         # Demo response
         response = {
@@ -87,19 +86,17 @@ class supervisor_state(Resource):
 
         for key in response['containers']:
             if key['status'].lower() != 'running':
-                supervisor_status = False
                 logger.warning("Supervisor reports container "
                                f"'{key['serviceName']}' is not in state "
                                "'Running'.")
-            else:
-                supervisor_status = True
+                supervisor_state = False
 
-        return {'message': supervisor_status}
+        return {'message': supervisor_state}
 
 
 class supervisor_update(Resource):
     def get(self):
-        return {'status': 202, 'message': "Accepted"}, 202
+        return {'message': "Accepted"}, 202
 
 
 class supervisor_uuid(Resource):
@@ -112,15 +109,14 @@ class wifi_connect(Resource):
     def post(self):
         content = request.get_json()
 
-        return {'status': 202, 'message': content}, 202
+        return {'message': content}, 202
 
 
 class wifi_connection_status(Resource):
     def get(self):
         global wifistatus
         time.sleep(1.5)
-        return {'status': 200, 'wifi': wifistatus,
-                'internet': check_internet()}
+        return {'wifi': wifistatus, 'internet': check_internet()}
 
 
 class wifi_forget(Resource):
@@ -130,14 +126,13 @@ class wifi_forget(Resource):
 
         if wifistatus is False:
             return {
-                'status': 409,
                 'message': 'Device is already disconnected, connection '
                            'cannot be reset.'
             }, 409
 
         wifi_toggle()
 
-        return {'status': 202, 'message': 'Accepted'}, 202
+        return {'message': 'Accepted'}, 202
 
 
 class wifi_forget_all(Resource):
@@ -148,7 +143,7 @@ class wifi_forget_all(Resource):
         if wifistatus is True:
             wifi_toggle()
 
-        return {'status': 202, 'message': 'Accepted'}, 202
+        return {'message': 'Accepted'}, 202
 
 
 class wifi_list_access_points(Resource):
@@ -185,7 +180,7 @@ class wifi_set_password(Resource):
         lb_database.wifi_password = content["wifi_password"]
         lb_database.save_to_db()
 
-        return {'status': 200, 'running': 'success'}
+        return {'running': 'success'}
 
 
 class wifi_set_ssid(Resource):
@@ -206,4 +201,4 @@ class wifi_set_ssid(Resource):
 
         logger.info(f"Wi-Fi SSID changed to '{content['ssid']}'")
 
-        return {'status': 200, 'running': 'success'}
+        return {'running': 'success'}
