@@ -1553,10 +1553,10 @@ export default defineComponent({
         // Set new Wi-Fi SSID
         await Axios.post(`${api.value}/v1/wifi/set_ssid`, {
           ssid: newHostname.value
-        }).then(function () {
+        }).then(async function () {
           // If the Wi-Fi SSID change is successful, request change for hostname.
           // Use the AxiosOverride as it is going to timeout when connected via the Wi-Fi hotspot.
-          AxiosOverride.post(`${api.value}/v1/supervisor/host_config`, {
+          await AxiosOverride.post(`${api.value}/v1/supervisor/host_config`, {
             hostname: newHostname.value,
             timeout: 4000
           }).then(function () {
