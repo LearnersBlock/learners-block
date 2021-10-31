@@ -1170,20 +1170,18 @@ export default defineComponent({
 
     // Notify that the hostname has been changed
     function notifyConnected () {
-      setTimeout(() => {
-        $q.notify({
-          type: 'positive',
-          message: t('hostname_changed_notification'),
-          timeout: 0,
-          actions: [
-            {
-              label: t('close'),
-              color: 'white',
-              handler: () => { /* ... */ }
-            }
-          ]
-        })
-      }, 10000)
+      $q.notify({
+        type: 'positive',
+        message: t('hostname_changed_notification'),
+        timeout: 0,
+        actions: [
+          {
+            label: t('close'),
+            color: 'white',
+            handler: () => { /* ... */ }
+          }
+        ]
+      })
     }
 
     // Remove unused system files such as Docker images
@@ -1559,13 +1557,15 @@ export default defineComponent({
           await AxiosOverride.post(`${api.value}/v1/supervisor/host_config`, {
             hostname: newHostname.value,
             timeout: 4000
-          }).then(function () {
+          }).then(async function () {
+            await delay(10000)
             notifyConnected()
-          }).catch(function (error) {
+          }).catch(async function (error) {
             // Return positive message if there was no response. A timout
             // is expected as the device is connecting to a new network.
             if (!error.response) {
               // Add delay before returning response to ensure hostname has had time to apply
+              await delay(10000)
               notifyConnected()
             } else {
               $q.notify({

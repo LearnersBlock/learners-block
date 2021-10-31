@@ -34,6 +34,7 @@ class download_fetch(Resource):
     def download_file(self, url):
         try:
             resp = requests.get(url, stream=True, timeout=5)
+            resp.raise_for_status()
         except Exception:
             # As this runs in a thread, no use aborting or raising error
             logger.exception("Failed downloading file.")

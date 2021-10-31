@@ -127,9 +127,10 @@ if __name__ == '__main__':
         # Import development routes
         from resources.dev_routes import supervisor_device, \
             supervisor_host_config, supervisor_journal_logs, \
-            supervisor_update, supervisor_uuid, wifi_connect, \
-            wifi_connection_status, wifi_forget, wifi_forget_all,\
-            wifi_list_access_points, wifi_set_password, wifi_set_ssid
+            supervisor_state, supervisor_update, supervisor_uuid, \
+            wifi_connect, wifi_connection_status, wifi_forget, \
+            wifi_forget_all, wifi_list_access_points, wifi_set_password, \
+            wifi_set_ssid
 
         logger.info("Api-v1 - Starting API (Development)...")
     else:
@@ -137,7 +138,7 @@ if __name__ == '__main__':
         from boot.production import handle_exit, handle_sigterm, startup
         from resources.supervisor_routes import supervisor_device, \
             supervisor_host_config, supervisor_journal_logs, \
-            supervisor_update, supervisor_uuid
+            supervisor_state, supervisor_update, supervisor_uuid
         from resources.wifi_routes import wifi_connect, \
             wifi_connection_status, wifi_forget, wifi_forget_all, \
             wifi_list_access_points, wifi_set_password, wifi_set_ssid
@@ -208,6 +209,7 @@ if __name__ == '__main__':
     api.add_resource(supervisor_device, '/v1/supervisor/device')
     api.add_resource(supervisor_host_config, '/v1/supervisor/host_config')
     api.add_resource(supervisor_journal_logs, '/v1/supervisor/journal_logs')
+    api.add_resource(supervisor_state, '/v1/supervisor/state')
     api.add_resource(supervisor_update, '/v1/supervisor/update')
     api.add_resource(supervisor_uuid, '/v1/supervisor/uuid')
 

@@ -74,7 +74,9 @@ python-dotenv==0.19.1
 pytz==2021.3
     # via flask-restful
 requests==2.26.0
-    # via docker
+    # via
+    #   -r requirements.in
+    #   docker
 six==1.16.0
     # via
     #   bcrypt
