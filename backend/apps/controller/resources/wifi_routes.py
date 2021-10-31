@@ -26,13 +26,12 @@ class wifi_connect(Resource):
                                username=content["username"],
                                password=content["passphrase"])
 
-        return {'status': 200, 'message': 'Accepted'}
+        return {'message': 'Accepted'}
 
 
 class wifi_connection_status(Resource):
     def get(self):
-        return {'status': 200,
-                'wifi': check_connection(),
+        return {'wifi': check_connection(),
                 'internet': check_internet()}
 
 
@@ -45,7 +44,6 @@ class wifi_forget(Resource):
         # If the device is connected to a wifi network
         if not connection_state:
             return {
-                'status': 409,
                 'message': 'Device is already disconnected, '
                            'connection cannot be reset.'
             }, 409
@@ -55,7 +53,7 @@ class wifi_forget(Resource):
                                               name='wifi_forget_thread')
         wifi_forget_thread.start()
 
-        return {'status': 202, 'message': 'Accepted'}, 202
+        return {'message': 'Accepted'}, 202
 
 
 class wifi_forget_all(Resource):
@@ -67,7 +65,7 @@ class wifi_forget_all(Resource):
                                             name='wifi_forget_thread_all')
         wifi_forget_thread_all.start()
 
-        return {'status': 202, 'message': 'Accepted'}, 202
+        return {'message': 'Accepted'}, 202
 
 
 class wifi_list_access_points(Resource):

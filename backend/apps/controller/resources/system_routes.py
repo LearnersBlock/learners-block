@@ -41,7 +41,7 @@ def log_request(self, *args, **kwargs):
 class system_health_check(Resource):
     def get(self):
         serving.WSGIRequestHandler.log_request = log_request
-        return {'status': 200, 'message': 'ok'}
+        return {'message': 'ok'}
 
 
 class system_hostname(Resource):
@@ -134,7 +134,7 @@ class system_prune(Resource):
         except Exception:
             logger.exception("Failed to remove Portainer image.")
 
-        return {'status': 200, 'message': 'done'}
+        return {'message': 'done'}
 
 
 class system_reset_database(Resource):
