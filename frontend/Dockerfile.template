@@ -92,5 +92,5 @@ RUN chown -R nginx.nginx /run && \
 # Start SupervisorD to manage processes
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
-HEALTHCHECK --timeout=10s \
+HEALTHCHECK --start-period=30s \
   CMD curl --silent --fail http://127.0.0.1:8081/fpm-ping || exit 1
