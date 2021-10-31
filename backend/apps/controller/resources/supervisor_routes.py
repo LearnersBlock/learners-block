@@ -12,7 +12,7 @@ class supervisor_device(Resource):
         response = curl(method="get",
                         path="/v1/device?apikey=")
 
-        return response["json_response"], response["status_code"]
+        return response.json(), response.status_code
 
 
 class supervisor_host_config(Resource):
@@ -27,18 +27,38 @@ class supervisor_host_config(Resource):
 
         response = device_host_config(hostname)
 
-        return {'status': response["status_code"],
-                'message': response["message"]}, response["status_code"]
+        return {'status': response.status_code,
+                'message': response.text}, response.status_code
 
 
 class supervisor_journal_logs(Resource):
     def get(self):
         response = curl(method="post-json",
                         path="/v2/journal-logs?apikey=",
-                        string='("follow", "false", "all", "true", \
-                            "format", "short")')
+                        data={"follow": False, "all": True,
+                              "format": "short"})
 
-        return response["message"], response["status_code"]
+        return response.text, response.status_code
+
+
+class supervisor_state(Resource):
+    def get(self):
+        response = curl(method="get",
+                        path="/v2/state/status?apikey=")
+
+        # Use requests library to parse JSON.
+        json_response = response.json()
+
+        for key in json_response['containers']:
+            if key['status'].lower() != 'running':
+                supervisor_status = False
+                logger.warning("Supervisor reports container "
+                               f"'{key['serviceName']}' is not in state "
+                               "'Running'.")
+            else:
+                supervisor_status = True
+
+        return {'message': supervisor_status}, response.status_code
 
 
 class supervisor_update(Resource):
@@ -47,10 +67,10 @@ class supervisor_update(Resource):
 
         response = curl(method="post-json",
                         path="/v1/update?apikey=",
-                        string='("force", "true")')
+                        data={"force": False})
 
-        return {'status': response["status_code"],
-                'message': response["message"]}, response["status_code"]
+        return {'status': response.status_code,
+                'message': response.text}, response.status_code
 
 
 class supervisor_uuid(Resource):

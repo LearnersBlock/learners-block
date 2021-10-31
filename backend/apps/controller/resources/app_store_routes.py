@@ -19,15 +19,17 @@ class appstore_get_apps(Resource):
         # Fetch list of available apps from app-store repo
         try:
             app_list = requests.get(app_store_url,
-                                    timeout=8).json()
+                                    timeout=8)
+            app_list.raise_for_status()
 
         except Exception:
-            logger.exception("Failed fetching app list from Git.")
+            logger.exception("Failed fetching app list from Git. " +
+                             app_list.status_code)
             raise AppStoreFetchFailed
 
-        update_existing_app_status(app_list)
+        update_existing_app_status(app_list.json())
 
-        update_new_apps(app_list)
+        update_new_apps(app_list.json())
 
         return {'message': 'done'}
 

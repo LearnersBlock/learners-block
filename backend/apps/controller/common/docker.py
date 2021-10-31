@@ -126,8 +126,7 @@ class docker_py():
             container.stop()
             container.remove()
         except docker.errors.NotFound:
-            logger.exception("Docker image not found.")
-            raise DockerImageNotFound
+            logger.exception("Docker image not found. Continuing.")
         except Exception:
             logger.exception("Failed to remove container.")
             raise DockerException

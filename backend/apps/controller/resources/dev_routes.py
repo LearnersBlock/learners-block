@@ -55,6 +55,48 @@ class supervisor_journal_logs(Resource):
         return "journal logs..."
 
 
+class supervisor_state(Resource):
+    def get(self):
+        supervisor_status = True
+
+        # Demo response
+        response = {
+            "status": "success",
+            "containers": [
+                {
+                    "status": "Running",
+                    "serviceName": "controller",
+                    "appId": 1854775,
+                    "imageId": 4192930,
+                    "serviceId": 1178950,
+                    "containerId": "c4402e5f5ee5e...",
+                    "createdAt": "2021-10-31T18:02:41.272Z"
+                    },
+                {
+                    "status": "Running",
+                    "serviceName": "frontend",
+                    "appId": 1854775,
+                    "imageId": 4192931,
+                    "serviceId": 1178951,
+                    "containerId": "473a71f3ec2745...",
+                    "createdAt": "2021-10-31T17:50:18.377Z"
+                }
+            ],
+            "release": "aaf4aad197d58e52f5edd0cbbdaad814"
+            }
+
+        for key in response['containers']:
+            if key['status'].lower() != 'running':
+                supervisor_status = False
+                logger.warning("Supervisor reports container "
+                               f"'{key['serviceName']}' is not in state "
+                               "'Running'.")
+            else:
+                supervisor_status = True
+
+        return {'message': supervisor_status}
+
+
 class supervisor_update(Resource):
     def get(self):
         return {'status': 202, 'message': "Accepted"}, 202

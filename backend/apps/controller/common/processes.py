@@ -10,7 +10,6 @@ import time
 from common.errors import logger
 from common.errors import SupervisorCurlFailed
 from common.errors import SupervisorUnreachable
-from flask_restful import abort
 
 
 def check_connection():
@@ -55,19 +54,14 @@ def check_supervisor(supervisor_retries, timeout):
         try:
             supervisor_status = requests.get(
                 f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}/ping',
-                headers={"Content-Type": "application/json"}, timeout=timeout
+                timeout=timeout
             )
 
             if supervisor_status.status_code == 200:
                 break
-            else:
-                abort(supervisor_status.status_code,
-                      status=supervisor_status.status_code,
-                      message='Supervisor returned error code.',
-                      error=str(supervisor_status.text))
 
         except Exception:
-            logger.info(f'Waiting for Balena Supervisor to be ready. '
+            logger.info('Waiting for Balena Supervisor to be ready. '
                         f'Retry {str(retry)}.')
 
             if retry == supervisor_retries:
@@ -92,67 +86,51 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
     logger.debug(f"Curl commands = {cmd}")
 
-    # Process curl request
+    # Process curl requests
     try:
+        path = os.environ["BALENA_SUPERVISOR_ADDRESS"] + cmd["path"] + \
+            os.environ["BALENA_SUPERVISOR_API_KEY"]
+
+        # Post method
         if cmd["method"] == 'post-json':
             response = requests.post(
-                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
-                f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
-                json=[cmd["string"]],
-                headers={"Content-Type": "application/json"},
+                path,
+                json=cmd["data"],
                 timeout=timeout
             )
 
-        elif cmd["method"] == 'post-data':
-            response = requests.post(
-                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
-                f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
-                data=cmd["string"],
-                headers={"Content-Type": "application/json"},
-                timeout=timeout
-            )
-
+        # Patch method
         elif cmd["method"] == 'patch':
             response = requests.patch(
-                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
-                f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
-                data=cmd["string"],
-                headers={"Content-Type": "application/json"},
+                path,
+                json=cmd["data"],
                 timeout=timeout
             )
 
+        # Get method
         elif cmd["method"] == 'get':
             response = requests.get(
-                f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}{cmd["path"]}'
-                f'{os.environ["BALENA_SUPERVISOR_API_KEY"]}',
-                headers={"Content-Type": "application/json"},
+                path,
                 timeout=timeout
             )
     except Exception:
         logger.exception("Supervisor curl request error.")
         raise SupervisorCurlFailed
 
-    # Check if response is JSON and if not return it as text
     try:
-        response.json()
+        response.raise_for_status()
     except Exception:
-        # Return successful JSON response
-        return {"status_code": response.status_code,
-                "message": response.text}
+        logger.exception('Failed to send request to Supervisor')
+        raise SupervisorCurlFailed
 
-    logger.debug(f"Curl request: {response.status_code}")
-
-    # Return non-JSON response
-    return {"status_code": response.status_code,
-            "message": response.text,
-            "json_response": response.json()}
+    # Return response
+    return response
 
 
 def device_host_config(hostname, **kwargs):
     new_hostname = curl(method="patch",
                         path="/v1/device/host-config?apikey=",
-                        string='{"network": {"hostname": "%s"}}' %
-                        (hostname),
+                        data={"network": {"hostname": hostname}},
                         **kwargs)
 
     return new_hostname
@@ -161,15 +139,15 @@ def device_host_config(hostname, **kwargs):
 def device_hostname(**kwargs):
     device_hostname = curl(method="get",
                            path="/v1/device/host-config?apikey=",
-                           **kwargs)
+                           **kwargs).json()
 
-    return device_hostname["json_response"]["network"]["hostname"]
+    return device_hostname["network"]["hostname"]
 
 
 def device_reboot():
     curl(method="post-json",
          path="/v1/reboot?apikey=",
-         string='("force", "true")',
+         data={"force": True},
          supervisor_retries=20)
 
 
