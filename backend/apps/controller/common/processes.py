@@ -129,7 +129,7 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
                 timeout=timeout
             )
     except Exception:
-        logger.exception("Supervisor curl request timed out.")
+        logger.exception("Supervisor curl request error.")
         raise SupervisorCurlFailed
 
     # Check if response is JSON and if not return it as text
@@ -149,27 +149,19 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
 
 def device_host_config(hostname, **kwargs):
-    try:
-        new_hostname = curl(method="patch",
-                            path="/v1/device/host-config?apikey=",
-                            string='{"network": {"hostname": "%s"}}' %
-                            (hostname),
-                            **kwargs)
-    except Exception:
-        logger.exception('Error fetching device hostname.')
-        return False
+    new_hostname = curl(method="patch",
+                        path="/v1/device/host-config?apikey=",
+                        string='{"network": {"hostname": "%s"}}' %
+                        (hostname),
+                        **kwargs)
 
     return new_hostname
 
 
 def device_hostname(**kwargs):
-    try:
-        device_hostname = curl(method="get",
-                               path="/v1/device/host-config?apikey=",
-                               **kwargs)
-    except Exception:
-        logger.exception('Error fetching device hostname.')
-        return False
+    device_hostname = curl(method="get",
+                           path="/v1/device/host-config?apikey=",
+                           **kwargs)
 
     return device_hostname["json_response"]["network"]["hostname"]
 
