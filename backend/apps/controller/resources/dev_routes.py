@@ -1,5 +1,4 @@
 import config
-import subprocess
 import time
 from common.errors import logger
 from common.models import User
@@ -48,17 +47,6 @@ class supervisor_host_config(Resource):
             'status': 200,
             'message': "Hostname/Wi-Fi SSID changed"
             f"to '{content['hostname']}'"
-        }
-
-
-class system_hostname(Resource):
-    def get(self):
-        container_hostname = subprocess.run(["hostname"], capture_output=True,
-                                            text=True).stdout.rstrip()
-        return {
-            'status': 200,
-            'hostname': container_hostname,
-            'message': "OK"
         }
 
 

@@ -11,12 +11,6 @@ from common.processes import check_internet
 from flask_restful import abort
 
 
-# Import relevant UNIX path
-if config.dev_mode:
-    client_path = 'unix://var/run/docker.sock'
-else:
-    client_path = 'unix://var/run/balena-engine.sock'
-
 # Initiate NTP Library
 ntp = ntplib.NTPClient()
 
@@ -51,10 +45,12 @@ def docker_ping(func):
     def inner(*args, **kwargs):
         try:
             global client
-            # If the Docker client is not yet initiated
+            # If the Docker client is not yet initiated.
+            # Initiated here to avoid calling to early in boot sequence.
             if 'client' not in globals():
-                client = docker.DockerClient(base_url=client_path,
-                                             tls=False)
+                client = \
+                    docker.DockerClient(base_url=f"unix:/{config.socket_path}",
+                                        tls=False)
             # Check the docker client is available
             client.ping()
         except Exception:
