@@ -135,7 +135,6 @@
     "formats": "Formats :",
     "size": "Taille :",
     "host": "Hébergé par :",
-    "rsync_url": "URL Rsync",
     "no_results_found": "Aucun résultat trouvé",
     "download_complete": "Téléchargement terminé",
     "level": "Niveau :",
