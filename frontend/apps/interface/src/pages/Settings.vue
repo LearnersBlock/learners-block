@@ -1239,20 +1239,30 @@ export default defineComponent({
     // Check for when the API is back up after the SQLite database reset, and when ready forward
     // user back to first page
     async function resetDatabaseLoop () {
+      const redirecting = ref<boolean>(false)
       for (let i = 0; i < 10; i++) {
+        await delay(4000)
         const xhr = new XMLHttpRequest()
-        xhr.open('GET', `${api.value}`)
+        xhr.open('GET', api.value)
         xhr.timeout = 2000
-        xhr.send()
 
-        await delay(2000)
-        if (xhr.status === 200) {
-          await delay(7000)
-          redirect('/')
-          break
+        xhr.onreadystatechange = async function () {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 0 || (xhr.status >= 200 && xhr.status < 400)) {
+              redirecting.value = true
+              await delay(7000)
+              redirect('/')
+            }
+          }
+        }
+
+        if (!redirecting.value) {
+          xhr.send()
+        } else {
+          return
         }
       }
-      $q.notify({ type: 'positive', message: t('api_down') })
+      $q.notify({ type: 'negative', message: t('api_down') })
     }
 
     // Set the custom start page menu to the currently selected start page
