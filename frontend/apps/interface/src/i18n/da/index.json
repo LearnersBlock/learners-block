@@ -1,7 +1,6 @@
 {
     "password_set_success": "Din adgangskode er indstillet",
     "password": "Adgangskode",
-    "makerspace_description": "Indhold downloadet fra Makerspace kan findes her.",
     "login_successfull": "Logind lykkedes",
     "login_disabled": "Adgangskoden til log ind er blevet deaktiveret.",
     "login": "log ind",
