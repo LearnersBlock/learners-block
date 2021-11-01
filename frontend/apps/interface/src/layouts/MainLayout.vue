@@ -5,7 +5,7 @@
       bordered
       reveal
     >
-      <q-toolbar v-if="!(currentPath == '/captive_portal' || currentPath == '/captive_portal/' || currentPath == '/epub_reader/')">
+      <q-toolbar v-if="!hideHeader">
         <div class="ml-2">
           <router-link to="/">
             <img
@@ -90,7 +90,7 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
 
     // Set constants
-    const currentPath = ref<any>($router.currentRoute.value.path)
+    const hideHeader = ref<boolean>(false)
     const languages = ref([
       // Language updates must be changed here and in the webpackInclude magic comment below
       {
@@ -127,8 +127,13 @@ export default defineComponent({
       }
     ])
 
+    // Watch for page changes to update header status
     watch(() => $router.currentRoute.value.path, val => {
-      currentPath.value = val
+      if (val.includes('captive_portal') || val.includes('epub_reader')) {
+        hideHeader.value = true
+      } else {
+        hideHeader.value = false
+      }
     })
 
     const isAuthenticated = computed(() => {
@@ -136,6 +141,11 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      // Hide header on full screen routes
+      if ($router.currentRoute.value.path.includes('captive_portal') || $router.currentRoute.value.path.includes('epub_reader')) {
+        hideHeader.value = true
+      }
+
       const langCookie = ref<any>($q.localStorage.getItem('lang'))
       if (langCookie.value) {
         changeLanguage(langCookie.value)
@@ -183,7 +193,7 @@ export default defineComponent({
 
     return {
       changeLanguage,
-      currentPath,
+      hideHeader,
       isAuthenticated,
       languages,
       logout,
