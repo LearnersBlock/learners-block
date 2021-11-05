@@ -56,7 +56,7 @@ jobs:
               lxc \
               wget \
               bsdtar \
-              linux-image-extra-$(uname -r)     
+              libarchive-tools   
 
           modprobe aufs
 
