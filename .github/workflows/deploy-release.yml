@@ -52,7 +52,16 @@ jobs:
               jq \
               unzip \
               wget \
-              zip
+              zip \
+              # Temporary aufs fix: https://stackoverflow.com/a/19445836/16019434
+              lxc \
+              wget \
+              bsdtar \
+              linux-image-extra-$(uname -r)     
+
+          # Temp aufs fix
+          modprobe aufs
+
           cd /opt/ && \
             sudo curl -O -sSL $BALENA_CLI && \
             sudo unzip balena-cli-*-linux-x64-standalone.zip && \
