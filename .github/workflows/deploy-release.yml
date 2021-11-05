@@ -52,14 +52,7 @@ jobs:
               jq \
               unzip \
               wget \
-              zip \
-              lxc \
-              wget \
-              bsdtar \
-              libarchive-tools   
-
-          modprobe aufs
-
+              zip
           cd /opt/ && \
             sudo curl -O -sSL $BALENA_CLI && \
             sudo unzip balena-cli-*-linux-x64-standalone.zip && \
