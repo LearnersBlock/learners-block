@@ -4,12 +4,12 @@ FROM python:3.8.10-alpine
 WORKDIR /app
 
 RUN apk add \
-  build-base \
-  dbus-libs \
-  dnsmasq \
-  glib \
-  iw \
+  # BCrypt dependencies
+  gcc \
+  g++ \
   libffi-dev \
+  musl-dev \
+  # Natsort dependencies for more accurate sorting of files in File Manager 
   py3-icu
 
 # Set env variables

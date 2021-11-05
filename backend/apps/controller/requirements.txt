@@ -59,7 +59,7 @@ markupsafe==2.0.1
     # via
     #   jinja2
     #   mako
-natsort==7.1.1
+natsort==8.0.0
     # via -r requirements.in
 ntplib==0.4.0
     # via -r requirements.in

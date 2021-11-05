@@ -1,17 +1,19 @@
 ## Compile container
-FROM node:14.17.0-alpine3.13
+FROM node:16.13.0-alpine3.14
 
 # Install SupervisorD
 RUN apk add supervisor
 
 # --------------- ## Mirror of production file ## -------------- #
-# ----------- 'install_packages' switched for 'apk add' --------- #
 
 # Install packages
-RUN apk add \
+RUN apk add --no-cache \
+  # Used for udev init script
+  bash \
   # Add USB mount dependencies
   findmnt \
   grep \
+  udev \
   util-linux \
   # Install NGINX and PHP-FPM
   curl \
@@ -33,7 +35,7 @@ RUN apk add \
   php8-xml \
   php8-xmlreader \
   php8-zlib \
-  && rm /etc/nginx/conf.d/default.conf
+  && rm /etc/nginx/http.d/default.conf
 
 # Set application directory 
 WORKDIR /app/
@@ -51,14 +53,16 @@ COPY config/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Enable USB support on device
 ENV UDEV=on
 COPY config/usb/udev/usb.rules /etc/udev/rules.d/usb.rules
+COPY config/usb/entrypoint.sh /usr/bin/
 COPY config/usb/scripts /usr/src/scripts
+RUN chmod +x /usr/bin/entrypoint.sh
 RUN chmod +x /usr/src/scripts/*
 
 # Configure PHP-FPM and NGINX
 COPY config/php/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
 COPY config/php/php.ini /etc/php8/conf.d/custom.ini
 COPY /config/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY /config/nginx/conf/ /etc/nginx/conf.d/
+COPY /config/nginx/conf/ /etc/nginx/http.d/
 
 # Insert website holding page
 COPY --chown=nginx /config/nginx/assets/index.html public/storage/website/index.html

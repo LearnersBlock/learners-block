@@ -1,8 +1,18 @@
 ## Build Python packages to avoid need for builds in main image
-FROM balenalib/%%BALENA_ARCH%%-alpine-python:3.8.10-3.13-build-20210603 AS python-buildstep
+FROM python:3.8.10-alpine3.14 AS python-buildstep
 
 # Prevent pip 'warn script location' warnings. Equivalent to --no-warn-script-location
 ENV PATH=/root/.local/bin:$PATH
+
+RUN apk add --no-cache \
+  build-base \
+  dbus-dev \
+  dbus-libs \
+  musl-dev \
+  gcc \
+  glib-dev \
+  libffi-dev \
+  g++
 
 # Copy Python requirements file
 COPY apps/controller/requirements.txt /tmp/
@@ -12,7 +22,7 @@ RUN pip install --user -r /tmp/requirements.txt --no-cache-dir
 
 
 ## Compile container
-FROM balenalib/%%BALENA_ARCH%%-alpine-python:3.8.10-3.13-20210603
+FROM python:3.8.10-alpine3.14
 
 # Set env variables
 ENV FLASK_ENV=production
@@ -24,13 +34,13 @@ ENV PATH=/root/.local/bin:$PATH
 WORKDIR /app
 
 # Install dependencies
-RUN install_packages \
+RUN apk add --no-cache \
   # Wi-Fi Connect dependencies
   dbus-libs \
   dnsmasq \
   glib \
   iw \
-  # Natsort dependencies for more accurate sorting of files in File Manager 
+  # Natsort dependencies for more accurate sorting of files in File Manager
   py3-icu
 
 # Copy built Python packages from build container

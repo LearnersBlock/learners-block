@@ -510,7 +510,7 @@
               v-if="!filesLoading"
               v-model="startPage"
               class="full-width"
-              :loading="startPage"
+              :loading="!startPage"
               rounded
               dense
               outlined
