@@ -978,7 +978,12 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     watch(lang, _val => {
       pages.value = [
-        t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('app_store_app'), t('custom_start_page')
+        t('lb_welcome_page'),
+        t('file_manager'),
+        t('library'),
+        t('website'),
+        t('app_store_app'),
+        t('custom_start_page')
       ]
       // Prevent repeat of page setting before rows are populated on first load
       if (rows.value) {
@@ -992,7 +997,7 @@ export default defineComponent({
     })
 
     // App Store database
-    const columns = [
+    const columns = computed(() => [
       {
         name: 'name',
         required: true,
@@ -1007,7 +1012,7 @@ export default defineComponent({
       { name: 'version', label: t('version'), field: 'version_name', align: 'left' },
       { name: 'ports', field: 'ports' },
       { name: 'status', field: 'status', sortable: true, align: 'center' }
-    ] as any
+    ]) as any
 
     const rows = ref<any>(null)
 
