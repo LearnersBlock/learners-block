@@ -19,7 +19,7 @@
     "home": "Inicio",
     "files_settings_description": "Gestione archivos en su Block. Solo los usuarios que hayan iniciado sesión pueden eliminarlos.",
     "files_description": "Examine los archivos aquí.",
-    "error": "Ha ocurrido un error.",
+    "error": "Ha ocurrido un error:",
     "enable_components_in": "Puede activar componentes en el Panel de control.",
     "disconnect_wifi": "¿Confirma que quiere desconectarse de la red wifi?",
     "disconnect": "Desconectar",
@@ -150,5 +150,6 @@
     "portainer_desc": "Una interfaz gráfica para gestionar contenedores personalizados de Docker en el Block.",
     "library_api_down": "No se pudo establecer contacto con la Biblioteca en línea. Compruebe la conexión a internet y vuelva a intentarlo.",
     "enter_name": "Introduzca un nombre",
-    "searching_networks": "Buscando redes cercanas…"
+    "searching_networks": "Buscando redes cercanas…",
+    "api_unavailable": "Tu bloque aun se esta descargando. Esta página se recargará cuando este listo."
 }
