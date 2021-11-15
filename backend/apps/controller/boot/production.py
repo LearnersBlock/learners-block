@@ -1,4 +1,3 @@
-import config
 import subprocess
 import sys
 import threading
@@ -8,6 +7,7 @@ from common.processes import check_connection
 from common.processes import check_internet
 from common.processes import container_hostname
 from common.processes import device_hostname
+from common.processes import led
 from common.wifi import wifi
 from resources.supervisor_routes import supervisor_update
 
@@ -38,12 +38,6 @@ def dnsmasq():
 
 
 def handle_exit(*args):
-    # Ensure Wi-Fi connections are shutdown softly
-    try:
-        wifi.forget(conn_name=config.hotspot_name)
-    except Exception:
-        logger.exception('Failed to terminate wifi processes.')
-
     logger.info('Finshed the exit process.')
 
 
@@ -55,9 +49,13 @@ def launch_wifi(self):
     # Delay to allow a pre-configured connection to connect
     time.sleep(10)
 
-    # If not connected, start Wi-Fi-Connect
-    if not check_connection():
-        wifi.start_hotspot()
+    # If the Wi-Fi connection or device is already active, do nothing
+    if check_connection() or wifi.check_device_state():
+        led(1)
+    else:
+        led(0)
+        wifi.refresh_networks(retries=1)
+        wifi.connect()
         logger.info("Api-v1 - API Started - Launched wifi-connect.")
 
     # If internet available (Ethernet or Wi-Fi) request update
@@ -74,11 +72,11 @@ def startup():
         # Check container and device hostname match
         if container_hostname() != \
                 device_hostname(supervisor_retries=20):
-            logger.info("Api-v1 - Container hostname and device hostname do "
-                        "not match. Likely a hostname change has been "
-                        "performed. Balena Supervisor should detect this "
-                        "and rebuild the container shortly. Waiting 30"
-                        "seconds before continuing anyway.")
+            logger.warning("Api-v1 - Container hostname and device hostname "
+                           "do not match. Likely a hostname change has been "
+                           "performed. Balena Supervisor should detect this "
+                           "and rebuild the container shortly. Waiting 30"
+                           "seconds before continuing anyway.")
             time.sleep(30)
 
     except Exception:

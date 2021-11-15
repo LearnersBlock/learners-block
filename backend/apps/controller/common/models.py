@@ -134,6 +134,7 @@ class User(db.Model):
 
     wifi_password = db.Column(db.String,
                               unique=False,
+                              server_default=str(''),
                               nullable=True)
 
     wifi_ssid = db.Column(db.String,

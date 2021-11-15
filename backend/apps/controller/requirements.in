@@ -10,3 +10,4 @@ ntplib
 python-dotenv
 python-networkmanager
 requests
+waitress

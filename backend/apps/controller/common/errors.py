@@ -10,6 +10,7 @@ formatter = logging.Formatter('[%(asctime)s] - [%(levelname)s] - [%(module)s:'
 syslog.setFormatter(formatter)
 logger.addHandler(syslog)
 logger.setLevel(logging.WARNING)
+logger.propagate = False
 
 # Change default logging mode when in development environmnets
 if config.dev_mode or ("BALENA_APP_NAME" in os.environ and
@@ -58,7 +59,27 @@ class SupervisorUnreachable(Exception):
     pass
 
 
-class WifiApFail(Exception):
+class WifiConnectionFailed(Exception):
+    pass
+
+
+class WifiDeviceNotFound(Exception):
+    pass
+
+
+class WifiHotspotStartFailed(Exception):
+    pass
+
+
+class WifiInvalidConnectionType(Exception):
+    pass
+
+
+class WifiNetworkManagerError(Exception):
+    pass
+
+
+class WifiNoSuitableDevice(Exception):
     pass
 
 
@@ -104,8 +125,28 @@ errors = {
          "message": "Balena Supervisor could not be reached.",
          "status": 408
      },
-    "WifiApFail": {
-         "message": "Failed to activate Wi-Fi",
+    "WifiConnectionFailed": {
+         "message": "System error while establishing Wi-Fi connection.",
          "status": 500
+     },
+    "WifiDeviceNotFound": {
+         "message": "Requested device not available.",
+         "status": 500
+     },
+    "WifiHotspotStartFailed": {
+         "message": "System error starting hotspot.",
+         "status": 500
+     },
+    "WifiInvalidConnectionType": {
+         "message": "Invalid connection type.",
+         "status": 500
+     },
+    "WifiNetworkManagerError": {
+         "message": "Failed communicating with Network Manager.",
+         "status": 500
+     },
+    "WifiNoSuitableDevice": {
+         "message": "No suitable Wi-Fi device available.",
+         "status": 404
      }
 }

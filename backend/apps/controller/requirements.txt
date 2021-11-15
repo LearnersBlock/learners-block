@@ -89,6 +89,8 @@ sqlalchemy==1.4.26
     #   flask-sqlalchemy
 urllib3==1.26.7
     # via requests
+waitress==2.0.0
+    # via -r requirements.in
 websocket-client==1.2.1
     # via docker
 werkzeug==2.0.2

@@ -152,15 +152,15 @@ class wifi_list_access_points(Resource):
         time.sleep(2)
         # Demo routes
         ssids = [{"ssid": "My House", "security": "WPA",
-                  "strength": 70},
+                  "strength": 73},
                  {"ssid": "TELUS9052-Enterprise",
                   "security": "ENTERPRISE",
                   "strength": 100},
                  {"ssid": "Althaea-2-no-password",
                   "security": "NONE",
-                  "strength": 1},
+                  "strength": 11},
                  {"ssid": "TELUS9052-Hidden", "security": "HIDDEN",
-                  "strength": 10}]
+                  "strength": 17}]
 
         # Sort SSIDs by signal strength
         ssids = sorted(ssids,

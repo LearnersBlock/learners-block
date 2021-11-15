@@ -37,6 +37,7 @@ from resources.system_routes import system_hostname
 from resources.system_routes import system_portainer
 from resources.system_routes import system_prune
 from resources.system_routes import system_reset_database
+from waitress import serve
 
 
 # Apply fix to Flask-Restful not aligned with JWT exceptions
@@ -233,4 +234,4 @@ if __name__ == '__main__':
     # Initialise and start
     api.init_app(app)
 
-    app.run(port=9090, host='0.0.0.0')
+    serve(app, port=9090, host='0.0.0.0')

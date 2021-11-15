@@ -153,7 +153,8 @@ def device_reboot():
 
 def database_recover():
     # Resetting database
-    logger.warning("Database error. Deleting database and restarting.")
+    logger.error("Database error. Deleting database and restarting.")
+    time.sleep(3)
 
     try:
         # If the container hostname is not the default, remove
@@ -195,3 +196,15 @@ def human_size(nbytes):
         i += 1
     f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
     return '%s %s' % (f, suffixes[i])
+
+
+def led(mode):
+    # Activate LED on compatible devices
+    # 1 = on
+    # 0 = off
+    try:
+        with open('/sys/class/leds/led0/brightness', 'w+') as f:
+            f.write(str(mode))
+    except Exception:
+        # This is not possible on some devices.
+        pass

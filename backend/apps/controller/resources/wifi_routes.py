@@ -15,16 +15,10 @@ class wifi_connect(Resource):
     def post(self):
         content = request.get_json()
 
-        if content["hiddenNetworkName"]:
-            wifi.connect_to_AP(conn_type=content["hiddenSecurity"],
-                               ssid=content["hiddenNetworkName"],
-                               username=content["username"],
-                               password=content["passphrase"])
-        else:
-            wifi.connect_to_AP(conn_type=content["type"],
-                               ssid=content["ssid"],
-                               username=content["username"],
-                               password=content["passphrase"])
+        wifi_connect_thread = threading.Thread(target=wifi.connect,
+                                               kwargs=content)
+
+        wifi_connect_thread.start()
 
         return {'message': 'Accepted'}
 
@@ -49,8 +43,13 @@ class wifi_forget(Resource):
             }, 409
 
         wifi_forget_thread = threading.Thread(target=wifi.forget,
-                                              args=(config.ap_name,),
-                                              name='wifi_forget_thread')
+                                              kwargs={'create_new_hotspot':
+                                                      True,
+                                                      'all_networks':
+                                                      False})
+
+        logger.info('Removing connetion...')
+
         wifi_forget_thread.start()
 
         return {'message': 'Accepted'}, 202
@@ -71,14 +70,9 @@ class wifi_forget_all(Resource):
 class wifi_list_access_points(Resource):
     @jwt_required()
     def get(self):
-        ssids, refresh_status = wifi.list_access_points()
+        ssids, iw_status = wifi.list_access_points()
 
-        # Sort SSIDs by signal strength
-        ssids = sorted(ssids,
-                       key=lambda x: x['strength'],
-                       reverse=True)
-
-        return {'ssids': ssids, 'compatible': refresh_status}
+        return {'ssids': ssids, 'iw_compatible': iw_status}
 
 
 class wifi_set_password(Resource):
