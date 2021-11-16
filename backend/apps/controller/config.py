@@ -29,6 +29,9 @@ if "FLASK_ENV" in os.environ and \
 else:
     dev_mode = False
 
+# Store the chronyd state to avoid polling multiple times
+chronyd_synced = False
+
 # Default access point name. No need to change these under usual operation as
 # they are for use inside the app only. PWC is acronym for 'Py Wi-Fi Connect'.
 ap_name = 'PWC'

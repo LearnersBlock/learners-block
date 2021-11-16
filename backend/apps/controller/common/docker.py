@@ -1,43 +1,13 @@
 import config
 import docker
-import ntplib
 from common.errors import DockerContainerException
 from common.errors import DockerException
 from common.errors import DockerImageStatus
 from common.errors import DockerImageNotFound
 from common.errors import DockerSocket
 from common.errors import logger
-from common.processes import check_internet
-from flask_restful import abort
-
-
-# Initiate NTP Library
-ntp = ntplib.NTPClient()
-
-
-# Check time has been synced before request
-def docker_ntp_check(func):
-    def inner(*args, **kwargs):
-        # Only trigger if there is an internet connection
-        if check_internet():
-            try:
-                # Check if the system clock is in sync otherwise Docker Hub
-                # certificates create an error
-                time_offset = ntp.request('time.cloudflare.com',
-                                          version=3).offset
-                logger.info(f"Time offset is: {time_offset}")
-                if time_offset > 3600 or time_offset < -3600:
-                    logger.debug('Not in sync with NTP server.')
-                    abort(502,
-                          status=502,
-                          message='System is still loading. Try again later.')
-            except Exception:
-                logger.exception('Failed to check time with NTP server.')
-                # In event of connection error, allowing Docker to try anyway.
-
-        return func(*args, **kwargs)
-
-    return inner
+from common.processes import chronyd_check
+from common.processes import ntp_check
 
 
 # Check Docker is available before sending the request
@@ -94,7 +64,8 @@ class docker_py():
         return True
 
     @docker_ping
-    @docker_ntp_check
+    @chronyd_check
+    @ntp_check
     def pull(env_vars, image, name, ports, volumes, network, detach=True):
         try:
             container = client.containers.get(name)
@@ -134,7 +105,8 @@ class docker_py():
         return True
 
     @docker_ping
-    @docker_ntp_check
+    @chronyd_check
+    @ntp_check
     def run(image, name, ports={}, volumes={}, detach=True, network='lbsystem',
             env_vars={}, privileged=False, command='', labels={}):
         # If network doesn't yet exist then create it

@@ -3,12 +3,12 @@ import logging
 import os
 
 # Create custom logger
-logger = logging.getLogger('syslog')
 syslog = logging.StreamHandler()
+logger = logging.getLogger('syslog')
+logger.addHandler(syslog)
 formatter = logging.Formatter('[%(asctime)s] - [%(levelname)s] - [%(module)s:'
                               '%(lineno)d] - %(message)s', "%Y-%m-%d %H:%M:%S")
 syslog.setFormatter(formatter)
-logger.addHandler(syslog)
 logger.setLevel(logging.WARNING)
 logger.propagate = False
 
