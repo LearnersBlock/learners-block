@@ -60,7 +60,7 @@ export default defineComponent({
     }
 
     const fetchHostname = async () => {
-      const fetchedHostName = await Axios.get(`${api.value}/v1/system/hostname`)
+      const fetchedHostName = await Axios.get(`${api.value}/v1/supervisor/hostname`)
       hostname.value = `http://${fetchedHostName.data.hostname}.local`
     }
 

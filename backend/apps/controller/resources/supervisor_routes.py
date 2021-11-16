@@ -1,6 +1,7 @@
 import os
 from common.errors import logger
 from common.processes import curl
+from common.processes import device_hostname
 from common.processes import device_host_config
 from flask import request
 from flask_jwt_extended import jwt_required
@@ -28,6 +29,11 @@ class supervisor_host_config(Resource):
         response = device_host_config(hostname)
 
         return {'message': response.text}, response.status_code
+
+
+class supervisor_hostname(Resource):
+    def get(self):
+        return {'hostname': str(device_hostname())}
 
 
 class supervisor_journal_logs(Resource):

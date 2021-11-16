@@ -2,6 +2,7 @@ import atexit
 import config
 import os
 import signal
+import time
 from common.errors import errors
 from common.errors import logger
 from common.models import db
@@ -101,6 +102,9 @@ def first_launch():
 
             logger.info('Set hostname on first boot. Restarting.')
 
+            # Sleep to allow supervisor to be ready.
+            time.sleep(15)
+
             device_reboot()
 
 
@@ -127,19 +131,20 @@ if __name__ == '__main__':
     if config.dev_mode:
         # Import development routes
         from resources.dev_routes import supervisor_device, \
-            supervisor_host_config, supervisor_journal_logs, \
-            supervisor_state, supervisor_update, supervisor_uuid, \
-            wifi_connect, wifi_connection_status, wifi_forget, \
-            wifi_forget_all, wifi_list_access_points, wifi_set_password, \
-            wifi_set_ssid
+            supervisor_host_config, supervisor_hostname, \
+            supervisor_journal_logs, supervisor_state, supervisor_update, \
+            supervisor_uuid, wifi_connect, wifi_connection_status, \
+            wifi_forget, wifi_forget_all, wifi_list_access_points, \
+            wifi_set_password, wifi_set_ssid
 
         logger.info("Api-v1 - Starting API (Development)...")
     else:
         # Import production routes
         from boot.production import handle_exit, handle_sigterm, startup
         from resources.supervisor_routes import supervisor_device, \
-            supervisor_host_config, supervisor_journal_logs, \
-            supervisor_state, supervisor_update, supervisor_uuid
+            supervisor_host_config, supervisor_hostname, \
+            supervisor_journal_logs, supervisor_state, supervisor_update, \
+            supervisor_uuid
         from resources.wifi_routes import wifi_connect, \
             wifi_connection_status, wifi_forget, wifi_forget_all, \
             wifi_list_access_points, wifi_set_password, wifi_set_ssid
@@ -209,6 +214,7 @@ if __name__ == '__main__':
     # Supervisor
     api.add_resource(supervisor_device, '/v1/supervisor/device')
     api.add_resource(supervisor_host_config, '/v1/supervisor/host_config')
+    api.add_resource(supervisor_hostname, '/v1/supervisor/hostname')
     api.add_resource(supervisor_journal_logs, '/v1/supervisor/journal_logs')
     api.add_resource(supervisor_state, '/v1/supervisor/state')
     api.add_resource(supervisor_update, '/v1/supervisor/update')
