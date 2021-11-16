@@ -54,6 +54,3 @@ COPY apps/controller .
 
 # Check for database migrations then launch controller
 CMD ["sh", "start.sh"]
-
-HEALTHCHECK --start-period=60s --timeout=30s \
-  CMD curl --silent --fail http://127.0.0.1:9090 || exit 1
