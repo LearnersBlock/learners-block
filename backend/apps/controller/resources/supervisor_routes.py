@@ -66,7 +66,7 @@ class supervisor_update(Resource):
 
         response = curl(method="post-json",
                         path="/v1/update?apikey=",
-                        data={"force": False})
+                        data={"force": True})
 
         return {'message': response.text}, response.status_code
 

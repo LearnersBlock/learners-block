@@ -13,8 +13,10 @@ logger.setLevel(logging.WARNING)
 logger.propagate = False
 
 # Change default logging mode when in development environmnets
+lb_dev = False
 if config.dev_mode or ("BALENA_APP_NAME" in os.environ and
    os.environ['BALENA_APP_NAME'].lower() == "lb-dev"):
+    lb_dev = True
     logger.setLevel(logging.DEBUG)
 
 

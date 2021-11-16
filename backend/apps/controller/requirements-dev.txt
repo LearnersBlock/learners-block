@@ -22,6 +22,8 @@ click==8.0.3
     # via python-networkmanager
 docker==5.0.3
     # via -r requirements.in
+fasteners==0.16.3
+    # via -r requirements.in
 flask==2.0.2
     # via
     #   flask-cors
