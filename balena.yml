@@ -22,7 +22,6 @@ data:
   supportedDeviceTypes:
     - fincm3
     - orange-pi-zero
-    - raspberry-pi
     - raspberry-pi2
     - raspberrypi3-64
     - raspberrypi4-64

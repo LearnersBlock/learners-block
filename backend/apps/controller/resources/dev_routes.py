@@ -51,7 +51,7 @@ class supervisor_host_config(Resource):
 
 class supervisor_hostname(Resource):
     def get(self):
-        return {'hostname': "device hostname"}
+        return {'hostname': "devicehostname"}
 
 
 class supervisor_journal_logs(Resource):
