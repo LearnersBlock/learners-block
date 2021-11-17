@@ -1,3 +1,2 @@
 lb-aarch64
 lb-armv7hf
-lb-armv6hf
