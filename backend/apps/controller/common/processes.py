@@ -86,11 +86,8 @@ def chronyd_check(func):
     def inner(*args, **kwargs):
         if not config.chronyd_synced:
             try:
-                subprocess.check_output(["chronyc",
-                                         "sources",
-                                         "|",
-                                         "grep",
-                                         "'*'"])
+                subprocess.check_output("chronyc sources | grep '*'",
+                                        shell=True)
                 config.chronyd_synced = True
             except Exception:
                 logger.exception('ChronyD not synced yet.')
