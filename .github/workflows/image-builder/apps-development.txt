@@ -1,3 +1,2 @@
 lb-dev-aarch64
 lb-dev-armv7hf
-lb-dev-armv6hf
