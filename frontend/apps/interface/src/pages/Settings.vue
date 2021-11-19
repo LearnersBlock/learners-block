@@ -35,6 +35,8 @@
           />
         </q-tabs>
       </div>
+
+      <!-- Tab 1 -->
       <div
         v-if="tab == 'general'"
         class="q-pa-sm"
@@ -320,6 +322,8 @@
         </q-list>
         <q-separator spaced />
       </div>
+
+      <!-- Tab 2 -->
       <!-- Application Store -->
       <div
         v-if="tab == 'appStore'"
@@ -486,6 +490,8 @@
           </q-card-section>
         </q-card>
       </div>
+
+      <!-- Tab 3 -->
       <!-- Advanced Features -->
       <div
         v-if="tab == 'advanced'"
