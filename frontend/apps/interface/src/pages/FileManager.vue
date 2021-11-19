@@ -342,7 +342,7 @@
                   :rules="[(val) =>
                     !invalidCharacters.some(el => val.includes(el))
                     || $t('invalid_filemanager_string')]"
-                  @keyup.enter="scope.set"
+                  @keyup.enter="scope.set()"
                   @update:model-value="newName = scope.value"
                 />
               </q-popup-edit>
