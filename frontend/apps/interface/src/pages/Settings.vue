@@ -1174,10 +1174,10 @@ export default defineComponent({
     }
 
     // Notify that the hostname has been changed
-    function notifyConnected () {
+    function permNotify (type, message) {
       $q.notify({
-        type: 'positive',
-        message: t('hostname_changed_notification'),
+        type: type,
+        message: message,
         timeout: 0,
         actions: [
           {
@@ -1465,18 +1465,7 @@ export default defineComponent({
             volumes: row.volumes,
             dependencies: row.dependencies
           }).then(function () {
-            $q.notify({
-              type: 'positive',
-              timeout: 0,
-              actions: [
-                {
-                  label: t('close'),
-                  color: 'white',
-                  handler: () => { /* ... */ }
-                }
-              ],
-              message: t('app_installed')
-            })
+            permNotify('positive', t('app_installed'))
             fetchApps()
           }).catch(async function () {
             await fetchApps()
@@ -1524,18 +1513,7 @@ export default defineComponent({
             volumes: row.volumes,
             dependencies: row.dependencies
           }).then(function () {
-            $q.notify({
-              type: 'positive',
-              timeout: 0,
-              actions: [
-                {
-                  label: t('close'),
-                  color: 'white',
-                  handler: () => { /* ... */ }
-                }
-              ],
-              message: t('app_installed')
-            })
+            permNotify('positive', t('app_installed'))
             fetchApps()
           }).catch(async function () {
             await fetchApps()
@@ -1574,27 +1552,16 @@ export default defineComponent({
             timeout: 4000
           }).then(async function () {
             await delay(10000)
-            notifyConnected()
+            permNotify('positive', t('hostname_changed_notification'))
           }).catch(async function (error) {
             // Return positive message if there was no response. A timout
             // is expected as the device is connecting to a new network.
             if (!error.response) {
               // Add delay before returning response to ensure hostname has had time to apply
               await delay(10000)
-              notifyConnected()
+              permNotify('positive', t('hostname_changed_notification'))
             } else {
-              $q.notify({
-                type: 'negative',
-                message: t('error'),
-                timeout: 0,
-                actions: [
-                  {
-                    label: t('close'),
-                    color: 'white',
-                    handler: () => { /* ... */ }
-                  }
-                ]
-              })
+              permNotify('negative', t('error'))
               console.log(error)
             }
           })
