@@ -84,7 +84,7 @@ def check_supervisor(supervisor_retries, timeout):
 # this is the first ever connection to the internet.
 def chronyd_check(func):
     def inner(*args, **kwargs):
-        if not config.chronyd_synced:
+        if not config.dev_mode and not config.chronyd_synced:
             try:
                 subprocess.check_output("chronyc sources | grep '*'",
                                         shell=True)

@@ -508,14 +508,14 @@
           <q-item class="mb-1">
             <q-select
               v-if="!filesLoading"
-              v-model="startPage"
+              v-model="selectedStartPage"
               class="full-width"
-              :loading="!startPage"
+              :loading="!selectedStartPage"
               rounded
               dense
               outlined
               transition-duration="1"
-              :options="pages"
+              :options="startPageOptions"
               @update:model-value="changeStartPage"
             />
           </q-item>
@@ -550,8 +550,8 @@
                       flat
                       color="primary"
                       icon="check_circle_outline"
-                      :disable="customStartPath "
-                      @click="setCustomStartPath"
+                      :disable="customStartPath === ''"
+                      @click="storeStartPage(null)"
                     />
                   </template>
                 </q-input>
@@ -637,7 +637,7 @@
                   flat
                   :label="$t('cancel')"
                   color="primary"
-                  @click="setStartPage"
+                  @click="selectedStartPage = $t('choose_start_page')"
                 />
               </q-card-actions>
             </q-card>
@@ -931,8 +931,8 @@ export default defineComponent({
 
     const appStorePageInput = ref<boolean>(false)
     const appTableVisible = ref(false)
-    const currentStartPage = ref<any>()
     const customStartPageInput = ref<boolean>(false)
+    const customStartPath = ref<any>('')
     const devMode = ref<boolean>(false)
     const files = ref<boolean>(false)
     const filesLoading = ref<boolean>(true)
@@ -947,11 +947,6 @@ export default defineComponent({
     const loginPasswordStatus = ref<boolean>(false)
     const loginPasswordToggle = ref<boolean>(false)
     const newHostname = ref<any>('')
-    const customStartPath = ref<any>('')
-    const pagesString = [
-      t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('app_store_app'), t('custom_start_page')
-    ]
-    const pages = ref(pagesString)
     const portainer = ref<boolean>(false)
     const portainerImageExists = ref<boolean>(true)
     const portainerLoading = ref<boolean>(true)
@@ -961,7 +956,7 @@ export default defineComponent({
     const regexp = ref(new RegExp('^[A-Za-z0-9-_]'))
     const $router = useRouter()
     const settingPassword = ref<boolean>(false)
-    const startPage = ref<any>('')
+    const selectedStartPage = ref<any>('')
     const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
@@ -974,22 +969,6 @@ export default defineComponent({
     const wifiPasswordToggle = ref<boolean>(false)
     const wifiLoading = ref<boolean>(true)
     const windowHostname = ref<string>(window.location.hostname)
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    watch(lang, _val => {
-      pages.value = [
-        t('lb_welcome_page'),
-        t('file_manager'),
-        t('library'),
-        t('website'),
-        t('app_store_app'),
-        t('custom_start_page')
-      ]
-      // Prevent repeat of page setting before rows are populated on first load
-      if (rows.value) {
-        setStartPage()
-      }
-    })
 
     // Get api from store
     const api = computed(() => {
@@ -1015,6 +994,37 @@ export default defineComponent({
     ]) as any
 
     const rows = ref<any>(null)
+
+    const startPageOptions = computed(() => [
+      {
+        label: t('lb_welcome_page'),
+        string: '/'
+      },
+      {
+        label: t('file_manager'),
+        string: 'files'
+      },
+      {
+        label: t('library'),
+        string: 'library'
+      },
+      {
+        label: t('website'),
+        string: 'website'
+      },
+      {
+        label: t('custom_start_page'),
+        string: selectedStartPage.value ? selectedStartPage.value.string : ''
+      },
+      {
+        label: t('app_store_app'),
+        string: rows.value ? rows.value.find(x => x.name === selectedStartPage.value) : ''
+      }
+    ])
+
+    watch(lang, () => {
+      selectedStartPage.value = t('choose_start_page')
+    })
 
     onMounted(() => {
       apiCall()
@@ -1061,9 +1071,8 @@ export default defineComponent({
       })
 
       // Fetch Settings UI configuration
-      Promise.all([settingsUi, verifyUserPasswordState]).then(function ([res1, res2]) {
+      Promise.all([settingsUi, verifyUserPasswordState]).then(async function ([res1, res2]) {
         // Set settings toggle status
-        currentStartPage.value = res1.data.start_page
         files.value = res1.data.files
         website.value = res1.data.website
         library.value = res1.data.library
@@ -1083,14 +1092,23 @@ export default defineComponent({
 
         // Stop loading toggles
         togglesLoading.value = false
-
-        // Fetch available apps from database, then populate the
-        // start page which relies on rows being populated above
-        fetchApps().then(() => setStartPage())
-
         filesLoading.value = false
         libraryLoading.value = false
         websiteLoading.value = false
+
+        // Fetch available apps from database.
+        await fetchApps()
+
+        // Set default start page
+        const internalPage = startPageOptions.value.find((x) => x.string === res1.data.start_page)?.label
+        const appEntry = rows.value.find(x => x.name === res1.data?.start_page)
+        if (internalPage) {
+          selectedStartPage.value = internalPage
+        } else if (appEntry) {
+          selectedStartPage.value = appEntry.long_name
+        } else {
+          selectedStartPage.value = res1.data.start_page
+        }
       })
 
       // Fetch System Info status
@@ -1100,21 +1118,17 @@ export default defineComponent({
       })
     }
 
-    // Set the page a user will see on first load
+    // Show various dialogs or execute functions depending on user selection
     const changeStartPage = () => {
-      if (startPage.value === t('lb_welcome_page') || startPage.value === t('file_manager') || startPage.value === t('library') || startPage.value === t('website')) {
-        customStartPageInput.value = false
-        appStorePageInput.value = false
-      } else if (startPage.value === t('app_store_app')) {
+      if (selectedStartPage.value.label === t('app_store_app')) {
         customStartPageInput.value = false
         appStorePageInput.value = true
-        return
-      } else if (startPage.value === t('custom_start_page')) {
+      } else if (selectedStartPage.value.label === t('custom_start_page')) {
         appStorePageInput.value = false
         customStartPageInput.value = true
-        return
+      } else {
+        storeStartPage(null)
       }
-      storeStartPage(null)
     }
 
     // Function for calling delays throughout
@@ -1250,46 +1264,6 @@ export default defineComponent({
       $q.notify({ type: 'negative', message: t('api_down') })
     }
 
-    // When changing the default start path of the device, warn the user and inform
-    // how to undo the change
-    function setCustomStartPath () {
-      if (startPathValid.value.validate() && customStartPath.value !== '') {
-        $q.dialog({
-          title: t('confirm'),
-          message: t('change_path_warning'),
-          cancel: true,
-          persistent: true
-        }).onOk(() => {
-          Axios.post(`${api.value}/v1/settings/set_ui`, {
-            start_page: customStartPath.value
-          })
-          $q.notify({ type: 'positive', message: `${t('path_changed_to')} '${customStartPath.value}'` })
-        })
-      } else {
-        $q.notify({ type: 'negative', message: t('invalid_path_input') })
-      }
-    }
-
-    // Set the custom start page menu to the currently selected start page
-    function setStartPage () {
-      if (currentStartPage.value === '/') {
-        startPage.value = t('lb_welcome_page')
-      } else if (currentStartPage.value === 'files') {
-        startPage.value = t('file_manager')
-      } else if (currentStartPage.value === 'library') {
-        startPage.value = t('library')
-      } else if (currentStartPage.value === 'website') {
-        startPage.value = t('website')
-      } else {
-        startPage.value = currentStartPage.value
-
-        const appEntry = rows.value.find(x => x.name === currentStartPage.value)
-        if (appEntry) {
-          startPage.value = appEntry.long_name
-        }
-      }
-    }
-
     // Change the password used to access the Control Panel (also known as the settings panel)
     function setLoginPassword () {
       if (loginPasswordStatus.value) {
@@ -1382,44 +1356,43 @@ export default defineComponent({
 
     // Commit the passed start page to the database
     async function storeStartPage (rows) {
-      if (startPage.value === t('lb_welcome_page')) {
+      // If reseting to default, do not prompt user for confirmation
+      if (selectedStartPage.value.label === t('lb_welcome_page')) {
         await Axios.post(`${api.value}/v1/settings/set_ui`, {
           start_page: '/'
         })
-        currentStartPage.value = '/'
-        $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${startPage.value}` })
-      } else {
+        $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${selectedStartPage.value.label}` })
+      } else if (rows || (customStartPath.value && customStartPageInput)) {
         $q.dialog({
           title: t('confirm'),
           message: `${t('change_path_warning')} http://${windowHostname.value}/settings`,
           cancel: true,
           persistent: true
         }).onOk(() => {
+          // If an app store app is passed to this function
           if (rows) {
             Axios.post(`${api.value}/v1/settings/set_ui`, {
               start_page: rows.name
             })
-            currentStartPage.value = rows.name
             $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${rows.long_name}` })
-          } else {
-            if (startPage.value === t('file_manager')) {
-              currentStartPage.value = 'files'
-            } else if (startPage.value === t('library')) {
-              currentStartPage.value = 'library'
-            } else if (startPage.value === t('website')) {
-              currentStartPage.value = 'website'
+            // If a custom path name
+          } else if (customStartPath.value && customStartPageInput) {
+            if (startPathValid.value.validate()) {
+              Axios.post(`${api.value}/v1/settings/set_ui`, {
+                start_page: customStartPath.value
+              })
+              $q.notify({ type: 'positive', message: `${t('path_changed_to')} '${customStartPath.value}'` })
+              customStartPath.value = ''
+            } else {
+              $q.notify({ type: 'negative', message: t('invalid_path_input') })
             }
-
-            Axios.post(`${api.value}/v1/settings/set_ui`, {
-              start_page: currentStartPage.value
-            })
-            $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${startPage.value}` })
           }
-          setStartPage()
-        }).onDismiss(() => {
-          startPage.value = currentStartPage.value
-          setStartPage()
         })
+      } else {
+        Axios.post(`${api.value}/v1/settings/set_ui`, {
+          start_page: selectedStartPage.value.string
+        })
+        $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${selectedStartPage.value.label}` })
       }
     }
 
@@ -1653,7 +1626,6 @@ export default defineComponent({
       loginPasswordStatus,
       loginPasswordToggle,
       newHostname,
-      pages,
       portainer,
       portainerImageExists,
       portainerLoading,
@@ -1663,13 +1635,12 @@ export default defineComponent({
       regexp,
       resetDatabase,
       rows,
-      setCustomStartPath,
       setLoginPassword,
-      setStartPage,
       setWifiPassword,
       settingPassword,
       systemMaintenance,
-      startPage,
+      selectedStartPage,
+      startPageOptions,
       startPathValid,
       storeStartPage,
       sysInfo,
