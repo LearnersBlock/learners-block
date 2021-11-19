@@ -527,7 +527,7 @@
               >
                 <q-input
                   ref="startPathValid"
-                  v-model="newStartPath"
+                  v-model="customStartPath"
                   class="mt-1 ml-1 mr-1 fit ml-2 mr-2"
                   filled
                   dense
@@ -550,8 +550,8 @@
                       flat
                       color="primary"
                       icon="check_circle_outline"
-                      :disable="newStartPath "
-                      @click="newStartPathWarn"
+                      :disable="customStartPath "
+                      @click="setCustomStartPath"
                     />
                   </template>
                 </q-input>
@@ -947,7 +947,7 @@ export default defineComponent({
     const loginPasswordStatus = ref<boolean>(false)
     const loginPasswordToggle = ref<boolean>(false)
     const newHostname = ref<any>('')
-    const newStartPath = ref<any>('')
+    const customStartPath = ref<any>('')
     const pagesString = [
       t('lb_welcome_page'), t('file_manager'), t('library'), t('website'), t('app_store_app'), t('custom_start_page')
     ]
@@ -1153,26 +1153,6 @@ export default defineComponent({
       }
     }
 
-    // When changing the default start path of the device, warn the user and inform
-    // how to undo the change
-    function newStartPathWarn () {
-      if (startPathValid.value.validate() && newStartPath.value !== '') {
-        $q.dialog({
-          title: t('confirm'),
-          message: t('change_path_warning'),
-          cancel: true,
-          persistent: true
-        }).onOk(() => {
-          Axios.post(`${api.value}/v1/settings/set_ui`, {
-            start_page: newStartPath.value
-          })
-          $q.notify({ type: 'positive', message: `${t('path_changed_to')} '${newStartPath.value}'` })
-        })
-      } else {
-        $q.notify({ type: 'negative', message: t('invalid_path_input') })
-      }
-    }
-
     // Notify that the hostname has been changed
     function permNotify (type, message) {
       $q.notify({
@@ -1268,6 +1248,26 @@ export default defineComponent({
         }
       }
       $q.notify({ type: 'negative', message: t('api_down') })
+    }
+
+    // When changing the default start path of the device, warn the user and inform
+    // how to undo the change
+    function setCustomStartPath () {
+      if (startPathValid.value.validate() && customStartPath.value !== '') {
+        $q.dialog({
+          title: t('confirm'),
+          message: t('change_path_warning'),
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          Axios.post(`${api.value}/v1/settings/set_ui`, {
+            start_page: customStartPath.value
+          })
+          $q.notify({ type: 'positive', message: `${t('path_changed_to')} '${customStartPath.value}'` })
+        })
+      } else {
+        $q.notify({ type: 'negative', message: t('invalid_path_input') })
+      }
     }
 
     // Set the custom start page menu to the currently selected start page
@@ -1640,6 +1640,7 @@ export default defineComponent({
       changeStartPage,
       columns,
       customStartPageInput,
+      customStartPath,
       devMode,
       files,
       filesLoading,
@@ -1652,8 +1653,6 @@ export default defineComponent({
       loginPasswordStatus,
       loginPasswordToggle,
       newHostname,
-      newStartPath,
-      newStartPathWarn,
       pages,
       portainer,
       portainerImageExists,
@@ -1664,6 +1663,7 @@ export default defineComponent({
       regexp,
       resetDatabase,
       rows,
+      setCustomStartPath,
       setLoginPassword,
       setStartPage,
       setWifiPassword,
