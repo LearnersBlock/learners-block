@@ -151,5 +151,6 @@
     "library_api_down": "No se pudo establecer contacto con la Biblioteca en línea. Compruebe la conexión a internet y vuelva a intentarlo.",
     "enter_name": "Introduzca un nombre",
     "searching_networks": "Buscando redes cercanas…",
-    "api_unavailable": "Tu bloque aun se esta descargando. Esta página se recargará cuando este listo."
+    "api_unavailable": "Tu bloque aun se esta descargando. Esta página se recargará cuando este listo.",
+    "need_internet_connection": "Necesita una conexión a Internet para utilizar estas funciones. Si está conectado, intente actualizar la página."
 }
