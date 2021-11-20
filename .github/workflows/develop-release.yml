@@ -2,34 +2,19 @@ name: "Development Release"
 
 on:
  pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, closed]
     branches:
       - main
 
 jobs:
-  balena_cloud_build-aarch:
+  balena_cloud_build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Turnstyle
-        uses: softprops/turnstyle@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/checkout@v2
       - uses: balena-io/balena-ci@master
-        id: build-aarch64
+        id: build
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
-          fleet: learner_s_block/lb-dev-aarch64
-      - name: Log release ID built
-        run: echo "Built release ID ${{ steps.build.outputs.release_id }}"
-
-      - uses: actions/checkout@v2
-      - uses: balena-io/balena-ci@master
-        id: build-armv7hf
-        with:
-          balena_token: ${{ secrets.BALENA_API_TOKEN }}
-          fleet: learner_s_block/lb-dev-armv7hf
+          fleet: arran_magee/lb-dev
       - name: Log release ID built
         run: echo "Built release ID ${{ steps.build.outputs.release_id }}"
