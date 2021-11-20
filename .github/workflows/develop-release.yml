@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: balena-io/balena-ci@master
-        id: build
+        id: build-aarch64
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
           fleet: learner_s_block/lb-dev-aarch64
@@ -21,7 +21,7 @@ jobs:
 
       - uses: actions/checkout@v2
       - uses: balena-io/balena-ci@master
-        id: build
+        id: build-armv7hf
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
           fleet: learner_s_block/lb-dev-armv7hf
