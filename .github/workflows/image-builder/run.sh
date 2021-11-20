@@ -19,7 +19,7 @@ balena login --token ${BALENA_API_TOKEN} > /dev/null
 for line in $(cat $GITHUB_WORKSPACE/.github/workflows/image-builder/apps-$1.txt)
 do
   # Run each Balena push command concurrently
-  balena push $line || tee fail &
+  balena push $line --draft || tee fail &
 done
 
 # Wait for all Balena push commands to finish and check exit codes
