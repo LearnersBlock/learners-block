@@ -1,3 +1,5 @@
+name: "Development Release"
+
 on:
  pull_request:
     types: [opened, synchronize]
