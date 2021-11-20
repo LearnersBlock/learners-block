@@ -8,9 +8,8 @@ jobs:
   balena_cloud_build-aarch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
       - name: Deploy aarch64
+      - uses: actions/checkout@v2
       - uses: balena-io/balena-ci@master
         id: build
         with:
@@ -20,6 +19,7 @@ jobs:
         run: echo "Built release ID ${{ steps.build.outputs.release_id }}"
 
       - name: Deploy armv7hf
+      - uses: actions/checkout@v2
       - uses: balena-io/balena-ci@master
         id: build
         with:
