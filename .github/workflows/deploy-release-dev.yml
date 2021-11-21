@@ -21,8 +21,8 @@ jobs:
         run: sed -i '/version/,+1 d' ${GITHUB_WORKSPACE}/balena.yml
 
       - name: Deploy aarch64 to development
-        uses: actions/checkout@v2
-        uses: balena-io/balena-ci@master
+      - uses: actions/checkout@v2
+      - uses: balena-io/balena-ci@master
         id: build-dev-aarch64
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
@@ -32,8 +32,8 @@ jobs:
         run: echo "Built release ID ${{ steps.build.outputs.release_id }}"
 
       - name: Deploy armv7hf to development
-        uses: actions/checkout@v2
-        uses: balena-io/balena-ci@master
+      - uses: actions/checkout@v2
+      - uses: balena-io/balena-ci@master
         id: build-dev-armv7hf
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
