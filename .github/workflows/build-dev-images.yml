@@ -1,0 +1,49 @@
+name: "Build dev images"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-images:
+    name: "Build dev images"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create build context
+        env:
+          BALENA_CLI: https://github.com/balena-io/balena-cli/releases/download/v12.52.0/balena-cli-v12.52.0-linux-x64-standalone.zip
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+              curl \
+              jq \
+              unzip \
+              wget \
+              zip
+          cd /opt/ && \
+            sudo curl -O -sSL $BALENA_CLI && \
+            sudo unzip balena-cli-*-linux-x64-standalone.zip && \
+            sudo ln -s /opt/balena-cli/balena /usr/bin/ && \
+            cd $GITHUB_WORKSPACE
+
+      - name: Turnstyle
+        uses: softprops/turnstyle@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create images
+        env:
+          BALENA_API_TOKEN: ${{ secrets.BALENA_API_TOKEN }}
+        run: |
+          bash $GITHUB_WORKSPACE/.github/workflows/image-builder/run.sh development
+
+      - name: Create development changeLog and publish pre-release
+        uses: "marvinpinto/action-automatic-releases@v1.2.1"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "development"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            Learners-Block-*.zip

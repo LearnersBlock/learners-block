@@ -1,0 +1,39 @@
+name: "Deploy Development Release"
+
+on:
+  push:
+    branches:
+      - "main"
+jobs:
+  deploy-release:
+    name: "Deploy Development Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Update versions
+        run: |
+          echo VERSION="dev" > ${GITHUB_WORKSPACE}/backend/apps/controller/.version && \
+          echo "RELEASE_VERSION=dev" >> $GITHUB_ENV
+
+      - name: Remove 'version' line from balena.yml in development environment
+        run: sed -i '/version/,+1 d' ${GITHUB_WORKSPACE}/balena.yml
+
+      - name: Deploy aarch64 to development
+        uses: actions/checkout@v2
+        uses: balena-io/balena-ci@master
+        id: build-dev-aarch64
+        with:
+          balena_token: ${{ secrets.BALENA_API_TOKEN }}
+          fleet: learner_s_block/lb-dev-aarch64
+        run: echo "Built release ID ${{ steps.build.outputs.release_id }}"
+
+      - name: Deploy armv7hf to development
+        uses: actions/checkout@v2
+        uses: balena-io/balena-ci@master
+        id: build-dev-armv7hf
+        with:
+          balena_token: ${{ secrets.BALENA_API_TOKEN }}
+          fleet: learner_s_block/lb-dev-armv7hf
+        run: echo "Built release ID ${{ steps.build.outputs.release_id }}"

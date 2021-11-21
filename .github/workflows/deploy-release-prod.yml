@@ -1,0 +1,46 @@
+name: "Deploy Production Release"
+
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  deploy-release:
+    name: "Deploy Production Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Update versions
+        run: |
+          echo VERSION="$RELEASE_VERSION" > ${GITHUB_WORKSPACE}/backend/apps/controller/.version && \
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV && \
+          sed -i "/^\([[:space:]]*version: \).*/s//\1$RELEASE_VERSION/" ${GITHUB_WORKSPACE}/balena.yml
+
+      - name: Commit .version file
+        uses: EndBug/add-and-commit@v7.2.1
+        with:
+          author_name: Learner's Block
+          author_email: 41898282+github-actions[bot]@users.noreply.github.com
+          message: 'Update version files'
+          branch: main
+          add: './backend/apps/controller/.version'
+
+      - name: Deploy aarch64 to production
+        uses: actions/checkout@v2
+        uses: balena-io/balena-ci@master
+        id: build-prod-aarch64
+        with:
+          balena_token: ${{ secrets.BALENA_API_TOKEN }}
+          fleet: learner_s_block/lb-aarch64
+        run: echo "Built release ID ${{ steps.build.outputs.release_id }}"
+
+      - name: Deploy armv7hf to production
+        uses: actions/checkout@v2
+        uses: balena-io/balena-ci@master
+        id: build-prod-armv7hf
+        with:
+          balena_token: ${{ secrets.BALENA_API_TOKEN }}
+          fleet: learner_s_block/lb-armv7hf
+        run: echo "Built release ID ${{ steps.build.outputs.release_id }}"

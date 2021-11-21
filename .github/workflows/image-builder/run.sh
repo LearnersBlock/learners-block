@@ -15,19 +15,8 @@ fi
 # Log in to Balena
 balena login --token ${BALENA_API_TOKEN} > /dev/null
 
-# Deploy to Balena Cloud
-for line in $(cat $GITHUB_WORKSPACE/.github/workflows/image-builder/apps-$1.txt)
-do
-  # Run each Balena push command concurrently
-  balena push $line --draft || tee fail &
-done
-
-# Wait for all Balena push commands to finish and check exit codes
-wait < <(jobs -p)
-test -f fail && exit 1
-
 # Pre-load images
-for env in $GITHUB_WORKSPACE/.github/workflows/image-builder/env-files/$1/*.env; do
+for env in $GITHUB_WORKSPACE/.github/workflows/image-builder/$1/*.env; do
 
   # Export env variables from file
   export $(grep -v '^#' "$env" | xargs -d '\n')

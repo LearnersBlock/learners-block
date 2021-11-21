@@ -1,2 +1,0 @@
-lb-dev-aarch64
-lb-dev-armv7hf

@@ -1,4 +1,4 @@
-name: "Development Release"
+name: "Deploy Pull Request"
 
 on:
  pull_request:

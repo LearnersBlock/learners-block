@@ -1,2 +1,0 @@
-lb-aarch64
-lb-armv7hf
