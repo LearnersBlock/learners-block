@@ -28,8 +28,7 @@ jobs:
           add: './backend/apps/controller/.version'
 
       - name: Deploy aarch64 to production
-      - uses: actions/checkout@v2
-      - uses: balena-io/balena-ci@master
+        uses: balena-io/balena-ci@master
         id: build-prod-aarch64
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
@@ -39,8 +38,7 @@ jobs:
         run: echo "Built release ID ${{ steps.build.outputs.release_id }}"
 
       - name: Deploy armv7hf to production
-      - uses: actions/checkout@v2
-      - uses: balena-io/balena-ci@master
+        uses: balena-io/balena-ci@master
         id: build-prod-armv7hf
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
