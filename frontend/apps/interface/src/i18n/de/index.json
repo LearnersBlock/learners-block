@@ -152,5 +152,6 @@
     "portainer_desc": "Eine grafische Benutzeroberfläche zur Verwaltung benutzerdefinierter Docker-Container auf Ihrem Block.",
     "your_new_url": "Ihre neue URL lautet:",
     "need_internet_connection": "Sie benötigen eine Internetverbindung, um diese Funktionen nutzen zu können. Wenn Sie eine Verbindung haben, versuchen Sie, die Seite zu aktualisieren.",
-    "api_unavailable": "Ihr Block wird noch geladen. Diese Seite wird neu geladen, wenn sie fertig ist."
+    "api_unavailable": "Ihr Block wird noch geladen. Diese Seite wird neu geladen, wenn sie fertig ist.",
+    "installed": "Installiert"
 }

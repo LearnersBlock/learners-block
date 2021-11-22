@@ -152,5 +152,6 @@
     "url_wifi_desc": "Cambia l’URL usato per accedere al tuo Block e come il tuo Block appare nella lista delle reti Wi-Fi delle persone.",
     "portainer_desc": "Un’interfaccia utente grafica per gestire i contenitori Docker personalizzati sul tuo Block.",
     "need_internet_connection": "Hai bisogno di una connessione internet per utilizzare queste funzioni. Se sei connesso/a, prova ad aggiornare la pagina.",
-    "api_unavailable": "Il tuo Block si sta ancora caricando. Questa pagina verrà ricaricata quando sarà pronta."
+    "api_unavailable": "Il tuo Block si sta ancora caricando. Questa pagina verrà ricaricata quando sarà pronta.",
+    "installed": "Installato"
 }
