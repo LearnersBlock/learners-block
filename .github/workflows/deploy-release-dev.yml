@@ -6,10 +6,9 @@ on:
       - main
 jobs:
   deploy-release:
-    if: github.head_ref != 'l10n_master'
     name: "Deploy Development Release"
     runs-on: "ubuntu-latest"
-
+    if: github.head_ref != 'l10n_master'
     steps:
       - uses: actions/checkout@v2
 
