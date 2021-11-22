@@ -20,6 +20,10 @@ jobs:
       - name: Remove 'version' line from balena.yml in development environment
         run: sed -i '/version/,+1 d' ${GITHUB_WORKSPACE}/balena.yml
 
+      - name: Check output
+        run: |
+          echo ${{ github.head_ref }}
+
       - if: ${{ github.head_ref }} != i10n_master
         name: Deploy aarch64 to development
         uses: balena-io/balena-ci@master
