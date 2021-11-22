@@ -20,14 +20,14 @@ jobs:
       - name: Remove 'version' line from balena.yml in development environment
         run: sed -i '/version/,+1 d' ${GITHUB_WORKSPACE}/balena.yml
 
-        name: Deploy aarch64 to development
+      - name: Deploy aarch64 to development
         uses: balena-io/balena-ci@master
         id: build-dev-aarch64
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
           fleet: learner_s_block/lb-dev-aarch64
 
-        name: Deploy armv7hf to development
+      - name: Deploy armv7hf to development
         uses: balena-io/balena-ci@master
         id: build-dev-armv7hf
         with:
