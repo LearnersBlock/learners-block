@@ -1,9 +1,9 @@
 name: "Deploy Development Release"
-
 on:
-  push:
+ pull_request:
+    types: [opened, synchronize, closed]
     branches:
-      - "main"
+      - main
 jobs:
   deploy-release:
     name: "Deploy Development Release"
@@ -20,22 +20,18 @@ jobs:
       - name: Remove 'version' line from balena.yml in development environment
         run: sed -i '/version/,+1 d' ${GITHUB_WORKSPACE}/balena.yml
 
-      - name: Deploy aarch64 to development
+      - if: ${{ github.head_ref }} != i10n_master
+        name: Deploy aarch64 to development
         uses: balena-io/balena-ci@master
         id: build-dev-aarch64
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
           fleet: learner_s_block/lb-dev-aarch64
 
-      - name: Log release ID built
-        run: echo "Built release ID ${{ steps.build.outputs.release_id }}"
-
-      - name: Deploy armv7hf to development
+      - if: ${{ github.head_ref }} != i10n_master
+        name: Deploy armv7hf to development
         uses: balena-io/balena-ci@master
         id: build-dev-armv7hf
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
           fleet: learner_s_block/lb-dev-armv7hf
-
-      - name: Log release ID built
-        run: echo "Built release ID ${{ steps.build.outputs.release_id }}"
