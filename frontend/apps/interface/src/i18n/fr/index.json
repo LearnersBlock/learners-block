@@ -152,5 +152,6 @@
     "your_new_url": "Votre nouvelle URL sera :",
     "url_wifi_desc": "Modifiez l’URL utilisée pour accéder à votre Block et la manière dont celui-ci apparaît dans la liste des réseaux Wi-Fi des personnes.",
     "need_internet_connection": "Vous devez avoir une connexion Internet pour utiliser ces fonctions. Si vous êtes connecté(e), essayez d’actualiser la page.",
-    "api_unavailable": "Votre Block est en cours de chargement. Cette page sera rechargée dès qu’elle sera prête."
+    "api_unavailable": "Votre Block est en cours de chargement. Cette page sera rechargée dès qu’elle sera prête.",
+    "installed": "Installé"
 }
