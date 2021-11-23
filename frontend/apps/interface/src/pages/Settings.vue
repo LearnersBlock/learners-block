@@ -1045,7 +1045,7 @@ export default defineComponent({
       const verifyUserPasswordState = Axios.get(`${api.value}/v1/auth/verify_user_password_state`)
 
       // Group dependent calls together for Portainer and Connection Status
-      void Promise.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(function ([res1, res2]) {
+      Promise.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(function ([res1, res2]) {
         // Set connection status
         if (res1.data.wifi) {
           wifi.value = true
@@ -1074,6 +1074,9 @@ export default defineComponent({
 
         portainerLoading.value = false
         wifiLoading.value = false
+      }).catch(function () {
+        permNotify('negative', t('error'))
+        console.log('Error populating connnection and portainer settings')
       })
 
       // Fetch Settings UI configuration
