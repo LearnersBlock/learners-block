@@ -118,5 +118,11 @@
     "library_empty": "La biblioteca és buida. Podeu afegir-hi contingut mitjançant el Tauler de control.",
     "your_new_ssid": "L’SSID Wi-Fi nou serà:",
     "your_new_url": "L’URL nou serà:",
-    "searching_networks": "S’estan cercant xarxes properes…"
+    "searching_networks": "S’estan cercant xarxes properes…",
+    "api_unavailable": "El Block encara s’està carregant. La pàgina s’actualitzarà quan sigui a punt.",
+    "set_password": "Defineix una contrasenya",
+    "set_custom_startpage": "Defineix com a pàgina d’inici personalitzada",
+    "select_ssid": "Seleccioneu una xarxa Wi-Fi",
+    "installed": "Instal·lat",
+    "enter_name": "Introduïu un nom"
 }
