@@ -11,9 +11,6 @@ from common.nm_dicts import get_hotspot_SSID
 from common.processes import led
 from time import sleep
 
-from dbus.mainloop.glib import DBusGMainLoop
-DBusGMainLoop(set_as_default=True)
-
 
 class wifi:
     def analyse_access_point(ap):

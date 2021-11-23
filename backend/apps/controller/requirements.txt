@@ -71,7 +71,7 @@ pyjwt==2.3.0
     # via flask-jwt-extended
 python-dotenv==0.19.1
     # via -r requirements.in
-python-networkmanager==2.2
+python-networkmanager==2.1
     # via -r requirements.in
 pytz==2021.3
     # via flask-restful
