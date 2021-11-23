@@ -40,3 +40,41 @@ jobs:
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
           fleet: learner_s_block/lb-armv7hf
+
+  build-images:
+    name: "Build production images"
+    runs-on: "ubuntu-latest"
+    needs: [deploy-release]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create image builder context
+        env:
+          BALENA_CLI: https://github.com/balena-io/balena-cli/releases/download/v12.52.0/balena-cli-v12.52.0-linux-x64-standalone.zip
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+              curl \
+              jq \
+              unzip \
+              wget \
+              zip
+          cd /opt/ && \
+            sudo curl -O -sSL $BALENA_CLI && \
+            sudo unzip balena-cli-*-linux-x64-standalone.zip && \
+            sudo ln -s /opt/balena-cli/balena /usr/bin/ && \
+            cd $GITHUB_WORKSPACE
+
+      - name: Create images
+        env:
+          BALENA_API_TOKEN: ${{ secrets.BALENA_API_TOKEN }}
+        run: |
+          bash $GITHUB_WORKSPACE/.github/workflows/image-builder/run.sh production
+
+      - name: Create production changeLog and publish releases
+        uses: "marvinpinto/action-automatic-releases@v1.2.1"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            Learners-Block-*.zip
