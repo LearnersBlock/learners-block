@@ -162,7 +162,7 @@ export default defineComponent({
     })
 
     const changeLanguage = (value: string) => {
-      import(
+      void import(
         /* webpackInclude: /(en-US|ar|de|es|fr|it|tr|pt-BR|ru)\.js$/ */
         'quasar/lang/' + value
       ).then((lang) => {

@@ -77,9 +77,9 @@ export default defineComponent({
             message: t('login_successfull')
           })
           if (route.params.data) {
-            $router.replace(route.params.data as string)
+            void $router.replace(route.params.data as string)
           } else {
-            $router.replace('/settings')
+            void $router.replace('/settings')
           }
         })
         .catch((e: { message: never}) => {

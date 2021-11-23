@@ -59,10 +59,10 @@ export default defineComponent({
         if (response.data.message === true) {
           apiIsReady.value = true
         } else {
-          waitApi()
+          void waitApi()
         }
       }).catch(function () {
-        waitApi()
+        void waitApi()
       })
     } else {
       apiIsReady.value = true
