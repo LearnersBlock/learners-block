@@ -240,4 +240,4 @@ if __name__ == '__main__':
     # Initialise and start
     api.init_app(app)
 
-    serve(app, port=9090, host='0.0.0.0')
+    serve(app, threads=6, port=9090, host='0.0.0.0')
