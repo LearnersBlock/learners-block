@@ -83,7 +83,7 @@ export default route<StateInterface>(function ({ store }) {
     if ((to.name === 'settings' || to.name === 'wifi') && !store.getters.isAuthenticated) {
       // Try logging in without a password, and if error then redirect to login page
       await store.dispatch('LOGIN', { username: 'lb', password: ' ' }).catch(() => {
-        next({ name: 'login', params: { data: to.fullPath } })
+        void Router.replace({ name: 'login', params: { data: to.fullPath } })
       })
     }
     // If login successful, allow access.
