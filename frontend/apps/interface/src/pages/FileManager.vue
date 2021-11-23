@@ -749,15 +749,16 @@ export default defineComponent({
         title: t('confirm'),
         message: t('confirm_delete'),
         cancel: true
-      }).onOk(async () => {
-        await Axios.post(`${api.value}/v1/filemanager/delete`, {
+      }).onOk(() => {
+        Axios.post(`${api.value}/v1/filemanager/delete`, {
           path: objPath.value,
           object: itemObj,
           root: rootPath.value
+        }).then(async () => {
+          selected.value = []
+          await updateRows()
+          notifyComplete()
         })
-        selected.value = []
-        await updateRows()
-        notifyComplete()
       })
     }
 
@@ -831,7 +832,7 @@ export default defineComponent({
           isValid: val => val !== ''
         },
         cancel: true
-      }).onOk(async data => {
+      }).onOk(data => {
         if (invalidCharacters.value.some(el => data.includes(el))) {
           $q.notify({
             type: 'negative',
@@ -844,13 +845,14 @@ export default defineComponent({
               message: t('item_already_exists')
             })
           } else {
-            await Axios.post(`${api.value}/v1/filemanager/new_folder`, {
+            Axios.post(`${api.value}/v1/filemanager/new_folder`, {
               path: objPath.value,
               directory: data,
               root: rootPath.value
+            }).then(async () => {
+              await updateRows()
+              notifyComplete()
             })
-            await updateRows()
-            notifyComplete()
           }
         }
       })
