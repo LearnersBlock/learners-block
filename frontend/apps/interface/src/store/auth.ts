@@ -46,8 +46,8 @@ const auth = {
       })
       if (response.status === 200) {
         sessionStorage.removeItem('learners-block-token')
-        Axios.defaults.headers.common.Authorization = null
-        AxiosOverride.defaults.headers.common.Authorization = null
+        Axios.defaults.headers.common.Authorization = ''
+        AxiosOverride.defaults.headers.common.Authorization = ''
         commit('SET_TOKEN', null)
       }
     },
