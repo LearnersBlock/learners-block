@@ -19,6 +19,15 @@ class docker_pull(Resource):
     def post(self):
         content = request.get_json()
 
+        # Fetch database entry based on passed name
+        lb_database = App_Store.query.filter_by(
+            name=content["name"]).first()
+
+        # Update entry before action to allow button to toggle.
+        # It helps with error handling when button is in wrong state.
+        lb_database.status = 'installed'
+        lb_database.save_to_db()
+
         # If there are container dependencies, pull those too
         if content["dependencies"]:
             for dependency in content["dependencies"]:
@@ -45,14 +54,6 @@ class docker_pull(Resource):
                                   network=content["name"],
                                   detach=True)
 
-        # Fetch database entry based on passed name
-        lb_database = App_Store.query.filter_by(
-            name=content["name"]).first()
-
-        # Update entry
-        lb_database.status = 'installed'
-        lb_database.save_to_db()
-
         return {"message": response}
 
 
@@ -60,6 +61,15 @@ class docker_remove(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
+
+        # Fetch database entry based on passed name
+        lb_database = App_Store.query.filter_by(
+            name=content["name"]).first()
+
+        # Update entry before action to allow button to toggle.
+        # It helps with error handling when button is in wrong state.
+        lb_database.status = 'install'
+        lb_database.save_to_db()
 
         # If there are container dependencies then remove them
         if content["dependencies"]:
@@ -70,14 +80,6 @@ class docker_remove(Resource):
         # Remove main container
         response = docker_py.remove(name=content["name"])
 
-        # Fetch database entry based on passed name
-        lb_database = App_Store.query.filter_by(
-            name=content["name"]).first()
-
-        # Update entry
-        lb_database.status = 'install'
-        lb_database.save_to_db()
-
         return {"message": response}
 
 
@@ -85,6 +87,15 @@ class docker_run(Resource):
     @jwt_required()
     def post(self):
         content = request.get_json()
+
+        # Fetch database entry based on passed name
+        lb_database = App_Store.query.filter_by(
+            name=content["name"]).first()
+
+        # Update entry before action to allow button to toggle.
+        # It helps with error handling when button is in wrong state.
+        lb_database.status = 'installed'
+        lb_database.save_to_db()
 
         # If there are container dependencies start them
         if content["dependencies"]:
@@ -111,13 +122,5 @@ class docker_run(Resource):
                                  volumes=content["volumes"],
                                  network=content["name"],
                                  detach=True)
-
-        # Fetch database entry based on passed name
-        lb_database = App_Store.query.filter_by(
-            name=content["name"]).first()
-
-        # Update entry
-        lb_database.status = 'installed'
-        lb_database.save_to_db()
 
         return {"message": response}
