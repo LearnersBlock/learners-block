@@ -1278,14 +1278,16 @@ export default defineComponent({
           message: t('are_you_sure'),
           cancel: true,
           persistent: true
-        }).onOk(async () => {
+        }).onOk(() => {
           settingPassword.value = true
-          await Axios.post(`${api.value}/v1/auth/set_password`, { password: ' ' }).then(() => {
+          Axios.post(`${api.value}/v1/auth/set_password`, { password: ' ' }).then(() => {
             $q.notify({ type: 'positive', message: t('login_disabled') })
             loginPasswordStatus.value = false
             loginPasswordToggle.value = false
+            settingPassword.value = false
+          }).catch(function () {
+            settingPassword.value = false
           })
-          settingPassword.value = false
         }).onCancel(() => {
           loginPasswordToggle.value = true
         })
@@ -1298,16 +1300,18 @@ export default defineComponent({
             model: '',
             type: 'password'
           }
-        }).onOk(async (data) => {
+        }).onOk((data) => {
           settingPassword.value = true
-          await Axios.post(`${api.value}/v1/auth/set_password`, {
+          Axios.post(`${api.value}/v1/auth/set_password`, {
             password: data
           }).then(() => {
             $q.notify({ type: 'positive', message: t('password_set_success') })
             loginPasswordStatus.value = true
             loginPasswordToggle.value = true
+            settingPassword.value = false
+          }).catch(function () {
+            settingPassword.value = false
           })
-          settingPassword.value = false
         }).onCancel(() => {
           loginPasswordToggle.value = false
         })
@@ -1322,14 +1326,16 @@ export default defineComponent({
           message: t('are_you_sure'),
           cancel: true,
           persistent: true
-        }).onOk(async () => {
+        }).onOk(() => {
           settingPassword.value = true
-          await Axios.post(`${api.value}/v1/wifi/set_password`, { wifi_password: '' }).then(() => {
+          Axios.post(`${api.value}/v1/wifi/set_password`, { wifi_password: '' }).then(() => {
             $q.notify({ type: 'positive', message: t('wifi_login_disabled') })
             wifiPasswordStatus.value = false
             wifiPasswordToggle.value = false
+            settingPassword.value = false
+          }).catch(function () {
+            settingPassword.value = false
           })
-          settingPassword.value = false
         }).onCancel(() => {
           wifiPasswordToggle.value = true
         })
@@ -1344,16 +1350,18 @@ export default defineComponent({
             isValid: val => val.length > 7,
             type: 'password'
           }
-        }).onOk(async (data) => {
+        }).onOk((data) => {
           settingPassword.value = true
-          await Axios.post(`${api.value}/v1/wifi/set_password`, {
+          Axios.post(`${api.value}/v1/wifi/set_password`, {
             wifi_password: data
           }).then(() => {
             $q.notify({ type: 'positive', message: t('wifi_password_set_success') })
             wifiPasswordStatus.value = true
             wifiPasswordToggle.value = true
+            settingPassword.value = false
+          }).catch(function () {
+            settingPassword.value = false
           })
-          settingPassword.value = false
         }).onCancel(() => {
           wifiPasswordToggle.value = false
         })
@@ -1433,23 +1441,24 @@ export default defineComponent({
           message: t('are_you_sure'),
           cancel: true,
           persistent: true
-        }).onOk(async () => {
+        }).onOk(() => {
           appTableVisible.value = false
           // Install app
-          await Axios.post(`${api.value}/v1/docker/run`, {
+          Axios.post(`${api.value}/v1/docker/run`, {
             env_vars: row.env_vars,
             image: row.image,
             name: row.name,
             ports: row.ports,
             volumes: row.volumes,
             dependencies: row.dependencies
-          }).then(function () {
+          }).then(async function () {
             permNotify('positive', t('app_installed'))
-            fetchApps()
+            await fetchApps()
+            appTableVisible.value = true
           }).catch(async function () {
             await fetchApps()
+            appTableVisible.value = true
           })
-          appTableVisible.value = true
         })
       } else if (row.status.toLowerCase() === 'installed') {
         $q.dialog({
@@ -1457,19 +1466,20 @@ export default defineComponent({
           message: t('are_you_sure'),
           cancel: true,
           persistent: true
-        }).onOk(async () => {
+        }).onOk(() => {
           appTableVisible.value = false
           // Uninstall app
-          await Axios.post(`${api.value}/v1/docker/remove`, {
+          Axios.post(`${api.value}/v1/docker/remove`, {
             name: row.name,
             dependencies: row.dependencies
-          }).then(function () {
+          }).then(async function () {
             $q.notify({ type: 'positive', message: t('success') })
-            fetchApps()
+            await fetchApps()
+            appTableVisible.value = true
           }).catch(async function () {
             await fetchApps()
+            appTableVisible.value = true
           })
-          appTableVisible.value = true
         })
       } else if (row.status.toLowerCase() === 'update_available') {
         if (!internet.value) {
@@ -1481,23 +1491,24 @@ export default defineComponent({
           message: t('are_you_sure'),
           cancel: true,
           persistent: true
-        }).onOk(async () => {
+        }).onOk(() => {
           appTableVisible.value = false
           // Update app
-          await Axios.post(`${api.value}/v1/docker/pull`, {
+          Axios.post(`${api.value}/v1/docker/pull`, {
             env_vars: row.env_vars,
             image: row.image,
             name: row.name,
             ports: row.ports,
             volumes: row.volumes,
             dependencies: row.dependencies
-          }).then(function () {
+          }).then(async function () {
             permNotify('positive', t('app_installed'))
-            fetchApps()
+            await fetchApps()
+            appTableVisible.value = true
           }).catch(async function () {
             await fetchApps()
+            appTableVisible.value = true
           })
-          appTableVisible.value = true
         })
       }
     }
