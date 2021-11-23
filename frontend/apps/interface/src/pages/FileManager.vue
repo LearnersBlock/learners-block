@@ -55,7 +55,7 @@
               />
               <q-breadcrumbs-el
                 v-for="path in objPath"
-                :key="path.value"
+                :key="path"
                 v-ripple
                 class="cursor-pointer"
                 clickable
@@ -676,7 +676,7 @@ export default defineComponent({
         const encodedRowName = encodeURIComponent(fileName)
         if (encodedCurrentPath) {
           if (ePub) {
-            $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
+            void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
           } else {
             // Uses window.open to open a new window. Otherwise a user hits the back button to return
             // to the FileManager from the opened item and loses their folder position.
@@ -687,7 +687,7 @@ export default defineComponent({
           }
         } else {
           if (ePub) {
-            $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
+            void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
           } else {
             window.open(
               `/storage/${encodedRowName}`,
@@ -750,7 +750,7 @@ export default defineComponent({
         message: t('confirm_delete'),
         cancel: true
       }).onOk(() => {
-        Axios.post(`${api.value}/v1/filemanager/delete`, {
+        void Axios.post(`${api.value}/v1/filemanager/delete`, {
           path: objPath.value,
           object: itemObj,
           root: rootPath.value
@@ -795,7 +795,7 @@ export default defineComponent({
             message: t('invalid_filemanager_string')
           })
         } else {
-          rename(currentName, data)
+          void rename(currentName, data)
         }
       })
     }
@@ -845,7 +845,7 @@ export default defineComponent({
               message: t('item_already_exists')
             })
           } else {
-            Axios.post(`${api.value}/v1/filemanager/new_folder`, {
+            void Axios.post(`${api.value}/v1/filemanager/new_folder`, {
               path: objPath.value,
               directory: data,
               root: rootPath.value
@@ -874,7 +874,7 @@ export default defineComponent({
         const encodedRowName = encodeURIComponent(row.name)
         if (currentPath.value) {
           if (ePub) {
-            $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
+            void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
           } else {
             window.open(
               `/storage/${encodedCurrentPath}/${encodedRowName}`,
@@ -883,7 +883,7 @@ export default defineComponent({
           }
         } else {
           if (ePub) {
-            $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
+            void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
           } else {
             window.open(
               `/storage/${encodedRowName}`,
@@ -894,7 +894,7 @@ export default defineComponent({
       } else if (row.format === 'folder') {
         objPath.value.push(row.name)
         selected.value = []
-        updateRows().then(() => {
+        void updateRows().then(() => {
           // Auto open files starting with --auto-open
           if (!loginState) {
             checkAutoOpenFile()
@@ -905,7 +905,7 @@ export default defineComponent({
 
     function onSelectorRowClick (_evt, row) {
       selectorObjPath.value.push(row.name)
-      updateSelectorRows()
+      void updateSelectorRows()
     }
 
     function onUploaderRejected (rejectedEntries) {
@@ -919,7 +919,7 @@ export default defineComponent({
       selectedItem.value = obj
       selectorObjPath.value = []
       selectorObjPath.value = selectorObjPath.value.concat(objPath.value)
-      updateSelectorRows()
+      void updateSelectorRows()
       fileSelector.value = true
     }
 
@@ -943,7 +943,7 @@ export default defineComponent({
         })
         notifyComplete()
       }
-      updateRows()
+      void updateRows()
     }
 
     async function unzip (fileName) {
@@ -977,7 +977,7 @@ export default defineComponent({
         console.log(error)
         if (objPath.value !== []) {
           objPath.value = []
-          updateRows()
+          void updateRows()
         }
         $q.notify({ type: 'negative', message: t('error') })
       })

@@ -112,7 +112,7 @@ export default route<StateInterface>(function ({ store }) {
           })
         }).catch(() => {
           // If unable to login with default username and password
-          Router.replace({ name: 'login', params: { data: Router.currentRoute.value.fullPath } })
+          void Router.replace({ name: 'login', params: { data: Router.currentRoute.value.fullPath } })
           Notify.create({
             type: 'negative',
             message: i18n.global.t('login_again'),

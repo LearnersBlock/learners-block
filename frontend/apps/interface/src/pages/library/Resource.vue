@@ -318,7 +318,7 @@ export default defineComponent({
     async function downloadFiles () {
       try {
         if (exitLoop.value === false) {
-          Axios.get(`${api.value}/v1/download/stop`)
+          void Axios.get(`${api.value}/v1/download/stop`)
           stopDownload()
         } else {
           // Start the download process

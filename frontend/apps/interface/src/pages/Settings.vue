@@ -1045,7 +1045,7 @@ export default defineComponent({
       const verifyUserPasswordState = Axios.get(`${api.value}/v1/auth/verify_user_password_state`)
 
       // Group dependent calls together for Portainer and Connection Status
-      Promise.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(function ([res1, res2]) {
+      void Promise.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(function ([res1, res2]) {
         // Set connection status
         if (res1.data.wifi) {
           wifi.value = true
@@ -1115,10 +1115,13 @@ export default defineComponent({
         } else {
           selectedStartPage.value = res1.data.start_page
         }
+      }).catch(function () {
+        permNotify('negative', t('error'))
+        console.log('Error populating settings UI')
       })
 
       // Fetch System Info status
-      Axios.get(`${api.value}/v1/system/info`).then((response) => {
+      void Axios.get(`${api.value}/v1/system/info`).then((response) => {
         sysInfo.value = response.data
         sysInfoLoading.value = false
       })
@@ -1133,7 +1136,7 @@ export default defineComponent({
         appStorePageInput.value = false
         customStartPageInput.value = true
       } else {
-        storeStartPage(null)
+        void storeStartPage(null)
       }
     }
 
@@ -1166,7 +1169,7 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          updateHostname()
+          void updateHostname()
         })
       } else {
         $q.notify({ type: 'negative', message: t('invalid_hostname') })
@@ -1199,7 +1202,7 @@ export default defineComponent({
         dark: true
       }).onOk(() => {
         systemMaintenance.value = true
-        Axios.get(`${api.value}/v1/system/prune`).then(() => {
+        void Axios.get(`${api.value}/v1/system/prune`).then(() => {
           portainerImageExists.value = false
           // Only return False on success, as redirect will take care of boolean otherwise
           systemMaintenance.value = false
@@ -1236,7 +1239,7 @@ export default defineComponent({
         systemMaintenance.value = true
         $q.loading.show()
         AxiosOverride.get(`${api.value}/v1/system/reset_database`, { timeout: 1000 }).catch(function () {
-          resetDatabaseLoop()
+          void resetDatabaseLoop()
         })
       })
     }
@@ -1385,14 +1388,14 @@ export default defineComponent({
         }).onOk(() => {
           // If an app store app is passed to this function
           if (rows) {
-            Axios.post(`${api.value}/v1/settings/set_ui`, {
+            void Axios.post(`${api.value}/v1/settings/set_ui`, {
               start_page: rows.name
             })
             $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${rows.long_name}` })
             // If a custom path name
           } else if (customStartPath.value && customStartPageInput) {
             if (startPathValid.value.validate()) {
-              Axios.post(`${api.value}/v1/settings/set_ui`, {
+              void Axios.post(`${api.value}/v1/settings/set_ui`, {
                 start_page: customStartPath.value
               })
               $q.notify({ type: 'positive', message: `${t('path_changed_to')} '${customStartPath.value}'` })
@@ -1403,7 +1406,7 @@ export default defineComponent({
           }
         })
       } else {
-        Axios.post(`${api.value}/v1/settings/set_ui`, {
+        void Axios.post(`${api.value}/v1/settings/set_ui`, {
           start_page: selectedStartPage.value.string
         })
         $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${selectedStartPage.value.label}` })
@@ -1605,7 +1608,7 @@ export default defineComponent({
     // Warn before setting a password for the Wi-Fi hotspot
     function wifiWarn () {
       if (wifi.value === false) {
-        $router.push('/wifi')
+        void $router.push('/wifi')
       } else {
         $q.dialog({
           title: t('confirm'),
@@ -1614,7 +1617,7 @@ export default defineComponent({
           persistent: true
         }).onOk(() => {
           wifiLoading.value = true
-          disconnectWifi()
+          void disconnectWifi()
           // Add delay to improve user interaction
           setTimeout(() => {
             wifi.value = false

@@ -50,12 +50,12 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      fetchHostname()
+      void fetchHostname()
     })
 
     const copyUrl = () => {
       if (hostname.value) {
-        copyToClipboard(hostname.value)
+        void copyToClipboard(hostname.value)
       }
     }
 

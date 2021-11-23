@@ -214,11 +214,11 @@ export default defineComponent({
           // Redirect for pre-set paths
           if (res1.data.start_page === 'files') {
             setTimeout(() => {
-              $router.push({ name: 'filemanager', params: { data: 'fileshare' } })
+              void $router.push({ name: 'filemanager', params: { data: 'fileshare' } })
             }, 2000)
           } else if (res1.data.start_page === 'library') {
             setTimeout(() => {
-              $router.push({ name: 'filemanager', params: { data: 'library' } })
+              void $router.push({ name: 'filemanager', params: { data: 'library' } })
             }, 2000)
           } else if (res1.data.start_page === 'website') {
             setTimeout(() => {

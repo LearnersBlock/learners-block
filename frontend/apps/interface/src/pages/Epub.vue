@@ -207,7 +207,7 @@ export default defineComponent({
       } else if (info.direction === 'right') {
         ePubJs.rendition.prev()
       } else if (info.direction === 'up' && $q.fullscreen.isActive) {
-        $q.fullscreen.toggle()
+        void $q.fullscreen.toggle()
       } else if (info.direction === 'up' && !$q.fullscreen.isActive) {
         showMenu.value = true
       }
