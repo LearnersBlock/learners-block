@@ -15,7 +15,6 @@ jobs:
       - name: Update versions
         run: |
           echo VERSION="$RELEASE_VERSION" > ${GITHUB_WORKSPACE}/backend/apps/controller/.version && \
-          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV && \
           sed -i "/^\([[:space:]]*version: \).*/s//\1$RELEASE_VERSION/" ${GITHUB_WORKSPACE}/balena.yml
 
       - name: Commit .version file
@@ -64,6 +63,10 @@ jobs:
             sudo unzip balena-cli-*-linux-x64-standalone.zip && \
             sudo ln -s /opt/balena-cli/balena /usr/bin/ && \
             cd $GITHUB_WORKSPACE
+
+      - name: Set version variable
+        run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: Create images
         env:
