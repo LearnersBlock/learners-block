@@ -59,6 +59,10 @@ jobs:
             sudo ln -s /opt/balena-cli/balena /usr/bin/ && \
             cd $GITHUB_WORKSPACE
 
+      - name: Set version to dev
+        run: |
+          echo "RELEASE_VERSION=dev" >> $GITHUB_ENV
+
       - name: Create images
         env:
           BALENA_API_TOKEN: ${{ secrets.BALENA_API_TOKEN }}
