@@ -20,9 +20,8 @@ assets:
 data:
   defaultDeviceType: orange-pi-zero
   supportedDeviceTypes:
-    - fincm3
     - orange-pi-zero
-    - raspberry-pi2
     - raspberrypi3-64
     - raspberrypi4-64
+    - raspberrypi0-2w-64
 version: 0.0.0
