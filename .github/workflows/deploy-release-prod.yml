@@ -51,7 +51,7 @@ jobs:
 
       - name: Create image builder context
         env:
-          BALENA_CLI: https://github.com/balena-io/balena-cli/releases/download/v12.52.0/balena-cli-v12.52.0-linux-x64-standalone.zip
+          BALENA_CLI: https://github.com/balena-io/balena-cli/releases/download/v12.55.0/balena-cli-v12.55.0-linux-x64-standalone.zip
         run: |
           sudo apt-get update && sudo apt-get install -y \
               curl \
