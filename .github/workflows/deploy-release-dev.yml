@@ -14,7 +14,7 @@ jobs:
 
       - name: Update versions
         run: |
-          echo VERSION="dev" > ${GITHUB_WORKSPACE}/backend/apps/controller/.version && \
+          echo VERSION="dev" > ${GITHUB_WORKSPACE}/backend/apps/controller/.version
 
       - name: Remove 'version' line from balena.yml in development environment
         run: sed -i '/version/,+1 d' ${GITHUB_WORKSPACE}/balena.yml
