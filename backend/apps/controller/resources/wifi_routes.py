@@ -84,7 +84,7 @@ class wifi_set_password(Resource):
         lb_database.wifi_password = content["wifi_password"]
         lb_database.save_to_db()
 
-        logger.info(f'Wi-Fi password set to {content["wifi_password"]}')
+        logger.debug(f'Wi-Fi password set to {content["wifi_password"]}')
 
         return {'message': 'success'}
 
