@@ -1,5 +1,5 @@
 ## Build interface
-FROM node:16.13.0-alpine3.14 AS interface-buildstep
+FROM node:16.13.1-alpine3.14 AS interface-buildstep
 
 WORKDIR /build-context
 
@@ -15,7 +15,7 @@ RUN yarn build
 
 
 ## Compile container
-FROM python:3.8.10-alpine3.14
+FROM python:3.8.12-alpine3.14
 
 # Install SupervisorD
 RUN pip install supervisor==4.2.2 --no-cache-dir
