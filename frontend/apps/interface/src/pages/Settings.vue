@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="flex flex-col items-center text-subtitle1">
+    <div class="flex flex-col items-center">
       <div
         class="q-gutter-y-md items-center window-width"
       >
@@ -69,7 +69,7 @@
               />
             </q-item-section>
             <q-item-section>
-              <q-item-label>
+              <q-item-label class="text-subtitle1">
                 {{ $t('file_manager') }}
               </q-item-label>
               <q-item-label caption>
@@ -118,7 +118,7 @@
               />
             </q-item-section>
             <q-item-section>
-              <q-item-label>
+              <q-item-label class="text-subtitle1">
                 {{ $t('library') }}
               </q-item-label>
               <q-item-label caption>
@@ -176,7 +176,7 @@
               />
             </q-item-section>
             <q-item-section>
-              <q-item-label>
+              <q-item-label class="text-subtitle1">
                 {{ $t('website') }}
               </q-item-label>
               <q-item-label caption>
@@ -231,7 +231,7 @@
                 />
               </q-item-section>
               <q-item-section>
-                <q-item-label>
+                <q-item-label class="text-subtitle1">
                   {{ $t('set_cp_password') }}
                 </q-item-label>
                 <q-item-label caption>
@@ -270,7 +270,7 @@
                 />
               </q-item-section>
               <q-item-section>
-                <q-item-label>
+                <q-item-label class="text-subtitle1">
                   {{ $t('set_wifi_password') }}
                 </q-item-label>
                 <q-item-label caption>
@@ -308,7 +308,7 @@
           </q-item-label>
           <q-btn
             v-model="wifi"
-            class="ml-3 mr-3 mt-1 mb-2 text-base full-width"
+            class="ml-3 mr-3 mt-1 mb-2 full-width"
             icon="wifi"
             outline
             rounded
@@ -358,7 +358,7 @@
                   size="50px"
                   color="primary"
                 />
-                <div class="mt-2 text-center text-base text-gray-800">
+                <div class="mt-2 text-center text-gray-800">
                   {{ $t('this_may_take_time') }}
                 </div>
               </div>
@@ -480,7 +480,7 @@
           flat
         >
           <q-card-section>
-            <div class="column flex text-base text-center items-center text-gray-800">
+            <div class="column flex text-center items-center text-gray-800">
               <q-spinner-gears
                 size="50px"
                 color="primary"
@@ -627,7 +627,7 @@
                             size="sm"
                             rounded
                             unelevated
-                            color="secondary"
+                            color="primary"
                             :label="$t('set_custom_startpage')"
                             @click="storeStartPage(props.row)"
                           />
@@ -736,7 +736,7 @@
               />
             </q-item-section>
             <q-item-section bottom>
-              <q-item-label>
+              <q-item-label class="text-subtitle1">
                 {{ $t('portainer_settings_description') }}
               </q-item-label>
               <q-item-label caption>
@@ -805,7 +805,7 @@
                   />
                 </q-item-section>
                 <q-item-section bottom>
-                  <q-item-label>
+                  <q-item-label class="text-subtitle1">
                     {{ $t('prune_system_files_description') }}
                   </q-item-label>
                 </q-item-section>
@@ -815,10 +815,8 @@
                     rounded
                     no-caps
                     :loading="systemMaintenance"
-                    size="md"
                     color="red"
                     :label="$t('prune')"
-                    class="text-lg"
                     @click="pruneSystemFiles"
                   />
                 </q-item-section>
@@ -835,7 +833,7 @@
                   />
                 </q-item-section>
                 <q-item-section bottom>
-                  <q-item-label>
+                  <q-item-label class="text-subtitle1">
                     {{ $t('reset_database_description') }}
                   </q-item-label>
                 </q-item-section>
@@ -848,7 +846,6 @@
                     size="md"
                     color="red"
                     :label="$t('reset')"
-                    class="text-lg"
                     @click="resetDatabase"
                   />
                 </q-item-section>
@@ -858,7 +855,7 @@
         </q-list>
         <q-separator spaced />
         <!-- System Info -->
-        <div class="text-center text-xl mt-4 text-gray-600">
+        <div class="text-center text-h6 mt-4 text-gray-600">
           {{ $t('system_info') }}
         </div>
         <div
