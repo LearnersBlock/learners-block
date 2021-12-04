@@ -10,7 +10,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 salt = bcrypt.gensalt()
 default_password = \
-    b'$2b$12$x70yiBuLG/YQ3GOyGlFdAOBB/NaJUFQulqSOH4WrznxZVnAmWVl9S'
+    b'$2b$09$PBTwpPOtvyN6KQG6C9VPgutig3jX.1VVyqxIveoBfzMD/msTYNf0e'
 
 
 # Create default user
@@ -145,7 +145,7 @@ class User(db.Model):
         return '<User %r>' % self.username
 
     def hash_password(password):
-        return bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt(12))
+        return bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt(9))
 
     def save_to_db(self):
         db.session.add(self)
