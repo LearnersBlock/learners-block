@@ -8,19 +8,19 @@
           src="../assets/lb-logo.svg"
         >
       </div>
-      <div class="mt-5 text-4xl text-gray-600 mb-6 text-center ml-2 mr-2">
+      <div class="mt-5 text-h4 text-gray-600 mb-6 text-center ml-2 mr-2 josefin">
         {{ $t('welcome_lb') }}
       </div>
       <q-separator />
       <div
         v-if="settingsLoading"
-        class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
+        class="text-h4 text-gray-500 mt-3 text-center ml-1 mr-1"
       >
         {{ $t('loading') }}
       </div>
       <div
         v-else-if="!settings.website && !settings.files && !settings.library && !slides[0]"
-        class="text-2xl text-gray-500 mt-3 text-center ml-1 mr-1"
+        class="text-h4 text-gray-500 mt-3 text-center ml-1 mr-1"
       >
         {{ $t('enable_components_in') }}
       </div>
@@ -40,10 +40,10 @@
             />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="josefin text-2xl pr-12">
+            <q-item-label class="text-h6 pr-12">
               {{ $t('files') }}
             </q-item-label>
-            <q-item-label class="text-lg text-gray-500">
+            <q-item-label class="text-subtitle1 text-gray-500">
               {{ $t('files_description') }}
             </q-item-label>
           </q-item-section>
@@ -64,10 +64,10 @@
             />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="josefin text-2xl pr-12">
+            <q-item-label class="text-h6 pr-12">
               {{ $t('library') }}
             </q-item-label>
-            <q-item-label class="text-lg text-gray-500">
+            <q-item-label class="text-subtitle1 text-gray-500">
               {{ $t('library_description') }}
             </q-item-label>
           </q-item-section>
@@ -90,10 +90,10 @@
             />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="josefin text-2xl pr-12">
+            <q-item-label class="text-h6 pr-12">
               {{ $t('website') }}
             </q-item-label>
-            <q-item-label class="text-lg text-gray-500">
+            <q-item-label class="text-subtitle1 text-gray-500">
               {{ $t('website_description') }}
             </q-item-label>
           </q-item-section>
@@ -103,7 +103,7 @@
       <div v-if="slide && !settingsLoading">
         <q-item-label
           header
-          class="text-2xl mt-2 text-center"
+          class="text-h5 mt-2 text-center"
         >
           {{ $t('app_store') }}
         </q-item-label>
@@ -120,7 +120,7 @@
               padding
               arrows
               height="200px"
-              class="text-plsrimary text-2xl shadow-1 rounded-borders"
+              class="text-h5 shadow-1 rounded-borders"
             >
               <q-carousel-slide
                 v-for="slide in slides"
@@ -140,7 +140,7 @@
                   size="56px"
                   color="primary"
                 />
-                <div class="q-mt-md text-center">
+                <div class="text-h6 q-mt-md text-center">
                   {{ slide.long_name }}
                 </div>
               </q-carousel-slide>

@@ -14,7 +14,7 @@
             >
           </router-link>
         </div>
-        <q-toolbar-title class="josefin text-h5 q-mt-xs">
+        <q-toolbar-title class="text-h5 q-mt-xs">
           <router-link
             class="text-white"
             style="text-decoration:none;"

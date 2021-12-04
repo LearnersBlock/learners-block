@@ -4,18 +4,43 @@
 @import "tailwindcss/utilities";
 
 @font-face {
-    font-family: "josefin sans";
+    font-family: "josefin";
     src: url("../assets/josefin-sans.ttf");
 }
 
-.text-caption {
-    font-size: 13px;
+@font-face {
+    font-family: "Inter";
+    src: url("../assets/Inter.ttf");
+}
+
+.text-h1 {
+    font-family: 'josefin',sans-serif;
+}
+
+.text-h2 {
+    font-family: 'josefin',sans-serif;
+}
+
+.text-h3 {
+    font-family: 'josefin',sans-serif;
+}
+
+.text-h4 {
+    font-family: 'josefin',sans-serif;
+}
+
+.text-h5 {
+    font-family: 'josefin',sans-serif;
+}
+
+.text-h6 {
+    font-family: 'josefin',sans-serif;
+}
+
+.text-subtitle1 {
+    font-family: 'josefin',sans-serif;
 }
 
 * {
-    font-family: 'josefin sans',sans-serif;
-}
-
-.josefin {
-    font-family: 'josefin sans';
+    font-family: 'Inter',sans-serif;
 }
