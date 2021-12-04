@@ -32,7 +32,7 @@
             text-color="primary"
             :label="$t('back')"
             icon="arrow_back"
-            :to="{ name: 'library' }"
+            @click="$router.back()"
           />
         </q-page-sticky>
       </q-item>
@@ -92,7 +92,7 @@
               multi-line
               color="secondary"
             >
-              {{ $t(category.category) }}
+              {{ category.category }}
             </q-badge>
           </div>
         </div>

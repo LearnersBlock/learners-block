@@ -183,11 +183,11 @@ export default defineComponent({
     // On mount, enable loading and fetch resources
     onMounted(() => {
       if ($store.state.savedResources.resources) {
-        $store.state.savedResources.limit = $store.state.savedResources.resources.resources.length
+        $store.commit('savedResources/resourceLimit', $store.state.savedResources.resources.resources.length)
         fetchedResources.value = $store.state.savedResources.resources
       } else {
         $store.commit('savedResources/resourceLimit', numberOfResults.value)
-        $store.commit('savedResources/updateResources', fetchedResources)
+        void fetchFilteredResources()
       }
     })
 
@@ -195,7 +195,7 @@ export default defineComponent({
     async function fetchFilteredResources () {
       await fetchResources(
         { limit: $store.state.savedResources.limit })
-      $store.commit('savedResources/updateResources', fetchedResources)
+      $store.commit('savedResources/updateResources', fetchedResources.value)
       endOfResults.value = false
     }
 
