@@ -205,10 +205,11 @@ def database_recover():
 
 def hostname_reset():
     # Remove run.pid to force reset of hostname
-    try:
-        os.remove('/app/db/run.pid')
-    except Exception:
-        logger.exception('Failed deleting run.pid')
+    if not config.dev_mode:
+        try:
+            os.remove('/app/db/run.pid')
+        except Exception:
+            logger.exception('Failed deleting run.pid')
 
 
 def human_size(nbytes):

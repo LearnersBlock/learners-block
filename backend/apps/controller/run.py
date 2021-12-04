@@ -244,4 +244,7 @@ if __name__ == '__main__':
     # Initialise and start
     api.init_app(app)
 
-    serve(app, threads=6, port=9090, host='0.0.0.0')
+    if config.dev_mode:
+        app.run(port=9090, host='0.0.0.0')
+    else:
+        serve(app, threads=6, port=9090, host='0.0.0.0')

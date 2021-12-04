@@ -1,9 +1,9 @@
+import config
 import fasteners
 import subprocess
 import sys
 import threading
 import time
-from common.errors import lb_dev
 from common.errors import logger
 from common.processes import check_connection
 from common.processes import check_internet
@@ -70,7 +70,7 @@ def launch_wifi(self):
 
 def startup():
     # Lock automatic updates in production to allow Controller to regulate them
-    if not lb_dev:
+    if not config.dev_device:
         lock = fasteners.InterProcessLock('/tmp/balena/updates.lock')
         lock.acquire()
 

@@ -29,6 +29,12 @@ if "FLASK_ENV" in os.environ and \
 else:
     dev_mode = False
 
+# Change default logging mode when in development environmnets
+dev_device = False
+if ("BALENA_APP_NAME" in os.environ and
+   os.environ['BALENA_APP_NAME'].lower() == "lb-dev"):
+    dev_device = True
+
 # Store the chronyd state to avoid polling multiple times
 chronyd_synced = False
 
