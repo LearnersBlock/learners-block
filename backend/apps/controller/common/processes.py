@@ -178,7 +178,6 @@ def device_reboot():
 def database_recover():
     # Resetting database
     logger.error("Database error. Deleting database and restarting.")
-    time.sleep(3)
 
     try:
         # If the container hostname is not the default, remove

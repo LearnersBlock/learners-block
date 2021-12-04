@@ -140,8 +140,8 @@ class system_prune(Resource):
 class system_reset_database(Resource):
     @jwt_required()
     def get(self):
-        # Add delay to ensure request is processed.
-        time.sleep(5)
+        # Add delay as on occasion it does not process without it.
+        time.sleep(1)
         database_recover()
 
         return {'message': 'Forcing an error to activate polling.'}, 410

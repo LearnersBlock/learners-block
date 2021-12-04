@@ -54,7 +54,7 @@ export default defineComponent({
       // Check the state of the device to decide on page to display
       AxiosOverride.get(
         apiPath.value,
-        { timeout: 4000 }
+        { timeout: 2000 }
       ).then(function (response) {
         if (response.data.message === true) {
           apiIsReady.value = true
@@ -80,7 +80,7 @@ export default defineComponent({
       apiIsReady.value = false
       // Loop x number of times checking for the device to be ready
       for (let i = 0; i < 10; i++) {
-        await delay(3000)
+        await delay(5000)
         const xhr = new XMLHttpRequest()
         xhr.open('GET', apiPath.value)
         xhr.timeout = 2000
