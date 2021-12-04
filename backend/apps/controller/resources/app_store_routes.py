@@ -19,7 +19,7 @@ class appstore_get_apps(Resource):
         # Fetch list of available apps from app-store repo
         try:
             app_list = requests.get(app_store_url,
-                                    timeout=8)
+                                    timeout=3)
             app_list.raise_for_status()
 
         except Exception:

@@ -121,9 +121,9 @@ if __name__ == '__main__':
             appstore_status
         from resources.auth_routes import auth_log_in, auth_log_out, \
             auth_set_password, auth_verify_login, \
-            auth_verify_user_password_state
-        from resources.settings_routes import settings_get_ui, \
-            settings_set_ui
+            auth_verify_user_password_state, auth_wifi_password_state
+        from resources.settings_routes import settings_default_startpage, \
+            settings_get_ui, settings_set_ui
 
         init_database()
 
@@ -184,6 +184,8 @@ if __name__ == '__main__':
     api.add_resource(auth_verify_login, '/v1/auth/verify_login')
     api.add_resource(auth_verify_user_password_state,
                      '/v1/auth/verify_user_password_state')
+    api.add_resource(auth_wifi_password_state,
+                     '/v1/auth/wifi_password_state')
 
     # Docker
     api.add_resource(docker_image, '/v1/docker/image')
@@ -208,6 +210,8 @@ if __name__ == '__main__':
     api.add_resource(filemanager_upload, '/v1/filemanager/upload')
 
     # Settings
+    api.add_resource(settings_default_startpage,
+                     '/v1/settings/default_startpage')
     api.add_resource(settings_get_ui, '/v1/settings/get_ui')
     api.add_resource(settings_set_ui, '/v1/settings/set_ui')
 
