@@ -178,6 +178,7 @@ export default defineComponent({
     const windowHostname = ref<string>(window.location.hostname)
 
     // Settings for the ui
+    const defaultStartpage = Axios.get(`${api.value}/v1/settings/default_startpage`)
     const settingsState = Axios.get(`${api.value}/v1/settings/get_ui`)
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
@@ -190,20 +191,20 @@ export default defineComponent({
 
     async function apiCallAwait () {
       $q.loading.show()
-      await Promise.all([settingsState, appStoreState]).then(function ([res1, res2]) {
+      await Promise.all([settingsState, appStoreState, defaultStartpage]).then(function ([res1, res2, res3]) {
         // Redirect for Learner's Block Start Page
-        if (res1.data.start_page === '/') {
+        if (res3.data.start_page === '/') {
           settings.value = res1.data
           populateAppStore(res2)
           settingsLoading.value = false
-        } else if (res1.data.start_page.substring(0, 1) === ':') {
+        } else if (res3.data.start_page.substring(0, 1) === ':') {
           // Redirect for ports
           setTimeout(() => {
-            location.href = `http://${window.location.hostname}${res1.data.start_page}`
+            location.href = `http://${window.location.hostname}${res3.data.start_page}`
           }, 2000)
         } else {
           // Redirect for App Store
-          const appEntry = res2.data.find(x => x.name === res1.data.start_page)
+          const appEntry = res2.data.find(x => x.name === res3.data.start_page)
           if (appEntry) {
             const appPort = Object.keys(appEntry.ports)
             setTimeout(() => {
@@ -212,22 +213,22 @@ export default defineComponent({
             return
           }
           // Redirect for pre-set paths
-          if (res1.data.start_page === 'files') {
+          if (res3.data.start_page === 'files') {
             setTimeout(() => {
               void $router.push({ name: 'filemanager', params: { data: 'fileshare' } })
             }, 2000)
-          } else if (res1.data.start_page === 'library') {
+          } else if (res3.data.start_page === 'library') {
             setTimeout(() => {
               void $router.push({ name: 'filemanager', params: { data: 'library' } })
             }, 2000)
-          } else if (res1.data.start_page === 'website') {
+          } else if (res3.data.start_page === 'website') {
             setTimeout(() => {
               location.href = '/website/'
             }, 2000)
           } else {
             // Redirect for custom path
             setTimeout(() => {
-              location.href = res1.data.start_page
+              location.href = res3.data.start_page
             }, 2000)
           }
         }

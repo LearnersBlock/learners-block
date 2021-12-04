@@ -81,7 +81,6 @@
                 v-if="!filesLoading"
                 v-model="files"
                 icon="folder"
-                :disable="togglesLoading"
                 @update:model-value="updateFiles"
               />
               <q-spinner
@@ -97,11 +96,11 @@
             clickable
             tag="a"
             target="_self"
-            :disable="!internet || wifiLoading"
+            :disable="!internet || loadingConnectionStatus"
             :to="{ name: 'library' }"
           >
             <q-tooltip
-              v-if="!internet && !wifiLoading"
+              v-if="!internet && !loadingConnectionStatus"
               class="text-caption text-center"
               anchor="top middle"
               self="center middle"
@@ -152,7 +151,6 @@
                 v-if="!libraryLoading"
                 v-model="library"
                 icon="import_contacts"
-                :disable="togglesLoading"
                 @update:model-value="updateLibrary"
               />
               <q-spinner
@@ -191,7 +189,6 @@
                 v-model="website"
                 icon="language"
                 class="ml-auto"
-                :disable="togglesLoading"
                 @update:model-value="updateWebsite"
               />
               <q-spinner
@@ -212,9 +209,10 @@
             {{ $t('security') }}
           </q-item-label>
           <q-card flat>
+            <!-- Login Password -->
             <q-item
               clickable
-              :disable="settingPassword || togglesLoading"
+              :disable="settingPassword || loadingSecurityToggles"
               @click="setLoginPassword()"
             >
               <q-item-section
@@ -242,17 +240,18 @@
               </q-item-section>
               <q-item-section side>
                 <q-toggle
+                  v-if="!loadingSecurityToggles"
                   v-model="loginPasswordToggle"
                   :icon="loginPasswordToggle ? 'lock' : 'lock_open'"
-                  :disable="settingPassword || togglesLoading"
+                  :disable="settingPassword"
                   @update:model-value="setLoginPassword()"
                 />
               </q-item-section>
             </q-item>
-            <!-- Wifi Passwords -->
+            <!-- Wifi Password -->
             <q-item
               clickable
-              :disable="settingPassword || togglesLoading"
+              :disable="settingPassword || loadingSecurityToggles"
               @click="setWifiPassword()"
             >
               <q-item-section
@@ -280,14 +279,15 @@
               </q-item-section>
               <q-item-section side>
                 <q-toggle
+                  v-if="!loadingSecurityToggles"
                   v-model="wifiPasswordToggle"
                   :icon="wifiPasswordToggle ? 'lock' : 'lock_open'"
-                  :disable="settingPassword || togglesLoading"
+                  :disable="settingPassword"
                   @update:model-value="setWifiPassword()"
                 />
               </q-item-section>
             </q-item>
-            <q-inner-loading :showing="settingPassword || togglesLoading">
+            <q-inner-loading :showing="settingPassword || loadingSecurityToggles">
               <q-spinner-gears
                 size="50px"
                 color="primary"
@@ -312,10 +312,10 @@
             icon="wifi"
             outline
             rounded
-            :loading="wifiLoading"
+            :loading="loadingConnectionStatus"
             no-caps
             color="primary"
-            :disable="wifiLoading"
+            :disable="loadingConnectionStatus"
             :label="!wifi ? $t('connect'): $t('disconnect')"
             @click="wifiWarn"
           />
@@ -377,8 +377,8 @@
               round
               size="xs"
               icon="refresh"
-              :disable="wifiLoading"
-              @click="internet ? refreshApps(): $q.notify({ type: 'negative', message: $t('need_internet_connection') })"
+              :disable="loadingConnectionStatus"
+              @click="internet ? fetchApps(true): $q.notify({ type: 'negative', message: $t('need_internet_connection') })"
             />
           </template>
           <template
@@ -875,7 +875,7 @@
             {{ $t('version') }} {{ sysInfo.versions.lb }}
           </div>
           <div
-            v-if="!wifiLoading"
+            v-if="!loadingConnectionStatus"
             class="row"
           >
             <q-icon
@@ -950,6 +950,8 @@ export default defineComponent({
     })
     const library = ref<boolean>(false)
     const libraryLoading = ref<boolean>(true)
+    const loadingConnectionStatus = ref<boolean>(true)
+    const loadingSecurityToggles = ref<boolean>(true)
     const loginPasswordStatus = ref<boolean>(false)
     const loginPasswordToggle = ref<boolean>(false)
     const newHostname = ref<any>('')
@@ -967,13 +969,11 @@ export default defineComponent({
     const sysInfoLoading = ref<boolean>(true)
     const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
     const systemMaintenance = ref<boolean>(false)
-    const togglesLoading = ref<boolean>(true)
     const website = ref<boolean>(false)
     const websiteLoading = ref<boolean>(true)
     const wifi = ref<boolean>(false)
     const wifiPasswordStatus = ref<boolean>(false)
     const wifiPasswordToggle = ref<boolean>(false)
-    const wifiLoading = ref<boolean>(true)
     const windowHostname = ref<string>(window.location.hostname)
 
     // Get api from store
@@ -1033,102 +1033,80 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      apiCall()
-    })
-
-    // Populate variables on first load of page
-    function apiCall () {
-      // API calls for Axios spread
-      const fetchedConnectionStatus = Axios.get(`${api.value}/v1/wifi/connection_status`)
-      const fetchedPortainerSettings = Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'status' })
-      const settingsUi = Axios.get(`${api.value}/v1/settings/get_ui`)
-      const verifyUserPasswordState = Axios.get(`${api.value}/v1/auth/verify_user_password_state`)
-
-      // Group dependent calls together for Portainer and Connection Status
-      Promise.all([fetchedConnectionStatus, fetchedPortainerSettings]).then(function ([res1, res2]) {
+      Axios.get(`${api.value}/v1/wifi/connection_status`).then(async (response) => {
         // Set connection status
-        if (res1.data.wifi) {
+        if (response.data.wifi) {
           wifi.value = true
         }
 
         // Set internet connection status
-        if (res1.data.internet) {
+        if (response.data.internet) {
           internet.value = true
-        } else {
-          internet.value = false
         }
 
-        // Set Portainer status. Dependent on having fetched internet connection status.
-        if (res2.data.installed) {
-          portainer.value = true
-          portainerUnavailable.value = false
-        } else if (!res2.data.image && !internet.value) {
-          portainer.value = false
-          portainerImageExists.value = res2.data.image
-          portainerUnavailable.value = true
-        } else {
-          portainer.value = false
-          portainerImageExists.value = res2.data.image
-          portainerUnavailable.value = false
-        }
+        // Make internet status dependent features visible
+        loadingConnectionStatus.value = false
 
-        portainerLoading.value = false
-        wifiLoading.value = false
+        // Check Portainer status
+        getPortainerStatus()
+
+        // Fetch available apps from database.
+        await fetchApps(internet.value)
+
+        // Set default start page. Dependent on fetching app store databse.
+        getDefaultStartpage()
       }).catch(function () {
         permNotify('negative', t('error'))
-        console.log('Error populating connnection and portainer settings')
+        console.log('Error populating connnection settings')
       })
 
-      // Fetch Settings UI configuration
-      Promise.all([settingsUi, verifyUserPasswordState]).then(async function ([res1, res2]) {
+      Axios.get(`${api.value}/v1/settings/get_ui`).then((response) => {
         // Set settings toggle status
-        files.value = res1.data.files
-        website.value = res1.data.website
-        library.value = res1.data.library
-        devMode.value = res1.data.dev_mode
-
-        // Check if disable wifi password button should be visible
-        if (res1.data.wifi_password_set) {
-          wifiPasswordStatus.value = true
-          wifiPasswordToggle.value = true
-        }
-
-        // Check if disable password button should be visible
-        if (res2.data.default_login_password_set) {
-          loginPasswordStatus.value = true
-          loginPasswordToggle.value = true
-        }
+        files.value = response.data.files
+        website.value = response.data.website
+        library.value = response.data.library
+        devMode.value = response.data.dev_mode
 
         // Stop loading toggles
-        togglesLoading.value = false
         filesLoading.value = false
         libraryLoading.value = false
         websiteLoading.value = false
-
-        // Fetch available apps from database.
-        await fetchApps()
-
-        // Set default start page
-        const internalPage = startPageOptions.value.find((x) => x.string === res1.data.start_page)?.label
-        const appEntry = rows.value.find(x => x.name === res1.data?.start_page)
-        if (internalPage) {
-          selectedStartPage.value = internalPage
-        } else if (appEntry) {
-          selectedStartPage.value = appEntry.long_name
-        } else {
-          selectedStartPage.value = res1.data.start_page
-        }
       }).catch(function () {
         permNotify('negative', t('error'))
         console.log('Error populating settings UI')
       })
 
+      // Group dependent calls together for password states
+      const fetchedUserPasswordState = Axios.get(`${api.value}/v1/auth/verify_user_password_state`)
+      const fetchedWifiPasswordState = Axios.get(`${api.value}/v1/auth/wifi_password_state`)
+
+      Promise.all([fetchedUserPasswordState, fetchedWifiPasswordState]).then(function ([res1, res2]) {
+        // Check if disable password button should be visible
+        if (res1.data.default_login_password_set) {
+          loginPasswordStatus.value = true
+          loginPasswordToggle.value = true
+        }
+
+        // Check if disable wifi password button should be visible
+        if (res2.data.wifi_password_set) {
+          wifiPasswordStatus.value = true
+          wifiPasswordToggle.value = true
+        }
+        loadingSecurityToggles.value = false
+      }).catch(function () {
+        permNotify('negative', t('error'))
+        console.log('Error verifying user password')
+      })
+
       // Fetch System Info status
-      void Axios.get(`${api.value}/v1/system/info`).then((response) => {
+      Axios.get(`${api.value}/v1/system/info`).then((response) => {
         sysInfo.value = response.data
         sysInfoLoading.value = false
+      }).catch(function () {
+        permNotify('negative', t('error'))
+        console.log('Error fetching system info')
       })
-    }
+    })
 
     // Show various dialogs or execute functions depending on user selection
     const changeStartPage = () => {
@@ -1154,13 +1132,52 @@ export default defineComponent({
     }
 
     // Fetch a list of apps as stored in the local database. Does not query the online database
-    async function fetchApps () {
+    async function fetchApps (refresh) {
       appTableVisible.value = false
+      if (refresh) {
+        await Axios.get(`${api.value}/v1/appstore/get_apps`)
+      }
       await Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
         rows.value = availableApps.data
-        appTableVisible.value = true
-      }
-      )
+      })
+      appTableVisible.value = true
+    }
+
+    function getDefaultStartpage () {
+      void Axios.get(`${api.value}/v1/settings/default_startpage`).then((response) => {
+        const internalPage = startPageOptions.value.find((x) => x.string === response.data.start_page)?.label
+        if (internalPage) {
+          selectedStartPage.value = internalPage
+        } else {
+          // Fetch apps now as needed for processing default start page
+          const appEntry = rows.value.find(x => x.name === response.data?.start_page)
+          if (appEntry) {
+            selectedStartPage.value = appEntry.long_name
+          } else {
+            selectedStartPage.value = response.data.start_page
+          }
+        }
+      })
+    }
+
+    function getPortainerStatus () {
+      void Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'status' }).then((response) => {
+        // Set Portainer status. Dependent on having fetched internet connection status.
+        if (response.data.installed) {
+          portainer.value = true
+          portainerUnavailable.value = false
+        } else if (!response.data.image && !internet.value) {
+          portainer.value = false
+          portainerImageExists.value = response.data.image
+          portainerUnavailable.value = true
+        } else {
+          portainer.value = false
+          portainerImageExists.value = response.data.image
+          portainerUnavailable.value = false
+        }
+
+        portainerLoading.value = false
+      })
     }
 
     // Verify that the user wants to change the hostname
@@ -1217,17 +1234,6 @@ export default defineComponent({
     // A simple redirect to another page
     function redirect (path) {
       location.href = path
-    }
-
-    // Fetch list of new apps from the online database and update local databse
-    async function refreshApps () {
-      appTableVisible.value = false
-      await Axios.get(`${api.value}/v1/appstore/get_apps`)
-      await Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
-        rows.value = availableApps.data
-      }
-      )
-      appTableVisible.value = true
     }
 
     // Reset the SQLite database
@@ -1459,10 +1465,10 @@ export default defineComponent({
             dependencies: row.dependencies
           }).then(async function () {
             permNotify('positive', t('app_installed'))
-            await fetchApps()
+            await fetchApps(false)
             appTableVisible.value = true
           }).catch(async function () {
-            await fetchApps()
+            await fetchApps(false)
             appTableVisible.value = true
           })
         })
@@ -1480,10 +1486,10 @@ export default defineComponent({
             dependencies: row.dependencies
           }).then(async function () {
             $q.notify({ type: 'positive', message: t('success') })
-            await fetchApps()
+            await fetchApps(false)
             appTableVisible.value = true
           }).catch(async function () {
-            await fetchApps()
+            await fetchApps(false)
             appTableVisible.value = true
           })
         })
@@ -1509,10 +1515,10 @@ export default defineComponent({
             dependencies: row.dependencies
           }).then(async function () {
             permNotify('positive', t('app_installed'))
-            await fetchApps()
+            await fetchApps(false)
             appTableVisible.value = true
           }).catch(async function () {
-            await fetchApps()
+            await fetchApps(false)
             appTableVisible.value = true
           })
         })
@@ -1619,12 +1625,12 @@ export default defineComponent({
           cancel: true,
           persistent: true
         }).onOk(() => {
-          wifiLoading.value = true
+          loadingConnectionStatus.value = true
           void disconnectWifi()
           // Add delay to improve user interaction
           setTimeout(() => {
             wifi.value = false
-            wifiLoading.value = false
+            loadingConnectionStatus.value = false
           }, 2000)
         })
       }
@@ -1638,6 +1644,7 @@ export default defineComponent({
       customStartPageInput,
       customStartPath,
       devMode,
+      fetchApps,
       files,
       filesLoading,
       hostnameChanging,
@@ -1646,6 +1653,8 @@ export default defineComponent({
       internet,
       library,
       libraryLoading,
+      loadingConnectionStatus,
+      loadingSecurityToggles,
       loginPasswordStatus,
       loginPasswordToggle,
       newHostname,
@@ -1654,7 +1663,6 @@ export default defineComponent({
       portainerLoading,
       portainerUnavailable,
       pruneSystemFiles,
-      refreshApps,
       regexp,
       resetDatabase,
       rows,
@@ -1670,7 +1678,6 @@ export default defineComponent({
       sysInfoLoading,
       tab: ref('general'),
       toggleApp,
-      togglesLoading,
       updateFiles,
       updateLibrary,
       updatePortainer,
@@ -1679,7 +1686,6 @@ export default defineComponent({
       website,
       websiteLoading,
       wifi,
-      wifiLoading,
       wifiPasswordStatus,
       wifiPasswordToggle,
       wifiWarn,

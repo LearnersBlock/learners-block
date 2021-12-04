@@ -97,3 +97,17 @@ class auth_verify_user_password_state(Resource):
                                                  lb_database.password)
 
         return {'default_login_password_set': not verified_password}
+
+
+class auth_wifi_password_state(Resource):
+    def get(self):
+        lb_database = User.query.filter_by(username=config.default_hostname
+                                           ).first()
+
+        # Check if there is a wifi password set and return boolean
+        if lb_database.wifi_password:
+            wifi_password = True
+        else:
+            wifi_password = False
+
+        return {'wifi_password_set': wifi_password}
