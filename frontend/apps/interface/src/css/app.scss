@@ -3,14 +3,18 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* josefin-sans-regular - vietnamese_latin-ext_latin */
 @font-face {
     font-family: "josefin";
-    src: url("../assets/josefin-sans.ttf");
+    src: url("../assets/josefin-sans.woff") format('woff');
+    src: url("../assets/josefin-sans.woff2") format('woff2');
 }
 
+/* inter-regular - vietnamese_latin-ext_latin_greek-ext_greek_cyrillic-ext_cyrillic */
 @font-face {
-    font-family: "Inter";
-    src: url("../assets/Inter.ttf");
+    font-family: "inter";
+    src: url("../assets/inter.woff") format('woff');
+    src: url("../assets/inter.woff2") format('woff2');
 }
 
 .text-h1 {
@@ -42,5 +46,5 @@
 }
 
 * {
-    font-family: 'Inter',sans-serif;
+    font-family: 'inter',sans-serif;
 }
