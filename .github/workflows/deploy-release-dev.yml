@@ -24,7 +24,7 @@ jobs:
         id: build-dev-aarch64
         with:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
-          fleet: learner_s_block/lb-dev-aarch64
+          fleet: learner_s_block/LearnersBlockDevelopment
 
       - name: Deploy armv7hf to development
         uses: balena-io/balena-ci@master
