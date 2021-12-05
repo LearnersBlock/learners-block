@@ -7,7 +7,7 @@
   />
   <div
     v-else-if="apiIsReady == false"
-    class="text-gray-600 text-h4 q-mt-xl text-center"
+    class="text-gray-600 text-h5 q-mt-xl text-center"
   >
     <div class="m-3">
       <div class="text-center">
