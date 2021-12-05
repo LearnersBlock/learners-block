@@ -43,7 +43,7 @@
             <q-item-label class="text-h6 pr-12">
               {{ $t('files') }}
             </q-item-label>
-            <q-item-label class="text-subtitle1 text-gray-500">
+            <q-item-label class="text-gray-500">
               {{ $t('files_description') }}
             </q-item-label>
           </q-item-section>
@@ -67,7 +67,7 @@
             <q-item-label class="text-h6 pr-12">
               {{ $t('library') }}
             </q-item-label>
-            <q-item-label class="text-subtitle1 text-gray-500">
+            <q-item-label class="text-gray-500">
               {{ $t('library_description') }}
             </q-item-label>
           </q-item-section>
@@ -93,7 +93,7 @@
             <q-item-label class="text-h6 pr-12">
               {{ $t('website') }}
             </q-item-label>
-            <q-item-label class="text-subtitle1 text-gray-500">
+            <q-item-label class="text-gray-500">
               {{ $t('website_description') }}
             </q-item-label>
           </q-item-section>

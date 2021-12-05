@@ -805,7 +805,7 @@
                   />
                 </q-item-section>
                 <q-item-section bottom>
-                  <q-item-label class="text-subtitle1">
+                  <q-item-label>
                     {{ $t('prune_system_files_description') }}
                   </q-item-label>
                 </q-item-section>
@@ -833,7 +833,7 @@
                   />
                 </q-item-section>
                 <q-item-section bottom>
-                  <q-item-label class="text-subtitle1">
+                  <q-item-label>
                     {{ $t('reset_database_description') }}
                   </q-item-label>
                 </q-item-section>
