@@ -13,7 +13,7 @@
       class="resource_container"
     >
       <q-btn
-        class="q-mb-md text-body-1 text-weight-bold"
+        class="q-mb-md text-weight-bold"
         rounded
         outline
         color="white"
@@ -68,7 +68,6 @@
                   {{ resource.name }}
                 </div>
                 <div
-                  class="text-body1"
                   dir="auto"
                 >
                   {{ resource.description }}
@@ -78,7 +77,7 @@
                     <q-badge
                       v-for="language in resource.languages"
                       :key="language.id"
-                      class="q-pa-sm q-mr-sm q-mt-sm multi-line text-body2 text-weight-large"
+                      class="q-pa-sm q-mr-sm q-mt-sm multi-line text-caption text-weight-large"
                       color="secondary"
                     >
                       {{ language.language }}

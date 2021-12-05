@@ -613,7 +613,7 @@
                   <template #item="props">
                     <div class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4">
                       <q-card>
-                        <q-card-section class="text-center text-body1 text-weight-bold q-pa-none mt-2">
+                        <q-card-section class="text-center q-pa-none mt-2">
                           {{ props.row.long_name }}
                         </q-card-section>
                         <q-separator />

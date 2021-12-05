@@ -24,7 +24,7 @@
           :offset="[25, 20]"
         >
           <q-btn
-            class="text-body-1 text-weight-bold"
+            class="text-weight-bold"
             rounded
             outline
             color="white"
@@ -55,13 +55,13 @@
         {{ fetchedResource.resource.name }}
       </div>
       <div
-        class="text-body1 q-pa-sm"
+        class="q-pa-sm"
         dir="auto"
       >
         {{ fetchedResource.resource.description }}
       </div>
       <q-separator class="q-mt-sm" />
-      <div class="q-mt-md text-left text-body1">
+      <div class="q-mt-md text-left">
         <div
           v-if="fetchedResource.resource.author"
           class="resource_info"
@@ -88,7 +88,7 @@
             <q-badge
               v-for="category in fetchedResource.resource.categories"
               :key="category.id"
-              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
               multi-line
               color="secondary"
             >
@@ -107,7 +107,7 @@
             <q-badge
               v-for="language in fetchedResource.resource.languages"
               :key="language.id"
-              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
               multi-line
               color="secondary"
             >
@@ -126,7 +126,7 @@
             <q-badge
               v-for="format in fetchedResource.resource.formats"
               :key="format.id"
-              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
               multi-line
               color="secondary"
             >
@@ -167,7 +167,7 @@
             <q-badge
               v-for="subject in fetchedResource.resource.subjects"
               :key="subject.id"
-              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
               multi-line
               color="secondary"
             >
@@ -186,7 +186,7 @@
             <q-badge
               v-for="level in fetchedResource.resource.levels"
               :key="level.id"
-              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-body2 text-weight-medium"
+              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
               multi-line
               color="secondary"
             >

@@ -1,5 +1,5 @@
 <template>
-  <q-page class="items-center p-3 text-body1">
+  <q-page class="items-center p-3">
     <!-- Home Button -->
     <q-btn
       v-if="rows"
@@ -7,7 +7,7 @@
       size="sm"
       color="white"
       text-color="primary"
-      class="mt-1 mb-1 text-body-1 text-weight-bold"
+      class="mt-1 mb-1 text-weight-bold"
       outline
       :label="$t('back')"
       icon="arrow_back"
@@ -227,7 +227,7 @@
       <!-- Name -->
       <template #body-cell-name="props">
         <q-td :props="props">
-          <div class="text-body1">
+          <div>
             <!-- Icons on left of row -->
             <q-slide-item
               right-color="red"
@@ -516,7 +516,7 @@
             <!-- Name -->
             <template #body-cell-name="props">
               <q-td :props="props">
-                <div class="text-body1">
+                <div>
                   <q-icon
                     class="mb-1"
                     color="gray-800"
