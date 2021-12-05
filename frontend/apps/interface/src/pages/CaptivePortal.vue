@@ -11,7 +11,7 @@
     </div>
     <div
       v-if="hostname"
-      class="text-h6 text-center text-gray-500 mt-2"
+      class="text-body1 text-center text-gray-600 mt-2"
     >
       <div>
         {{ $t('visit_to_begin') }}

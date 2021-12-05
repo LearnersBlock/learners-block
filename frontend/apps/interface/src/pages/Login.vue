@@ -4,7 +4,7 @@
       class="mb-6 flex flex-col"
       @submit="login"
     >
-      <div class="text-h4 mb-6 text-gray-600">
+      <div class="text-h4 text-center mb-6 text-gray-600">
         {{ $t('login') }}
       </div>
       <q-input
