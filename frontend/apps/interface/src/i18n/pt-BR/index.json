@@ -9,14 +9,14 @@
     "login_disabled": "Senha foi desativada.",
     "login": "Conecte-se",
     "library_settings_description": "Baixe conteúdo da biblioteca Learner's Block.",
-    "library_description": "Explore conteúdo baixado da biblioteca aqui.",
+    "library_description": "Explore o conteúdo baixado da biblioteca.",
     "library": "Biblioteca",
     "invalid_input": "No máximo 32 caracteres e sem caracteres especiais além de '_' e '-'",
     "invalid_hostname": "Você submeteu uma URL e um SSID do Wi-Fi inválidos. Por favor, tente novamente.",
     "hostname_changed_notification": "Seus URL e SSID do Wi-Fi foram atualizados. Talvez seja necessário reiniciar o Block para isso ter efeito.",
     "home": "Início",
     "files_settings_description": "Gerencie arquivos no seu Block. Apenas usuários logados podem deletá-los.",
-    "files_description": "Explore arquivos aqui.",
+    "files_description": "Explore os arquivos.",
     "files": "Arquivos",
     "error": "Ocorreu um erro:",
     "enable_components_in": "Você pode ativar componentes no Painel de Controle.",
@@ -42,7 +42,7 @@
     "are_you_sure": "Você tem certeza?",
     "welcome_lb": "Boas vindas ao Learner's Block",
     "website_settings_description": "Faça o upload dos arquivos de seu site para permitir que outros usem seu site offline.",
-    "website_description": "Acesse o site aqui.",
+    "website_description": "Acesse o site.",
     "website": "Site da web",
     "visit_to_begin": "Insira a seguinte URL no seu navegador para começar a usar o seu Learner’s Block:",
     "version": "Versão:",
@@ -153,5 +153,6 @@
     "url_wifi_desc": "Altere a URL usada para acessar o seu Bloco e como o seu Bloco aparece na lista das redes Wi-Fi das pessoas.",
     "need_internet_connection": "É preciso uma conexão de internet para usar estas características. Caso esteja conectado, tente atualizar a página.",
     "api_unavailable": "O seu bloco ainda está carregando. Esta página será recarregada assim que estiver pronta.",
-    "installed": "Instalado"
+    "installed": "Instalado",
+    "sample": "Amostra"
 }
