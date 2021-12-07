@@ -12,7 +12,7 @@
     "are_you_sure": "Emin misiniz?",
     "welcome_lb": "Learner's Block 'a Hoş Geldiniz",
     "website_settings_description": "Başkalarının sitenizi çevrim dışı kullanmasına izin vermek için web sitesi dosyalarınızı yükleyin.",
-    "website_description": "Web sitesine buradan erişin.",
+    "website_description": "Web sitesine erişin.",
     "website": "İnternet Sitesi",
     "visit_to_begin": "Learner’s Block'unuzu kullanmaya başlamak için tarayıcınıza şu URL'yi girin:",
     "version": "Sürüm:",
@@ -38,11 +38,11 @@
     "login_disabled": "Parola devre dışı bırakıldı.",
     "library_settings_description": "Learner's Block Kitaplığından içerik indirin.",
     "files_settings_description": "Block'taki dosyalarınızı yönetin. Yalnızca oturum açmış kullanıcılar bunları silebilir.",
-    "library_description": "İndirilen kitaplık içeriğine buradan göz atın.",
+    "library_description": "İndirilen kitaplık içeriğine göz atın.",
     "library": "Kitaplık",
     "home": "Ev",
     "advanced": "İleri Düzey",
-    "files_description": "Dosyalara buradan göz atın.",
+    "files_description": "Dosyalara göz atın.",
     "files": "Dosyalar",
     "error": "Bir hata oluştu:",
     "enable_components_in": "Bileşenleri, Denetim Panelinden etkinleştirebilirsiniz.",
@@ -153,5 +153,6 @@
     "portainer_desc": "Block'unuzdaki özel Docker konteynerlerini yönetmek için bir grafiksel kullanıcı arayüzü.",
     "need_internet_connection": "Bu özellikleri kullanmak için internet bağlantınızın olması gerekir. Bağlıysanız, sayfayı yenilemeyi deneyin.",
     "api_unavailable": "Block'unuz hala yükleniyor. Hazır olduğunda bu sayfa yeniden yüklenecektir.",
-    "installed": "Kurulu"
+    "installed": "Kurulu",
+    "sample": "Ön izleme"
 }
