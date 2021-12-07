@@ -11,7 +11,7 @@
     "are_you_sure": "Sind Sie sicher?",
     "welcome_lb": "Willkommen im Learner’s Block",
     "website_settings_description": "Laden Sie Ihre Website-Dateien hoch, damit andere Ihre Website offline nutzen können.",
-    "website_description": "Hier können Sie auf die Website zugreifen.",
+    "website_description": "Besuchen Sie die Website.",
     "website": "Website",
     "visit_to_begin": "Geben Sie die folgende URL in Ihren Browser ein, um Ihren Learner’s Block zu verwenden:",
     "version": "Version:",
@@ -30,7 +30,7 @@
     "invalid_hostname": "Sie haben eine ungültige URL und Wi-Fi SSID angegeben. Bitte versuchen Sie es erneut.",
     "hostname_changed_notification": "Ihre URL und Wi-Fi SSID wurden aktualisiert. Möglicherweise müssen Sie den Block neu starten, damit dies wirksam wird.",
     "home": "Startseite",
-    "files_description": "Hier Dateien durchsuchen.",
+    "files_description": "Dateien durchsuchen.",
     "files": "Dateien",
     "error": "Ein Fehler ist aufgetreten:",
     "enable_components_in": "Sie können Komponenten in der Systemsteuerung aktivieren.",
@@ -42,7 +42,7 @@
     "click_toggle": "Klicken Sie auf ein Element unten, um die Verwaltung zu öffnen. Verwenden Sie die Kippschalter auf der rechten Seite, um die Komponenten auf der Titelseite ein- oder auszublenden.",
     "password_set_success": "Ihr Passwort wurde festgelegt",
     "library_settings_description": "Laden Sie Inhalte aus der Learner's Block-Bibliothek herunter.",
-    "library_description": "Durchsuchen Sie die heruntergeladenen Bibliotheksinhalte hier.",
+    "library_description": "Durchsuchen Sie die heruntergeladenen Bibliotheksinhalte.",
     "login_successfull": "Anmeldung erfolgreich",
     "login_disabled": "Das Passwort ist deaktiviert worden.",
     "change_hostname_warning": "Sind Sie sicher, dass Sie die URL und die Wi-Fi SSID ändern möchten?",
@@ -153,5 +153,6 @@
     "your_new_url": "Ihre neue URL lautet:",
     "need_internet_connection": "Sie benötigen eine Internetverbindung, um diese Funktionen nutzen zu können. Wenn Sie eine Verbindung haben, versuchen Sie, die Seite zu aktualisieren.",
     "api_unavailable": "Ihr Block wird noch geladen. Diese Seite wird neu geladen, wenn sie fertig ist.",
-    "installed": "Installiert"
+    "installed": "Installiert",
+    "sample": "Muster"
 }
