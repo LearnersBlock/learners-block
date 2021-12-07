@@ -6,7 +6,7 @@
     "wifi": "Wi-Fi",
     "welcome_lb": "Benvenuto/a sul Learner’s Block",
     "website_settings_description": "Carica i file del tuo sito web per permettere ad altri di usare il tuo sito fuori linea.",
-    "website_description": "Accedi al sito web qui.",
+    "website_description": "Accedi al sito web.",
     "website": "Sito web",
     "visit_to_begin": "Inserisci il seguente URL nel tuo browser per iniziare a usare il tuo Learner’s Block:",
     "version": "Versione:",
@@ -27,13 +27,13 @@
     "login_disabled": "La password è stata disabilitata.",
     "login": "Accedi",
     "library_settings_description": "Scarica il contenuto dalla Biblioteca del Learner’s Block.",
-    "library_description": "Sfoglia i contenuti scaricati della biblioteca qui.",
+    "library_description": "Sfoglia i contenuti scaricati della raccolta.",
     "library": "Biblioteca",
     "invalid_input": "Massimo 32 caratteri e nessun carattere speciale diverso da _ e -",
     "invalid_hostname": "Hai inviato un URL e un SSID Wi-Fi non validi. Si prega di riprovare.",
     "hostname_changed_notification": "Il tuo URL e SSID Wi-Fi sono stati aggiornati. Potrebbe essere necessario riavviare il Blocco perché questo abbia effetto.",
     "home": "Pagina principale",
-    "files_description": "Sfoglia i file qui.",
+    "files_description": "Sfoglia i file.",
     "files": "File",
     "error": "Si è verificato un errore:",
     "enable_components_in": "Puoi abilitare i componenti nel Pannello di controllo.",
@@ -153,5 +153,6 @@
     "portainer_desc": "Un’interfaccia utente grafica per gestire i contenitori Docker personalizzati sul tuo Block.",
     "need_internet_connection": "Hai bisogno di una connessione internet per utilizzare queste funzioni. Se sei connesso/a, prova ad aggiornare la pagina.",
     "api_unavailable": "Il tuo Block si sta ancora caricando. Questa pagina verrà ricaricata quando sarà pronta.",
-    "installed": "Installato"
+    "installed": "Installato",
+    "sample": "Campione"
 }

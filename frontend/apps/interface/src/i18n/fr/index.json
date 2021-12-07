@@ -9,7 +9,7 @@
     "loading": "Chargement en cours…",
     "are_you_sure": "Êtes-vous sûr(e) ?",
     "website_settings_description": "Téléchargez les fichiers de votre site Web pour permettre à d'autres d'utiliser votre site hors ligne.",
-    "website_description": "Accédez au site ici.",
+    "website_description": "Accédez au site.",
     "website": "Site Web",
     "version": "Version :",
     "url_copied": "L'URL a été copiée dans le presse-papier",
@@ -27,7 +27,7 @@
     "invalid_input": "Maximum de 32 caractères et aucun caractère spécial autre que _ et -",
     "invalid_hostname": "Vous avez soumis une URL et un SSID Wi-Fi invalides. Veuillez réessayer.",
     "home": "Accueil",
-    "files_description": "Parcourir les fichiers ici.",
+    "files_description": "Parcourir les fichiers.",
     "files": "Fichiers",
     "error": "Une erreur s’est produite :",
     "enable_components_in": "Vous pouvez activer les composants dans le Panneau de configuration.",
@@ -48,7 +48,7 @@
     "portainer_starting_at": "Portainer démarrant sur :",
     "portainer_settings_description": "Activer ou désactiver Portainer",
     "portainer": "Portainer",
-    "library_description": "Parcourez les contenus téléchargés de la bibliothèque ici.",
+    "library_description": "Parcourez les contenus téléchargés de la bibliothèque.",
     "hostname_changed_notification": "Votre URL et votre SSID Wi-Fi ont été mis à jour. Il se peut que vous deviez redémarrer le Block pour que ceci prenne effet.",
     "click_toggle": "Cliquez sur un élément ci-dessous pour ouvrir l'administration. Utilisez les boutons commutateurs sur la droite pour afficher ou masquer les composants de la page d'accueil.",
     "swipe_up_exit": "Balayez vers le haut pour sortir.",
@@ -153,5 +153,6 @@
     "url_wifi_desc": "Modifiez l’URL utilisée pour accéder à votre Block et la manière dont celui-ci apparaît dans la liste des réseaux Wi-Fi des personnes.",
     "need_internet_connection": "Vous devez avoir une connexion Internet pour utiliser ces fonctions. Si vous êtes connecté(e), essayez d’actualiser la page.",
     "api_unavailable": "Votre Block est en cours de chargement. Cette page sera rechargée dès qu’elle sera prête.",
-    "installed": "Installé"
+    "installed": "Installé",
+    "sample": "Échantillon"
 }
