@@ -59,7 +59,9 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
       env: {
-        API: ctx.dev ? devAPI : undefined
+        API: ctx.dev ? devAPI : undefined,
+        // API path for the online LB Library
+        LIBRARYAPI: 'https://api.learnersblock.org'
       },
 
       // transpile: false,

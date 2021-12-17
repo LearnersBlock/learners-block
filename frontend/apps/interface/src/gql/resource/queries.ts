@@ -1,71 +1,61 @@
 import gql from 'graphql-tag'
 
 export const GET_RESOURCES = gql`
-  query resources($keyword: String, $languages: [String], $formats: [String], $subjects: [String], $levels: [String], $categories: [String], $limit: Int){
-      resources(
-        where: { 
-          _or: [{name_contains: $keyword},{description_contains: $keyword}]
-          subjects: {id_in: $subjects}
-          levels: {id_in: $levels}
-          categories: {id_in: $categories}
-          languages: {id_in: $languages}
-          formats: {id_in: $formats}
-          download_url_null: false
-        }, sort: "published_at:desc",limit:$limit) {
-          id
-          name
-          download_url
-          description
-          languages {
-            id
-            language
-          }
-          size
-          logo {
-            formats
-            url
-          }
+  query resources{
+    resources(filter: { download_url: { _neq: "null" } }){
+      id
+      name
+      description
+      languages {
+        id,
+        languages_id {language}
       }
+      size
+      logo {
+        id
+      }
+   }
   }
 `
 
 export const GET_RESOURCE = gql`
-  query resource($id: ID!){
-      resource(id: $id) {
-          id
-          name
-          description
-          author
-          author_website
-          host
-          sample
-          formats {
-            id
-            type
-          }
-          uid
-          download_url
-          languages {
-            id
-            language
-          }
-          subjects {
-            id
-            subject
-          }
-          levels {
-            id
-            level
-          }
-          categories {
-            id
-            category
-          }
-          size
-          logo {
-            formats 
-            url
+  query resources($id: ID!){
+    resources_by_id(id: $id) {
+      id
+      name
+      description
+      author
+      author_website
+      sample_url
+      formats {
+        id,
+        formats_id {
+          format
           }
       }
+      download_url
+      languages {
+        id,
+        languages_id {
+          language
+          }
+      }
+      subjects {
+        id,
+        subjects_id {
+          subject
+          }
+      }
+      levels {
+        id,
+        levels_id {
+          level
+          }
+      }
+      size
+      logo {
+        id
+      }
+    }
   }
 `

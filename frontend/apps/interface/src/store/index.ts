@@ -7,7 +7,6 @@ import {
   Store as VuexStore,
   useStore as vuexUseStore
 } from 'vuex'
-import savedResources from './savedResources'
 
 /*
  * If not building with SSR mode, you can
@@ -23,7 +22,6 @@ export interface StateInterface {
   // example: ExampleStateInterface;
   // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
   example: unknown;
-  savedResources: unknown
 }
 
 // provide typings for `this.$store`
@@ -39,8 +37,7 @@ export const storeKey: InjectionKey<VuexStore<StateInterface>> = Symbol('vuex-ke
 export default store(function (/* { ssrContext } */) {
   const Store = createStore<StateInterface>({
     modules: {
-      auth,
-      savedResources
+      auth
     },
 
     // enable strict mode (adds overhead!)
