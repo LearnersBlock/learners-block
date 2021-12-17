@@ -11,48 +11,11 @@ export /* async */ function getClientOptions (
     <ApolloClientOptions<unknown>>{
       link: createHttpLink({
         uri:
-          process.env.GRAPHQL_URI || 'https://library-api.learnersblock.org/graphql'
+          `${process.env.LIBRARYAPI}/graphql`
       }),
 
       cache: new InMemoryCache()
     },
-
-    // Specific Quasar mode options.
-    process.env.MODE === 'spa'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'ssr'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'pwa'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'bex'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'cordova'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'capacitor'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'electron'
-      ? {
-          //
-        }
-      : {},
 
     // dev/prod options.
     process.env.DEV

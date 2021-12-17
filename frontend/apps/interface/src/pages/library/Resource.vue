@@ -15,7 +15,7 @@
     </div>
     <!-- Resource container -->
     <div
-      v-if="fetchedResource"
+      v-if="fetchedResource?.resources_by_id"
       class="resource_container q-mb-xl"
     >
       <q-item class="q-mt-md q-mr-sm">
@@ -36,34 +36,28 @@
           />
         </q-page-sticky>
       </q-item>
-      <div v-if="fetchedResource.resource.logo && fetchedResource.resource.logo.formats && fetchedResource.resource.logo.formats.thumbnail && fetchedResource.resource.logo.formats.thumbnail.url">
-        <img
+      <div>
+        <q-img
+          :src="fetchedResource.resources_by_id?.logo?.id ? API_URL + '/assets/' + fetchedResource.resources_by_id.logo.id + '?key=lib-thumbnail' : require('../../assets/default.jpg')"
+          spinner-color="grey"
           class="resource_image"
-          :src="'https://library-api.learnersblock.org' + fetchedResource.resource.logo.formats.thumbnail.url"
-        >
-      </div>
-      <div v-else>
-        <img
-          class="resource_image"
-          :src="fetchedResource.resource.logo ? 'https://library-api.learnersblock.org' + fetchedResource.resource.logo.url : require('../../assets/default.jpg')"
-        >
+        />
       </div>
       <div
         class="text-h2 resource_name mt-5"
-        dir="auto"
       >
-        {{ fetchedResource.resource.name }}
+        {{ fetchedResource.resources_by_id.name }}
       </div>
       <div
         class="q-pa-sm"
-        dir="auto"
       >
-        {{ fetchedResource.resource.description }}
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <span v-html="fetchedResource.resources_by_id.description" />
       </div>
       <q-separator class="q-mt-sm" />
       <div class="q-mt-md text-left">
         <div
-          v-if="fetchedResource.resource.author"
+          v-if="fetchedResource.resources_by_id.author"
           class="resource_info"
         >
           <div>
@@ -71,33 +65,14 @@
           </div>
           <div>
             <a
-              :href="fetchedResource.resource.author_website"
+              :href="fetchedResource.resources_by_id.author_website"
               target="_blank"
-            >{{ fetchedResource.resource.author }}
+            >{{ fetchedResource.resources_by_id.author }}
             </a>
           </div>
         </div>
         <div
-          v-if="fetchedResource.resource.categories && fetchedResource.resource.categories.length"
-          class="resource_info q-mt-sm"
-        >
-          <div>
-            {{ $t('categories') }}
-          </div>
-          <div>
-            <q-badge
-              v-for="category in fetchedResource.resource.categories"
-              :key="category.id"
-              class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
-              multi-line
-              color="secondary"
-            >
-              {{ category.category }}
-            </q-badge>
-          </div>
-        </div>
-        <div
-          v-if="fetchedResource.resource.languages && fetchedResource.resource.languages.length"
+          v-if="fetchedResource.resources_by_id.languages?.length"
           class="resource_info q-mt-sm"
         >
           <div>
@@ -105,18 +80,18 @@
           </div>
           <div>
             <q-badge
-              v-for="language in fetchedResource.resource.languages"
+              v-for="language in fetchedResource.resources_by_id.languages"
               :key="language.id"
               class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
               multi-line
               color="secondary"
             >
-              {{ language.language }}
+              {{ language.languages_id.language }}
             </q-badge>
           </div>
         </div>
         <div
-          v-if="fetchedResource.resource.formats && fetchedResource.resource.formats.length"
+          v-if="fetchedResource.resources_by_id.formats?.length"
           class="resource_info q-mt-sm"
         >
           <div>
@@ -124,40 +99,29 @@
           </div>
           <div>
             <q-badge
-              v-for="format in fetchedResource.resource.formats"
+              v-for="format in fetchedResource.resources_by_id.formats"
               :key="format.id"
               class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
               multi-line
               color="secondary"
             >
-              {{ format.type }}
+              {{ format.formats_id.format }}
             </q-badge>
           </div>
         </div>
         <div
-          v-if="fetchedResource.resource.size"
+          v-if="fetchedResource.resources_by_id.size"
           class="resource_info q-mt-sm"
         >
           <div>
             {{ $t('size') }}
           </div>
           <div>
-            {{ fetchedResource.resource.size }} GB
+            {{ fetchedResource.resources_by_id.size }} GB
           </div>
         </div>
         <div
-          v-if="fetchedResource.resource.host"
-          class="resource_info q-mt-sm"
-        >
-          <div>
-            {{ $t('host') }}
-          </div>
-          <div>
-            {{ fetchedResource.resource.host }}
-          </div>
-        </div>
-        <div
-          v-if="fetchedResource.resource.subjects && fetchedResource.resource.subjects.length"
+          v-if="fetchedResource.resources_by_id.subjects?.length"
           class="resource_info q-mt-sm"
         >
           <div>
@@ -165,18 +129,18 @@
           </div>
           <div>
             <q-badge
-              v-for="subject in fetchedResource.resource.subjects"
+              v-for="subject in fetchedResource.resources_by_id.subjects"
               :key="subject.id"
               class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
               multi-line
               color="secondary"
             >
-              {{ subject.subject }}
+              {{ subject.subjects_id.subject }}
             </q-badge>
           </div>
         </div>
         <div
-          v-if="fetchedResource.resource.levels && fetchedResource.resource.levels.length"
+          v-if="fetchedResource.resources_by_id.levels?.length"
           class="resource_info q-mt-sm"
         >
           <div>
@@ -184,13 +148,13 @@
           </div>
           <div>
             <q-badge
-              v-for="level in fetchedResource.resource.levels"
+              v-for="level in fetchedResource.resources_by_id.levels"
               :key="level.id"
               class="q-mr-xs q-mt-xs q-mb-xs multi-line text-caption text-weight-medium"
               multi-line
               color="secondary"
             >
-              {{ level.level }}
+              {{ level.levels_id.level }}
             </q-badge>
           </div>
         </div>
@@ -202,21 +166,23 @@
       />
       <div class="mt-4">
         <q-btn
-          class="q-mb-sm"
+          class="q-mb-sm text-weight-bold"
           glossy
           rounded
           unelevated
+          size="sm"
           color="primary"
           icon="download"
           :label="exitLoop ? $t('download'): $t('cancel')"
           @click="downloadFiles()"
         />
         <q-btn
-          v-if="fetchedResource.resource.sample"
-          class="q-ml-sm q-mb-sm"
+          v-if="fetchedResource.resources_by_id.sample_url"
+          class="q-ml-sm q-mb-sm text-weight-bold"
           glossy
           rounded
           unelevated
+          size="sm"
           color="primary"
           icon="visibility"
           :label="$t('sample')"
@@ -251,6 +217,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable camelcase */
 import Axios from 'axios'
 import { useQuasar } from 'quasar'
 import { useQuery } from '@vue/apollo-composable'
@@ -269,47 +236,48 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
 
-    // Fetch resources
+    // Set required constants
+    const API_URL = ref(process.env.LIBRARYAPI)
+    const downloadedMb = ref<any>()
+    const downloadProgress = ref<any>()
+    const exitLoop = ref<boolean>(true)
+
+    const api = computed(() => {
+      return $store.getters.GET_API
+    })
+
+    // Apollo interfaces
     interface ApolloResource {
       author: string;
       // eslint-disable-next-line camelcase
       author_website: any;
-      categories: Array<{ id: any; category: any }>;
       description: string;
-      // eslint-disable-next-line camelcase
       download_url: any;
-      formats: Array<{ id: any; type: any }>;
-      host: string;
-      languages: Array<{ id: any; language: any }>;
-      levels: Array<{ id: any; level: any }>;
+      formats: Array<{ id: any; formats_id: {format: string} }>;
+      languages: Array<{ id: any; languages_id: {language: string} }>;
+      levels: Array<{ id: any; levels_id: {level: string} }>;
       logo: any;
       name: string;
       resource: any;
-      sample: any;
+      sample_url: string;
       size: any;
-      subjects: Array<{ id: any; subject: any }>;
+      subjects: Array<{ id: any; subjects_id: {subject: string} }>;
     }
 
     interface ApolloResources {
-      resource: ApolloResource;
+      // eslint-disable-next-line camelcase
+      resources_by_id: ApolloResource;
     }
 
     interface ApolloVars {
       id: any;
     }
 
+    // Fetch resources
     const {
       result: fetchedResource,
       loading: fetchResourceLoading
     } = useQuery<ApolloResources, ApolloVars>(GET_RESOURCE, { id: route.params.id })
-
-    // Set required constants
-    const api = computed(() => {
-      return $store.getters.GET_API
-    })
-    const downloadedMb = ref<any>()
-    const downloadProgress = ref<any>()
-    const exitLoop = ref<boolean>(true)
 
     function delay (ms: number) {
       return new Promise(resolve => setTimeout(resolve, ms))
@@ -322,7 +290,7 @@ export default defineComponent({
           stopDownload()
         } else {
           // Start the download process
-          await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value?.resource.download_url })
+          await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value?.resources_by_id.download_url })
 
           // Monitor the download process through the stream
           const position = ref<any>(0)
@@ -381,10 +349,11 @@ export default defineComponent({
     }
 
     const viewSample = () => {
-      window.open(fetchedResource.value?.resource.sample)
+      window.open(fetchedResource.value?.resources_by_id.sample_url)
     }
 
     return {
+      API_URL,
       downloadFiles,
       downloadedMb,
       downloadProgress,

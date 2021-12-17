@@ -1,7 +1,9 @@
 <template>
-  <q-page class="row items-center justify-evenly mt-3">
+  <q-page class="mt-3 row justify-evenly">
+    <!-- Loading Spinner -->
     <div
-      v-if="fetchResourcesLoading || (fetchedResources && fetchedResources.resources.length == 0 && endOfResults == false)"
+      v-if="fetchResourcesLoading"
+      class="row items-center"
     >
       <q-spinner
         color="primary"
@@ -23,129 +25,80 @@
         icon="arrow_back"
         :to="{ name: 'settings' }"
       />
-      <div
-        v-if="!fetchedResources.resources.length && !fetchResourcesLoading"
-        class="text-h3 text-center text-grey"
+      <router-link
+        v-for="resource in fetchedResources.resources"
+        :key="resource.id"
+        class="resource q-mb-md items-center text-black"
+        tag="div"
+        :to="'/library/resource/' + resource.id"
       >
-        {{ $t('no_results_found') }}
-      </div>
-      <div
-        v-else-if="fetchedResources.resources && !fetchResourcesLoading"
-      >
-        <q-infinite-scroll
-          :offset="4000"
-          @load="loadMore"
-        >
-          <router-link
-            v-for="resource in fetchedResources.resources"
-            :key="resource.id"
-            class="resource q-mb-md items-center text-black"
-            tag="div"
-            :to="'/library/resource/' + resource.id"
-          >
-            <div class="col-2">
-              <div v-if="resource.logo && resource.logo.formats && resource.logo.formats.thumbnail && resource.logo.formats.thumbnail.url">
-                <q-img
-                  :src="'https://library-api.learnersblock.org' + resource.logo.formats.thumbnail.url"
-                  loading="lazy"
-                  spinner-color="grey"
-                  class="resource_image"
-                />
-              </div>
-              <div v-else>
-                <img
-                  class="resource_image"
-                  :src="resource.logo ? 'https://library-api.learnersblock.org' + resource.logo.url : require('../../assets/default.jpg')"
+        <div class="col-2">
+          <q-img
+            :src="resource.logo?.id ? API_URL + '/assets/' + resource.logo.id + '?key=lib-thumbnail' : require('../../assets/default.jpg')"
+            loading="lazy"
+            spinner-color="grey"
+            class="resource_image"
+          />
+        </div>
+        <div class="col">
+          <div class="resource_info">
+            <div
+              class="text-h4 resource_name"
+            >
+              {{ resource.name }}
+            </div>
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <span v-html="resource.description" />
+            <div class="resource_languages">
+              <div>
+                <q-badge
+                  v-for="language in resource.languages"
+                  :key="language.id"
+                  class="q-pa-sm q-mr-sm q-mt-sm multi-line text-caption text-weight-large"
+                  color="secondary"
                 >
+                  {{ language.languages_id.language }}
+                </q-badge>
               </div>
             </div>
-            <div class="col">
-              <div class="resource_info">
-                <div
-                  class="text-h4 resource_name"
-                  dir="auto"
-                >
-                  {{ resource.name }}
-                </div>
-                <div
-                  dir="auto"
-                >
-                  {{ resource.description }}
-                </div>
-                <div class="resource_languages">
-                  <div>
-                    <q-badge
-                      v-for="language in resource.languages"
-                      :key="language.id"
-                      class="q-pa-sm q-mr-sm q-mt-sm multi-line text-caption text-weight-large"
-                      color="secondary"
-                    >
-                      {{ language.language }}
-                    </q-badge>
-                  </div>
-                </div>
-                <div class="column resource_size text-center q-mb-xs">
-                  <div
-                    v-if="resource.size"
-                    class="col"
-                  >
-                    {{ $t('size') }} {{ resource.size }} GB
-                  </div>
-                </div>
+            <div class="column resource_size text-center q-mb-xs">
+              <div
+                v-if="resource.size"
+                class="col"
+              >
+                {{ $t('size') }} {{ resource.size }} GB
               </div>
             </div>
-          </router-link>
-          <div
-            v-if="endOfResults"
-            class="text-h3 text-center text-grey q-mt-lg"
-          >
-            <q-icon
-              name="done_outline"
-              class="q-mb-lg"
-            />
           </div>
-          <template
-            v-if="!endOfResults"
-            #loading
-          >
-            <div class="row justify-center q-my-md q-mb-xl">
-              <q-spinner-dots
-                color="primary"
-                size="60px"
-              />
-            </div>
-          </template>
-        </q-infinite-scroll>
-      </div>
+        </div>
+      </router-link>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
+/* eslint-disable camelcase */
 import { useQuasar } from 'quasar'
 import { useQuery } from '@vue/apollo-composable'
 import { GET_RESOURCES } from '../../gql/resource/queries'
-import { defineComponent, onMounted, ref } from 'vue'
-import { useStore } from '../../store'
+import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   setup () {
     // Import required features
     const $q = useQuasar()
-    const $store = useStore() as any
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
 
     // Constants for resource fetching
-    const endOfResults = ref<boolean>(false)
-    const numberOfResults = ref<number>(40)
+    const API_URL = ref(process.env.LIBRARYAPI)
 
-    // Fetch resources query
+    // Apollo interfaces
     interface ApolloResource {
       name: string;
       description: string;
-      languages: Array<{ id: any; language: string }>;
+      languages: Array<{ id: any; languages_id: {language: string} }>;
       id: number;
       logo: any;
       resources: any;
@@ -156,16 +109,12 @@ export default defineComponent({
       resources: ApolloResource[];
     }
 
-    interface ApolloVars {
-      limit: number;
-    }
-
+    // Fetch resources
     const {
       result: fetchedResources,
       loading: fetchResourcesLoading,
-      refetch: fetchResources,
       onError: apiError
-    } = useQuery<ApolloResources, ApolloVars>(GET_RESOURCES, { limit: numberOfResults.value })
+    } = useQuery<ApolloResources>(GET_RESOURCES)
 
     // Error handler for when online API is unavailable
     apiError(() => {
@@ -179,52 +128,10 @@ export default defineComponent({
       })
     })
 
-    // On mount, enable loading and fetch resources
-    onMounted(() => {
-      if ($store.state.savedResources.resources) {
-        $store.commit('savedResources/resourceLimit', $store.state.savedResources.resources.resources.length)
-        fetchedResources.value = $store.state.savedResources.resources
-      } else {
-        $store.commit('savedResources/resourceLimit', numberOfResults.value)
-        void fetchFilteredResources()
-      }
-    })
-
-    // Enable loading and filter resources according to all inputs
-    async function fetchFilteredResources () {
-      await fetchResources(
-        { limit: $store.state.savedResources.limit })
-      $store.commit('savedResources/updateResources', fetchedResources.value)
-      endOfResults.value = false
-    }
-
-    // Load more resources when reaching bottom of results
-    async function loadMore (_index, done) {
-      if (endOfResults.value) {
-        setTimeout(() => {
-          if (done) {
-            done()
-          }
-        }, 2000)
-      } else if ($store.state.savedResources.limit > $store.state.savedResources.resources.resources.length) {
-        endOfResults.value = true
-        if (done) {
-          done()
-        }
-      } else {
-        $store.commit('savedResources/resourceLimit', parseInt($store.state.savedResources.limit) + numberOfResults.value)
-        await fetchFilteredResources()
-        if (done) {
-          done()
-        }
-      }
-    }
-
     return {
-      endOfResults,
+      API_URL,
       fetchedResources,
-      fetchResourcesLoading,
-      loadMore
+      fetchResourcesLoading
     }
   }
 })
