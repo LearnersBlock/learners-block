@@ -1,5 +1,5 @@
 {
-    "404": "La página que ha intentado abrir no existe.",
+    "404": "La página a la que ha intentado acceder no existe.",
     "cancel": "Cancelar",
     "components": "Componentes",
     "files": "Archivos",
@@ -28,9 +28,9 @@
     "click_toggle": "Pulse en un elemento a continuación para abrir la administración. Utilice los controles de la derecha para mostrar u ocultar los componentes en la página principal.",
     "change_hostname_warning": "¿Confirma que quiere cambiar el URL y el SSID de wifi?",
     "available_storage": "Almacenamiento disponible:",
-    "api_down": "La API no está disponible. Espere 30 segundos y pruebe a actualizar la página. Si la página sigue sin cargarse, reinicie el dispositivo.",
+    "api_down": "La API no está disponible. Espere 30 segundos e intente actualizar esta página. Si la página aun sigue sin cargarse, reinicie el dispositivo.",
     "advanced": "Avanzado",
-    "401": "Sin autorización. Intente acceder a su cuenta nuevamente.",
+    "401": "No autorizado. Por favor, intente conectarse nuevamente.",
     "website_settings_description": "Cargue los archivos de su sitio web para que otros puedan utilizar el sitio sin conexión.",
     "website_description": "Acceda al sitio web.",
     "version": "Versión:",
@@ -151,7 +151,7 @@
     "library_api_down": "No se pudo establecer contacto con la Biblioteca en línea. Compruebe la conexión a internet y vuelva a intentarlo.",
     "enter_name": "Introduzca un nombre",
     "searching_networks": "Buscando redes cercanas…",
-    "api_unavailable": "El Block aún está cargándose. La página se actualizará cuando esté listo.",
+    "api_unavailable": "El Block aún se está cargando. Esta página se actualizará cuando esté listo.",
     "need_internet_connection": "Necesita una conexión a Internet para utilizar estas funciones. Si está conectado, intente actualizar la página.",
     "installed": "Instalado",
     "sample": "Ejemplo"
