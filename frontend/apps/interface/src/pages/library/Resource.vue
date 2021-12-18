@@ -105,7 +105,7 @@
               multi-line
               color="secondary"
             >
-              {{ format.formats_id.format }}
+              {{ $t(format.formats_id.key) }}
             </q-badge>
           </div>
         </div>
@@ -135,7 +135,7 @@
               multi-line
               color="secondary"
             >
-              {{ subject.subjects_id.subject }}
+              {{ $t(subject.subjects_id.key) }}
             </q-badge>
           </div>
         </div>
@@ -154,7 +154,7 @@
               multi-line
               color="secondary"
             >
-              {{ level.levels_id.level }}
+              {{ $t(level.levels_id.key) }}
             </q-badge>
           </div>
         </div>
@@ -253,15 +253,15 @@ export default defineComponent({
       author_website: any;
       description: string;
       download_url: any;
-      formats: Array<{ id: any; formats_id: {format: string} }>;
+      formats: Array<{ id: any; formats_id: {key: string} }>;
       languages: Array<{ id: any; languages_id: {language: string} }>;
-      levels: Array<{ id: any; levels_id: {level: string} }>;
+      levels: Array<{ id: any; levels_id: {key: string} }>;
       logo: any;
       name: string;
       resource: any;
       sample_url: string;
       size: any;
-      subjects: Array<{ id: any; subjects_id: {subject: string} }>;
+      subjects: Array<{ id: any; subjects_id: {key: string} }>;
     }
 
     interface ApolloResources {
