@@ -21,7 +21,7 @@ query resources {
 `
 
 export const GET_RESOURCE = gql`
-query resources($id: ID!){
+query resources($id: ID!) {
   resources_by_id(id: $id) {
     id
     name
