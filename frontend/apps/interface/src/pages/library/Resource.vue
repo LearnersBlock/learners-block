@@ -16,26 +16,8 @@
     <!-- Resource container -->
     <div
       v-if="fetchedResource?.resources_by_id"
-      class="resource_container q-mb-xl"
+      class="resource_container q-mt-xl q-mb-xl"
     >
-      <q-item class="q-mt-md q-mr-sm">
-        <q-page-sticky
-          position="top-left"
-          :offset="[25, 20]"
-        >
-          <q-btn
-            class="text-weight-bold"
-            rounded
-            outline
-            color="white"
-            size="sm"
-            text-color="primary"
-            :label="$t('back')"
-            icon="arrow_back"
-            @click="$router.back()"
-          />
-        </q-page-sticky>
-      </q-item>
       <div>
         <q-img
           :src="fetchedResource.resources_by_id?.logo?.id ? API_URL + '/assets/' + fetchedResource.resources_by_id.logo.id + '?key=lib-thumbnail' : require('../../assets/default.jpg')"
@@ -44,7 +26,7 @@
         />
       </div>
       <div
-        class="text-h2 resource_name mt-5"
+        class="text-h4 mt-5"
       >
         {{ fetchedResource.resources_by_id.name }}
       </div>
@@ -61,7 +43,7 @@
           class="resource_info"
         >
           <div>
-            {{ $t('author') }}
+            {{ $t('author_colon') }}
           </div>
           <div>
             <a
@@ -159,12 +141,7 @@
           </div>
         </div>
       </div>
-      <q-spinner
-        v-if="!exitLoop"
-        color="primary"
-        size="3em"
-      />
-      <div class="mt-4">
+      <div class="mt-4 mb-1">
         <q-btn
           class="q-mb-sm text-weight-bold"
           glossy
@@ -213,6 +190,21 @@
         </div>
       </q-linear-progress>
     </div>
+    <q-page-sticky
+      position="top-left"
+      :offset="[25, 20]"
+    >
+      <q-btn
+        class="text-weight-bold"
+        rounded
+        outline
+        color="white"
+        size="sm"
+        text-color="primary"
+        icon="arrow_back"
+        @click="$router.back()"
+      />
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -375,7 +367,7 @@ export default defineComponent({
             display: block;
             margin-left: auto;
             margin-right: auto;
-            width: 6rem;
+            width: 8rem;
       }
     }
 
@@ -396,15 +388,6 @@ export default defineComponent({
         }
     }
 
-    &_name {
-      @media only screen and (max-width: 1300px) {
-        font-size: 3rem;
-      }
-       @media only screen and (max-width: 1050px) {
-        font-size: 2.6rem;
-      }
-    }
-
     &_container {
         min-width: 90%;
 
@@ -421,12 +404,6 @@ export default defineComponent({
             text-align: center;
         }
     }
-}
-
-.visit {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
 }
 
 </style>

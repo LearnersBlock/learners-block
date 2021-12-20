@@ -238,11 +238,6 @@ export default defineComponent({
     text-align: center;
   }
 
-  &:hover {
-    box-shadow: 0 .3rem 1rem .1rem rgba(0,0,0,.3);
-    transform: translateY(-.1rem);
-  }
-
   &_image {
     margin-right: 2.5rem;
     width: 8rem;
