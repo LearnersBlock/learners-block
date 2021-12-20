@@ -1,5 +1,8 @@
 <template>
-  <q-page class="mt-3 row justify-evenly">
+  <q-page
+    class="mt-3 row justify-evenly"
+    style="min-width: 70vw"
+  >
     <!-- Loading Spinner -->
     <div
       v-if="fetchResourcesLoading"
@@ -11,22 +14,71 @@
       />
     </div>
     <div
-      v-else-if="fetchedResources && !fetchResourcesLoading"
+      v-else-if="filteredResources && !fetchResourcesLoading"
       class="resource_container"
     >
-      <q-btn
-        class="q-mb-md text-weight-bold"
-        rounded
-        outline
-        color="white"
-        size="sm"
-        text-color="primary"
-        :label="$t('settings')"
-        icon="arrow_back"
-        :to="{ name: 'settings' }"
-      />
+      <div class="flex row">
+        <div
+          class="col"
+        >
+          <q-btn
+            class="q-mt-sm q-mb-md text-weight-bold"
+            rounded
+            outline
+            no-wrap
+            color="white"
+            size="sm"
+            text-color="primary"
+            :label="$t('settings')"
+            icon="arrow_back"
+            :to="{ name: 'settings' }"
+          />
+        </div>
+        <div
+          v-if="searchBox"
+          class="col"
+        >
+          <q-input
+            v-model="searchInput"
+            class="q-mb-lg"
+            dense
+            debounce="1500"
+            hide-bottom-space
+            :label="$t('search')"
+          >
+            <template #append>
+              <q-btn
+                icon="close"
+                flat
+                padding="0"
+                class="cursor-pointer"
+                @click="searchInput = ''"
+              />
+            </template>
+          </q-input>
+        </div>
+        <div>
+          <q-btn
+            v-if="!searchBox"
+            class="q-mt-sm"
+            icon="search"
+            outline
+            rounded
+            color="white"
+            size="sm"
+            text-color="primary"
+            @click="searchBox = true"
+          />
+        </div>
+      </div>
+      <div
+        v-if="!filteredResources?.length"
+        class="text-h3 text-center text-grey mt-4"
+      >
+        {{ $t('no_results_found') }}
+      </div>
       <router-link
-        v-for="resource in fetchedResources.resources"
+        v-for="resource in filteredResources"
         :key="resource.id"
         class="resource q-mb-md items-center text-black"
         tag="div"
@@ -81,19 +133,12 @@
 import { useQuasar } from 'quasar'
 import { useQuery } from '@vue/apollo-composable'
 import { GET_RESOURCES } from '../../gql/resource/queries'
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useStore } from '../../store'
 
 export default defineComponent({
   setup () {
-    // Import required features
-    const $q = useQuasar()
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    const { t } = useI18n()
-
-    // Constants for resource fetching
-    const API_URL = ref(process.env.LIBRARYAPI)
-
     // Apollo interfaces
     interface ApolloResource {
       name: string;
@@ -109,6 +154,22 @@ export default defineComponent({
       resources: ApolloResource[];
     }
 
+    // Import required features
+    const $q = useQuasar()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { t } = useI18n()
+    const $store = useStore() as any
+
+    // Constants for resource fetching
+    const API_URL = ref(process.env.LIBRARYAPI)
+    const searchBox = ref<boolean>(false)
+    const searchInput = ref<string>($store.state.searchInput.searchInput)
+
+    // Show search box if field is populated
+    if (searchInput.value) {
+      searchBox.value = true
+    }
+
     // Fetch resources
     const {
       result: fetchedResources,
@@ -116,8 +177,31 @@ export default defineComponent({
       onError: apiError
     } = useQuery<ApolloResources>(GET_RESOURCES)
 
+    // Compute filtered resources for search function
+    const filteredResources = computed(() => {
+      const filtered = fetchedResources.value?.resources.filter(
+        (res) =>
+          res.name.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+          res.description.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+          res.languages.some(({ languages_id }) => languages_id.language.toLowerCase() === searchInput.value.toLowerCase())
+      )
+      return filtered
+    })
+
+    // Display loading indicator on search result change
+    watch(() => filteredResources.value, () => {
+      // Store current search term for use later
+      $store.commit('searchInput/searchInput', searchInput.value)
+      // Add loading indicator for better user experience
+      $q.loading.show()
+      setTimeout(() => {
+        $q.loading.hide()
+      }, 200)
+    })
+
     // Error handler for when online API is unavailable
-    apiError(() => {
+    apiError((e) => {
+      console.log(e)
       $q.notify({
         type: 'negative',
         message: t('library_api_down'),
@@ -130,8 +214,10 @@ export default defineComponent({
 
     return {
       API_URL,
-      fetchedResources,
-      fetchResourcesLoading
+      fetchResourcesLoading,
+      filteredResources,
+      searchInput,
+      searchBox
     }
   }
 })
