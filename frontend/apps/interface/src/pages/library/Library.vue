@@ -125,6 +125,21 @@
         </div>
       </router-link>
     </div>
+    <q-page-sticky
+      position="bottom-right"
+      :offset="[20, 15]"
+    >
+      <q-btn
+        class="text-weight-bold"
+        rounded
+        outline
+        color="white"
+        size="sm"
+        text-color="primary"
+        icon="keyboard_arrow_up"
+        @click="scrollTop()"
+      />
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -212,10 +227,15 @@ export default defineComponent({
       })
     })
 
+    function scrollTop () {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
     return {
       API_URL,
       fetchResourcesLoading,
       filteredResources,
+      scrollTop,
       searchInput,
       searchBox
     }
