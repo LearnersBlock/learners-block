@@ -256,7 +256,7 @@
               <q-btn
                 v-if="loginState && $q.screen.gt.sm && (props.row.extension == '.zip' || props.row.extension == '.gz')"
                 class="ml-2"
-                :loading="unzipLoading"
+                :loading="unzipLoading && unzipLoadingFileName === props.row.name"
                 round
                 outline
                 size="xs"
@@ -421,7 +421,7 @@
           <!-- Mobile menu for right of row -->
           <div v-if="loginState && !$q.screen.gt.sm">
             <q-btn
-              :loading="unzipLoading"
+              :loading="unzipLoading && unzipLoadingFileName === props.row.name"
               round
               size="xs"
               flat
@@ -600,6 +600,7 @@ export default defineComponent({
     const selectorObjPath = ref<Array<any>>([])
     const selectorRows = ref<Array<any>>([])
     const unzipLoading = ref<boolean>(false)
+    const unzipLoadingFileName = ref<string>('')
     const visibleColumns = ref<Array<any>>([])
     const windowHostname = ref<string>(window.location.origin)
 
@@ -947,6 +948,7 @@ export default defineComponent({
     }
 
     async function unzip (fileName) {
+      unzipLoadingFileName.value = fileName
       unzipLoading.value = true
       await Axios.post(`${api.value}/v1/filemanager/unzip`, {
         file: fileName,
@@ -1043,6 +1045,7 @@ export default defineComponent({
       selectorRows,
       unzip,
       unzipLoading,
+      unzipLoadingFileName,
       updateRows,
       updateSelectorRows,
       uploaderDialog: ref<boolean>(false),
