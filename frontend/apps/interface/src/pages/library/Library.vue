@@ -15,7 +15,7 @@
     </div>
     <div
       v-else-if="filteredResources && !fetchResourcesLoading"
-      class="resource_container"
+      class="resource_container q-mb-md"
     >
       <div class="flex row">
         <div
