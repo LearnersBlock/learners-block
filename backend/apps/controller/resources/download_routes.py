@@ -5,7 +5,6 @@ import shutil
 import threading
 import time
 from common.errors import logger
-from common.processes import chronyd_check
 from flask import request
 from flask import Response
 from flask_jwt_extended import jwt_required
@@ -14,7 +13,6 @@ from flask_restful import Resource
 
 class download_fetch(Resource):
     @jwt_required()
-    @chronyd_check
     def post(self):
         # Set vars
         global download_log
