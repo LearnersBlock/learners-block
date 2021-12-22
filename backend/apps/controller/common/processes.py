@@ -10,12 +10,6 @@ import time
 from common.errors import logger
 from common.errors import SupervisorCurlFailed
 from common.errors import SupervisorUnreachable
-from flask_restful import abort
-import ntplib
-
-
-# Initiate NTP Library
-ntp = ntplib.NTPClient()
 
 
 def check_connection():
@@ -82,28 +76,6 @@ def check_supervisor(supervisor_retries, timeout):
             retry = retry + 1
 
     return {"message": "Supervisor up"}
-
-
-# Check chronyd has executed before. Used as a useful indicator of whether
-# this is the first ever connection to the internet.
-def chronyd_check(func):
-    def inner(*args, **kwargs):
-        if not config.dev_mode and not config.chronyd_synced:
-            try:
-                subprocess.check_output(
-                    "chronyc sources | grep '*'", shell=True
-                )
-                config.chronyd_synced = True
-            except Exception:
-                logger.exception("ChronyD not synced yet.")
-                abort(
-                    502,
-                    status=502,
-                    message="System is still syncing. Try again later.",
-                )
-        return func(*args, **kwargs)
-
-    return inner
 
 
 def container_hostname():
@@ -238,31 +210,3 @@ def led(mode):
     except Exception:
         # This is not possible on some devices.
         pass
-
-
-# Check time has been synced before request decorator
-def ntp_check(func):
-    def inner(*args, **kwargs):
-        # Only trigger if there is an internet connection
-        if check_internet():
-            try:
-                # Check if the system clock is in sync otherwise Docker Hub
-                # certificates create an error
-                time_offset = ntp.request(
-                    "time.cloudflare.com", version=3
-                ).offset
-                logger.info(f"Time offset is: {time_offset}")
-                if time_offset > 3600 or time_offset < -3600:
-                    logger.debug("Not in sync with NTP server.")
-                    abort(
-                        502,
-                        status=502,
-                        message="System is still loading. Try again later.",
-                    )
-            except Exception:
-                logger.exception("Failed to check time with NTP server.")
-                # In event of connection error, allowing Docker to try anyway.
-
-        return func(*args, **kwargs)
-
-    return inner

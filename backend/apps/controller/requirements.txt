@@ -61,8 +61,6 @@ markupsafe==2.0.1
     #   mako
 natsort==8.0.2
     # via -r requirements.in
-ntplib==0.4.0
-    # via -r requirements.in
 pycparser==2.20
     # via cffi
 pyjwt==2.3.0

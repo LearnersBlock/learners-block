@@ -20,8 +20,8 @@ class appstore_get_apps(Resource):
     def get(self):
         # Fetch list of available apps from app-store repo
         try:
-            # Verify = false to avoid delay in chronyd sync
-            app_list = requests.get(app_store_url, timeout=3, verify=False)
+            app_list = requests.get(app_store_url,
+                                    timeout=3)
             app_list.raise_for_status()
 
         except Exception:

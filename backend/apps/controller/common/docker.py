@@ -6,9 +6,7 @@ from common.errors import DockerImageStatus
 from common.errors import DockerImageNotFound
 from common.errors import DockerSocket
 from common.errors import logger
-from common.processes import chronyd_check
 from common.processes import container_hostname
-from common.processes import ntp_check
 
 
 # Check Docker is available before sending the request
@@ -65,8 +63,6 @@ class docker_py:
         return True
 
     @docker_ping
-    @chronyd_check
-    @ntp_check
     def pull(env_vars, image, name, ports, volumes, network, detach=True):
         try:
             container = client.containers.get(name)
@@ -108,20 +104,8 @@ class docker_py:
         return True
 
     @docker_ping
-    @chronyd_check
-    @ntp_check
-    def run(
-        image,
-        name,
-        ports={},
-        volumes={},
-        detach=True,
-        network="lbsystem",
-        env_vars={},
-        privileged=False,
-        command="",
-        labels={},
-    ):
+    def run(image, name, ports={}, volumes={}, detach=True, network='lbsystem',
+            env_vars={}, privileged=False, command='', labels={}):
         # If network doesn't yet exist then create it
         try:
             client.networks.create(
