@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export const GET_RESOURCES = gql`
 query resources {
-  resources(filter: { download_url: { _nempty: true } }, sort: ["name"]) {
+  resources(filter: { download_url: { _nempty: true } }, sort: ["name"], limit: -1) {
     id
     name
     description
