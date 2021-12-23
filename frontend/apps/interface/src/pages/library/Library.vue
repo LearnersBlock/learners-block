@@ -3,18 +3,8 @@
     class="mt-3 row justify-evenly"
     style="min-width: 70vw"
   >
-    <!-- Loading Spinner -->
     <div
-      v-if="fetchResourcesLoading"
-      class="row items-center"
-    >
-      <q-spinner
-        color="primary"
-        size="6em"
-      />
-    </div>
-    <div
-      v-else-if="filteredResources && !fetchResourcesLoading"
+      v-if="filteredResources && !fetchResourcesLoading"
       class="resource_container q-mb-md"
     >
       <div class="flex row">
