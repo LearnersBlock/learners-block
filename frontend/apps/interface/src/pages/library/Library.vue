@@ -194,6 +194,9 @@ export default defineComponent({
 
     // Compute filtered resources for search function
     const filteredResources = computed(() => {
+      $q.loading.show({
+        delay: 1 // ms
+      })
       const filtered = fetchedResources.value?.resources.filter(
         (res) =>
           res.name.toLowerCase().includes(searchInput.value.toLowerCase()) ||
@@ -207,11 +210,10 @@ export default defineComponent({
     watch(() => filteredResources.value, () => {
       // Store current search term for use later
       $store.commit('searchInput/searchInput', searchInput.value)
-      // Add loading indicator for better user experience
-      $q.loading.show()
+      // Add loading indicator delay for better user experience
       setTimeout(() => {
         $q.loading.hide()
-      }, 200)
+      }, 400)
     })
 
     // Error handler for when online API is unavailable
