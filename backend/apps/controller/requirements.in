@@ -1,6 +1,5 @@
 bcrypt
 docker
-Fasteners
 Flask-Cors
 Flask-JWT-Extended
 Flask-Migrate

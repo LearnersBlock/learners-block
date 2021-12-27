@@ -22,14 +22,14 @@ if "BALENA_HOST_OS_VERSION" in os.environ:
 else:
     socket_path = '/var/run/docker.sock'
 
-# Set dev env variables
+# Set dev env variable for Flask
 if "FLASK_ENV" in os.environ and \
         os.environ['FLASK_ENV'].lower() == "development":
     dev_mode = True
 else:
     dev_mode = False
 
-# Change default logging mode when in development environmnets
+# Set dev env variable for Balena dev fleet
 dev_device = False
 if ("BALENA_APP_NAME" in os.environ and
    os.environ['BALENA_APP_NAME'].lower() == "lb-dev"):

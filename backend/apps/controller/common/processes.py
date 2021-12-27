@@ -168,6 +168,14 @@ def device_hostname(**kwargs):
     return device_hostname["network"]["hostname"]
 
 
+def device_update(force_mode=False):
+    device_update = curl(method="post-json",
+                         path="/v1/update?apikey=",
+                         data={"force": force_mode})
+
+    return device_update
+
+
 def database_recover():
     # Resetting database
     logger.error("Database error. Deleting database and restarting.")
