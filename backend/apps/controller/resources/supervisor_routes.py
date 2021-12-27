@@ -3,6 +3,7 @@ from common.errors import logger
 from common.processes import curl
 from common.processes import device_hostname
 from common.processes import device_host_config
+from common.processes import device_update
 from flask import request
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
@@ -68,11 +69,9 @@ class supervisor_state(Resource):
 
 class supervisor_update(Resource):
     def get(self):
-        logger.debug('Supervisor update requested.')
+        logger.info('Supervisor forced update requested')
 
-        response = curl(method="post-json",
-                        path="/v1/update?apikey=",
-                        data={"force": True})
+        response = device_update(force_mode=True)
 
         return {'message': response.text}, response.status_code
 

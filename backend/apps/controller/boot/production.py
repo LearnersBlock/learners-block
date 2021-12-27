@@ -1,5 +1,3 @@
-import config
-import fasteners
 import subprocess
 import sys
 import threading
@@ -9,9 +7,9 @@ from common.processes import check_connection
 from common.processes import check_internet
 from common.processes import container_hostname
 from common.processes import device_hostname
+from common.processes import device_update
 from common.processes import led
 from common.wifi import wifi
-from resources.supervisor_routes import supervisor_update
 
 
 def dnsmasq():
@@ -63,17 +61,12 @@ def launch_wifi(self):
     # If internet available (Ethernet or Wi-Fi) request update
     if check_internet():
         try:
-            supervisor_update().get()
+            device_update(force_mode=False)
         except Exception:
             logger.exception('Software update failed.')
 
 
 def startup():
-    # Lock automatic updates in production to allow Controller to regulate them
-    if not config.dev_device:
-        lock = fasteners.InterProcessLock('/tmp/balena/updates.lock')
-        lock.acquire()
-
     # Check hostname in container is same as device
     try:
         # Check container and device hostname match
@@ -84,7 +77,7 @@ def startup():
                            "performed. Balena Supervisor should detect this "
                            "and rebuild the container shortly. Waiting 30 "
                            "seconds before continuing anyway.")
-            time.sleep(30)
+            time.sleep(90)
 
     except Exception:
         logger.exception('Failed to compare hostnames.')
