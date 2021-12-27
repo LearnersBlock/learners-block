@@ -168,13 +168,6 @@ def device_hostname(**kwargs):
     return device_hostname["network"]["hostname"]
 
 
-def device_reboot():
-    curl(method="post-json",
-         path="/v1/reboot?apikey=",
-         data={"force": True},
-         supervisor_retries=20)
-
-
 def database_recover():
     # Resetting database
     logger.error("Database error. Deleting database and restarting.")
