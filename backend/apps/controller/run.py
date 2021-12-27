@@ -9,7 +9,6 @@ from common.models import db
 from common.models import migrate
 from common.processes import container_hostname
 from common.processes import device_host_config
-from common.processes import device_reboot
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api as _Api
@@ -92,7 +91,6 @@ def first_launch():
 
     if not os.path.isfile(pidfile):
         # Run tasks on first launch
-        # Set hostname to default
         open(pidfile, 'w').write(pid)
 
         logger.info('Created first launch PID.')
@@ -100,12 +98,11 @@ def first_launch():
         if container_hostname() != config.default_hostname:
             device_host_config(config.default_hostname, supervisor_retries=20)
 
-            logger.info('Set hostname on first boot. Restarting.')
+            logger.warning("Hostname set to 'lb' as this is the first boot.")
 
-            # Sleep to allow supervisor to be ready.
-            time.sleep(15)
-
-            device_reboot()
+            # Short delay to allow hostname change to take place before
+            # starting Wi-Fi
+            time.sleep(3)
 
 
 # Create Flask app instance

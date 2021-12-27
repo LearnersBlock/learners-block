@@ -82,7 +82,7 @@ def startup():
             logger.warning("Api-v1 - Container hostname and device hostname "
                            "do not match. Likely a hostname change has been "
                            "performed. Balena Supervisor should detect this "
-                           "and rebuild the container shortly. Waiting 30"
+                           "and rebuild the container shortly. Waiting 30 "
                            "seconds before continuing anyway.")
             time.sleep(30)
 
