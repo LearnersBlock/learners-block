@@ -73,11 +73,9 @@ def startup():
         if container_hostname() != \
                 device_hostname(supervisor_retries=20):
             logger.warning("Api-v1 - Container hostname and device hostname "
-                           "do not match. Likely a hostname change has been "
-                           "performed. Balena Supervisor should detect this "
-                           "and rebuild the container shortly. Waiting 30 "
-                           "seconds before continuing anyway.")
-            time.sleep(90)
+                           "do not match. A short delay here allows time for  "
+                           "Supervisor to restart the container if necessary.")
+            time.sleep(30)
 
     except Exception:
         logger.exception('Failed to compare hostnames.')
