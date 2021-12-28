@@ -67,7 +67,7 @@ pycparser==2.20
     # via cffi
 pyjwt==2.3.0
     # via flask-jwt-extended
-python-dotenv==0.19.1
+python-dotenv==0.19.2
     # via -r requirements.in
 # python-networkmanager==2.1 <-- Removed for dev env
     # via -r requirements.in
