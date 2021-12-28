@@ -113,4 +113,3 @@ Many great open-source projects provide the foundation to make this possible, an
 * [GitBook](http://gitbook.com)
 * [Weblate](https://weblate.org)
 * [Feature UpVote](https://featureupvote.com/)
-* [Strapi](https://strapi.io)
