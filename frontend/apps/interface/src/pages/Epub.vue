@@ -170,7 +170,8 @@ export default defineComponent({
       ePubJs.rendition = ePubJs.book.renderTo('epub-render', {
         method: 'default',
         height: '100%',
-        width: '96vw'
+        width: '96vw',
+        allowScriptedContent: true
       })
       ePubJs.rendition.display()
       ePubJs.book.ready.then(() => {
