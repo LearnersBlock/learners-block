@@ -18,9 +18,8 @@ assets:
     data:
       url: 'https://learnersblock.org/images/logo-512.png'
 data:
-  defaultDeviceType: orange-pi-zero
+  defaultDeviceType: raspberrypi0-2w-64
   supportedDeviceTypes:
-    - orange-pi-zero
     - raspberrypi3-64
     - raspberrypi4-64
     - raspberrypi0-2w-64

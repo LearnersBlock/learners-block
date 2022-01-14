@@ -26,13 +26,6 @@ jobs:
           balena_token: ${{ secrets.BALENA_API_TOKEN }}
           fleet: learner_s_block/LearnersBlockDevelopment
 
-      - name: Deploy armv7hf to development
-        uses: balena-io/deploy-to-balena-action@master
-        id: build-dev-armv7hf
-        with:
-          balena_token: ${{ secrets.BALENA_API_TOKEN }}
-          fleet: learner_s_block/lb-dev-armv7hf
-
   build-images:
     name: "Build development images"
     runs-on: "ubuntu-latest"
