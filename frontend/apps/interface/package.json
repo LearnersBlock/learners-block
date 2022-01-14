@@ -11,17 +11,17 @@
     "build": "quasar build"
   },
   "dependencies": {
-    "@quasar/extras": "^1.12.2",
+    "@quasar/extras": "^1.12.3",
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
     "epubjs": "^0.3.90",
-    "quasar": "^2.3.4",
+    "quasar": "^2.4.9",
     "vue-i18n": "^9.1.0",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.0.0",
-    "@quasar/app": "^3.2.5",
+    "@quasar/app": "^3.2.6",
     "@quasar/quasar-app-extension-apollo": "^2.0.0-beta.3",
     "@types/node": "^16.7.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
@@ -32,7 +32,7 @@
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-quasar": "^1.0.0",
+    "eslint-plugin-quasar": "^1.1.0",
     "eslint-plugin-vue": "^7.0.0",
     "eslint-webpack-plugin": "^3.0.1",
     "postcss": "^8.3.0",
