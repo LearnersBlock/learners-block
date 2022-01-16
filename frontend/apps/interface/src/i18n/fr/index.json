@@ -184,5 +184,7 @@
     "search": "Recherche",
     "document": "Document",
     "emc": "Ingénierie, fabrication et construction",
-    "haw": "Santé et protection sociale"
+    "haw": "Santé et protection sociale",
+    "update_available": "Mise à jour disponible",
+    "move": "Déplacer"
 }
