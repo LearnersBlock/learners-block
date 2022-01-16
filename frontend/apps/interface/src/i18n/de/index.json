@@ -184,5 +184,7 @@
     "services": "Dienste",
     "ttes": "Lehrertraining und Erziehungswissenschaft",
     "pd": "Persönliche Entwicklung",
-    "search": "Suche"
+    "search": "Suche",
+    "update_available": "Aktualisierung verfügbar",
+    "move": "Verschieben"
 }
