@@ -566,6 +566,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
+  name: 'IntFileManager',
   setup () {
     // Import required features
     const $q = useQuasar()
@@ -591,7 +592,7 @@ export default defineComponent({
     const loading = ref<boolean>(true)
     const loadingFileSize = ref<boolean>(false)
     const loginState = $store.getters.isAuthenticated
-    const loginToken = ref<string>(Axios.defaults.headers.common.Authorization)
+    const loginToken = ref<string | number | boolean>(Axios.defaults.headers.common.Authorization)
     const rootPath = ref<any>()
     const rows = ref<Array<any>>([])
     const objPath = ref<Array<any>>([])
@@ -674,7 +675,7 @@ export default defineComponent({
         const index = fileName.lastIndexOf('.') as number
         const ePub = fileName.substring(index + 1).toLowerCase() === 'epub'
         const encodedCurrentPath = encodeURIComponent(currentPath.value)
-        const encodedRowName = encodeURIComponent(fileName)
+        const encodedRowName = encodeURIComponent(fileName as string | number | boolean)
         if (encodedCurrentPath) {
           if (ePub) {
             void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
@@ -872,7 +873,7 @@ export default defineComponent({
       const ePub = index > 0 && row.name.substring(index + 1).toLowerCase() === 'epub'
       if (row.format === 'file') {
         const encodedCurrentPath = encodeURIComponent(currentPath.value)
-        const encodedRowName = encodeURIComponent(row.name)
+        const encodedRowName = encodeURIComponent(row.name as string | number | boolean)
         if (currentPath.value) {
           if (ePub) {
             void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)

@@ -29,5 +29,6 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  name: 'IntError401'
 })
 </script>
