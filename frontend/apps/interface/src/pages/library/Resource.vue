@@ -220,6 +220,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
+  name: 'IntLibraryResources',
   setup () {
     // Import required features
     const $q = useQuasar()
@@ -285,7 +286,7 @@ export default defineComponent({
           await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value?.resources_by_id.download_url })
 
           // Monitor the download process through the stream
-          const position = ref<any>(0)
+          const position = ref<number | undefined>(0)
           const progress = ref<any>('')
           const xhr = new XMLHttpRequest()
           xhr.open('GET', `${api.value}/v1/download/stream`)

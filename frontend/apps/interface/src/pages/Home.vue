@@ -160,6 +160,7 @@ import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
+  name: 'IntHome',
   setup () {
     // Import required features
     const $q = useQuasar()
@@ -206,7 +207,7 @@ export default defineComponent({
           // Redirect for App Store
           const appEntry = res2.data.find(x => x.name === res3.data.start_page)
           if (appEntry) {
-            const appPort = Object.keys(appEntry.ports)
+            const appPort = Object.keys(appEntry.ports as never)
             setTimeout(() => {
               location.href = `http://${window.location.hostname}:${appEntry.ports[appPort[0]]}`
             }, 2000)
@@ -240,7 +241,7 @@ export default defineComponent({
       const installedApps: any = res2.data.filter(obj => {
         if (obj.status.toLowerCase() === 'installed' || obj.status.toLowerCase() === 'update_available') {
           // Set the port to be the inbound port only
-          const jsonKey = Object.keys(obj.ports)
+          const jsonKey = Object.keys(obj.ports as never)
           obj.ports = obj.ports[jsonKey[0]]
 
           return obj
@@ -255,7 +256,7 @@ export default defineComponent({
       }
     }
 
-    function redirect (path) {
+    function redirect (path: string | URL | undefined) {
       window.open(path, '_blank')
     }
 

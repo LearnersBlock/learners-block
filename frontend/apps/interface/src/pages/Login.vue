@@ -53,6 +53,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
+  name: 'IntLogin',
   setup () {
     // Import required features
     const $q = useQuasar()

@@ -33,7 +33,7 @@ const auth = {
       })
       if (response.status === 200) {
         const token = response.data.token
-        sessionStorage.setItem('learners-block-token', token)
+        sessionStorage.setItem('learners-block-token', token as string)
         Axios.defaults.headers.common.Authorization = `Bearer ${token}`
         AxiosOverride.defaults.headers.common.Authorization = `Bearer ${token}`
         commit('SET_TOKEN', token)
@@ -42,7 +42,7 @@ const auth = {
     },
     LOGOUT: async ({ commit, getters }: { commit: any, getters: any }) => {
       const response = await Axios.post(`${getters.GET_API}/v1/auth/log_out`).catch(e => {
-        throw new Error(e.message)
+        throw new Error(e.message as string)
       })
       if (response.status === 200) {
         sessionStorage.removeItem('learners-block-token')

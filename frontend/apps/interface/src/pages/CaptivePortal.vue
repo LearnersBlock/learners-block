@@ -41,6 +41,7 @@ import { useStore } from '../store'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
+  name: 'IntCaptivePortal',
   setup () {
     // Import required features
     const $store = useStore()

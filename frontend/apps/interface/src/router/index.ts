@@ -1,4 +1,6 @@
-import axios from 'axios'
+import axios, {
+  AxiosRequestConfig
+} from 'axios'
 import { i18n } from '../boot/i18n'
 import { Loading, Notify } from 'quasar'
 import { route } from 'quasar/wrappers'
@@ -112,7 +114,7 @@ export default route<StateInterface>(function ({ store }) {
           // Remove old token to force use of new one
           delete originalRequestConfig.headers.Authorization
           // Retry request with new Auth header
-          overrideResponse.value = await AxiosOverride(originalRequestConfig).catch(() => {
+          overrideResponse.value = await AxiosOverride(originalRequestConfig as AxiosRequestConfig<any>).catch(() => {
             // Should be no reason to reach this error
             notifyError(i18n.global.t('error'))
           })

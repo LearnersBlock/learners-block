@@ -71,7 +71,6 @@
         v-for="resource in filteredResources"
         :key="resource.id"
         class="resource q-mb-md items-center text-black"
-        tag="div"
         :to="'/library/resource/' + resource.id"
       >
         <div class="col-2">
@@ -143,6 +142,7 @@ import { useI18n } from 'vue-i18n'
 import { useStore } from '../../store'
 
 export default defineComponent({
+  name: 'IntLibrary',
   setup () {
     // Apollo interfaces
     interface ApolloResource {
@@ -168,7 +168,7 @@ export default defineComponent({
     // Constants for resource fetching
     const API_URL = ref(process.env.LIBRARYAPI)
     const searchBox = ref<boolean>(false)
-    const searchInput = ref<string>($store.state.searchInput.searchInput)
+    const searchInput = ref<string>($store.state.searchInput.searchInput as string)
 
     // Show search box if field is populated
     if (searchInput.value) {

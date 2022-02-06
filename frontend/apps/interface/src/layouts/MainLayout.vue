@@ -80,8 +80,10 @@ import { useStore } from '../store'
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import type { QuasarLanguage } from 'quasar'
 
 export default defineComponent({
+  name: 'IntMainLayout',
   setup () {
     // Import required features
     const $q = useQuasar()
@@ -152,7 +154,7 @@ export default defineComponent({
 
       const langCookie = ref<any>($q.localStorage.getItem('lang'))
       if (langCookie.value) {
-        changeLanguage(langCookie.value)
+        changeLanguage(langCookie.value as string)
       }
 
       const usersLocale = $q.lang.getLocale()
@@ -164,10 +166,10 @@ export default defineComponent({
     const changeLanguage = (value: string) => {
       void import(
         /* webpackInclude: /(en-US|ar|de|es|fr|it|tr|pt-BR|ru)\.js$/ */
-        'quasar/lang/' + value
+        `quasar/lang/${value}`
       ).then((lang) => {
         locale.value = value
-        Quasar.lang.set(lang.default)
+        Quasar.lang.set(lang.default as QuasarLanguage)
         $q.cookies.set('lang', value, { sameSite: 'Lax', path: '/', expires: 365 })
         localStorage.setItem('lang', value)
       })
