@@ -7,6 +7,7 @@ from common.errors import DockerImageNotFound
 from common.errors import DockerSocket
 from common.errors import logger
 from common.processes import chronyd_check
+from common.processes import container_hostname
 from common.processes import ntp_check
 
 
@@ -117,6 +118,10 @@ class docker_py():
         except docker.errors.APIError:
             # Network already exists
             pass
+
+        # Add default env vars for all containers
+        evars = {"DEVICE_HOSTNAME": container_hostname()}
+        env_vars.update(evars)
 
         try:
             response = client.containers.run(image,
