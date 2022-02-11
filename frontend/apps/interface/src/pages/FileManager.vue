@@ -24,7 +24,7 @@
       :rows="rows"
       :rows-per-page-options="[50, 75, 100, 0]"
       :columns="columns"
-      :no-data-label="$route.params.data === 'library' ? $t('library_empty') : $t('empty_folder')"
+      :no-data-label="$route.params.data === 'library' && !objPath[0] ? $t('library_empty') : $t('empty_folder')"
       :no-results-label="$t('no_results_found')"
       row-key="name"
       :selection="loginState && $q.screen.gt.sm ? 'multiple' : 'none'"
