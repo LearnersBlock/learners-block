@@ -90,9 +90,11 @@ class filemanager_file_size(Resource):
     def post(self):
         content = request.get_json()
 
+        content['path'].append(content['item'])
+
         path = generate_path(content['root'], content['path'])
 
-        file_size = os.path.getsize(os.path.join(path, content['item']))
+        file_size = os.path.getsize(path)
 
         return {'size': human_size(file_size)}
 
@@ -198,18 +200,20 @@ class filemanager_unzip(Resource):
         content = request.get_json()
         path = generate_path(content['root'], content['path'])
 
+        filename = sanitise(string=content['file'])
+
         # Generate a safe extraction path to avoid overwriting
         if os.path.exists(os.path.join(path,
-                                       Path(content['file']).stem)):
+                                       Path(filename).stem)):
             i = 1
             while True:
-                new_path = Path(content['file']).stem + str(i)
+                new_path = Path(filename).stem + str(i)
                 if os.path.exists(os.path.join(path, new_path)):
                     i = i+1
                 else:
                     break
         else:
-            new_path = Path(content['file']).stem
+            new_path = Path(filename).stem
 
         pid = os.fork()
 
@@ -241,8 +245,9 @@ class filemanager_upload(Resource):
                              json.loads(request.headers['savePath']))
 
         for fname in request.files:
-            f = request.files.get(fname)
-            f.save(os.path.join(path, fname))
-            os.chown(os.path.join(path, fname), 65534, 65534)
+            filename = sanitise(string=fname)
+            f = request.files.get(filename)
+            f.save(os.path.join(path, filename))
+            os.chown(os.path.join(path, filename), 65534, 65534)
 
         return {'message': 'success'}
