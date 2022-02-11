@@ -17,7 +17,18 @@ system_root = '/app/storage/'
 
 
 def generate_path(root, path):
-    return os.path.join(system_root, root, *path)
+    return os.path.join(system_root, sanitise(path=root), *sanitise(path=path))
+
+
+def sanitise(**item):
+    if '../' in item['path']:
+        raise FileManagerInvalidString
+
+    for i in item['path']:
+        if '../' in i:
+            raise FileManagerInvalidString
+
+    return item['path']
 
 
 class filemanager_copy(Resource):
@@ -28,24 +39,25 @@ class filemanager_copy(Resource):
         fromPath = generate_path(content['root'], content['fromPath'])
         toPath = generate_path(content['root'], content['toPath'])
         for item in content['object']:
+            itemName = sanitise(path=item['name'])
             if item['format'] == 'file':
                 # Remove existing item
-                existingFile = os.path.join(toPath, item['name'])
+                existingFile = os.path.join(toPath, itemName)
                 if os.path.isfile(existingFile):
                     os.remove(existingFile)
 
                 # Copy new item
-                shutil.copy2(os.path.join(fromPath, item['name']),
-                             os.path.join(toPath))
+                shutil.copy2(os.path.join(fromPath, itemName),
+                             toPath)
             elif item['format'] == 'folder':
                 # Remove existing item
-                existingFile = os.path.join(toPath, item['name'])
+                existingFile = os.path.join(toPath, itemName)
                 if os.path.isdir(existingFile):
                     shutil.rmtree(existingFile)
 
                 # Copy new item
-                shutil.copytree(os.path.join(fromPath, item['name']),
-                                os.path.join(toPath, item['name']))
+                shutil.copytree(os.path.join(fromPath, itemName),
+                                os.path.join(toPath, itemName))
 
         return {'message': 'success'}
 
@@ -57,10 +69,11 @@ class filemanager_delete(Resource):
         path = generate_path(content['root'], content['path'])
 
         for item in content['object']:
+            itemName = sanitise(path=item['name'])
             if item['format'] == 'file':
-                os.remove(os.path.join(path, item['name']))
+                os.remove(os.path.join(path, itemName))
             elif item['format'] == 'folder':
-                shutil.rmtree(os.path.join(path, item['name']))
+                shutil.rmtree(os.path.join(path, itemName))
             else:
                 raise FileManagerInvalidString
 
@@ -95,13 +108,18 @@ class filemanager_list(Resource):
                            'format': 'file',
                            'extension': file_ext[1]})
 
+        # Store path as pathlib POSIX
+        p = Path(path)
+
         # Return compiled path for use in interface
         if content['path']:
-            return_path = os.path.join(content['root'], *content['path'])
+            # Use the sanitised path
+            p = Path(path)
+            return_path = p.relative_to(*p.parts[:3])
         else:
-            return_path = content['root']
+            return_path = p.parts[3]
 
-        return {'rows': output, 'path': return_path}
+        return {'rows': output, 'path': str(return_path)}
 
 
 class filemanager_move(Resource):
@@ -113,18 +131,19 @@ class filemanager_move(Resource):
         toPath = generate_path(content['root'], content['toPath'])
 
         for item in content['object']:
+            itemName = sanitise(path=item['name'])
             if item['format'] == 'file':
                 # Remove existing item
-                existingFile = os.path.join(toPath, item['name'])
+                existingFile = os.path.join(toPath, itemName)
                 if os.path.isfile(existingFile):
                     os.remove(existingFile)
             elif item['format'] == 'folder':
                 # Remove existing item
-                existingFile = os.path.join(toPath, item['name'])
+                existingFile = os.path.join(toPath, itemName)
                 if os.path.isdir(existingFile):
                     shutil.rmtree(existingFile)
 
-            shutil.move(os.path.join(fromPath, item['name']),
+            shutil.move(os.path.join(fromPath, itemName),
                         toPath)
 
         return {'message': 'success'}
@@ -135,12 +154,13 @@ class filemanager_newfolder(Resource):
     def post(self):
         content = request.get_json()
 
+        # Add the directory here before sanitising the pathnames
+        content['path'].append(content['directory'])
+
         path = generate_path(content['root'], content['path'])
 
-        fPath = os.path.join(path, content['directory'])
-
-        os.mkdir(fPath)
-        os.chown(fPath, 65534, 65534)
+        os.mkdir(path)
+        os.chown(path, 65534, 65534)
 
         return {'message': 'success'}
 
@@ -150,10 +170,18 @@ class filemanager_rename(Resource):
     def post(self):
         content = request.get_json()
 
-        path = generate_path(content['root'], content['path'])
+        # Add the new from and to names here before sanitising the pathnames
+        fromPath = content['path'][:]
+        fromPath.append(content['from'])
 
-        os.rename(os.path.join(path, content['from']),
-                  os.path.join(path, content['to']))
+        toPath = content['path'][:]
+        toPath.append(content['to'])
+
+        fromItem = generate_path(content['root'], fromPath)
+        toItem = generate_path(content['root'], toPath)
+
+        os.rename(fromItem,
+                  toItem)
 
         return {'message': 'success'}
 
