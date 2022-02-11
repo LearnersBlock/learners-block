@@ -17,18 +17,24 @@ system_root = '/app/storage/'
 
 
 def generate_path(root, path):
-    return os.path.join(system_root, sanitise(path=root), *sanitise(path=path))
+    return os.path.join(system_root,
+                        sanitise(string=root),
+                        *sanitise(obj=path))
 
 
 def sanitise(**item):
-    if '../' in item['path']:
-        raise FileManagerInvalidString
-
-    for i in item['path']:
-        if '../' in i:
+    if 'string' in item:
+        if '../' in item['string'] or item['string'][:1] == '/':
             raise FileManagerInvalidString
-
-    return item['path']
+        else:
+            return item['string']
+    elif 'obj' in item:
+        for i in item['obj']:
+            if '../' in i or i[:1] == '/':
+                raise FileManagerInvalidString
+        return item['obj']
+    else:
+        raise FileManagerInvalidString
 
 
 class filemanager_copy(Resource):
@@ -39,7 +45,7 @@ class filemanager_copy(Resource):
         fromPath = generate_path(content['root'], content['fromPath'])
         toPath = generate_path(content['root'], content['toPath'])
         for item in content['object']:
-            itemName = sanitise(path=item['name'])
+            itemName = sanitise(string=item['name'])
             if item['format'] == 'file':
                 # Remove existing item
                 existingFile = os.path.join(toPath, itemName)
@@ -69,7 +75,7 @@ class filemanager_delete(Resource):
         path = generate_path(content['root'], content['path'])
 
         for item in content['object']:
-            itemName = sanitise(path=item['name'])
+            itemName = sanitise(string=item['name'])
             if item['format'] == 'file':
                 os.remove(os.path.join(path, itemName))
             elif item['format'] == 'folder':
@@ -131,7 +137,7 @@ class filemanager_move(Resource):
         toPath = generate_path(content['root'], content['toPath'])
 
         for item in content['object']:
-            itemName = sanitise(path=item['name'])
+            itemName = sanitise(string=item['name'])
             if item['format'] == 'file':
                 # Remove existing item
                 existingFile = os.path.join(toPath, itemName)
