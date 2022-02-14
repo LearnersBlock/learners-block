@@ -75,7 +75,7 @@ def check_supervisor(supervisor_retries, timeout):
             time.sleep(2)
             retry = retry + 1
 
-    return {'message': 'Supervisor up'}
+    return {"message": "Supervisor up"}
 
 
 def container_hostname():

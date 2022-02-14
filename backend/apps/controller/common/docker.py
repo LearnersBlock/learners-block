@@ -104,8 +104,18 @@ class docker_py:
         return True
 
     @docker_ping
-    def run(image, name, ports={}, volumes={}, detach=True, network='lbsystem',
-            env_vars={}, privileged=False, command='', labels={}):
+    def run(
+        image,
+        name,
+        ports={},
+        volumes={},
+        detach=True,
+        network="lbsystem",
+        env_vars={},
+        privileged=False,
+        command="",
+        labels={},
+    ):
         # If network doesn't yet exist then create it
         try:
             client.networks.create(
