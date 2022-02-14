@@ -20,9 +20,11 @@ class wifi:
         # (https://developer.gnome.org/NetworkManager/1.2/nm-dbus-types.html#NM80211ApSecurityFlags)
         # to determine which type of security this AP uses.
         AP_SEC = Pnm.NM_802_11_AP_SEC_NONE
-        if ap.Flags & Pnm.NM_802_11_AP_FLAGS_PRIVACY and \
-                ap.WpaFlags == AP_SEC and \
-                ap.RsnFlags == AP_SEC:
+        if (
+            ap.Flags & Pnm.NM_802_11_AP_FLAGS_PRIVACY
+            and ap.WpaFlags == AP_SEC
+            and ap.RsnFlags == AP_SEC
+        ):
             security = config.type_wep
 
         if ap.WpaFlags != AP_SEC:
@@ -31,15 +33,17 @@ class wifi:
         if ap.RsnFlags != AP_SEC:
             security = config.type_wpa2
 
-        if ap.WpaFlags & \
-            Pnm.NM_802_11_AP_SEC_KEY_MGMT_802_1X or \
-                ap.RsnFlags & \
-                Pnm.NM_802_11_AP_SEC_KEY_MGMT_802_1X:
+        if (
+            ap.WpaFlags & Pnm.NM_802_11_AP_SEC_KEY_MGMT_802_1X
+            or ap.RsnFlags & Pnm.NM_802_11_AP_SEC_KEY_MGMT_802_1X
+        ):
             security = config.type_enterprise
 
-        entry = {"ssid": ap.Ssid,
-                 "conn_type": security,
-                 "strength": int(ap.Strength)}
+        entry = {
+            "ssid": ap.Ssid,
+            "conn_type": security,
+            "strength": int(ap.Strength),
+        }
 
         return entry
 
@@ -56,17 +60,18 @@ class wifi:
         connections = Pnm.Settings.ListConnections()
 
         for connection in connections:
-            if connection.GetSettings()["connection"]["type"] \
-                    == "802-11-wireless":
+            if (
+                connection.GetSettings()["connection"]["type"]
+                == "802-11-wireless"
+            ):
                 # Delete the identified connection
                 connection.Delete()
 
         return True
 
-    def connect(conn_type=config.type_hotspot,
-                ssid=None,
-                username=None,
-                password=None):
+    def connect(
+        conn_type=config.type_hotspot, ssid=None, username=None, password=None
+    ):
         # Remove any existing connection made by this app
         wifi.forget()
 
@@ -78,9 +83,9 @@ class wifi:
             Pnm.Settings.AddConnection(conn_dict)
 
             # Connect
-            Pnm.NetworkManager.ActivateConnection(wifi.get_connection_id(),
-                                                  wifi.get_device(),
-                                                  "/")
+            Pnm.NetworkManager.ActivateConnection(
+                wifi.get_connection_id(), wifi.get_device(), "/"
+            )
 
             # If not a hotspot, log the connection SSID being attempted
             if conn_type != config.type_hotspot:
@@ -125,11 +130,14 @@ class wifi:
         try:
             if all_networks:
                 for connection in Pnm.Settings.ListConnections():
-                    if connection.GetSettings()["connection"]["type"] \
-                            == "802-11-wireless":
+                    if (
+                        connection.GetSettings()["connection"]["type"]
+                        == "802-11-wireless"
+                    ):
                         # Delete the identified connection
-                        network_id = \
-                            connection.GetSettings()["connection"]["id"]
+                        network_id = connection.GetSettings()["connection"][
+                            "id"
+                        ]
                         # Add short delay to ensure the endpoint has returned a
                         # response before disconnecting the user.
                         sleep(0.5)
@@ -162,8 +170,12 @@ class wifi:
         return True
 
     def get_connection_id():
-        connection = dict([(x.GetSettings()['connection']['id'], x)
-                          for x in Pnm.Settings.ListConnections()])
+        connection = dict(
+            [
+                (x.GetSettings()["connection"]["id"], x)
+                for x in Pnm.Settings.ListConnections()
+            ]
+        )
 
         if config.ap_name in connection:
             return connection[config.ap_name]
@@ -172,8 +184,9 @@ class wifi:
 
     def get_device():
         # Fetch last Wi-Fi interface found
-        devices = dict([(x.DeviceType, x)
-                       for x in Pnm.NetworkManager.GetDevices()])
+        devices = dict(
+            [(x.DeviceType, x) for x in Pnm.NetworkManager.GetDevices()]
+        )
 
         if Pnm.NM_DEVICE_TYPE_WIFI in devices:
             return devices[Pnm.NM_DEVICE_TYPE_WIFI]
@@ -187,30 +200,32 @@ class wifi:
         # button will be disabled.
         iw_status = wifi.refresh_networks(retries=1)
 
-        logger.debug('Fetching Wi-Fi networks.')
+        logger.debug("Fetching Wi-Fi networks.")
 
         try:
             # For each wi-fi connection in range, identify it's details
-            compiled_ssids = [wifi.analyse_access_point(ap)
-                              for ap in wifi.get_device().GetAccessPoints()]
+            compiled_ssids = [
+                wifi.analyse_access_point(ap)
+                for ap in wifi.get_device().GetAccessPoints()
+            ]
         except Exception:
-            logger.exception('Failed listing access points.')
+            logger.exception("Failed listing access points.")
             raise WifiNetworkManagerError
 
         # Sort SSIDs by signal strength
-        compiled_ssids = sorted(compiled_ssids,
-                                key=lambda x: x['strength'],
-                                reverse=True)
+        compiled_ssids = sorted(
+            compiled_ssids, key=lambda x: x["strength"], reverse=True
+        )
 
         # Remove duplicates and own hotspot from list.
         tmp = []
         ssids = []
         for item in compiled_ssids:
-            if item['ssid'] not in tmp and item['ssid'] != get_hotspot_SSID:
+            if item["ssid"] not in tmp and item["ssid"] != get_hotspot_SSID:
                 ssids.append(item)
-            tmp.append(item['ssid'])
+            tmp.append(item["ssid"])
 
-        logger.debug('Finished fetching Wi-Fi networks.')
+        logger.debug("Finished fetching Wi-Fi networks.")
 
         # Return a list of available SSIDs and their security type,
         # or [] for none available.
@@ -231,17 +246,19 @@ class wifi:
                 sleep(3)
                 subprocess.check_output(["iw", "dev", "wlan0", "scan"])
             except subprocess.CalledProcessError:
-                logger.warning('IW resource busy. Retrying...')
+                logger.warning("IW resource busy. Retrying...")
                 continue
             except Exception:
-                logger.error('Unknown error calling IW.')
+                logger.error("Unknown error calling IW.")
                 return False
             else:
-                logger.debug('IW succeeded.')
+                logger.debug("IW succeeded.")
                 return True
             finally:
                 run += 1
 
-        logger.warning("IW is not accessible. This can happen on some devices "
-                       "and is usually nothing to worry about.")
+        logger.warning(
+            "IW is not accessible. This can happen on some devices "
+            "and is usually nothing to worry about."
+        )
         return False

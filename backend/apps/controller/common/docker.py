@@ -18,14 +18,14 @@ def docker_ping(func):
             global client
             # If the Docker client is not yet initiated.
             # Initiated here to avoid calling to early in boot sequence.
-            if 'client' not in globals():
-                client = \
-                    docker.DockerClient(base_url=f"unix:/{config.socket_path}",
-                                        tls=False)
+            if "client" not in globals():
+                client = docker.DockerClient(
+                    base_url=f"unix:/{config.socket_path}", tls=False
+                )
             # Check the docker client is available
             client.ping()
         except Exception:
-            logger.exception('Docker UNIX socket is unreachable.')
+            logger.exception("Docker UNIX socket is unreachable.")
             raise DockerSocket
 
         return func(*args, **kwargs)
@@ -33,7 +33,7 @@ def docker_ping(func):
     return inner
 
 
-class docker_py():
+class docker_py:
     @docker_ping
     def image_status(image):
         try:
@@ -42,7 +42,7 @@ class docker_py():
             else:
                 return False
         except docker.errors.APIError:
-            logger.exception('Failed getting image status.')
+            logger.exception("Failed getting image status.")
             raise DockerImageStatus
 
     @docker_ping
@@ -75,13 +75,15 @@ class docker_py():
             container.remove()
 
             # Run the pulled containers
-            response = docker_py.run(env_vars=env_vars,
-                                     image=image,
-                                     detach=True,
-                                     name=name,
-                                     ports=ports,
-                                     volumes=volumes,
-                                     network=network)
+            response = docker_py.run(
+                env_vars=env_vars,
+                image=image,
+                detach=True,
+                name=name,
+                ports=ports,
+                volumes=volumes,
+                network=network,
+            )
         except docker.errors.NotFound:
             logger.exception("Docker image not found.")
             raise DockerImageNotFound
@@ -108,13 +110,23 @@ class docker_py():
     @docker_ping
     @chronyd_check
     @ntp_check
-    def run(image, name, ports={}, volumes={}, detach=True, network='lbsystem',
-            env_vars={}, privileged=False, command='', labels={}):
+    def run(
+        image,
+        name,
+        ports={},
+        volumes={},
+        detach=True,
+        network="lbsystem",
+        env_vars={},
+        privileged=False,
+        command="",
+        labels={},
+    ):
         # If network doesn't yet exist then create it
         try:
-            client.networks.create(network,
-                                   driver="bridge",
-                                   check_duplicate=True)
+            client.networks.create(
+                network, driver="bridge", check_duplicate=True
+            )
         except docker.errors.APIError:
             # Network already exists
             pass
@@ -124,17 +136,19 @@ class docker_py():
         env_vars.update(evars)
 
         try:
-            response = client.containers.run(image,
-                                             environment=env_vars,
-                                             detach=True,
-                                             privileged=privileged,
-                                             ports=ports,
-                                             name=name,
-                                             labels=labels,
-                                             volumes=volumes,
-                                             network=network,
-                                             restart_policy={"Name": "always"},
-                                             command=command)
+            response = client.containers.run(
+                image,
+                environment=env_vars,
+                detach=True,
+                privileged=privileged,
+                ports=ports,
+                name=name,
+                labels=labels,
+                volumes=volumes,
+                network=network,
+                restart_policy={"Name": "always"},
+                command=command,
+            )
         except docker.errors.NotFound:
             logger.exception("Docker image not found.")
             raise DockerImageNotFound

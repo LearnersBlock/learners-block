@@ -20,18 +20,19 @@ class download_fetch(Resource):
         global download_log
         global download_terminated
         download_terminated = 0
-        download_log = ''
+        download_log = ""
         content = request.get_json()
 
         # Fetch the requested file
         download_progress = threading.Thread(
-                                target=download_fetch.download_file,
-                                args=(self, content["download_url"]),
-                                name='download_file')
+            target=download_fetch.download_file,
+            args=(self, content["download_url"]),
+            name="download_file",
+        )
 
         download_progress.start()
 
-        return {'message': 'process started'}
+        return {"message": "process started"}
 
     def download_file(self, url):
         try:
@@ -40,12 +41,12 @@ class download_fetch(Resource):
         except Exception:
             # As this runs in a thread, no use aborting or raising error
             logger.exception("Failed downloading file.")
-            download_stop.get(self, response='failed download')
+            download_stop.get(self, response="failed download")
             return
 
         # Get length of file for progress reporting
         try:
-            total = int(resp.headers.get('content-length', 0))
+            total = int(resp.headers.get("content-length", 0))
         except Exception:
             # If cannot get file length, set to 0 to avoid errors
             # As this runs in a thread, no use aborting or raising error
@@ -53,10 +54,11 @@ class download_fetch(Resource):
             total = 0
 
         # Set the download path
-        filePath = os.path.realpath('.') + '/storage/library/' + \
-            url.split('/')[-1]
+        filePath = (
+            os.path.realpath(".") + "/storage/library/" + url.split("/")[-1]
+        )
 
-        with open(filePath, 'wb') as file:
+        with open(filePath, "wb") as file:
             # Set vars
             global download_terminated
             downloaded_bytes = 0
@@ -79,15 +81,17 @@ class download_fetch(Resource):
 
                 # If running out of disk space exit
                 if downloaded_bytes + 100000000 > free:
-                    download_stop.get(self, response='Out of disk space')
+                    download_stop.get(self, response="Out of disk space")
                     return
 
                 # Format and create response for streaming via download_fetch
                 global download_log
-                download_log = json.dumps({
-                    "progress": int(float(downloaded_bytes/total*100)),
-                    "mbytes": int(float(downloaded_bytes/1000000)),
-                })
+                download_log = json.dumps(
+                    {
+                        "progress": int(float(downloaded_bytes / total * 100)),
+                        "mbytes": int(float(downloaded_bytes / 1000000)),
+                    }
+                )
 
         # Set file permission for access via NGINX and PHP
         if os.path.isfile(filePath):
@@ -96,7 +100,7 @@ class download_fetch(Resource):
         # Reset global var for next use
         download_log = True
 
-        return {'message': 'process complete'}
+        return {"message": "process complete"}
 
 
 class download_stop(Resource):
@@ -105,7 +109,7 @@ class download_stop(Resource):
         global download_terminated
         download_terminated = response
 
-        return {'message': 'terminate request sent'}
+        return {"message": "terminate request sent"}
 
 
 class download_stream(Resource):
@@ -124,8 +128,9 @@ class download_stream(Resource):
                 # If download_terminated is not 1 or 0 then report error
                 if download_terminated != 0:
                     # An error occured
-                    yield str(json.dumps({"error":
-                                          download_terminated})) + "\n\n"
+                    yield str(
+                        json.dumps({"error": download_terminated})
+                    ) + "\n\n"
                     break
                 # Stream last line
                 yield str(download_log) + "\n\n"

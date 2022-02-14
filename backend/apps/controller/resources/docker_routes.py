@@ -20,39 +20,38 @@ class docker_pull(Resource):
         content = request.get_json()
 
         # Fetch database entry based on passed name
-        lb_database = App_Store.query.filter_by(
-            name=content["name"]).first()
+        lb_database = App_Store.query.filter_by(name=content["name"]).first()
 
         # Update entry before action to allow button to toggle.
         # It helps with error handling when button is in wrong state.
-        lb_database.status = 'installed'
+        lb_database.status = "installed"
         lb_database.save_to_db()
 
         # If there are container dependencies, pull those too
         if content["dependencies"]:
             for dependency in content["dependencies"]:
-                deps = docker_py.pull(env_vars=content["dependencies"]
-                                      [dependency]["env_vars"],
-                                      image=content["dependencies"]
-                                      [dependency]["image"],
-                                      name=dependency,
-                                      ports=content["dependencies"]
-                                      [dependency]["ports"],
-                                      volumes=content["dependencies"]
-                                      [dependency]["volumes"],
-                                      network=content["name"],
-                                      detach=True)
+                deps = docker_py.pull(
+                    env_vars=content["dependencies"][dependency]["env_vars"],
+                    image=content["dependencies"][dependency]["image"],
+                    name=dependency,
+                    ports=content["dependencies"][dependency]["ports"],
+                    volumes=content["dependencies"][dependency]["volumes"],
+                    network=content["name"],
+                    detach=True,
+                )
 
                 logger.info(deps)
 
         # Pull latest containers and run them
-        response = docker_py.pull(env_vars=content["env_vars"],
-                                  image=content["image"],
-                                  name=content["name"],
-                                  ports=content["ports"],
-                                  volumes=content["volumes"],
-                                  network=content["name"],
-                                  detach=True)
+        response = docker_py.pull(
+            env_vars=content["env_vars"],
+            image=content["image"],
+            name=content["name"],
+            ports=content["ports"],
+            volumes=content["volumes"],
+            network=content["name"],
+            detach=True,
+        )
 
         return {"message": response}
 
@@ -63,12 +62,11 @@ class docker_remove(Resource):
         content = request.get_json()
 
         # Fetch database entry based on passed name
-        lb_database = App_Store.query.filter_by(
-            name=content["name"]).first()
+        lb_database = App_Store.query.filter_by(name=content["name"]).first()
 
         # Update entry before action to allow button to toggle.
         # It helps with error handling when button is in wrong state.
-        lb_database.status = 'install'
+        lb_database.status = "install"
         lb_database.save_to_db()
 
         # If there are container dependencies then remove them
@@ -89,38 +87,37 @@ class docker_run(Resource):
         content = request.get_json()
 
         # Fetch database entry based on passed name
-        lb_database = App_Store.query.filter_by(
-            name=content["name"]).first()
+        lb_database = App_Store.query.filter_by(name=content["name"]).first()
 
         # Update entry before action to allow button to toggle.
         # It helps with error handling when button is in wrong state.
-        lb_database.status = 'installed'
+        lb_database.status = "installed"
         lb_database.save_to_db()
 
         # If there are container dependencies start them
         if content["dependencies"]:
             for dependency in content["dependencies"]:
-                deps = docker_py.run(env_vars=content["dependencies"]
-                                     [dependency]["env_vars"],
-                                     image=content["dependencies"]
-                                     [dependency]["image"],
-                                     name=dependency,
-                                     ports=content["dependencies"]
-                                     [dependency]["ports"],
-                                     volumes=content["dependencies"]
-                                     [dependency]["volumes"],
-                                     network=content["name"],
-                                     detach=True)
+                deps = docker_py.run(
+                    env_vars=content["dependencies"][dependency]["env_vars"],
+                    image=content["dependencies"][dependency]["image"],
+                    name=dependency,
+                    ports=content["dependencies"][dependency]["ports"],
+                    volumes=content["dependencies"][dependency]["volumes"],
+                    network=content["name"],
+                    detach=True,
+                )
 
                 logger.debug(deps)
 
         # Run the primary container
-        response = docker_py.run(env_vars=content["env_vars"],
-                                 image=content["image"],
-                                 name=content["name"],
-                                 ports=content["ports"],
-                                 volumes=content["volumes"],
-                                 network=content["name"],
-                                 detach=True)
+        response = docker_py.run(
+            env_vars=content["env_vars"],
+            image=content["image"],
+            name=content["name"],
+            ports=content["ports"],
+            volumes=content["volumes"],
+            network=content["name"],
+            detach=True,
+        )
 
         return {"message": response}

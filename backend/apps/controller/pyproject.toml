@@ -1,2 +1,3 @@
-[build-system]
-exclude = ['/migration']
+[tool.black]
+extend-exclude = 'migration'
+line-length = 79

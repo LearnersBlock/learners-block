@@ -8,9 +8,11 @@ from common.models import App_Store
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 
-app_store_url = ("https://raw.githubusercontent.com/"
-                 "LearnersBlock/app-store/main/"
-                 "database.json")
+app_store_url = (
+    "https://raw.githubusercontent.com/"
+    "LearnersBlock/app-store/main/"
+    "database.json"
+)
 
 
 class appstore_get_apps(Resource):
@@ -19,21 +21,20 @@ class appstore_get_apps(Resource):
         # Fetch list of available apps from app-store repo
         try:
             # Verify = false to avoid delay in chronyd sync
-            app_list = requests.get(app_store_url,
-                                    timeout=3,
-                                    verify=False)
+            app_list = requests.get(app_store_url, timeout=3, verify=False)
             app_list.raise_for_status()
 
         except Exception:
-            logger.exception("Failed fetching app list from Git. " +
-                             app_list.status_code)
+            logger.exception(
+                "Failed fetching app list from Git. " + app_list.status_code
+            )
             raise AppStoreFetchFailed
 
         update_existing_app_status(app_list.json())
 
         update_new_apps(app_list.json())
 
-        return {'message': 'done'}
+        return {"message": "done"}
 
 
 class appstore_status(Resource):
@@ -49,20 +50,20 @@ class appstore_status(Resource):
         for db_entry in all_entires:
             # Add all the DB fields to entry var
             entry = {
-                        'name': db_entry.name,
-                        'long_name': db_entry.long_name,
-                        'env_vars': json.loads(db_entry.env_vars),
-                        'image': db_entry.image,
-                        "ports": json.loads(db_entry.ports),
-                        "volumes": json.loads(db_entry.volumes),
-                        'info': db_entry.info,
-                        'dependencies': json.loads(db_entry.dependencies),
-                        "version_name": db_entry.version_name,
-                        "version": db_entry.version,
-                        "author_site": db_entry.author_site,
-                        "logo": db_entry.logo,
-                        'status': db_entry.status
-                    }
+                "name": db_entry.name,
+                "long_name": db_entry.long_name,
+                "env_vars": json.loads(db_entry.env_vars),
+                "image": db_entry.image,
+                "ports": json.loads(db_entry.ports),
+                "volumes": json.loads(db_entry.volumes),
+                "info": db_entry.info,
+                "dependencies": json.loads(db_entry.dependencies),
+                "version_name": db_entry.version_name,
+                "version": db_entry.version,
+                "author_site": db_entry.author_site,
+                "logo": db_entry.logo,
+                "status": db_entry.status,
+            }
 
             # Combine all the apps into one entry var
             database_entries.append(entry)
