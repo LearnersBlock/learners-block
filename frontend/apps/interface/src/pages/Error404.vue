@@ -1,13 +1,12 @@
 <template>
-  <div class="fullscreen bg-primary text-white text-center q-pa-md flex flex-center">
+  <div
+    class="fullscreen bg-primary text-white text-center q-pa-md flex flex-center"
+  >
     <div>
       <div class="text-h1">
         {{ urlCode }}
       </div>
-      <div
-        class="text-h2"
-        style="opacity:.4"
-      >
+      <div class="text-h2" style="opacity: 0.4">
         {{ $t('404') }}
       </div>
       <q-btn
@@ -28,13 +27,12 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'IntError404',
-  setup () {
-    const urlCode = <string>(window.location.pathname.split('/').pop())
+  setup() {
+    const urlCode = <string>window.location.pathname.split('/').pop()
 
     return {
       urlCode
     }
   }
 })
-
 </script>

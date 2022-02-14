@@ -1,12 +1,7 @@
-
 import auth from './auth'
 import { store } from 'quasar/wrappers'
 import type { InjectionKey } from 'vue'
-import {
-  createStore,
-  Store as VuexStore,
-  useStore as vuexUseStore
-} from 'vuex'
+import { createStore, Store as VuexStore, useStore as vuexUseStore } from 'vuex'
 import searchInput from './library/index'
 
 /*
@@ -22,8 +17,8 @@ export interface StateInterface {
   // Define your own store structure, using submodules if needed
   // example: ExampleStateInterface;
   // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
-  example: unknown;
-  searchInput: unknown;
+  example: unknown
+  searchInput: unknown
 }
 
 // provide typings for `this.$store`
@@ -34,7 +29,8 @@ declare module '@vue/runtime-core' {
 }
 
 // provide typings for `useStore` helper
-export const storeKey: InjectionKey<VuexStore<StateInterface>> = Symbol('vuex-key')
+export const storeKey: InjectionKey<VuexStore<StateInterface>> =
+  Symbol('vuex-key')
 
 export default store(function (/* { ssrContext } */) {
   const Store = createStore<StateInterface>({
@@ -51,6 +47,6 @@ export default store(function (/* { ssrContext } */) {
   return Store
 })
 
-export function useStore () {
+export function useStore() {
   return vuexUseStore(storeKey)
 }

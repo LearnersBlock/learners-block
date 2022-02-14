@@ -2,7 +2,12 @@
   <q-page>
     <div
       v-touch-swipe.mouse.left.right.up="touchMoveToPage"
-      style="position: absolute;z-index: 2000 !important; height: 67vh; width: 96%"
+      style="
+        position: absolute;
+        z-index: 2000 !important;
+        height: 67vh;
+        width: 96%;
+      "
     />
     <div
       id="epub-render"
@@ -11,7 +16,7 @@
     />
     <q-page-sticky
       v-if="showMenu && !loading"
-      style="z-index: 2001;"
+      style="z-index: 2001"
       position="bottom-right"
       :offset="fabPos"
     >
@@ -92,10 +97,7 @@
       </q-fab>
     </q-page-sticky>
     <q-inner-loading :showing="loading">
-      <q-spinner
-        size="5em"
-        color="primary"
-      />
+      <q-spinner size="5em" color="primary" />
     </q-inner-loading>
   </q-page>
 </template>
@@ -109,7 +111,7 @@ import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'IntEpub',
-  setup () {
+  setup() {
     // Import required features
     const $q = useQuasar()
     const route = useRoute()
@@ -117,7 +119,7 @@ export default defineComponent({
     const { t } = useI18n()
 
     // Import ePubJS
-    const ePubJs = (ePub as any)
+    const ePubJs = ePub as any
 
     // Set constants
     const draggingFab = ref<boolean>(false)
@@ -129,32 +131,39 @@ export default defineComponent({
     const tableOfContents = ref<Array<any>>([])
 
     // Fix for Safari where first page is not stored on load
-    watch(() => $q.fullscreen.isActive, val => {
-      if (val) {
-        if (!ePubJs.rendition.location) {
-          ePubJs.rendition.display()
+    watch(
+      () => $q.fullscreen.isActive,
+      (val) => {
+        if (val) {
+          if (!ePubJs.rendition.location) {
+            ePubJs.rendition.display()
+          }
         }
       }
-    })
+    )
 
     onMounted(() => {
       loadEpub()
     })
 
-    function download () {
+    function download() {
       location.href = epubFile.value
     }
 
-    function goToExcerpt (i) {
+    function goToExcerpt(i) {
       ePubJs.rendition.display(i.href)
     }
 
-    function hideMenu () {
+    function hideMenu() {
       showMenu.value = false
-      $q.notify({ type: 'info', multiLine: true, message: t('swipe_up_for_menu') })
+      $q.notify({
+        type: 'info',
+        multiLine: true,
+        message: t('swipe_up_for_menu')
+      })
     }
 
-    function loadEpub () {
+    function loadEpub() {
       if (!epubFile.value) {
         $q.notify({
           type: 'negative',
@@ -178,14 +187,22 @@ export default defineComponent({
       ePubJs.book.ready.then(() => {
         loading.value = false
         if (!$q.platform.is.mobile) {
-          $q.notify({ type: 'info', multiLine: true, message: t('click_swipe_instruction') })
+          $q.notify({
+            type: 'info',
+            multiLine: true,
+            message: t('click_swipe_instruction')
+          })
         } else {
-          $q.notify({ type: 'info', multiLine: true, message: t('swipe_instruction') })
+          $q.notify({
+            type: 'info',
+            multiLine: true,
+            message: t('swipe_instruction')
+          })
         }
       })
     }
 
-    function moveFab (ev) {
+    function moveFab(ev) {
       draggingFab.value = ev.isFirst !== true && ev.isFinal !== true
       fabPos.value = [
         fabPos.value[0] - ev.delta.x,
@@ -193,17 +210,22 @@ export default defineComponent({
       ]
     }
 
-    function toggle () {
-      $q.fullscreen.toggle()
+    function toggle() {
+      $q.fullscreen
+        .toggle()
         .then(() => {
-          $q.notify({ type: 'info', multiLine: true, message: t('swipe_up_exit') })
+          $q.notify({
+            type: 'info',
+            multiLine: true,
+            message: t('swipe_up_exit')
+          })
         })
         .catch((err) => {
           console.error(err)
         })
     }
 
-    function touchMoveToPage ({ ...info }) {
+    function touchMoveToPage({ ...info }) {
       if (info.direction === 'left') {
         ePubJs.rendition.next()
       } else if (info.direction === 'right') {

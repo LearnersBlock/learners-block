@@ -1,9 +1,7 @@
 <template>
   <q-page>
     <div class="flex flex-col items-center">
-      <div
-        class="q-gutter-y-md items-center window-width"
-      >
+      <div class="q-gutter-y-md items-center window-width">
         <q-tabs
           v-model="tab"
           class="bg-primary text-gray-900"
@@ -13,40 +11,18 @@
           outside-arrows
           mobile-arrows
         >
-          <q-tab
-            name="home"
-            icon="home"
-            @click="$router.push('/')"
-          />
-          <q-tab
-            name="general"
-            icon="build"
-            :label="$t('general')"
-          />
-          <q-tab
-            name="appStore"
-            icon="storefront"
-            :label="$t('app_store')"
-          />
-          <q-tab
-            name="advanced"
-            icon="settings"
-            :label="$t('advanced')"
-          />
+          <q-tab name="home" icon="home" @click="$router.push('/')" />
+          <q-tab name="general" icon="build" :label="$t('general')" />
+          <q-tab name="appStore" icon="storefront" :label="$t('app_store')" />
+          <q-tab name="advanced" icon="settings" :label="$t('advanced')" />
         </q-tabs>
       </div>
 
       <!-- Tab 1 -->
-      <div
-        v-if="tab == 'general'"
-        class="q-pa-sm"
-        style="min-width: 70vw"
-      >
+      <div v-if="tab == 'general'" class="q-pa-sm" style="min-width: 70vw">
         <!-- Component toggles -->
         <q-list padding>
-          <q-item-label
-            header
-          >
+          <q-item-label header>
             <q-item-section class="text-h6">
               {{ $t('components') }}
             </q-item-section>
@@ -57,16 +33,10 @@
           <!-- File Manager -->
           <q-item
             clickable
-            :to="{ name: 'filemanager', params: { data: 'fileshare'} }"
+            :to="{ name: 'filemanager', params: { data: 'fileshare' } }"
           >
-            <q-item-section
-              top
-              avatar
-            >
-              <q-avatar
-                icon="folder"
-                text-color="orange"
-              />
+            <q-item-section top avatar>
+              <q-avatar icon="folder" text-color="orange" />
             </q-item-section>
             <q-item-section>
               <q-item-label class="text-subtitle1">
@@ -108,14 +78,8 @@
             >
               {{ $t('need_internet_connection') }}
             </q-tooltip>
-            <q-item-section
-              top
-              avatar
-            >
-              <q-avatar
-                icon="import_contacts"
-                text-color="green"
-              />
+            <q-item-section top avatar>
+              <q-avatar icon="import_contacts" text-color="green" />
             </q-item-section>
             <q-item-section>
               <q-item-label class="text-subtitle1">
@@ -133,7 +97,7 @@
                 flat
                 size="md"
                 color="primary"
-                :to="{ name: 'filemanager', params: { data: 'library'} }"
+                :to="{ name: 'filemanager', params: { data: 'library' } }"
                 @click.stop
               >
                 <q-tooltip
@@ -164,16 +128,10 @@
           <!-- Website -->
           <q-item
             clickable
-            :to="{ name: 'filemanager', params: { data: 'website'} }"
+            :to="{ name: 'filemanager', params: { data: 'website' } }"
           >
-            <q-item-section
-              top
-              avatar
-            >
-              <q-avatar
-                icon="language"
-                text-color="yellow"
-              />
+            <q-item-section top avatar>
+              <q-avatar icon="language" text-color="yellow" />
             </q-item-section>
             <q-item-section>
               <q-item-label class="text-subtitle1">
@@ -202,10 +160,7 @@
 
           <q-separator spaced />
           <!-- Security section -->
-          <q-item-label
-            header
-            class="text-h6"
-          >
+          <q-item-label header class="text-h6">
             {{ $t('security') }}
           </q-item-label>
           <q-card flat>
@@ -215,20 +170,13 @@
               :disable="settingPassword || loadingSecurityToggles"
               @click="setLoginPassword()"
             >
-              <q-item-section
-                top
-                avatar
-              >
+              <q-item-section top avatar>
                 <q-avatar
                   v-if="loginPasswordStatus"
                   icon="lock"
                   text-color="green"
                 />
-                <q-avatar
-                  v-else
-                  icon="lock_open"
-                  text-color="accent"
-                />
+                <q-avatar v-else icon="lock_open" text-color="accent" />
               </q-item-section>
               <q-item-section>
                 <q-item-label class="text-subtitle1">
@@ -254,20 +202,13 @@
               :disable="settingPassword || loadingSecurityToggles"
               @click="setWifiPassword()"
             >
-              <q-item-section
-                top
-                avatar
-              >
+              <q-item-section top avatar>
                 <q-avatar
                   v-if="wifiPasswordStatus"
                   icon="lock"
                   text-color="green"
                 />
-                <q-avatar
-                  v-else
-                  icon="lock_open"
-                  text-color="accent"
-                />
+                <q-avatar v-else icon="lock_open" text-color="accent" />
               </q-item-section>
               <q-item-section>
                 <q-item-label class="text-subtitle1">
@@ -287,18 +228,15 @@
                 />
               </q-item-section>
             </q-item>
-            <q-inner-loading :showing="settingPassword || loadingSecurityToggles">
-              <q-spinner-gears
-                size="50px"
-                color="primary"
-              />
+            <q-inner-loading
+              :showing="settingPassword || loadingSecurityToggles"
+            >
+              <q-spinner-gears size="50px" color="primary" />
             </q-inner-loading>
           </q-card>
           <q-separator spaced />
           <!-- Networking section -->
-          <q-item-label
-            header
-          >
+          <q-item-label header>
             <q-item-section class="text-h6">
               {{ $t('networking') }}
             </q-item-section>
@@ -316,7 +254,7 @@
             no-caps
             color="primary"
             :disable="loadingConnectionStatus"
-            :label="!wifi ? $t('connect'): $t('disconnect')"
+            :label="!wifi ? $t('connect') : $t('disconnect')"
             @click="wifiWarn"
           />
         </q-list>
@@ -325,11 +263,7 @@
 
       <!-- Tab 2 -->
       <!-- Application Store -->
-      <div
-        v-if="tab == 'appStore'"
-        class="q-pa-sm"
-        style="min-width: 70vw"
-      >
+      <div v-if="tab == 'appStore'" class="q-pa-sm" style="min-width: 70vw">
         <q-table
           v-if="rows"
           flat
@@ -340,24 +274,14 @@
           :grid="$q.screen.xs"
           :no-data-label="$t('no_apps_to_display')"
           :no-results-label="$t('no_apps_to_display')"
-          :table-class="appTableVisible ? 'text-black': 'text-white'"
+          :table-class="appTableVisible ? 'text-black' : 'text-white'"
           :columns="columns"
           row-key="application"
         >
           <template #loading>
-            <q-inner-loading
-              showing
-              flat
-              color="primary"
-            >
-              <div
-                class="flex justify-center"
-                style="background-color: white"
-              >
-                <q-spinner-gears
-                  size="50px"
-                  color="primary"
-                />
+            <q-inner-loading showing flat color="primary">
+              <div class="flex justify-center" style="background-color: white">
+                <q-spinner-gears size="50px" color="primary" />
                 <div class="mt-2 text-center text-gray-800">
                   {{ $t('this_may_take_time') }}
                 </div>
@@ -365,10 +289,7 @@
             </q-inner-loading>
           </template>
           <template #top-left>
-            <q-item-label
-              header
-              class="text-h6"
-            >
+            <q-item-label header class="text-h6">
               {{ $t('available_applications') }}
             </q-item-label>
           </template>
@@ -378,26 +299,26 @@
               size="xs"
               icon="refresh"
               :disable="loadingConnectionStatus"
-              @click="internet ? fetchApps(true): $q.notify({ type: 'negative', message: $t('need_internet_connection') })"
+              @click="
+                internet
+                  ? fetchApps(true)
+                  : $q.notify({
+                      type: 'negative',
+                      message: $t('need_internet_connection')
+                    })
+              "
             />
           </template>
-          <template
-            v-if="appTableVisible"
-            #body-cell-author_site="props"
-          >
+          <template v-if="appTableVisible" #body-cell-author_site="props">
             <q-td :props="props">
               <div>
-                <a
-                  :href="'http://'+ props.row.author_site"
-                  target="_blank"
-                >{{ props.row.author_site }}</a>
+                <a :href="'http://' + props.row.author_site" target="_blank">{{
+                  props.row.author_site
+                }}</a>
               </div>
             </q-td>
           </template>
-          <template
-            v-if="appTableVisible"
-            #body-cell-status="props"
-          >
+          <template v-if="appTableVisible" #body-cell-status="props">
             <q-td :props="props">
               <div>
                 <q-btn
@@ -420,7 +341,7 @@
           <template #item="props">
             <div
               class="pl-3 pr-3 q-pa-xs col-xs-12 col-sm-6 col-md-4"
-              :class="appTableVisible ? 'text-black': 'text-white'"
+              :class="appTableVisible ? 'text-black' : 'text-white'"
             >
               <q-card>
                 <q-card-section class="text-center">
@@ -429,25 +350,19 @@
                     :src="props.row.logo"
                     style="max-width: 56px"
                   />
-                  <q-icon
-                    v-else
-                    name="apps"
-                    size="56px"
-                    color="primary"
-                  />
-                  <br>
+                  <q-icon v-else name="apps" size="56px" color="primary" />
+                  <br />
                   <strong>{{ props.row.long_name }}</strong>
                 </q-card-section>
                 <q-separator />
-                <q-list
-                  dense
-                  class="text-center"
-                >
+                <q-list dense class="text-center">
                   <div>
-                    {{ $t('author_colon') }} <a
-                      :href="'http://'+ props.row.author_site"
+                    {{ $t('author_colon') }}
+                    <a
+                      :href="'http://' + props.row.author_site"
                       target="_blank"
-                    >{{ props.row.author_site }}</a>
+                      >{{ props.row.author_site }}</a
+                    >
                   </div>
                   <div class="text-gray-600">
                     {{ props.row.info }}
@@ -475,16 +390,10 @@
             </div>
           </template>
         </q-table>
-        <q-card
-          v-else
-          flat
-        >
+        <q-card v-else flat>
           <q-card-section>
             <div class="column flex text-center items-center text-gray-800">
-              <q-spinner-gears
-                size="50px"
-                color="primary"
-              />
+              <q-spinner-gears size="50px" color="primary" />
               {{ $t('this_may_take_time') }}
             </div>
           </q-card-section>
@@ -493,17 +402,9 @@
 
       <!-- Tab 3 -->
       <!-- Advanced Features -->
-      <div
-        v-if="tab == 'advanced'"
-        class="mt-1 pd-2"
-        style="min-width: 70vw"
-      >
-        <q-list
-          dense
-        >
-          <q-item-label
-            header
-          >
+      <div v-if="tab == 'advanced'" class="mt-1 pd-2" style="min-width: 70vw">
+        <q-list dense>
+          <q-item-label header>
             <q-item-section class="text-h6">
               {{ $t('choose_start_page') }}
             </q-item-section>
@@ -528,9 +429,7 @@
           <!-- Custom start page -->
           <q-slide-transition :duration="2000">
             <div v-show="customStartPageInput">
-              <q-item
-                class="justify-center"
-              >
+              <q-item class="justify-center">
                 <q-input
                   ref="startPathValid"
                   v-model="customStartPath"
@@ -540,12 +439,14 @@
                   hide-bottom-space
                   :label="$t('choose_new_path')"
                   :placeholder="$t('your_new_path')"
-                  :rules="[(value) =>
-                    !value.substr(0,1).includes('/') &&
-                    !value.substr(-1).includes('/') &&
-                    !value.includes(' ') &&
-                    !value.includes('\\')
-                    || $t('invalid_path_input')]"
+                  :rules="[
+                    (value) =>
+                      (!value.substr(0, 1).includes('/') &&
+                        !value.substr(-1).includes('/') &&
+                        !value.includes(' ') &&
+                        !value.includes('\\')) ||
+                      $t('invalid_path_input')
+                  ]"
                 >
                   <template #after>
                     <q-btn
@@ -564,14 +465,10 @@
               </q-item>
             </div>
           </q-slide-transition>
-          <q-separator
-            class="mr-3 ml-3 mt-4"
-          />
+          <q-separator class="mr-3 ml-3 mt-4" />
           <!-- Choose App as default path -->
-          <q-dialog
-            v-model="appStorePageInput"
-          >
-            <q-card style="width: 700px; max-width: 80vw;">
+          <q-dialog v-model="appStorePageInput">
+            <q-card style="width: 700px; max-width: 80vw">
               <q-card-section class="row items-center">
                 <q-table
                   v-if="rows"
@@ -580,11 +477,11 @@
                   dense
                   wrap-cells
                   separator="cell"
-                  style="width: 700px; max-width: 80vw;"
+                  style="width: 700px; max-width: 80vw"
                   :grid="$q.screen.xs"
                   :rows-per-page-options="[0]"
                   :rows="rows"
-                  :table-class="appTableVisible ? 'text-black': 'text-white'"
+                  :table-class="appTableVisible ? 'text-black' : 'text-white'"
                   :columns="columns"
                   :visible-columns="visibleColumns"
                   filter="installed"
@@ -592,10 +489,7 @@
                   :no-data-label="$t('no_apps_installed')"
                   :no-results-label="$t('no_apps_installed')"
                 >
-                  <template
-                    v-if="appTableVisible"
-                    #body-cell-status="props"
-                  >
+                  <template v-if="appTableVisible" #body-cell-status="props">
                     <q-td :props="props">
                       <div>
                         <q-btn
@@ -617,10 +511,7 @@
                           {{ props.row.long_name }}
                         </q-card-section>
                         <q-separator />
-                        <q-list
-                          dense
-                          class="text-center"
-                        >
+                        <q-list dense class="text-center">
                           <q-btn
                             v-close-popup
                             class="mb-2 mt-2"
@@ -649,9 +540,7 @@
             </q-card>
           </q-dialog>
           <!-- Set Hostname/URL/WiFi SSID -->
-          <q-item-label
-            header
-          >
+          <q-item-label header>
             <q-item-section class="text-h6">
               {{ $t('set_hostname_desc') }}
             </q-item-section>
@@ -669,10 +558,10 @@
               hide-bottom-space
               :label="$t('enter_name')"
               :placeholder="$t('your_new_name')"
-              :rules="[(val) =>
-                val.length <= 32
-                && regexp.test(val)
-                || $t('invalid_input')]"
+              :rules="[
+                (val) =>
+                  (val.length <= 32 && regexp.test(val)) || $t('invalid_input')
+              ]"
             >
               <template #after>
                 <q-btn
@@ -688,32 +577,31 @@
                   @click="hostnameWarn"
                 />
               </template>
-              <template
-                v-if="newHostname"
-                #hint
-              >
+              <template v-if="newHostname" #hint>
                 <div class="text-caption text-gray-800">
-                  <div>{{ $t('your_new_url') }} <span class="text-primary">'http://{{ newHostname.replaceAll(" ", "").toLowerCase() }}.local'</span></div>
-                  <div
-                    v-if="newHostname=='lb'"
-                  >
-                    {{ $t('your_new_ssid') }} <span class="text-primary">'Learner's Block'</span>
+                  <div>
+                    {{ $t('your_new_url') }}
+                    <span class="text-primary"
+                      >'http://{{
+                        newHostname.replaceAll(' ', '').toLowerCase()
+                      }}.local'</span
+                    >
+                  </div>
+                  <div v-if="newHostname == 'lb'">
+                    {{ $t('your_new_ssid') }}
+                    <span class="text-primary">'Learner's Block'</span>
                   </div>
                   <div v-else>
-                    {{ $t('your_new_ssid') }} <span class="text-primary">'{{ newHostname }}'</span>
+                    {{ $t('your_new_ssid') }}
+                    <span class="text-primary">'{{ newHostname }}'</span>
                   </div>
                 </div>
               </template>
             </q-input>
           </q-item>
-          <q-separator
-            class="mr-3 ml-3"
-          />
+          <q-separator class="mr-3 ml-3" />
           <!-- Portainer -->
-          <q-item-label
-            header
-            class="text-h6"
-          >
+          <q-item-label header class="text-h6">
             {{ $t('portainer') }}
           </q-item-label>
           <q-item class="mb-3">
@@ -726,10 +614,7 @@
             >
               {{ $t('need_internet_connection') }}
             </q-tooltip>
-            <q-item-section
-              top
-              avatar
-            >
+            <q-item-section top avatar>
               <q-avatar
                 icon="widgets"
                 :text-color="portainer ? 'primary' : 'accent'"
@@ -742,14 +627,11 @@
               <q-item-label caption>
                 {{ $t('portainer_desc') }}
               </q-item-label>
-              <q-item-label
-                v-if="portainer && !portainerLoading"
-                caption
-              >
-                {{ $t('portainer_starting_at') }} <a
-                  :href="'http://' + windowHostname + ':9000'"
-                  target="_blank"
-                >http://{{ windowHostname }}:9000</a>
+              <q-item-label v-if="portainer && !portainerLoading" caption>
+                {{ $t('portainer_starting_at') }}
+                <a :href="'http://' + windowHostname + ':9000'" target="_blank"
+                  >http://{{ windowHostname }}:9000</a
+                >
               </q-item-label>
               <q-item-label
                 v-if="portainer && portainerLoading && !portainerImageExists"
@@ -766,17 +648,10 @@
                 icon="widgets"
                 @update:model-value="updatePortainer"
               />
-              <q-spinner
-                v-if="portainerLoading"
-                color="primary"
-                size="2em"
-              />
+              <q-spinner v-if="portainerLoading" color="primary" size="2em" />
             </q-item-section>
           </q-item>
-          <q-separator
-            class="mr-3 ml-3"
-            spaced
-          />
+          <q-separator class="mr-3 ml-3" spaced />
           <!-- System Maintenance -->
           <q-expansion-item>
             <template #header>
@@ -785,24 +660,15 @@
               </q-item-section>
               <q-item-section side>
                 <div class="row items-center">
-                  <q-icon
-                    color="accent"
-                    name="warning"
-                  />
+                  <q-icon color="accent" name="warning" />
                 </div>
               </q-item-section>
             </template>
             <q-card>
               <!-- Prune System Files -->
               <q-item>
-                <q-item-section
-                  top
-                  avatar
-                >
-                  <q-avatar
-                    icon="delete"
-                    text-color="red"
-                  />
+                <q-item-section top avatar>
+                  <q-avatar icon="delete" text-color="red" />
                 </q-item-section>
                 <q-item-section bottom>
                   <q-item-label>
@@ -823,14 +689,8 @@
               </q-item>
               <!-- Reset Database -->
               <q-item>
-                <q-item-section
-                  top
-                  avatar
-                >
-                  <q-avatar
-                    icon="restart_alt"
-                    text-color="red"
-                  />
+                <q-item-section top avatar>
+                  <q-avatar icon="restart_alt" text-color="red" />
                 </q-item-section>
                 <q-item-section bottom>
                   <q-item-label>
@@ -862,19 +722,12 @@
           v-if="!sysInfoLoading"
           class="flex flex-col text-center text-gray pb-5 items-center text-caption text-gray-600"
         >
-          <div>
-            {{ $t('total_storage') }} {{ sysInfo.storage.total }}
-          </div>
+          <div>{{ $t('total_storage') }} {{ sysInfo.storage.total }}</div>
           <div>
             {{ $t('available_storage') }} {{ sysInfo.storage.available }}
           </div>
-          <div>
-            {{ $t('version') }} {{ sysInfo.versions.lb }}
-          </div>
-          <div
-            v-if="!loadingConnectionStatus"
-            class="row"
-          >
+          <div>{{ $t('version') }} {{ sysInfo.versions.lb }}</div>
+          <div v-if="!loadingConnectionStatus" class="row">
             <q-icon
               v-if="devMode"
               class="mr-1"
@@ -902,13 +755,8 @@
             />
           </div>
         </div>
-        <div
-          v-else
-          class="flex flex-col text-center text-gray pb-5"
-        >
-          <div class="text-gray-600">
-            Loading...
-          </div>
+        <div v-else class="flex flex-col text-center text-gray pb-5">
+          <div class="text-gray-600">Loading...</div>
         </div>
       </div>
     </div>
@@ -926,7 +774,7 @@ import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'IntSettings',
-  setup () {
+  setup() {
     // Import required features
     const $q = useQuasar()
     const $store = useStore()
@@ -965,7 +813,10 @@ export default defineComponent({
     const selectedStartPage = ref<any>('')
     const startPathValid = ref()
     const sysInfoLoading = ref<boolean>(true)
-    const sysInfo = ref<{storage: {total: string, available: string}, versions:{lb: string}}>({ storage: { total: '', available: '' }, versions: { lb: '' } })
+    const sysInfo = ref<{
+      storage: { total: string; available: string }
+      versions: { lb: string }
+    }>({ storage: { total: '', available: '' }, versions: { lb: '' } })
     const systemMaintenance = ref<boolean>(false)
     const website = ref<boolean>(false)
     const websiteLoading = ref<boolean>(true)
@@ -986,13 +837,24 @@ export default defineComponent({
         required: true,
         label: t('application'),
         align: 'left',
-        field: row => row.long_name,
-        format: val => `${val}`,
+        field: (row) => row.long_name,
+        format: (val) => `${val}`,
         sortable: true
       },
-      { name: 'author_site', label: t('author'), field: 'author_site', align: 'left', sortable: true },
+      {
+        name: 'author_site',
+        label: t('author'),
+        field: 'author_site',
+        align: 'left',
+        sortable: true
+      },
       { name: 'info', label: t('info'), field: 'info', align: 'left' },
-      { name: 'version', label: t('version'), field: 'version_name', align: 'left' },
+      {
+        name: 'version',
+        label: t('version'),
+        field: 'version_name',
+        align: 'left'
+      },
       { name: 'ports', field: 'ports' },
       { name: 'status', field: 'status', sortable: true, align: 'center' }
     ]) as any
@@ -1022,7 +884,9 @@ export default defineComponent({
       },
       {
         label: t('app_store_app'),
-        string: rows.value ? rows.value.find(x => x.name === selectedStartPage.value) : ''
+        string: rows.value
+          ? rows.value.find((x) => x.name === selectedStartPage.value)
+          : ''
       }
     ])
 
@@ -1031,79 +895,91 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      Axios.get(`${api.value}/v1/wifi/connection_status`).then(async (response) => {
-        // Set connection status
-        if (response.data.wifi) {
-          wifi.value = true
-        }
+      Axios.get(`${api.value}/v1/wifi/connection_status`)
+        .then(async (response) => {
+          // Set connection status
+          if (response.data.wifi) {
+            wifi.value = true
+          }
 
-        // Set internet connection status
-        if (response.data.internet) {
-          internet.value = true
-        }
+          // Set internet connection status
+          if (response.data.internet) {
+            internet.value = true
+          }
 
-        // Make internet status dependent features visible
-        loadingConnectionStatus.value = false
+          // Make internet status dependent features visible
+          loadingConnectionStatus.value = false
 
-        // Check Portainer status
-        getPortainerStatus()
+          // Check Portainer status
+          getPortainerStatus()
 
-        // Fetch available apps from database.
-        await fetchApps(internet.value)
+          // Fetch available apps from database.
+          await fetchApps(internet.value)
 
-        // Set default start page. Dependent on fetching app store databse.
-        getDefaultStartpage()
-      }).catch(function () {
-        permNotify('negative', t('error'))
-        console.log('Error populating connnection settings')
-      })
+          // Set default start page. Dependent on fetching app store databse.
+          getDefaultStartpage()
+        })
+        .catch(function () {
+          permNotify('negative', t('error'))
+          console.log('Error populating connnection settings')
+        })
 
-      Axios.get(`${api.value}/v1/settings/get_ui`).then((response) => {
-        // Set settings toggle status
-        files.value = response.data.files
-        website.value = response.data.website
-        library.value = response.data.library
-        devMode.value = response.data.dev_mode
+      Axios.get(`${api.value}/v1/settings/get_ui`)
+        .then((response) => {
+          // Set settings toggle status
+          files.value = response.data.files
+          website.value = response.data.website
+          library.value = response.data.library
+          devMode.value = response.data.dev_mode
 
-        // Stop loading toggles
-        filesLoading.value = false
-        libraryLoading.value = false
-        websiteLoading.value = false
-      }).catch(function () {
-        permNotify('negative', t('error'))
-        console.log('Error populating settings UI')
-      })
+          // Stop loading toggles
+          filesLoading.value = false
+          libraryLoading.value = false
+          websiteLoading.value = false
+        })
+        .catch(function () {
+          permNotify('negative', t('error'))
+          console.log('Error populating settings UI')
+        })
 
       // Group dependent calls together for password states
-      const fetchedUserPasswordState = Axios.get(`${api.value}/v1/auth/verify_user_password_state`)
-      const fetchedWifiPasswordState = Axios.get(`${api.value}/v1/auth/wifi_password_state`)
+      const fetchedUserPasswordState = Axios.get(
+        `${api.value}/v1/auth/verify_user_password_state`
+      )
+      const fetchedWifiPasswordState = Axios.get(
+        `${api.value}/v1/auth/wifi_password_state`
+      )
 
-      Promise.all([fetchedUserPasswordState, fetchedWifiPasswordState]).then(function ([res1, res2]) {
-        // Check if disable password button should be visible
-        if (res1.data.default_login_password_set) {
-          loginPasswordStatus.value = true
-          loginPasswordToggle.value = true
-        }
+      Promise.all([fetchedUserPasswordState, fetchedWifiPasswordState])
+        .then(function ([res1, res2]) {
+          // Check if disable password button should be visible
+          if (res1.data.default_login_password_set) {
+            loginPasswordStatus.value = true
+            loginPasswordToggle.value = true
+          }
 
-        // Check if disable wifi password button should be visible
-        if (res2.data.wifi_password_set) {
-          wifiPasswordStatus.value = true
-          wifiPasswordToggle.value = true
-        }
-        loadingSecurityToggles.value = false
-      }).catch(function () {
-        permNotify('negative', t('error'))
-        console.log('Error verifying user password')
-      })
+          // Check if disable wifi password button should be visible
+          if (res2.data.wifi_password_set) {
+            wifiPasswordStatus.value = true
+            wifiPasswordToggle.value = true
+          }
+          loadingSecurityToggles.value = false
+        })
+        .catch(function () {
+          permNotify('negative', t('error'))
+          console.log('Error verifying user password')
+        })
 
       // Fetch System Info status
-      Axios.get(`${api.value}/v1/system/info`).then((response) => {
-        sysInfo.value = response.data
-        sysInfoLoading.value = false
-      }).catch(function () {
-        permNotify('negative', t('error'))
-        console.log('Error fetching system info')
-      })
+      Axios.get(`${api.value}/v1/system/info`)
+        .then((response) => {
+          sysInfo.value = response.data
+          sysInfoLoading.value = false
+        })
+        .catch(function () {
+          permNotify('negative', t('error'))
+          console.log('Error fetching system info')
+        })
     })
 
     // Show various dialogs or execute functions depending on user selection
@@ -1120,8 +996,8 @@ export default defineComponent({
     }
 
     // Function for calling delays throughout
-    function delay (ms: number) {
-      return new Promise(resolve => setTimeout(resolve, ms))
+    function delay(ms: number) {
+      return new Promise((resolve) => setTimeout(resolve, ms))
     }
 
     // Forget current Wi-Fi connection
@@ -1130,36 +1006,46 @@ export default defineComponent({
     }
 
     // Fetch a list of apps as stored in the local database. Does not query the online database
-    async function fetchApps (refresh) {
+    async function fetchApps(refresh) {
       appTableVisible.value = false
       if (refresh) {
         await Axios.get(`${api.value}/v1/appstore/get_apps`)
       }
-      await Axios.get(`${api.value}/v1/appstore/status`).then((availableApps) => {
-        rows.value = availableApps.data
-      })
+      await Axios.get(`${api.value}/v1/appstore/status`).then(
+        (availableApps) => {
+          rows.value = availableApps.data
+        }
+      )
       appTableVisible.value = true
     }
 
-    function getDefaultStartpage () {
-      void Axios.get(`${api.value}/v1/settings/default_startpage`).then((response) => {
-        const internalPage = startPageOptions.value.find((x) => x.string === response.data.start_page)?.label
-        if (internalPage) {
-          selectedStartPage.value = internalPage
-        } else {
-          // Fetch apps now as needed for processing default start page
-          const appEntry = rows.value.find(x => x.name === response.data?.start_page)
-          if (appEntry) {
-            selectedStartPage.value = appEntry.long_name
+    function getDefaultStartpage() {
+      void Axios.get(`${api.value}/v1/settings/default_startpage`).then(
+        (response) => {
+          const internalPage = startPageOptions.value.find(
+            (x) => x.string === response.data.start_page
+          )?.label
+          if (internalPage) {
+            selectedStartPage.value = internalPage
           } else {
-            selectedStartPage.value = response.data.start_page
+            // Fetch apps now as needed for processing default start page
+            const appEntry = rows.value.find(
+              (x) => x.name === response.data?.start_page
+            )
+            if (appEntry) {
+              selectedStartPage.value = appEntry.long_name
+            } else {
+              selectedStartPage.value = response.data.start_page
+            }
           }
         }
-      })
+      )
     }
 
-    function getPortainerStatus () {
-      void Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'status' }).then((response) => {
+    function getPortainerStatus() {
+      void Axios.post(`${api.value}/v1/system/portainer`, {
+        cmd: 'status'
+      }).then((response) => {
         // Set Portainer status. Dependent on having fetched internet connection status.
         if (response.data.installed) {
           portainer.value = true
@@ -1179,7 +1065,7 @@ export default defineComponent({
     }
 
     // Verify that the user wants to change the hostname
-    function hostnameWarn () {
+    function hostnameWarn() {
       if (hostnameValid.value.validate() && newHostname.value !== '') {
         $q.dialog({
           title: t('confirm'),
@@ -1195,7 +1081,7 @@ export default defineComponent({
     }
 
     // Notify that the hostname has been changed
-    function permNotify (type, message) {
+    function permNotify(type, message) {
       $q.notify({
         type: type,
         message: message,
@@ -1204,14 +1090,16 @@ export default defineComponent({
           {
             label: t('close'),
             color: 'white',
-            handler: () => { /* ... */ }
+            handler: () => {
+              /* ... */
+            }
           }
         ]
       })
     }
 
     // Remove unused system files such as Docker images
-    function pruneSystemFiles () {
+    function pruneSystemFiles() {
       $q.dialog({
         title: t('confirm'),
         message: t('are_you_sure'),
@@ -1230,12 +1118,12 @@ export default defineComponent({
     }
 
     // A simple redirect to another page
-    function redirect (path) {
+    function redirect(path) {
       location.href = path
     }
 
     // Reset the SQLite database
-    function resetDatabase () {
+    function resetDatabase() {
       $q.dialog({
         title: t('confirm'),
         message: t('are_you_sure'),
@@ -1245,7 +1133,9 @@ export default defineComponent({
       }).onOk(() => {
         systemMaintenance.value = true
         $q.loading.show()
-        AxiosOverride.get(`${api.value}/v1/system/reset_database`, { timeout: 1000 }).catch(async function () {
+        AxiosOverride.get(`${api.value}/v1/system/reset_database`, {
+          timeout: 1000
+        }).catch(async function () {
           await delay(10000)
           redirect('/')
         })
@@ -1253,26 +1143,30 @@ export default defineComponent({
     }
 
     // Change the password used to access the Control Panel (also known as the settings panel)
-    function setLoginPassword () {
+    function setLoginPassword() {
       if (loginPasswordStatus.value) {
         $q.dialog({
           title: t('disable_password'),
           message: t('are_you_sure'),
           cancel: true,
           persistent: true
-        }).onOk(() => {
-          settingPassword.value = true
-          Axios.post(`${api.value}/v1/auth/set_password`, { password: ' ' }).then(() => {
-            $q.notify({ type: 'positive', message: t('login_disabled') })
-            loginPasswordStatus.value = false
-            loginPasswordToggle.value = false
-            settingPassword.value = false
-          }).catch(function () {
-            settingPassword.value = false
-          })
-        }).onCancel(() => {
-          loginPasswordToggle.value = true
         })
+          .onOk(() => {
+            settingPassword.value = true
+            Axios.post(`${api.value}/v1/auth/set_password`, { password: ' ' })
+              .then(() => {
+                $q.notify({ type: 'positive', message: t('login_disabled') })
+                loginPasswordStatus.value = false
+                loginPasswordToggle.value = false
+                settingPassword.value = false
+              })
+              .catch(function () {
+                settingPassword.value = false
+              })
+          })
+          .onCancel(() => {
+            loginPasswordToggle.value = true
+          })
       } else {
         $q.dialog({
           title: t('set_password'),
@@ -1282,45 +1176,61 @@ export default defineComponent({
             model: '',
             type: 'password'
           }
-        }).onOk((data) => {
-          settingPassword.value = true
-          Axios.post(`${api.value}/v1/auth/set_password`, {
-            password: data
-          }).then(() => {
-            $q.notify({ type: 'positive', message: t('password_set_success') })
-            loginPasswordStatus.value = true
-            loginPasswordToggle.value = true
-            settingPassword.value = false
-          }).catch(function () {
-            settingPassword.value = false
-          })
-        }).onCancel(() => {
-          loginPasswordToggle.value = false
         })
+          .onOk((data) => {
+            settingPassword.value = true
+            Axios.post(`${api.value}/v1/auth/set_password`, {
+              password: data
+            })
+              .then(() => {
+                $q.notify({
+                  type: 'positive',
+                  message: t('password_set_success')
+                })
+                loginPasswordStatus.value = true
+                loginPasswordToggle.value = true
+                settingPassword.value = false
+              })
+              .catch(function () {
+                settingPassword.value = false
+              })
+          })
+          .onCancel(() => {
+            loginPasswordToggle.value = false
+          })
       }
     }
 
     // Set a password for accessing the Wi-Fi
-    function setWifiPassword () {
+    function setWifiPassword() {
       if (wifiPasswordStatus.value) {
         $q.dialog({
           title: t('disable_password'),
           message: t('are_you_sure'),
           cancel: true,
           persistent: true
-        }).onOk(() => {
-          settingPassword.value = true
-          Axios.post(`${api.value}/v1/wifi/set_password`, { wifi_password: '' }).then(() => {
-            $q.notify({ type: 'positive', message: t('wifi_login_disabled') })
-            wifiPasswordStatus.value = false
-            wifiPasswordToggle.value = false
-            settingPassword.value = false
-          }).catch(function () {
-            settingPassword.value = false
-          })
-        }).onCancel(() => {
-          wifiPasswordToggle.value = true
         })
+          .onOk(() => {
+            settingPassword.value = true
+            Axios.post(`${api.value}/v1/wifi/set_password`, {
+              wifi_password: ''
+            })
+              .then(() => {
+                $q.notify({
+                  type: 'positive',
+                  message: t('wifi_login_disabled')
+                })
+                wifiPasswordStatus.value = false
+                wifiPasswordToggle.value = false
+                settingPassword.value = false
+              })
+              .catch(function () {
+                settingPassword.value = false
+              })
+          })
+          .onCancel(() => {
+            wifiPasswordToggle.value = true
+          })
       } else {
         $q.dialog({
           title: t('set_password'),
@@ -1329,39 +1239,51 @@ export default defineComponent({
           persistent: true,
           prompt: {
             model: '',
-            isValid: val => val.length > 7,
+            isValid: (val) => val.length > 7,
             type: 'password'
           }
-        }).onOk((data) => {
-          settingPassword.value = true
-          Axios.post(`${api.value}/v1/wifi/set_password`, {
-            wifi_password: data
-          }).then(() => {
-            $q.notify({ type: 'positive', message: t('wifi_password_set_success') })
-            wifiPasswordStatus.value = true
-            wifiPasswordToggle.value = true
-            settingPassword.value = false
-          }).catch(function () {
-            settingPassword.value = false
-          })
-        }).onCancel(() => {
-          wifiPasswordToggle.value = false
         })
+          .onOk((data) => {
+            settingPassword.value = true
+            Axios.post(`${api.value}/v1/wifi/set_password`, {
+              wifi_password: data
+            })
+              .then(() => {
+                $q.notify({
+                  type: 'positive',
+                  message: t('wifi_password_set_success')
+                })
+                wifiPasswordStatus.value = true
+                wifiPasswordToggle.value = true
+                settingPassword.value = false
+              })
+              .catch(function () {
+                settingPassword.value = false
+              })
+          })
+          .onCancel(() => {
+            wifiPasswordToggle.value = false
+          })
       }
     }
 
     // Commit the passed start page to the database
-    async function storeStartPage (rows) {
+    async function storeStartPage(rows) {
       // If reseting to default, do not prompt user for confirmation
       if (selectedStartPage.value.label === t('lb_welcome_page')) {
         await Axios.post(`${api.value}/v1/settings/set_ui`, {
           start_page: '/'
         })
-        $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${selectedStartPage.value.label}` })
+        $q.notify({
+          type: 'positive',
+          message: `${t('path_changed_to')} ${selectedStartPage.value.label}`
+        })
       } else if (rows || (customStartPath.value && customStartPageInput)) {
         $q.dialog({
           title: t('confirm'),
-          message: `${t('change_path_warning')} http://${windowHostname.value}/settings`,
+          message: `${t('change_path_warning')} http://${
+            windowHostname.value
+          }/settings`,
           cancel: true,
           persistent: true
         }).onOk(() => {
@@ -1370,14 +1292,20 @@ export default defineComponent({
             void Axios.post(`${api.value}/v1/settings/set_ui`, {
               start_page: rows.name
             })
-            $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${rows.long_name}` })
+            $q.notify({
+              type: 'positive',
+              message: `${t('path_changed_to')} ${rows.long_name}`
+            })
             // If a custom path name
           } else if (customStartPath.value && customStartPageInput) {
             if (startPathValid.value.validate()) {
               void Axios.post(`${api.value}/v1/settings/set_ui`, {
                 start_page: customStartPath.value
               })
-              $q.notify({ type: 'positive', message: `${t('path_changed_to')} '${customStartPath.value}'` })
+              $q.notify({
+                type: 'positive',
+                message: `${t('path_changed_to')} '${customStartPath.value}'`
+              })
               customStartPath.value = ''
             } else {
               $q.notify({ type: 'negative', message: t('invalid_path_input') })
@@ -1388,31 +1316,42 @@ export default defineComponent({
         void Axios.post(`${api.value}/v1/settings/set_ui`, {
           start_page: selectedStartPage.value.string
         })
-        $q.notify({ type: 'positive', message: `${t('path_changed_to')} ${selectedStartPage.value.label}` })
+        $q.notify({
+          type: 'positive',
+          message: `${t('path_changed_to')} ${selectedStartPage.value.label}`
+        })
       }
     }
 
     // Toggle through the various states for the passed application (install, installed, update etc.)
-    async function toggleApp (row) {
+    async function toggleApp(row) {
       if (row.status.toLowerCase() === 'install') {
         // If the internet is not available, cannot pull images
         if (!internet.value) {
           // If the image already exists, it can still install
-          const imageExists = await AxiosOverride.post(`${api.value}/v1/docker/image`, {
-            image: row.image
-          }).then(function (res) {
-            if (res.data.image) {
-              return true
-            } else {
-              return false
+          const imageExists = await AxiosOverride.post(
+            `${api.value}/v1/docker/image`,
+            {
+              image: row.image
             }
-          }).catch(function () {
-            return false
-          })
+          )
+            .then(function (res) {
+              if (res.data.image) {
+                return true
+              } else {
+                return false
+              }
+            })
+            .catch(function () {
+              return false
+            })
 
           // If the image doesn't exist, exit the function and notify the user
           if (!imageExists) {
-            $q.notify({ type: 'negative', message: t('need_internet_connection') })
+            $q.notify({
+              type: 'negative',
+              message: t('need_internet_connection')
+            })
             return
           }
         }
@@ -1433,14 +1372,16 @@ export default defineComponent({
             ports: row.ports,
             volumes: row.volumes,
             dependencies: row.dependencies
-          }).then(async function () {
-            permNotify('positive', t('app_installed'))
-            await fetchApps(false)
-            appTableVisible.value = true
-          }).catch(async function () {
-            await fetchApps(false)
-            appTableVisible.value = true
           })
+            .then(async function () {
+              permNotify('positive', t('app_installed'))
+              await fetchApps(false)
+              appTableVisible.value = true
+            })
+            .catch(async function () {
+              await fetchApps(false)
+              appTableVisible.value = true
+            })
         })
       } else if (row.status.toLowerCase() === 'installed') {
         $q.dialog({
@@ -1454,18 +1395,23 @@ export default defineComponent({
           Axios.post(`${api.value}/v1/docker/remove`, {
             name: row.name,
             dependencies: row.dependencies
-          }).then(async function () {
-            $q.notify({ type: 'positive', message: t('success') })
-            await fetchApps(false)
-            appTableVisible.value = true
-          }).catch(async function () {
-            await fetchApps(false)
-            appTableVisible.value = true
           })
+            .then(async function () {
+              $q.notify({ type: 'positive', message: t('success') })
+              await fetchApps(false)
+              appTableVisible.value = true
+            })
+            .catch(async function () {
+              await fetchApps(false)
+              appTableVisible.value = true
+            })
         })
       } else if (row.status.toLowerCase() === 'update_available') {
         if (!internet.value) {
-          $q.notify({ type: 'negative', message: t('need_internet_connection') })
+          $q.notify({
+            type: 'negative',
+            message: t('need_internet_connection')
+          })
           return
         }
         $q.dialog({
@@ -1483,14 +1429,16 @@ export default defineComponent({
             ports: row.ports,
             volumes: row.volumes,
             dependencies: row.dependencies
-          }).then(async function () {
-            permNotify('positive', t('app_installed'))
-            await fetchApps(false)
-            appTableVisible.value = true
-          }).catch(async function () {
-            await fetchApps(false)
-            appTableVisible.value = true
           })
+            .then(async function () {
+              permNotify('positive', t('app_installed'))
+              await fetchApps(false)
+              appTableVisible.value = true
+            })
+            .catch(async function () {
+              await fetchApps(false)
+              appTableVisible.value = true
+            })
         })
       }
     }
@@ -1522,21 +1470,23 @@ export default defineComponent({
           await AxiosOverride.post(`${api.value}/v1/supervisor/host_config`, {
             hostname: newHostname.value,
             timeout: 4000
-          }).then(async function () {
-            await delay(10000)
-            permNotify('positive', t('hostname_changed_notification'))
-          }).catch(async function (error) {
-            // Return positive message if there was no response. A timout
-            // is expected as the device is connecting to a new network.
-            if (!error.response) {
-              // Add delay before returning response to ensure hostname has had time to apply
+          })
+            .then(async function () {
               await delay(10000)
               permNotify('positive', t('hostname_changed_notification'))
-            } else {
-              permNotify('negative', t('error'))
-              console.log(error)
-            }
-          })
+            })
+            .catch(async function (error) {
+              // Return positive message if there was no response. A timout
+              // is expected as the device is connecting to a new network.
+              if (!error.response) {
+                // Add delay before returning response to ensure hostname has had time to apply
+                await delay(10000)
+                permNotify('positive', t('hostname_changed_notification'))
+              } else {
+                permNotify('negative', t('error'))
+                console.log(error)
+              }
+            })
         })
         hostnameChanging.value = false
         $q.loading.hide()
@@ -1556,16 +1506,20 @@ export default defineComponent({
     const updatePortainer = async () => {
       portainerLoading.value = true
       if (portainer.value) {
-        await Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'start' }).then(function () {
-          portainerImageExists.value = true
-        }).catch(function () {
-          // Set the toggle back to its starting position
-          portainer.value = false
-          // Ensure loading indicators are disabled to allow further use of UI
-          portainerLoading.value = false
-        })
+        await Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'start' })
+          .then(function () {
+            portainerImageExists.value = true
+          })
+          .catch(function () {
+            // Set the toggle back to its starting position
+            portainer.value = false
+            // Ensure loading indicators are disabled to allow further use of UI
+            portainerLoading.value = false
+          })
       } else {
-        await Axios.post(`${api.value}/v1/system/portainer`, { cmd: 'remove' }).catch(function () {
+        await Axios.post(`${api.value}/v1/system/portainer`, {
+          cmd: 'remove'
+        }).catch(function () {
           // Set the toggle back to its starting position
           portainer.value = true
           // Ensure loading indicators are disabled to allow further use of UI
@@ -1585,7 +1539,7 @@ export default defineComponent({
     }
 
     // Warn before setting a password for the Wi-Fi hotspot
-    function wifiWarn () {
+    function wifiWarn() {
       if (wifi.value === false) {
         void $router.push('/wifi')
       } else {
@@ -1665,6 +1619,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
