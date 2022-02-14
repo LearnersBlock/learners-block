@@ -9,30 +9,34 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Access point names
-ap_name = 'LBNETWORK'
-hotspot_name = 'HOTSPOT'
+ap_name = "LBNETWORK"
+hotspot_name = "HOTSPOT"
 
 # Default values
 default_ssid = "Learner's Block"
-default_hostname = 'lb'
+default_hostname = "lb"
 
 # If the device is running on Balena set the Docker socket
 if "BALENA_HOST_OS_VERSION" in os.environ:
-    socket_path = '/var/run/balena-engine.sock'
+    socket_path = "/var/run/balena-engine.sock"
 else:
-    socket_path = '/var/run/docker.sock'
+    socket_path = "/var/run/docker.sock"
 
 # Set dev env variable for Flask
-if "FLASK_ENV" in os.environ and \
-        os.environ['FLASK_ENV'].lower() == "development":
+if (
+    "FLASK_ENV" in os.environ
+    and os.environ["FLASK_ENV"].lower() == "development"
+):
     dev_mode = True
 else:
     dev_mode = False
 
 # Set dev env variable for Balena dev fleet
 dev_device = False
-if ("BALENA_APP_NAME" in os.environ and
-   os.environ['BALENA_APP_NAME'].lower() == "lb-dev"):
+if (
+    "BALENA_APP_NAME" in os.environ
+    and os.environ["BALENA_APP_NAME"].lower() == "lb-dev"
+):
     dev_device = True
 
 # Store the chronyd state to avoid polling multiple times
@@ -40,22 +44,22 @@ chronyd_synced = False
 
 # Default access point name. No need to change these under usual operation as
 # they are for use inside the app only. PWC is acronym for 'Py Wi-Fi Connect'.
-ap_name = 'PWC'
+ap_name = "PWC"
 
 # Wi-Fi modes
-type_hotspot = 'HOTSPOT'
-type_none = 'NONE'
-type_wep = 'WEP'
-type_wpa = 'WPA'
-type_wpa2 = 'WPA2'
-type_enterprise = 'ENTERPRISE'
+type_hotspot = "HOTSPOT"
+type_none = "NONE"
+type_wep = "WEP"
+type_wpa = "WPA"
+type_wpa2 = "WPA2"
+type_enterprise = "ENTERPRISE"
 
 
 # Fetch the secret key or generate one if it is absent
 def get_secret_key():
     # Generate secret key
     if not dotenv_values("db/.secret_key"):
-        with open('./db/.secret_key', 'w') as secrets_file:
+        with open("./db/.secret_key", "w") as secrets_file:
             secrets_file.write("SECRET_KEY = " + secrets.token_hex(32))
     key = dotenv_values("./db/.secret_key")
     return key["SECRET_KEY"]

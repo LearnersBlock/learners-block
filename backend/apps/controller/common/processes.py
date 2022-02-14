@@ -20,12 +20,14 @@ ntp = ntplib.NTPClient()
 
 def check_connection():
     try:
-        run = subprocess.run(["iw", "dev", "wlan0", "link"],
-                             capture_output=True,
-                             text=True).stdout.rstrip()
+        run = subprocess.run(
+            ["iw", "dev", "wlan0", "link"], capture_output=True, text=True
+        ).stdout.rstrip()
     except Exception:
-        logger.exception("Failed checking connection. Returning False to"
-                         "allow continuing.")
+        logger.exception(
+            "Failed checking connection. Returning False to"
+            "allow continuing."
+        )
         return False
 
     if run.lower()[:13] == "not connected":
@@ -60,24 +62,26 @@ def check_supervisor(supervisor_retries, timeout):
         try:
             supervisor_status = requests.get(
                 f'{os.environ["BALENA_SUPERVISOR_ADDRESS"]}/ping',
-                timeout=timeout
+                timeout=timeout,
             )
 
             if supervisor_status.status_code == 200:
                 break
 
         except Exception:
-            logger.info('Waiting for Balena Supervisor to be ready. '
-                        f'Retry {str(retry)}.')
+            logger.info(
+                "Waiting for Balena Supervisor to be ready. "
+                f"Retry {str(retry)}."
+            )
 
             if retry == supervisor_retries:
-                logger.error('Supervisor could not be reached.')
+                logger.error("Supervisor could not be reached.")
                 raise SupervisorUnreachable
 
             time.sleep(2)
             retry = retry + 1
 
-    return {'message': 'Supervisor up'}
+    return {"message": "Supervisor up"}
 
 
 # Check chronyd has executed before. Used as a useful indicator of whether
@@ -86,23 +90,26 @@ def chronyd_check(func):
     def inner(*args, **kwargs):
         if not config.dev_mode and not config.chronyd_synced:
             try:
-                subprocess.check_output("chronyc sources | grep '*'",
-                                        shell=True)
+                subprocess.check_output(
+                    "chronyc sources | grep '*'", shell=True
+                )
                 config.chronyd_synced = True
             except Exception:
-                logger.exception('ChronyD not synced yet.')
-                abort(502,
-                      status=502,
-                      message='System is still syncing. Try again later.')
+                logger.exception("ChronyD not synced yet.")
+                abort(
+                    502,
+                    status=502,
+                    message="System is still syncing. Try again later.",
+                )
         return func(*args, **kwargs)
+
     return inner
 
 
 def container_hostname():
-    return subprocess.run(["hostname"],
-                          capture_output=True,
-                          check=True,
-                          text=True).stdout.rstrip()
+    return subprocess.run(
+        ["hostname"], capture_output=True, check=True, text=True
+    ).stdout.rstrip()
 
 
 def curl(supervisor_retries=8, timeout=5, **cmd):
@@ -112,31 +119,23 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
     # Process curl requests
     try:
-        path = os.environ["BALENA_SUPERVISOR_ADDRESS"] + cmd["path"] + \
-            os.environ["BALENA_SUPERVISOR_API_KEY"]
+        path = (
+            os.environ["BALENA_SUPERVISOR_ADDRESS"]
+            + cmd["path"]
+            + os.environ["BALENA_SUPERVISOR_API_KEY"]
+        )
 
         # Post method
-        if cmd["method"] == 'post-json':
-            response = requests.post(
-                path,
-                json=cmd["data"],
-                timeout=timeout
-            )
+        if cmd["method"] == "post-json":
+            response = requests.post(path, json=cmd["data"], timeout=timeout)
 
         # Patch method
-        elif cmd["method"] == 'patch':
-            response = requests.patch(
-                path,
-                json=cmd["data"],
-                timeout=timeout
-            )
+        elif cmd["method"] == "patch":
+            response = requests.patch(path, json=cmd["data"], timeout=timeout)
 
         # Get method
-        elif cmd["method"] == 'get':
-            response = requests.get(
-                path,
-                timeout=timeout
-            )
+        elif cmd["method"] == "get":
+            response = requests.get(path, timeout=timeout)
     except Exception:
         logger.exception("Supervisor curl request error.")
         raise SupervisorCurlFailed
@@ -144,7 +143,7 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
     try:
         response.raise_for_status()
     except Exception:
-        logger.exception('Failed to send request to Supervisor')
+        logger.exception("Failed to send request to Supervisor")
         raise SupervisorCurlFailed
 
     # Return response
@@ -152,26 +151,30 @@ def curl(supervisor_retries=8, timeout=5, **cmd):
 
 
 def device_host_config(hostname, **kwargs):
-    new_hostname = curl(method="patch",
-                        path="/v1/device/host-config?apikey=",
-                        data={"network": {"hostname": hostname}},
-                        **kwargs)
+    new_hostname = curl(
+        method="patch",
+        path="/v1/device/host-config?apikey=",
+        data={"network": {"hostname": hostname}},
+        **kwargs,
+    )
 
     return new_hostname
 
 
 def device_hostname(**kwargs):
-    device_hostname = curl(method="get",
-                           path="/v1/device/host-config?apikey=",
-                           **kwargs).json()
+    device_hostname = curl(
+        method="get", path="/v1/device/host-config?apikey=", **kwargs
+    ).json()
 
     return device_hostname["network"]["hostname"]
 
 
 def device_update(force_mode=False):
-    device_update = curl(method="post-json",
-                         path="/v1/update?apikey=",
-                         data={"force": force_mode})
+    device_update = curl(
+        method="post-json",
+        path="/v1/update?apikey=",
+        data={"force": force_mode},
+    )
 
     return device_update
 
@@ -187,16 +190,18 @@ def database_recover():
             hostname_reset()
 
     except Exception:
-        logger.exception('Failed to delete run.pid. Continuing...')
+        logger.exception("Failed to delete run.pid. Continuing...")
 
     # Rename the .db file. A new one will be rebuilt fresh on next boot.
     # While this is a drastic step, it ensures devices do not
     # get bricked in the field.
     try:
-        path = os.path.realpath('.') + "/db/"
+        path = os.path.realpath(".") + "/db/"
 
-        os.rename(path + "sqlite.db",
-                  path + f"sqlite.db - {str(datetime.datetime.now())}")
+        os.rename(
+            path + "sqlite.db",
+            path + f"sqlite.db - {str(datetime.datetime.now())}",
+        )
 
         os.kill(os.getpid(), signal.SIGTERM)
     except Exception:
@@ -207,20 +212,20 @@ def hostname_reset():
     # Remove run.pid to force reset of hostname
     if not config.dev_mode:
         try:
-            os.remove('/app/db/run.pid')
+            os.remove("/app/db/run.pid")
         except Exception:
-            logger.exception('Failed deleting run.pid')
+            logger.exception("Failed deleting run.pid")
 
 
 def human_size(nbytes):
     # Convert system file sizes to human readable
-    suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+    suffixes = ["B", "KB", "MB", "GB", "TB", "PB"]
     i = 0
-    while nbytes >= 1024 and i < len(suffixes)-1:
-        nbytes /= 1024.
+    while nbytes >= 1024 and i < len(suffixes) - 1:
+        nbytes /= 1024.0
         i += 1
-    f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
-    return '%s %s' % (f, suffixes[i])
+    f = ("%.2f" % nbytes).rstrip("0").rstrip(".")
+    return "%s %s" % (f, suffixes[i])
 
 
 def led(mode):
@@ -228,7 +233,7 @@ def led(mode):
     # 1 = on
     # 0 = off
     try:
-        with open('/sys/class/leds/led0/brightness', 'w+') as f:
+        with open("/sys/class/leds/led0/brightness", "w+") as f:
             f.write(str(mode))
     except Exception:
         # This is not possible on some devices.
@@ -243,16 +248,19 @@ def ntp_check(func):
             try:
                 # Check if the system clock is in sync otherwise Docker Hub
                 # certificates create an error
-                time_offset = ntp.request('time.cloudflare.com',
-                                          version=3).offset
+                time_offset = ntp.request(
+                    "time.cloudflare.com", version=3
+                ).offset
                 logger.info(f"Time offset is: {time_offset}")
                 if time_offset > 3600 or time_offset < -3600:
-                    logger.debug('Not in sync with NTP server.')
-                    abort(502,
-                          status=502,
-                          message='System is still loading. Try again later.')
+                    logger.debug("Not in sync with NTP server.")
+                    abort(
+                        502,
+                        status=502,
+                        message="System is still loading. Try again later.",
+                    )
             except Exception:
-                logger.exception('Failed to check time with NTP server.')
+                logger.exception("Failed to check time with NTP server.")
                 # In event of connection error, allowing Docker to try anyway.
 
         return func(*args, **kwargs)
