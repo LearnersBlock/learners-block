@@ -17,10 +17,7 @@
           padding="0"
           flat
           size="sm"
-          @click="
-            copyUrl()
-            $q.notify($t('url_copied'))
-          "
+          @click="copyUrl()"
         >
           <q-tooltip class="text-caption text-center">
             {{ $t('copy_to_clipboard') }}
@@ -33,14 +30,18 @@
 
 <script lang="ts">
 import Axios from 'axios'
-import { copyToClipboard } from 'quasar'
+import { copyToClipboard, useQuasar } from 'quasar'
 import { useStore } from '../store'
 import { computed, defineComponent, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'IntCaptivePortal',
   setup() {
     // Import required features
+    const $q = useQuasar()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { t } = useI18n()
     const $store = useStore()
     const hostname = ref<string>()
     const api = computed(() => {
@@ -55,6 +56,7 @@ export default defineComponent({
       if (hostname.value) {
         void copyToClipboard(hostname.value)
       }
+      $q.notify(t('url_copied'))
     }
 
     const fetchHostname = async () => {
