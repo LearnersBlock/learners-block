@@ -3,7 +3,7 @@ name: "Deploy Production Release"
 on:
   push:
     tags:
-      - '*'
+      - "*"
 jobs:
   deploy-release:
     name: "Deploy Production Release"
@@ -22,9 +22,9 @@ jobs:
         with:
           author_name: Learner's Block
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
-          message: 'Update version files'
+          message: "Update version files"
           branch: main
-          add: './backend/apps/controller/.version'
+          add: "./backend/apps/controller/.version"
 
       - name: Deploy aarch64 to production
         uses: balena-io/deploy-to-balena-action@master
