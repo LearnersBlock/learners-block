@@ -1,14 +1,11 @@
 <template>
-  <div class="fullscreen bg-primary text-white text-center q-pa-md flex flex-center">
+  <div
+    class="fullscreen bg-primary text-white text-center q-pa-md flex flex-center"
+  >
     <div>
-      <div class="text-h1">
-        401
-      </div>
+      <div class="text-h1">401</div>
 
-      <div
-        class="text-h2"
-        style="opacity:.4"
-      >
+      <div class="text-h2" style="opacity: 0.4">
         {{ $t('401') }}
       </div>
 

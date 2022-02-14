@@ -1,17 +1,8 @@
 <template>
-  <q-page
-    class="row justify-evenly q-mb-lg"
-    style="width: 90vw"
-  >
+  <q-page class="row justify-evenly q-mb-lg" style="width: 90vw">
     <!-- Loading Spinner -->
-    <div
-      v-if="fetchResourceLoading"
-      class="row items-center"
-    >
-      <q-spinner
-        color="primary"
-        size="6em"
-      />
+    <div v-if="fetchResourceLoading" class="row items-center">
+      <q-spinner color="primary" size="6em" />
     </div>
     <!-- Resource container -->
     <div
@@ -20,19 +11,22 @@
     >
       <div>
         <q-img
-          :src="fetchedResource.resources_by_id?.logo?.id ? API_URL + '/assets/' + fetchedResource.resources_by_id.logo.id + '?key=lib-thumbnail' : require('../../assets/default.jpg')"
+          :src="
+            fetchedResource.resources_by_id?.logo?.id
+              ? API_URL +
+                '/assets/' +
+                fetchedResource.resources_by_id.logo.id +
+                '?key=lib-thumbnail'
+              : require('../../assets/default.jpg')
+          "
           spinner-color="grey"
           class="resource_image"
         />
       </div>
-      <div
-        class="text-h4 mt-5"
-      >
+      <div class="text-h4 mt-5">
         {{ fetchedResource.resources_by_id.name }}
       </div>
-      <div
-        class="q-pa-sm"
-      >
+      <div class="q-pa-sm">
         <!-- eslint-disable-next-line vue/no-v-html -->
         <span v-html="fetchedResource.resources_by_id.description" />
       </div>
@@ -49,7 +43,7 @@
             <a
               :href="fetchedResource.resources_by_id.author_website"
               target="_blank"
-            >{{ fetchedResource.resources_by_id.author }}
+              >{{ fetchedResource.resources_by_id.author }}
             </a>
           </div>
         </div>
@@ -98,9 +92,7 @@
           <div>
             {{ $t('size') }}
           </div>
-          <div>
-            {{ fetchedResource.resources_by_id.size }} GB
-          </div>
+          <div>{{ fetchedResource.resources_by_id.size }} GB</div>
         </div>
         <div
           v-if="fetchedResource.resources_by_id.subjects?.length"
@@ -150,7 +142,7 @@
           size="sm"
           color="primary"
           icon="download"
-          :label="exitLoop ? $t('download'): $t('cancel')"
+          :label="exitLoop ? $t('download') : $t('cancel')"
           @click="downloadFiles()"
         />
         <q-btn
@@ -169,7 +161,7 @@
       <q-linear-progress
         v-if="!exitLoop"
         size="30px"
-        :value="downloadProgress/100"
+        :value="downloadProgress / 100"
         color="primary"
       >
         <div class="absolute-full flex flex-center">
@@ -190,10 +182,7 @@
         </div>
       </q-linear-progress>
     </div>
-    <q-page-sticky
-      position="top-left"
-      :offset="[25, 20]"
-    >
+    <q-page-sticky position="top-left" :offset="[25, 20]">
       <q-btn
         class="text-weight-bold"
         rounded
@@ -221,7 +210,7 @@ import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'IntLibraryResources',
-  setup () {
+  setup() {
     // Import required features
     const $q = useQuasar()
     const route = useRoute()
@@ -241,49 +230,51 @@ export default defineComponent({
 
     // Apollo interfaces
     interface ApolloResource {
-      author: string;
+      author: string
       // eslint-disable-next-line camelcase
-      author_website: any;
-      description: string;
-      download_url: any;
-      formats: Array<{ id: any; formats_id: {key: string} }>;
-      languages: Array<{ id: any; languages_id: {language: string} }>;
-      levels: Array<{ id: any; levels_id: {key: string} }>;
-      logo: any;
-      name: string;
-      resource: any;
-      sample_url: string;
-      size: any;
-      subjects: Array<{ id: any; subjects_id: {key: string} }>;
+      author_website: any
+      description: string
+      download_url: any
+      formats: Array<{ id: any; formats_id: { key: string } }>
+      languages: Array<{ id: any; languages_id: { language: string } }>
+      levels: Array<{ id: any; levels_id: { key: string } }>
+      logo: any
+      name: string
+      resource: any
+      sample_url: string
+      size: any
+      subjects: Array<{ id: any; subjects_id: { key: string } }>
     }
 
     interface ApolloResources {
       // eslint-disable-next-line camelcase
-      resources_by_id: ApolloResource;
+      resources_by_id: ApolloResource
     }
 
     interface ApolloVars {
-      id: any;
+      id: any
     }
 
     // Fetch resources
-    const {
-      result: fetchedResource,
-      loading: fetchResourceLoading
-    } = useQuery<ApolloResources, ApolloVars>(GET_RESOURCE, { id: route.params.id })
+    const { result: fetchedResource, loading: fetchResourceLoading } = useQuery<
+      ApolloResources,
+      ApolloVars
+    >(GET_RESOURCE, { id: route.params.id })
 
-    function delay (ms: number) {
-      return new Promise(resolve => setTimeout(resolve, ms))
+    function delay(ms: number) {
+      return new Promise((resolve) => setTimeout(resolve, ms))
     }
 
-    async function downloadFiles () {
+    async function downloadFiles() {
       try {
         if (exitLoop.value === false) {
           void Axios.get(`${api.value}/v1/download/stop`)
           stopDownload()
         } else {
           // Start the download process
-          await Axios.post(`${api.value}/v1/download/fetch`, { download_url: fetchedResource.value?.resources_by_id.download_url })
+          await Axios.post(`${api.value}/v1/download/fetch`, {
+            download_url: fetchedResource.value?.resources_by_id.download_url
+          })
 
           // Monitor the download process through the stream
           const position = ref<number | undefined>(0)
@@ -305,9 +296,15 @@ export default defineComponent({
             // Handle errors
             if (progress.value.error || xhr.status > 200) {
               if (progress.value.error === 'Out of disk space') {
-                $q.notify({ type: 'negative', message: `${t('error')} - ${t('no_space')}` })
+                $q.notify({
+                  type: 'negative',
+                  message: `${t('error')} - ${t('no_space')}`
+                })
               } else {
-                $q.notify({ type: 'negative', message: `${t('error')} - ${progress.value.error}` })
+                $q.notify({
+                  type: 'negative',
+                  message: `${t('error')} - ${progress.value.error}`
+                })
               }
               stopDownload()
               return
@@ -335,7 +332,7 @@ export default defineComponent({
       }
     }
 
-    function stopDownload () {
+    function stopDownload() {
       exitLoop.value = true
       downloadedMb.value = 0
       downloadProgress.value = 0
@@ -361,50 +358,49 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .resource {
-    &_image {
-        width: 10rem;
-        margin-bottom: 1rem;
-        @media only screen and (max-width: 1050px) {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 8rem;
-      }
+  &_image {
+    width: 10rem;
+    margin-bottom: 1rem;
+    @media only screen and (max-width: 1050px) {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 8rem;
     }
+  }
 
-    &_info {
-        display: grid;
-        grid-template-columns: .5fr 1fr;
-        @media only screen and (max-width: 900px) {
-            text-align: center;
-            grid-template-columns: .5fr .5fr;
-        }
-        @media only screen and (max-width: 650px) {
-            text-align: center;
-            grid-template-columns: .5fr .5fr;
-        }
-        @media only screen and (max-width: 525px) {
-            text-align: center;
-            grid-template-columns: .5fr .5fr;
-        }
+  &_info {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+    @media only screen and (max-width: 900px) {
+      text-align: center;
+      grid-template-columns: 0.5fr 0.5fr;
     }
-
-    &_container {
-        min-width: 90%;
-
-        @media only screen and (max-width: 900px) {
-            width: 70%;
-            text-align: center;
-        }
-        @media only screen and (max-width: 650px) {
-            width: 85%;
-            text-align: center;
-        }
-        @media only screen and (max-width: 525px) {
-            width: 95%;
-            text-align: center;
-        }
+    @media only screen and (max-width: 650px) {
+      text-align: center;
+      grid-template-columns: 0.5fr 0.5fr;
     }
+    @media only screen and (max-width: 525px) {
+      text-align: center;
+      grid-template-columns: 0.5fr 0.5fr;
+    }
+  }
+
+  &_container {
+    min-width: 90%;
+
+    @media only screen and (max-width: 900px) {
+      width: 70%;
+      text-align: center;
+    }
+    @media only screen and (max-width: 650px) {
+      width: 85%;
+      text-align: center;
+    }
+    @media only screen and (max-width: 525px) {
+      width: 95%;
+      text-align: center;
+    }
+  }
 }
-
 </style>

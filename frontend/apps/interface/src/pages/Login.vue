@@ -1,9 +1,6 @@
 <template>
   <q-page class="flex flex-col justify-center items-center">
-    <q-form
-      class="mb-6 flex flex-col"
-      @submit="login"
-    >
+    <q-form class="mb-6 flex flex-col" @submit="login">
       <div class="text-h4 text-center mb-6 text-gray-600">
         {{ $t('login') }}
       </div>
@@ -54,7 +51,7 @@ import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'IntLogin',
-  setup () {
+  setup() {
     // Import required features
     const $q = useQuasar()
     const route = useRoute()
@@ -69,9 +66,13 @@ export default defineComponent({
     const username = ref<string>('lb')
 
     // Login and show message
-    function login () {
+    function login() {
       submitting.value = true
-      $store.dispatch('LOGIN', { username: username.value, password: password.value })
+      $store
+        .dispatch('LOGIN', {
+          username: username.value,
+          password: password.value
+        })
         .then(() => {
           $q.notify({
             type: 'positive',
@@ -83,13 +84,19 @@ export default defineComponent({
             void $router.replace('/settings')
           }
         })
-        .catch((e: { message: never}) => {
+        .catch((e: { message: never }) => {
           $q.notify({
             type: 'negative',
             message: e.message,
             timeout: 0,
             actions: [
-              { label: t('close'), color: 'black', handler: () => { /* ... */ } }
+              {
+                label: t('close'),
+                color: 'black',
+                handler: () => {
+                  /* ... */
+                }
+              }
             ]
           })
           submitting.value = false
@@ -106,6 +113,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

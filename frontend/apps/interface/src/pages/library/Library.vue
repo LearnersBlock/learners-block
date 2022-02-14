@@ -1,16 +1,11 @@
 <template>
-  <q-page
-    class="mt-3 row justify-evenly"
-    style="min-width: 70vw"
-  >
+  <q-page class="mt-3 row justify-evenly" style="min-width: 70vw">
     <div
       v-if="filteredResources && !fetchResourcesLoading"
       class="resource_container q-mb-md"
     >
       <div class="flex row">
-        <div
-          class="col"
-        >
+        <div class="col">
           <q-btn
             class="q-mt-sm q-mb-md text-weight-bold"
             rounded
@@ -24,10 +19,7 @@
             :to="{ name: 'settings' }"
           />
         </div>
-        <div
-          v-if="searchBox"
-          class="col"
-        >
+        <div v-if="searchBox" class="col">
           <q-input
             v-model="searchInput"
             class="q-mb-lg"
@@ -75,7 +67,11 @@
       >
         <div class="col-2">
           <q-img
-            :src="resource.logo?.id ? API_URL + '/assets/' + resource.logo.id + '?key=lib-thumbnail' : require('../../assets/default.jpg')"
+            :src="
+              resource.logo?.id
+                ? API_URL + '/assets/' + resource.logo.id + '?key=lib-thumbnail'
+                : require('../../assets/default.jpg')
+            "
             loading="lazy"
             spinner-color="grey"
             class="resource_image"
@@ -83,9 +79,7 @@
         </div>
         <div class="col">
           <div class="resource_info">
-            <div
-              class="text-h4 resource_name"
-            >
+            <div class="text-h4 resource_name">
               {{ resource.name }}
             </div>
             <!-- eslint-disable-next-line vue/no-v-html -->
@@ -103,10 +97,7 @@
               </div>
             </div>
             <div class="column resource_size text-center q-mb-xs">
-              <div
-                v-if="resource.size"
-                class="col"
-              >
+              <div v-if="resource.size" class="col">
                 {{ $t('size') }} {{ resource.size }} GB
               </div>
             </div>
@@ -114,10 +105,7 @@
         </div>
       </router-link>
     </div>
-    <q-page-sticky
-      position="bottom-right"
-      :offset="[20, 15]"
-    >
+    <q-page-sticky position="bottom-right" :offset="[20, 15]">
       <q-btn
         class="text-weight-bold"
         rounded
@@ -143,20 +131,20 @@ import { useStore } from '../../store'
 
 export default defineComponent({
   name: 'IntLibrary',
-  setup () {
+  setup() {
     // Apollo interfaces
     interface ApolloResource {
-      name: string;
-      description: string;
-      languages: Array<{ id: any; languages_id: {language: string} }>;
-      id: number;
-      logo: any;
-      resources: any;
-      size: any;
+      name: string
+      description: string
+      languages: Array<{ id: any; languages_id: { language: string } }>
+      id: number
+      logo: any
+      resources: any
+      size: any
     }
 
     interface ApolloResources {
-      resources: ApolloResource[];
+      resources: ApolloResource[]
     }
 
     // Import required features
@@ -168,7 +156,9 @@ export default defineComponent({
     // Constants for resource fetching
     const API_URL = ref(process.env.LIBRARYAPI)
     const searchBox = ref<boolean>(false)
-    const searchInput = ref<string>($store.state.searchInput.searchInput as string)
+    const searchInput = ref<string>(
+      $store.state.searchInput.searchInput as string
+    )
 
     // Show search box if field is populated
     if (searchInput.value) {
@@ -187,27 +177,36 @@ export default defineComponent({
       const filtered = fetchedResources.value?.resources.filter(
         (res) =>
           res.name.toLowerCase().includes(searchInput.value.toLowerCase()) ||
-          res.description.toLowerCase().includes(searchInput.value.toLowerCase()) ||
-          res.languages.some(({ languages_id }) => languages_id.language.toLowerCase() === searchInput.value.toLowerCase())
+          res.description
+            .toLowerCase()
+            .includes(searchInput.value.toLowerCase()) ||
+          res.languages.some(
+            ({ languages_id }) =>
+              languages_id.language.toLowerCase() ===
+              searchInput.value.toLowerCase()
+          )
       )
       return filtered
     })
 
     // Display loading indicator on search result change
-    watch(() => filteredResources.value, () => {
-      // Start loading indicator for better user experience
-      $q.loading.show({
-        delay: 1 // ms delay before showing indicator
-      })
+    watch(
+      () => filteredResources.value,
+      () => {
+        // Start loading indicator for better user experience
+        $q.loading.show({
+          delay: 1 // ms delay before showing indicator
+        })
 
-      // Store current search term for use later
-      $store.commit('searchInput/searchInput', searchInput.value)
+        // Store current search term for use later
+        $store.commit('searchInput/searchInput', searchInput.value)
 
-      // Stop loading indicator
-      setTimeout(() => {
-        $q.loading.hide()
-      }, 400) // ms delay before cancelling indicator
-    })
+        // Stop loading indicator
+        setTimeout(() => {
+          $q.loading.hide()
+        }, 400) // ms delay before cancelling indicator
+      }
+    )
 
     // Error handler for when online API is unavailable
     apiError((e) => {
@@ -217,12 +216,18 @@ export default defineComponent({
         message: t('library_api_down'),
         timeout: 0,
         actions: [
-          { label: t('close'), color: 'black', handler: () => { /* ... */ } }
+          {
+            label: t('close'),
+            color: 'black',
+            handler: () => {
+              /* ... */
+            }
+          }
         ]
       })
     })
 
-    function scrollTop () {
+    function scrollTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
@@ -240,13 +245,13 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .resource {
-  box-shadow: 0 .3rem 1rem .1rem rgba(0,0,0,.2);
+  box-shadow: 0 0.3rem 1rem 0.1rem rgba(0, 0, 0, 0.2);
   padding: 2rem;
   display: flex;
   position: relative;
   cursor: pointer;
-  border-radius: .3rem;
-  transition: all .15s ease-in-out;
+  border-radius: 0.3rem;
+  transition: all 0.15s ease-in-out;
   text-decoration: none;
   @media only screen and (max-width: 960px) {
     flex-direction: column;
@@ -256,35 +261,35 @@ export default defineComponent({
   &_image {
     margin-right: 2.5rem;
     width: 8rem;
-     @media only screen and (max-width: 960px) {
-       margin: auto;
-       margin-right: 0;
-       width: 7rem;
-       height: auto;
-       margin-bottom: 1.5rem;
-      }
-      @media screen and (max-width: 1680px) {
+    @media only screen and (max-width: 960px) {
+      margin: auto;
+      margin-right: 0;
+      width: 7rem;
+      height: auto;
+      margin-bottom: 1.5rem;
+    }
+    @media screen and (max-width: 1680px) {
       width: 7rem;
       height: auto;
       align-self: center;
-      }
     }
+  }
 
   &_languages {
     display: flex;
     align-self: flex-start;
-     @media only screen and (max-width: 960px) {
+    @media only screen and (max-width: 960px) {
       margin-top: 1rem;
       margin: auto;
     }
-     @media only screen and (max-width: 600px) {
-       flex-direction: column;
-       margin: auto;
+    @media only screen and (max-width: 600px) {
+      flex-direction: column;
+      margin: auto;
     }
   }
 
   &_name {
-      @media only screen and (max-width: 800px) {
+    @media only screen and (max-width: 800px) {
       font-size: 1.7rem;
     }
   }
@@ -292,15 +297,15 @@ export default defineComponent({
   &_size {
     position: absolute;
     right: 2.25rem;
-    bottom: .1rem;
+    bottom: 0.1rem;
     @media only screen and (max-width: 960px) {
       position: relative;
-      right: .3rem;
+      right: 0.3rem;
       margin-top: 1.5rem;
     }
     @media only screen and (max-width: 800px) {
       position: relative;
-      right: .3rem;
+      right: 0.3rem;
       margin-top: 1rem;
     }
   }

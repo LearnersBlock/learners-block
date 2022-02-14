@@ -27,16 +27,16 @@
                   v-model="scope.opt.strength"
                   show-value
                   font-size="11px"
-                  :class="scope.opt.strength > 60 ? 'text-green' : 'text-orange'"
+                  :class="
+                    scope.opt.strength > 60 ? 'text-green' : 'text-orange'
+                  "
                   size="40px"
                   :thickness="0.13"
                   :color="scope.opt.strength > 60 ? 'green' : 'orange'"
                   track-color="grey-3"
                 >
                   <div class="m-2 text-center">
-                    <q-icon
-                      name="signal_cellular_alt"
-                    />
+                    <q-icon name="signal_cellular_alt" />
                     {{ scope.opt.strength }}
                   </div>
                 </q-knob>
@@ -112,7 +112,7 @@ import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'IntWifiConnect',
-  setup () {
+  setup() {
     // Import required features
     const $q = useQuasar()
     // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -133,16 +133,18 @@ export default defineComponent({
       await checkWifiStatus()
     })
 
-    async function checkWifiStatus () {
+    async function checkWifiStatus() {
       $q.loading.show()
-      await wifiApi.get(`http://${hostname.value}:9090/v1/wifi/connection_status`).then(async (response) => {
-        if (!response.data.wifi) {
-          wifiStatus.value = false
-          await fetchNetworks()
-        } else {
-          wifiStatus.value = true
-        }
-      })
+      await wifiApi
+        .get(`http://${hostname.value}:9090/v1/wifi/connection_status`)
+        .then(async (response) => {
+          if (!response.data.wifi) {
+            wifiStatus.value = false
+            await fetchNetworks()
+          } else {
+            wifiStatus.value = true
+          }
+        })
         .catch(function () {
           notify('negative', t('network_fetch_fail'))
         })
@@ -150,23 +152,25 @@ export default defineComponent({
     }
 
     // Send connect request
-    async function connect () {
+    async function connect() {
       if (password.value.length < 8) {
         notify('negative', t('invalid_wifi_entry'))
       } else {
         submitting.value = true
-        await wifiApi.post(`http://${hostname.value}:9090/v1/wifi/connect`, {
-          ssid: wifiSsid.value.ssid,
-          conn_type: wifiSsid.value.conn_type,
-          password: password.value
-        }).then(() => {
-          wifiStatus.value = true
-          // Delay to improve interface interaction
-          setTimeout(() => {
-            notify('positive', t('connection_reset_request'))
-            submitting.value = false
-          }, 2000)
-        })
+        await wifiApi
+          .post(`http://${hostname.value}:9090/v1/wifi/connect`, {
+            ssid: wifiSsid.value.ssid,
+            conn_type: wifiSsid.value.conn_type,
+            password: password.value
+          })
+          .then(() => {
+            wifiStatus.value = true
+            // Delay to improve interface interaction
+            setTimeout(() => {
+              notify('positive', t('connection_reset_request'))
+              submitting.value = false
+            }, 2000)
+          })
           .catch(function () {
             notify('negative', t('network_connect_fail'))
             submitting.value = false
@@ -176,15 +180,17 @@ export default defineComponent({
       }
     }
 
-    async function fetchNetworks () {
+    async function fetchNetworks() {
       $q.loading.show({ message: t('searching_networks') })
-      await wifiApi.get(`http://${hostname.value}:9090/v1/wifi/list_access_points`).then((response) => {
-        refreshCompatible.value = response.data.iw_compatible
-        ssids.value = response.data.ssids
-        if (ssids.value.length === 0) {
-          notify('warning', t('no_networks'))
-        }
-      })
+      await wifiApi
+        .get(`http://${hostname.value}:9090/v1/wifi/list_access_points`)
+        .then((response) => {
+          refreshCompatible.value = response.data.iw_compatible
+          ssids.value = response.data.ssids
+          if (ssids.value.length === 0) {
+            notify('warning', t('no_networks'))
+          }
+        })
         .catch(function (error) {
           console.log(error)
           notify('negative', t('network_fetch_fail'))
@@ -193,22 +199,24 @@ export default defineComponent({
       $q.loading.hide()
     }
 
-    function forget () {
+    function forget() {
       submitting.value = true
-      wifiApi.get(`http://${hostname.value}:9090/v1/wifi/forget`).then(() => {
-        wifiStatus.value = false
-        // Delay to improve interface interaction
-        setTimeout(() => {
-          submitting.value = false
-        }, 2000)
-      })
+      wifiApi
+        .get(`http://${hostname.value}:9090/v1/wifi/forget`)
+        .then(() => {
+          wifiStatus.value = false
+          // Delay to improve interface interaction
+          setTimeout(() => {
+            submitting.value = false
+          }, 2000)
+        })
         .catch(function () {
           notify('negative', t('network_connect_fail'))
           submitting.value = false
         })
     }
 
-    function notify (type: string, message: string) {
+    function notify(type: string, message: string) {
       $q.notify({
         type: type,
         multiLine: true,
@@ -217,7 +225,9 @@ export default defineComponent({
           {
             label: t('close'),
             color: 'white',
-            handler: () => { /* ... */ }
+            handler: () => {
+              /* ... */
+            }
           }
         ],
         message: message
@@ -237,9 +247,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,18 +1,12 @@
 <template>
   <div class="m-3">
     <div class="text-center">
-      <q-img
-        src="../assets/lb-logo.svg"
-        style="max-width: 175px"
-      />
+      <q-img src="../assets/lb-logo.svg" style="max-width: 175px" />
     </div>
     <div class="text-h4 text-gray-600 text-center mt-2">
       {{ $t('welcome_lb') }}
     </div>
-    <div
-      v-if="hostname"
-      class="text-body1 text-center text-gray-600 mt-2"
-    >
+    <div v-if="hostname" class="text-body1 text-center text-gray-600 mt-2">
       <div>
         {{ $t('visit_to_begin') }}
       </div>
@@ -23,7 +17,10 @@
           padding="0"
           flat
           size="sm"
-          @click="copyUrl();$q.notify($t('url_copied'));"
+          @click="
+            copyUrl()
+            $q.notify($t('url_copied'))
+          "
         >
           <q-tooltip class="text-caption text-center">
             {{ $t('copy_to_clipboard') }}
@@ -42,7 +39,7 @@ import { computed, defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   name: 'IntCaptivePortal',
-  setup () {
+  setup() {
     // Import required features
     const $store = useStore()
     const hostname = ref<string>()
@@ -61,7 +58,9 @@ export default defineComponent({
     }
 
     const fetchHostname = async () => {
-      const fetchedHostName = await Axios.get(`${api.value}/v1/supervisor/hostname`)
+      const fetchedHostName = await Axios.get(
+        `${api.value}/v1/supervisor/hostname`
+      )
       hostname.value = `http://${fetchedHostName.data.hostname}.local`
     }
 
@@ -73,6 +72,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
