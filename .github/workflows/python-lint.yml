@@ -38,6 +38,6 @@ jobs:
       - name: Lint with Black
         uses: psf/black@stable
         with:
-          options: "--check --verbose --diff"
+          options: "--config backend/apps/controller/pyproject.toml --check --verbose --diff"
           src: "."
-          version: "21.5b1"
+          version: "22.1.0"
