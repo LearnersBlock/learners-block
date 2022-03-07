@@ -1,6 +1,6 @@
 name: "Deploy Development Release"
 on:
- pull_request:
+  pull_request:
     types: [opened, synchronize, closed]
     branches:
       - main

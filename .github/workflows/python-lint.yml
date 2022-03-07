@@ -39,5 +39,5 @@ jobs:
         uses: psf/black@stable
         with:
           options: "--check --verbose --diff"
-          src: "./src"
+          src: "."
           version: "21.5b1"
