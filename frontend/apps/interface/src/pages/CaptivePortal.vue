@@ -1,18 +1,12 @@
 <template>
   <div class="m-3">
     <div class="text-center">
-      <q-img
-        src="../assets/lb-logo.svg"
-        style="max-width: 175px"
-      />
+      <q-img src="../assets/lb-logo.svg" style="max-width: 175px" />
     </div>
     <div class="text-h4 text-gray-600 text-center mt-2">
       {{ $t('welcome_lb') }}
     </div>
-    <div
-      v-if="hostname"
-      class="text-body1 text-center text-gray-600 mt-2"
-    >
+    <div v-if="hostname" class="text-body1 text-center text-gray-600 mt-2">
       <div>
         {{ $t('visit_to_begin') }}
       </div>
@@ -23,7 +17,7 @@
           padding="0"
           flat
           size="sm"
-          @click="copyUrl();$q.notify($t('url_copied'));"
+          @click="copyUrl()"
         >
           <q-tooltip class="text-caption text-center">
             {{ $t('copy_to_clipboard') }}
@@ -36,14 +30,18 @@
 
 <script lang="ts">
 import Axios from 'axios'
-import { copyToClipboard } from 'quasar'
+import { copyToClipboard, useQuasar } from 'quasar'
 import { useStore } from '../store'
 import { computed, defineComponent, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'IntCaptivePortal',
-  setup () {
+  setup() {
     // Import required features
+    const $q = useQuasar()
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const { t } = useI18n()
     const $store = useStore()
     const hostname = ref<string>()
     const api = computed(() => {
@@ -58,10 +56,13 @@ export default defineComponent({
       if (hostname.value) {
         void copyToClipboard(hostname.value)
       }
+      $q.notify(t('url_copied'))
     }
 
     const fetchHostname = async () => {
-      const fetchedHostName = await Axios.get(`${api.value}/v1/supervisor/hostname`)
+      const fetchedHostName = await Axios.get(
+        `${api.value}/v1/supervisor/hostname`
+      )
       hostname.value = `http://${fetchedHostName.data.hostname}.local`
     }
 
@@ -73,6 +74,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

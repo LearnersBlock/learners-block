@@ -3,24 +3,25 @@ name: Node Lint
 on:
   push:
     paths:
-      - 'frontend/apps/interface/**'
-      - '!frontend/apps/interface/src/i18n/**'
+      - "frontend/apps/interface/**"
+      - "!frontend/apps/interface/src/i18n/**"
   pull_request:
     paths:
-      - 'frontend/apps/interface/**'
-      - '!frontend/apps/interface/src/i18n/**'  
+      - "frontend/apps/interface/**"
+      - "!frontend/apps/interface/src/i18n/**"
 
 defaults:
-    run:
-      working-directory: frontend/apps/interface
+  run:
+    working-directory: frontend/apps/interface
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-    - run: yarn install --frozen-lockfile
-    - run: yarn lint
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint
+      - run: yarn formatcheck

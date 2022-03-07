@@ -2,13 +2,11 @@
   <q-page>
     <div class="flex flex-col items-center">
       <div class="mt-3 row justify-center">
-        <img
-          alt=""
-          width="100"
-          src="../assets/lb-logo.svg"
-        >
+        <img alt="" width="100" src="../assets/lb-logo.svg" />
       </div>
-      <div class="mt-5 text-h4 text-gray-600 mb-6 text-center ml-2 mr-2 josefin">
+      <div
+        class="mt-5 text-h4 text-gray-600 mb-6 text-center ml-2 mr-2 josefin"
+      >
         {{ $t('welcome_lb') }}
       </div>
       <q-separator />
@@ -19,7 +17,12 @@
         {{ $t('loading') }}
       </div>
       <div
-        v-else-if="!settings.website && !settings.files && !settings.library && !slides[0]"
+        v-else-if="
+          !settings.website &&
+          !settings.files &&
+          !settings.library &&
+          !slides[0]
+        "
         class="text-h4 text-gray-500 mt-3 text-center ml-1 mr-1"
       >
         {{ $t('enable_components_in') }}
@@ -28,16 +31,10 @@
         <q-item
           v-if="settings.files"
           class="cursor-pointer py-3"
-          :to="{ name: 'filemanager', params: { data: 'fileshare'} }"
+          :to="{ name: 'filemanager', params: { data: 'fileshare' } }"
         >
-          <q-item-section
-            side
-            middle
-          >
-            <q-icon
-              name="folder"
-              color="orange"
-            />
+          <q-item-section side middle>
+            <q-icon name="folder" color="orange" />
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-h6 pr-12">
@@ -52,16 +49,10 @@
         <q-item
           v-if="settings.library"
           class="cursor-pointer py-3"
-          :to="{ name: 'filemanager', params: { data: 'library'} }"
+          :to="{ name: 'filemanager', params: { data: 'library' } }"
         >
-          <q-item-section
-            side
-            middle
-          >
-            <q-icon
-              name="import_contacts"
-              color="green"
-            />
+          <q-item-section side middle>
+            <q-icon name="import_contacts" color="green" />
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-h6 pr-12">
@@ -80,14 +71,8 @@
           target="_self"
           href="/website/"
         >
-          <q-item-section
-            side
-            middle
-          >
-            <q-icon
-              name="language"
-              color="yellow"
-            />
+          <q-item-section side middle>
+            <q-icon name="language" color="yellow" />
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-h6 pr-12">
@@ -101,10 +86,7 @@
         <q-separator v-if="settings.website" />
       </q-list>
       <div v-if="slide && !settingsLoading">
-        <q-item-label
-          header
-          class="text-h5 mt-2 text-center"
-        >
+        <q-item-label header class="text-h5 mt-2 text-center">
           {{ $t('app_store') }}
         </q-item-label>
         <div class="q-pl-md q-pr-md q-pb-md">
@@ -127,19 +109,16 @@
                 :key="slide.name"
                 :name="slide.name"
                 class="column no-wrap flex-center cursor-pointer"
-                @click="redirect('http://' + windowHostname + ':' + slide.ports)"
+                @click="
+                  redirect('http://' + windowHostname + ':' + slide.ports)
+                "
               >
                 <q-img
                   v-if="slide.logo"
                   :src="slide.logo"
                   style="max-width: 56px"
                 />
-                <q-icon
-                  v-else
-                  name="apps"
-                  size="56px"
-                  color="primary"
-                />
+                <q-icon v-else name="apps" size="56px" color="primary" />
                 <div class="text-h6 q-mt-md text-center">
                   {{ slide.long_name }}
                 </div>
@@ -161,7 +140,7 @@ import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'IntHome',
-  setup () {
+  setup() {
     // Import required features
     const $q = useQuasar()
     const $router = useRouter()
@@ -179,7 +158,9 @@ export default defineComponent({
     const windowHostname = ref<string>(window.location.hostname)
 
     // Settings for the ui
-    const defaultStartpage = Axios.get(`${api.value}/v1/settings/default_startpage`)
+    const defaultStartpage = Axios.get(
+      `${api.value}/v1/settings/default_startpage`
+    )
     const settingsState = Axios.get(`${api.value}/v1/settings/get_ui`)
     const settings = ref<any>({})
     const settingsLoading = ref<boolean>(true)
@@ -190,56 +171,71 @@ export default defineComponent({
       $q.loading.hide()
     })
 
-    async function apiCallAwait () {
+    async function apiCallAwait() {
       $q.loading.show()
-      await Promise.all([settingsState, appStoreState, defaultStartpage]).then(function ([res1, res2, res3]) {
-        // Redirect for Learner's Block Start Page
-        if (res3.data.start_page === '/') {
-          settings.value = res1.data
-          populateAppStore(res2)
-          settingsLoading.value = false
-        } else if (res3.data.start_page.substring(0, 1) === ':') {
-          // Redirect for ports
-          setTimeout(() => {
-            location.href = `http://${window.location.hostname}${res3.data.start_page}`
-          }, 2000)
-        } else {
-          // Redirect for App Store
-          const appEntry = res2.data.find(x => x.name === res3.data.start_page)
-          if (appEntry) {
-            const appPort = Object.keys(appEntry.ports as never)
+      await Promise.all([settingsState, appStoreState, defaultStartpage]).then(
+        function ([res1, res2, res3]) {
+          // Redirect for Learner's Block Start Page
+          if (res3.data.start_page === '/') {
+            settings.value = res1.data
+            populateAppStore(res2)
+            settingsLoading.value = false
+          } else if (res3.data.start_page.substring(0, 1) === ':') {
+            // Redirect for ports
             setTimeout(() => {
-              location.href = `http://${window.location.hostname}:${appEntry.ports[appPort[0]]}`
-            }, 2000)
-            return
-          }
-          // Redirect for pre-set paths
-          if (res3.data.start_page === 'files') {
-            setTimeout(() => {
-              void $router.push({ name: 'filemanager', params: { data: 'fileshare' } })
-            }, 2000)
-          } else if (res3.data.start_page === 'library') {
-            setTimeout(() => {
-              void $router.push({ name: 'filemanager', params: { data: 'library' } })
-            }, 2000)
-          } else if (res3.data.start_page === 'website') {
-            setTimeout(() => {
-              location.href = '/website/'
+              location.href = `http://${window.location.hostname}${res3.data.start_page}`
             }, 2000)
           } else {
-            // Redirect for custom path
-            setTimeout(() => {
-              location.href = res3.data.start_page
-            }, 2000)
+            // Redirect for App Store
+            const appEntry = res2.data.find(
+              (x) => x.name === res3.data.start_page
+            )
+            if (appEntry) {
+              const appPort = Object.keys(appEntry.ports as never)
+              setTimeout(() => {
+                location.href = `http://${window.location.hostname}:${
+                  appEntry.ports[appPort[0]]
+                }`
+              }, 2000)
+              return
+            }
+            // Redirect for pre-set paths
+            if (res3.data.start_page === 'files') {
+              setTimeout(() => {
+                void $router.push({
+                  name: 'filemanager',
+                  params: { data: 'fileshare' }
+                })
+              }, 2000)
+            } else if (res3.data.start_page === 'library') {
+              setTimeout(() => {
+                void $router.push({
+                  name: 'filemanager',
+                  params: { data: 'library' }
+                })
+              }, 2000)
+            } else if (res3.data.start_page === 'website') {
+              setTimeout(() => {
+                location.href = '/website/'
+              }, 2000)
+            } else {
+              // Redirect for custom path
+              setTimeout(() => {
+                location.href = res3.data.start_page
+              }, 2000)
+            }
           }
         }
-      })
+      )
     }
 
-    function populateAppStore (res2) {
+    function populateAppStore(res2) {
       // Populate app store data
-      const installedApps: any = res2.data.filter(obj => {
-        if (obj.status.toLowerCase() === 'installed' || obj.status.toLowerCase() === 'update_available') {
+      const installedApps: any = res2.data.filter((obj) => {
+        if (
+          obj.status.toLowerCase() === 'installed' ||
+          obj.status.toLowerCase() === 'update_available'
+        ) {
           // Set the port to be the inbound port only
           const jsonKey = Object.keys(obj.ports as never)
           obj.ports = obj.ports[jsonKey[0]]
@@ -256,7 +252,7 @@ export default defineComponent({
       }
     }
 
-    function redirect (path: string | URL | undefined) {
+    function redirect(path: string | URL | undefined) {
       window.open(path, '_blank')
     }
 
@@ -272,6 +268,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

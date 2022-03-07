@@ -1,23 +1,16 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header
-      class="bg-white"
-      bordered
-      reveal
-    >
+    <q-header class="bg-white" bordered reveal>
       <q-toolbar v-if="!hideHeader">
         <div class="ml-2">
           <router-link to="/">
-            <img
-              alt=""
-              src="../assets/lb-logo-full.svg"
-            >
+            <img alt="" src="../assets/lb-logo-full.svg" />
           </router-link>
         </div>
         <q-toolbar-title class="text-h5 q-mt-xs">
           <router-link
             class="text-white"
-            style="text-decoration:none;"
+            style="text-decoration: none"
             to="/"
           />
         </q-toolbar-title>
@@ -74,7 +67,6 @@
 </template>
 
 <script lang="ts">
-
 import { Quasar, useQuasar } from 'quasar'
 import { useStore } from '../store'
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
@@ -84,7 +76,7 @@ import type { QuasarLanguage } from 'quasar'
 
 export default defineComponent({
   name: 'IntMainLayout',
-  setup () {
+  setup() {
     // Import required features
     const $q = useQuasar()
     const $router = useRouter()
@@ -134,13 +126,16 @@ export default defineComponent({
     ])
 
     // Watch for page changes to update header status
-    watch(() => $router.currentRoute.value.path, val => {
-      if (val.includes('captive_portal') || val.includes('epub_reader')) {
-        hideHeader.value = true
-      } else {
-        hideHeader.value = false
+    watch(
+      () => $router.currentRoute.value.path,
+      (val) => {
+        if (val.includes('captive_portal') || val.includes('epub_reader')) {
+          hideHeader.value = true
+        } else {
+          hideHeader.value = false
+        }
       }
-    })
+    )
 
     const isAuthenticated = computed(() => {
       return $store.getters.isAuthenticated
@@ -148,7 +143,10 @@ export default defineComponent({
 
     onMounted(() => {
       // Hide header on full screen routes
-      if ($router.currentRoute.value.path.includes('captive_portal') || $router.currentRoute.value.path.includes('epub_reader')) {
+      if (
+        $router.currentRoute.value.path.includes('captive_portal') ||
+        $router.currentRoute.value.path.includes('epub_reader')
+      ) {
         hideHeader.value = true
       }
 
@@ -158,7 +156,11 @@ export default defineComponent({
       }
 
       const usersLocale = $q.lang.getLocale()
-      if (!localStorage.getItem('lang') && usersLocale && languages.value.find(language => language.value === usersLocale)) {
+      if (
+        !localStorage.getItem('lang') &&
+        usersLocale &&
+        languages.value.find((language) => language.value === usersLocale)
+      ) {
         changeLanguage(usersLocale)
       }
     })
@@ -170,7 +172,11 @@ export default defineComponent({
       ).then((lang) => {
         locale.value = value
         Quasar.lang.set(lang.default as QuasarLanguage)
-        $q.cookies.set('lang', value, { sameSite: 'Lax', path: '/', expires: 365 })
+        $q.cookies.set('lang', value, {
+          sameSite: 'Lax',
+          path: '/',
+          expires: 365
+        })
         localStorage.setItem('lang', value)
       })
     }

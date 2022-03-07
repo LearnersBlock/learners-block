@@ -24,13 +24,15 @@ def wifi_toggle():
         logger.info("WiFi is now down")
         wifistatus = False
 
-    return "This is a dev function, not for production. " \
+    return (
+        "This is a dev function, not for production. "
         f"Wifi is now set to {wifistatus}"
+    )
 
 
 class supervisor_device(Resource):
     def get(self):
-        return {'message': 'output'}
+        return {"message": "output"}
 
 
 class supervisor_host_config(Resource):
@@ -44,14 +46,14 @@ class supervisor_host_config(Resource):
         time.sleep(2)
         logger.info(f"Hostname changed to '{content['hostname']}'")
         return {
-            'message': "Hostname/Wi-Fi SSID changed"
+            "message": "Hostname/Wi-Fi SSID changed"
             f"to '{content['hostname']}'"
         }
 
 
 class supervisor_hostname(Resource):
     def get(self):
-        return {'hostname': "devicehostname"}
+        return {"hostname": "devicehostname"}
 
 
 class supervisor_journal_logs(Resource):
@@ -74,8 +76,8 @@ class supervisor_state(Resource):
                     "imageId": 4192930,
                     "serviceId": 1178950,
                     "containerId": "c4402e5f5ee5e...",
-                    "createdAt": "2021-10-31T18:02:41.272Z"
-                    },
+                    "createdAt": "2021-10-31T18:02:41.272Z",
+                },
                 {
                     "status": "Running",
                     "serviceName": "frontend",
@@ -83,30 +85,32 @@ class supervisor_state(Resource):
                     "imageId": 4192931,
                     "serviceId": 1178951,
                     "containerId": "473a71f3ec2745...",
-                    "createdAt": "2021-10-31T17:50:18.377Z"
-                }
+                    "createdAt": "2021-10-31T17:50:18.377Z",
+                },
             ],
-            "release": "aaf4aad197d58e52f5edd0cbbdaad814"
-            }
+            "release": "aaf4aad197d58e52f5edd0cbbdaad814",
+        }
 
-        for key in response['containers']:
-            if key['status'].lower() != 'running':
-                logger.warning("Supervisor reports container "
-                               f"'{key['serviceName']}' is not in state "
-                               "'Running'.")
+        for key in response["containers"]:
+            if key["status"].lower() != "running":
+                logger.warning(
+                    "Supervisor reports container "
+                    f"'{key['serviceName']}' is not in state "
+                    "'Running'."
+                )
                 supervisor_state = False
 
-        return {'message': supervisor_state}
+        return {"message": supervisor_state}
 
 
 class supervisor_update(Resource):
     def get(self):
-        return {'message': "Accepted"}, 202
+        return {"message": "Accepted"}, 202
 
 
 class supervisor_uuid(Resource):
     def get(self):
-        return {'uuid': "asdsadsdf213qs2"}
+        return {"uuid": "asdsadsdf213qs2"}
 
 
 class wifi_connect(Resource):
@@ -114,14 +118,14 @@ class wifi_connect(Resource):
     def post(self):
         content = request.get_json()
 
-        return {'message': content}, 202
+        return {"message": content}, 202
 
 
 class wifi_connection_status(Resource):
     def get(self):
         global wifistatus
         time.sleep(1.5)
-        return {'wifi': wifistatus, 'internet': check_internet()}
+        return {"wifi": wifistatus, "internet": check_internet()}
 
 
 class wifi_forget(Resource):
@@ -131,13 +135,13 @@ class wifi_forget(Resource):
 
         if wifistatus is False:
             return {
-                'message': 'Device is already disconnected, connection '
-                           'cannot be reset.'
+                "message": "Device is already disconnected, connection "
+                "cannot be reset."
             }, 409
 
         wifi_toggle()
 
-        return {'message': 'Accepted'}, 202
+        return {"message": "Accepted"}, 202
 
 
 class wifi_forget_all(Resource):
@@ -148,7 +152,7 @@ class wifi_forget_all(Resource):
         if wifistatus is True:
             wifi_toggle()
 
-        return {'message': 'Accepted'}, 202
+        return {"message": "Accepted"}, 202
 
 
 class wifi_list_access_points(Resource):
@@ -156,23 +160,25 @@ class wifi_list_access_points(Resource):
     def get(self):
         time.sleep(2)
         # Demo routes
-        ssids = [{"ssid": "My House", "security": "WPA",
-                  "strength": 73},
-                 {"ssid": "TELUS9052-Enterprise",
-                  "security": "ENTERPRISE",
-                  "strength": 100},
-                 {"ssid": "Althaea-2-no-password",
-                  "security": "NONE",
-                  "strength": 11},
-                 {"ssid": "TELUS9052-Hidden", "security": "HIDDEN",
-                  "strength": 17}]
+        ssids = [
+            {"ssid": "My House", "security": "WPA", "strength": 73},
+            {
+                "ssid": "TELUS9052-Enterprise",
+                "security": "ENTERPRISE",
+                "strength": 100,
+            },
+            {
+                "ssid": "Althaea-2-no-password",
+                "security": "NONE",
+                "strength": 11,
+            },
+            {"ssid": "TELUS9052-Hidden", "security": "HIDDEN", "strength": 17},
+        ]
 
         # Sort SSIDs by signal strength
-        ssids = sorted(ssids,
-                       key=lambda x: x['strength'],
-                       reverse=True)
+        ssids = sorted(ssids, key=lambda x: x["strength"], reverse=True)
 
-        return {'ssids': ssids, 'compatible': True}
+        return {"ssids": ssids, "compatible": True}
 
 
 class wifi_set_password(Resource):
@@ -180,12 +186,13 @@ class wifi_set_password(Resource):
     def post(self):
         content = request.get_json()
 
-        lb_database = User.query.filter_by(username=config.default_hostname
-                                           ).first()
+        lb_database = User.query.filter_by(
+            username=config.default_hostname
+        ).first()
         lb_database.wifi_password = content["wifi_password"]
         lb_database.save_to_db()
 
-        return {'running': 'success'}
+        return {"running": "success"}
 
 
 class wifi_set_ssid(Resource):
@@ -199,11 +206,12 @@ class wifi_set_ssid(Resource):
         if content["ssid"] == config.default_hostname:
             content["ssid"] = config.default_ssid
 
-        lb_database = User.query.filter_by(username=config.default_hostname
-                                           ).first()
+        lb_database = User.query.filter_by(
+            username=config.default_hostname
+        ).first()
         lb_database.wifi_ssid = content["ssid"]
         lb_database.save_to_db()
 
         logger.info(f"Wi-Fi SSID changed to '{content['ssid']}'")
 
-        return {'running': 'success'}
+        return {"running": "success"}

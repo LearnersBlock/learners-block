@@ -11,22 +11,13 @@
   >
     <div class="m-3">
       <div class="text-center">
-        <q-img
-          src="./assets/lb-logo.svg"
-          style="max-width: 175px"
-        />
+        <q-img src="./assets/lb-logo.svg" style="max-width: 175px" />
       </div>
       <div class="text-center mt-3">
         {{ errorMessage }}
       </div>
-      <div
-        v-if="loadingSpinner"
-        class="flex justify-center mt-5"
-      >
-        <q-spinner-clock
-          color="primary"
-          size="2em"
-        />
+      <div v-if="loadingSpinner" class="flex justify-center mt-5">
+        <q-spinner-clock color="primary" size="2em" />
       </div>
     </div>
   </div>
@@ -39,42 +30,43 @@ import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
-  setup () {
+  setup() {
     // Import required features
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { t } = useI18n()
     const $q = useQuasar()
 
     const apiIsReady = ref<boolean>()
-    const apiPath = ref<string>('http://' + window.location.hostname + ':9090/v1/supervisor/state')
+    const apiPath = ref<string>(
+      'http://' + window.location.hostname + ':9090/v1/supervisor/state'
+    )
     const errorMessage = ref<string>(t('api_unavailable'))
     const loadingSpinner = ref<boolean>(true)
     // If on the captive portal, the check is skipped to allow welcome message to display
     if (!window.location.pathname.includes('captive_portal')) {
       // Check the state of the device to decide on page to display
-      AxiosOverride.get(
-        apiPath.value,
-        { timeout: 2000 }
-      ).then(function (response) {
-        if (response.data.message === true) {
-          apiIsReady.value = true
-        } else {
+      AxiosOverride.get(apiPath.value, { timeout: 2000 })
+        .then(function (response) {
+          if (response.data.message === true) {
+            apiIsReady.value = true
+          } else {
+            void waitApi()
+          }
+        })
+        .catch(function () {
           void waitApi()
-        }
-      }).catch(function () {
-        void waitApi()
-      })
+        })
     } else {
       apiIsReady.value = true
     }
 
     // Function for calling delays throughout
-    function delay (ms: number) {
-      return new Promise(resolve => setTimeout(resolve, ms))
+    function delay(ms: number) {
+      return new Promise((resolve) => setTimeout(resolve, ms))
     }
 
     // Loop for rechecking when the API is ready
-    async function waitApi () {
+    async function waitApi() {
       const redirecting = ref<boolean>(false)
       // Show message indicating the page will auto-reload
       apiIsReady.value = false
@@ -110,7 +102,10 @@ export default defineComponent({
       // If no success after x loops, display a different error
       errorMessage.value = t('api_down')
       loadingSpinner.value = false
-      $q.notify({ type: 'negative', message: `${t('error')} API is down or device state is False.` })
+      $q.notify({
+        type: 'negative',
+        message: `${t('error')} API is down or device state is False.`
+      })
 
       // Try the original route eventually to avoid a bug prevnting complete access
       await delay(30000)
@@ -126,6 +121,4 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

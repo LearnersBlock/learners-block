@@ -3,7 +3,7 @@ name: "Deploy Production Release"
 on:
   push:
     tags:
-      - '*'
+      - "*"
 jobs:
   deploy-release:
     name: "Deploy Production Release"
@@ -22,9 +22,9 @@ jobs:
         with:
           author_name: Learner's Block
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
-          message: 'Update version files'
+          message: "Update version files"
           branch: main
-          add: './backend/apps/controller/.version'
+          add: "./backend/apps/controller/.version"
 
       - name: Deploy aarch64 to production
         uses: balena-io/deploy-to-balena-action@master
@@ -43,7 +43,7 @@ jobs:
 
       - name: Create image builder context
         env:
-          BALENA_CLI: https://github.com/balena-io/balena-cli/releases/download/v13.0.2/balena-cli-v13.0.2-linux-x64-standalone.zip
+          BALENA_CLI: https://github.com/balena-io/balena-cli/releases/download/v13.1.12/balena-cli-v13.1.12-linux-x64-standalone.zip
         run: |
           sudo apt-get update && sudo apt-get install -y \
               curl \

@@ -24,7 +24,11 @@
       :rows="rows"
       :rows-per-page-options="[50, 75, 100, 0]"
       :columns="columns"
-      :no-data-label="$route.params.data === 'library' ? $t('library_empty') : $t('empty_folder')"
+      :no-data-label="
+        $route.params.data === 'library' && !objPath[0]
+          ? $t('library_empty')
+          : $t('empty_folder')
+      "
       :no-results-label="$t('no_results_found')"
       row-key="name"
       :selection="loginState && $q.screen.gt.sm ? 'multiple' : 'none'"
@@ -34,7 +38,9 @@
     >
       <!-- Toolbar -->
       <template #top="props">
-        <div class="flex row full-width row reverse-wrap justify-between items-center">
+        <div
+          class="flex row full-width row reverse-wrap justify-between items-center"
+        >
           <div class="col-auto m-1 mt-2">
             <q-breadcrumbs v-if="!objPath[0]">
               <q-breadcrumbs-el
@@ -51,7 +57,7 @@
                 icon="home"
                 clickable
                 color="gray-800"
-                @click="objPath.splice(0,objPath.length), updateRows()"
+                @click="objPath.splice(0, objPath.length), updateRows()"
               />
               <q-breadcrumbs-el
                 v-for="path in objPath"
@@ -60,13 +66,13 @@
                 class="cursor-pointer"
                 clickable
                 :label="path"
-                @click="objPath.length = objPath.indexOf(path) +1, updateRows()"
+                @click="
+                  ;(objPath.length = objPath.indexOf(path) + 1), updateRows()
+                "
               />
             </q-breadcrumbs>
           </div>
-          <div
-            class="col-auto ml-3 mb-1"
-          >
+          <div class="col-auto ml-3 mb-1">
             <div>
               <q-btn
                 v-if="loginState"
@@ -126,9 +132,7 @@
                   {{ $t('upload') }}
                 </q-tooltip>
               </q-btn>
-              <q-dialog
-                v-model="uploaderDialog"
-              >
+              <q-dialog v-model="uploaderDialog">
                 <q-uploader
                   style="max-width: 300px"
                   :label="$t('upload')"
@@ -141,7 +145,11 @@
                   :readonly="delayUpload"
                   :filter="checkCharacters"
                   :url="api + '/v1/filemanager/upload'"
-                  :headers="[{name: 'rootPath', value: rootPath}, {name: 'savePath', value: JSON.stringify(objPath)}, {name: 'Authorization', value: loginToken}]"
+                  :headers="[
+                    { name: 'rootPath', value: rootPath },
+                    { name: 'savePath', value: JSON.stringify(objPath) },
+                    { name: 'Authorization', value: loginToken }
+                  ]"
                   @uploaded="updateRows()"
                   @failed="uploadFailed"
                   @rejected="onUploaderRejected"
@@ -232,7 +240,9 @@
             <q-slide-item
               right-color="red"
               @action="resetSlide"
-              @right="deleteFile([{name:props.row.name, format:props.row.format}])"
+              @right="
+                deleteFile([{ name: props.row.name, format: props.row.format }])
+              "
             >
               <template #right>
                 <q-icon name="delete" />
@@ -254,9 +264,16 @@
               {{ props.value }}
               <!-- Zip button -->
               <q-btn
-                v-if="loginState && $q.screen.gt.sm && (props.row.extension == '.zip' || props.row.extension == '.gz')"
+                v-if="
+                  loginState &&
+                  $q.screen.gt.sm &&
+                  (props.row.extension == '.zip' ||
+                    props.row.extension == '.gz')
+                "
                 class="ml-2"
-                :loading="unzipLoading && unzipLoadingFileName === props.row.name"
+                :loading="
+                  unzipLoading && unzipLoadingFileName === props.row.name
+                "
                 round
                 outline
                 size="xs"
@@ -278,14 +295,8 @@
         </q-td>
       </template>
       <!-- Buttons on right of row -->
-      <template
-        v-if="loginState"
-        #body-cell-move="props"
-      >
-        <q-td
-          :props="props"
-          auto-width
-        >
+      <template v-if="loginState" #body-cell-move="props">
+        <q-td :props="props" auto-width>
           <!-- Copy/Move -->
           <div>
             <q-btn
@@ -294,7 +305,11 @@
               size="xs"
               color="gray-800"
               icon="drive_file_move_rtl"
-              @click.stop="openFileSelector([{name:props.row.name, format:props.row.format}])"
+              @click.stop="
+                openFileSelector([
+                  { name: props.row.name, format: props.row.format }
+                ])
+              "
             >
               <q-tooltip
                 class="text-caption text-center"
@@ -309,14 +324,8 @@
         </q-td>
       </template>
       <!-- Rename -->
-      <template
-        v-if="loginState"
-        #body-cell-rename="props"
-      >
-        <q-td
-          :props="props"
-          auto-width
-        >
+      <template v-if="loginState" #body-cell-rename="props">
+        <q-td :props="props" auto-width>
           <div>
             <q-btn
               round
@@ -339,9 +348,11 @@
                   dense
                   autofocus
                   hide-bottom-space
-                  :rules="[(val) =>
-                    !invalidCharacters.some(el => val.includes(el))
-                    || $t('invalid_filemanager_string')]"
+                  :rules="[
+                    (val) =>
+                      !invalidCharacters.some((el) => val.includes(el)) ||
+                      $t('invalid_filemanager_string')
+                  ]"
                   @keyup.enter="scope.set()"
                   @update:model-value="newName = scope.value"
                 />
@@ -359,14 +370,8 @@
         </q-td>
       </template>
       <!-- Delete -->
-      <template
-        v-if="loginState"
-        #body-cell-delete="props"
-      >
-        <q-td
-          :props="props"
-          auto-width
-        >
+      <template v-if="loginState" #body-cell-delete="props">
+        <q-td :props="props" auto-width>
           <div>
             <q-btn
               round
@@ -374,7 +379,9 @@
               size="xs"
               color="gray-800"
               icon="delete"
-              @click.stop="deleteFile([{name:props.row.name, format:props.row.format}])"
+              @click.stop="
+                deleteFile([{ name: props.row.name, format: props.row.format }])
+              "
             >
               <q-tooltip
                 class="text-caption text-center"
@@ -390,15 +397,9 @@
       </template>
       <!-- Info -->
       <template #body-cell-info="props">
-        <q-td
-          :props="props"
-          auto-width
-        >
+        <q-td :props="props" auto-width>
           <!-- Info menu for right of row -->
-          <div
-            v-if="$q.screen.gt.sm"
-            class="touch-hide"
-          >
+          <div v-if="$q.screen.gt.sm" class="touch-hide">
             <div v-if="props.row.format == 'file'">
               <q-icon
                 size="xs"
@@ -409,10 +410,7 @@
                 <q-tooltip class="text-caption">
                   Size: {{ fileSize }}
                   <q-inner-loading :showing="loadingFileSize">
-                    <q-spinner-gears
-                      size="50px"
-                      color="primary"
-                    />
+                    <q-spinner-gears size="50px" color="primary" />
                   </q-inner-loading>
                 </q-tooltip>
               </q-icon>
@@ -428,38 +426,42 @@
               icon="menu"
               @click.stop
             >
-              <q-menu
-                auto-close
-                class="text-center"
-              >
+              <q-menu auto-close class="text-center">
                 <q-list style="min-width: 100px">
                   <q-item
-                    v-if="props.row.extension == '.zip' || props.row.extension == '.gz'"
+                    v-if="
+                      props.row.extension == '.zip' ||
+                      props.row.extension == '.gz'
+                    "
                     clickable
                   >
-                    <q-item-section
-                      @click="unzip(props.row.name)"
-                    >
+                    <q-item-section @click="unzip(props.row.name)">
                       {{ $t('extract') }}
                     </q-item-section>
                   </q-item>
                   <q-item clickable>
                     <q-item-section
-                      @click="openFileSelector([{name:props.row.name, format:props.row.format}])"
+                      @click="
+                        openFileSelector([
+                          { name: props.row.name, format: props.row.format }
+                        ])
+                      "
                     >
                       {{ $t('move_copy') }}
                     </q-item-section>
                   </q-item>
                   <q-item clickable>
-                    <q-item-section
-                      @click="mobileRenameFile(props.row.name)"
-                    >
+                    <q-item-section @click="mobileRenameFile(props.row.name)">
                       {{ $t('rename') }}
                     </q-item-section>
                   </q-item>
                   <q-item clickable>
                     <q-item-section
-                      @click="deleteFile([{name:props.row.name, format:props.row.format}])"
+                      @click="
+                        deleteFile([
+                          { name: props.row.name, format: props.row.format }
+                        ])
+                      "
                     >
                       {{ $t('delete') }}
                     </q-item-section>
@@ -472,11 +474,8 @@
       </template>
     </q-table>
     <!-- File Selector -->
-    <q-dialog
-      v-model="fileSelector"
-      @hide="selectorRows = []"
-    >
-      <q-card style="max-width: 95vw;">
+    <q-dialog v-model="fileSelector" @hide="selectorRows = []">
+      <q-card style="max-width: 95vw">
         <q-card-section class="row items-center justify-center">
           <q-table
             table-style="width: 75vw;"
@@ -517,12 +516,7 @@
             <template #body-cell-name="props">
               <q-td :props="props">
                 <div>
-                  <q-icon
-                    class="mb-1"
-                    color="gray-800"
-                    left
-                    name="folder"
-                  />
+                  <q-icon class="mb-1" color="gray-800" left name="folder" />
                   {{ props.value }}
                 </div>
               </q-td>
@@ -567,7 +561,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'IntFileManager',
-  setup () {
+  setup() {
     // Import required features
     const $q = useQuasar()
     const route = useRoute()
@@ -581,18 +575,19 @@ export default defineComponent({
       return $store.getters.GET_API
     })
 
-    const checkRowExistence = nameParam => rows.value.some(({ name }) => name === nameParam)
+    const checkRowExistence = (nameParam) =>
+      rows.value.some(({ name }) => name === nameParam)
     const currentPath = ref<string>('')
     const delayUpload = ref<boolean>(false)
     const fileSelector = ref<boolean>(false)
     const fileSize = ref<number>(0)
-    const invalidCharacters = ref<Array<any>>([
-      '/', '\\0'
-    ])
+    const invalidCharacters = ref<Array<any>>(['/', '\\0'])
     const loading = ref<boolean>(true)
     const loadingFileSize = ref<boolean>(false)
     const loginState = $store.getters.isAuthenticated
-    const loginToken = ref<string | number | boolean>(Axios.defaults.headers.common.Authorization)
+    const loginToken = ref<string | number | boolean>(
+      Axios.defaults.headers.common.Authorization
+    )
     const rootPath = ref<any>()
     const rows = ref<Array<any>>([])
     const objPath = ref<Array<any>>([])
@@ -605,45 +600,44 @@ export default defineComponent({
     const visibleColumns = ref<Array<any>>([])
     const windowHostname = ref<string>(window.location.origin)
 
-    const columns = computed(() =>
-      [
-        {
-          name: 'name',
-          required: true,
-          label: t('name'),
-          align: 'left',
-          field: row => row.name,
-          format: val => `${val}`
-        },
-        { name: 'move', field: 'move' },
-        { name: 'rename', field: 'rename' },
-        { name: 'delete', field: 'delete' },
-        { name: 'info', field: 'info' },
-        { name: 'extension', field: 'extension' }
-      ]
-    ) as any
+    const columns = computed(() => [
+      {
+        name: 'name',
+        required: true,
+        label: t('name'),
+        align: 'left',
+        field: (row) => row.name,
+        format: (val) => `${val}`
+      },
+      { name: 'move', field: 'move' },
+      { name: 'rename', field: 'rename' },
+      { name: 'delete', field: 'delete' },
+      { name: 'info', field: 'info' },
+      { name: 'extension', field: 'extension' }
+    ]) as any
 
-    const selectorColumns = computed(() =>
-      [
-        {
-          name: 'name',
-          required: true,
-          label: t('name'),
-          align: 'left',
-          field: row => row.name,
-          format: val => `${val}`
-        }
-      ]
-    ) as any
+    const selectorColumns = computed(() => [
+      {
+        name: 'name',
+        required: true,
+        label: t('name'),
+        align: 'left',
+        field: (row) => row.name,
+        format: (val) => `${val}`
+      }
+    ]) as any
 
     // Adjust visible columns when screen is rotated
-    watch(() => $q.screen.gt.sm, size => {
-      if (size) {
-        visibleColumns.value = ['move', 'rename', 'delete', 'info']
-      } else {
-        visibleColumns.value = ['info']
+    watch(
+      () => $q.screen.gt.sm,
+      (size) => {
+        if (size) {
+          visibleColumns.value = ['move', 'rename', 'delete', 'info']
+        } else {
+          visibleColumns.value = ['info']
+        }
       }
-    })
+    )
 
     onMounted(async () => {
       $q.loading.show()
@@ -668,17 +662,23 @@ export default defineComponent({
       $q.loading.hide()
     })
 
-    function checkAutoOpenFile () {
-      const stringExists = rows.value.findIndex(({ name }) => name.substring(0, 11) === '--auto-open')
+    function checkAutoOpenFile() {
+      const stringExists = rows.value.findIndex(
+        ({ name }) => name.substring(0, 11) === '--auto-open'
+      )
       if (stringExists > -1) {
         const fileName = rows.value[stringExists].name
         const index = fileName.lastIndexOf('.') as number
         const ePub = fileName.substring(index + 1).toLowerCase() === 'epub'
         const encodedCurrentPath = encodeURIComponent(currentPath.value)
-        const encodedRowName = encodeURIComponent(fileName as string | number | boolean)
+        const encodedRowName = encodeURIComponent(
+          fileName as string | number | boolean
+        )
         if (encodedCurrentPath) {
           if (ePub) {
-            void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
+            void $router.push(
+              `/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`
+            )
           } else {
             // Uses window.open to open a new window. Otherwise a user hits the back button to return
             // to the FileManager from the opened item and loses their folder position.
@@ -689,23 +689,24 @@ export default defineComponent({
           }
         } else {
           if (ePub) {
-            void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
-          } else {
-            window.open(
-              `/storage/${encodedRowName}`,
-              '_blank'
+            void $router.push(
+              `/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`
             )
+          } else {
+            window.open(`/storage/${encodedRowName}`, '_blank')
           }
         }
       }
     }
 
-    function checkCharacters (files) {
-      return files.filter(file => !invalidCharacters.value.some(el => file.name.includes(el)))
+    function checkCharacters(files) {
+      return files.filter(
+        (file) => !invalidCharacters.value.some((el) => file.name.includes(el))
+      )
     }
 
-    function checkUploadOverwrite (files) {
-      const itemCheck = files.filter(obj => {
+    function checkUploadOverwrite(files) {
+      const itemCheck = files.filter((obj) => {
         return rows.value.some(({ name }) => name === obj.name)
       })
 
@@ -713,9 +714,17 @@ export default defineComponent({
         delayUpload.value = true
         $q.notify({
           actions: [
-            { label: t('close'), color: 'black', handler: () => { /* ... */ } }
+            {
+              label: t('close'),
+              color: 'black',
+              handler: () => {
+                /* ... */
+              }
+            }
           ],
-          onDismiss: () => { delayUpload.value = false },
+          onDismiss: () => {
+            delayUpload.value = false
+          },
           timeout: 0,
           type: 'warning',
           position: 'center',
@@ -724,19 +733,26 @@ export default defineComponent({
       }
     }
 
-    async function confirmOverwrite (item, rows) {
+    async function confirmOverwrite(item, rows) {
       // Check if item already exists
-      const itemCheck = item.filter(obj => {
+      const itemCheck = item.filter((obj) => {
         return rows.some(({ name }) => name === obj.name)
       })
 
       // If item exists show warning
       if (itemCheck.length > 0) {
-        if (await new Promise(resolve => $q.dialog({
-          title: t('confirm'),
-          message: t('overwrite_warning'),
-          cancel: true
-        }).onOk(() => resolve(true)).onCancel(() => resolve(false)))) {
+        if (
+          await new Promise((resolve) =>
+            $q
+              .dialog({
+                title: t('confirm'),
+                message: t('overwrite_warning'),
+                cancel: true
+              })
+              .onOk(() => resolve(true))
+              .onCancel(() => resolve(false))
+          )
+        ) {
           return true
         } else {
           return false
@@ -746,7 +762,7 @@ export default defineComponent({
       }
     }
 
-    function deleteFile (itemObj) {
+    function deleteFile(itemObj) {
       $q.dialog({
         title: t('confirm'),
         message: t('confirm_delete'),
@@ -764,7 +780,7 @@ export default defineComponent({
       })
     }
 
-    async function fetchFileSize (itemFile) {
+    async function fetchFileSize(itemFile) {
       fileSize.value = 0
       loadingFileSize.value = true
       await Axios.post(`${api.value}/v1/filemanager/file_size`, {
@@ -777,21 +793,21 @@ export default defineComponent({
       loadingFileSize.value = false
     }
 
-    function filterFiles (rows, terms) {
-      return rows.filter(row => row.format === terms)
+    function filterFiles(rows, terms) {
+      return rows.filter((row) => row.format === terms)
     }
 
-    function mobileRenameFile (currentName) {
+    function mobileRenameFile(currentName) {
       $q.dialog({
         title: t('rename'),
         message: t('enter_name'),
         prompt: {
           model: currentName,
-          isValid: val => val !== ''
+          isValid: (val) => val !== ''
         },
         cancel: true
-      }).onOk(data => {
-        if (invalidCharacters.value.some(el => data.includes(el))) {
+      }).onOk((data) => {
+        if (invalidCharacters.value.some((el) => data.includes(el))) {
           $q.notify({
             type: 'negative',
             message: t('invalid_filemanager_string')
@@ -802,7 +818,7 @@ export default defineComponent({
       })
     }
 
-    async function moveCopyItem (action) {
+    async function moveCopyItem(action) {
       if (await confirmOverwrite(selectedItem.value, selectorRows.value)) {
         if (action === 'move') {
           await Axios.post(`${api.value}/v1/filemanager/move`, {
@@ -825,17 +841,17 @@ export default defineComponent({
       }
     }
 
-    function newFolderPrompt () {
+    function newFolderPrompt() {
       $q.dialog({
         title: t('new_folder'),
         message: t('enter_name'),
         prompt: {
           model: '',
-          isValid: val => val !== ''
+          isValid: (val) => val !== ''
         },
         cancel: true
-      }).onOk(data => {
-        if (invalidCharacters.value.some(el => data.includes(el))) {
+      }).onOk((data) => {
+        if (invalidCharacters.value.some((el) => data.includes(el))) {
           $q.notify({
             type: 'negative',
             message: t('invalid_filemanager_string')
@@ -860,7 +876,7 @@ export default defineComponent({
       })
     }
 
-    function notifyComplete () {
+    function notifyComplete() {
       $q.notify({
         type: 'positive',
         icon: 'done',
@@ -868,15 +884,20 @@ export default defineComponent({
       })
     }
 
-    function onRowClick (_evt, row) {
+    function onRowClick(_evt, row) {
       const index = row.name.lastIndexOf('.') as number
-      const ePub = index > 0 && row.name.substring(index + 1).toLowerCase() === 'epub'
+      const ePub =
+        index > 0 && row.name.substring(index + 1).toLowerCase() === 'epub'
       if (row.format === 'file') {
         const encodedCurrentPath = encodeURIComponent(currentPath.value)
-        const encodedRowName = encodeURIComponent(row.name as string | number | boolean)
+        const encodedRowName = encodeURIComponent(
+          row.name as string | number | boolean
+        )
         if (currentPath.value) {
           if (ePub) {
-            void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`)
+            void $router.push(
+              `/epub_reader/?url=${windowHostname.value}/storage/${encodedCurrentPath}/${encodedRowName}`
+            )
           } else {
             window.open(
               `/storage/${encodedCurrentPath}/${encodedRowName}`,
@@ -885,12 +906,11 @@ export default defineComponent({
           }
         } else {
           if (ePub) {
-            void $router.push(`/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`)
-          } else {
-            window.open(
-              `/storage/${encodedRowName}`,
-              '_blank'
+            void $router.push(
+              `/epub_reader/?url=${windowHostname.value}/storage/${encodedRowName}`
             )
+          } else {
+            window.open(`/storage/${encodedRowName}`, '_blank')
           }
         }
       } else if (row.format === 'folder') {
@@ -905,19 +925,19 @@ export default defineComponent({
       }
     }
 
-    function onSelectorRowClick (_evt, row) {
+    function onSelectorRowClick(_evt, row) {
       selectorObjPath.value.push(row.name)
       void updateSelectorRows()
     }
 
-    function onUploaderRejected (rejectedEntries) {
+    function onUploaderRejected(rejectedEntries) {
       $q.notify({
         type: 'negative',
         message: `${rejectedEntries.length} ${t('invalid_upload_string')}`
       })
     }
 
-    function openFileSelector (obj) {
+    function openFileSelector(obj) {
       selectedItem.value = obj
       selectorObjPath.value = []
       selectorObjPath.value = selectorObjPath.value.concat(objPath.value)
@@ -925,13 +945,13 @@ export default defineComponent({
       fileSelector.value = true
     }
 
-    async function rename (currentName, newName) {
+    async function rename(currentName, newName) {
       if (checkRowExistence(newName)) {
         $q.notify({
           type: 'negative',
           message: t('item_already_exists')
         })
-      } else if (invalidCharacters.value.some(el => newName.includes(el))) {
+      } else if (invalidCharacters.value.some((el) => newName.includes(el))) {
         $q.notify({
           type: 'negative',
           message: t('invalid_filemanager_string')
@@ -948,7 +968,7 @@ export default defineComponent({
       void updateRows()
     }
 
-    async function unzip (fileName) {
+    async function unzip(fileName) {
       unzipLoadingFileName.value = fileName
       unzipLoading.value = true
       await Axios.post(`${api.value}/v1/filemanager/unzip`, {
@@ -959,35 +979,40 @@ export default defineComponent({
         if (response.data.message === 'error') {
           $q.notify({ type: 'negative', message: t('error') })
         } else {
-          $q.notify({ type: 'positive', message: `${t('extracted_to')} ${response.data.new_path}` })
+          $q.notify({
+            type: 'positive',
+            message: `${t('extracted_to')} ${response.data.new_path}`
+          })
         }
       })
       await updateRows()
       unzipLoading.value = false
     }
 
-    async function updateRows () {
+    async function updateRows() {
       loading.value = true
       await Axios.post(`${api.value}/v1/filemanager/list`, {
         path: objPath.value,
         root: rootPath.value
-      }).then((response) => {
-        rows.value = response.data.rows
-        currentPath.value = response.data.path
-        selectorObjPath.value = []
-        selectorObjPath.value = selectorObjPath.value.concat(objPath.value)
-      }).catch(function (error) {
-        console.log(error)
-        if (objPath.value !== []) {
-          objPath.value = []
-          void updateRows()
-        }
-        $q.notify({ type: 'negative', message: t('error') })
       })
+        .then((response) => {
+          rows.value = response.data.rows
+          currentPath.value = response.data.path
+          selectorObjPath.value = []
+          selectorObjPath.value = selectorObjPath.value.concat(objPath.value)
+        })
+        .catch(function (error) {
+          console.log(error)
+          if (objPath.value !== []) {
+            objPath.value = []
+            void updateRows()
+          }
+          $q.notify({ type: 'negative', message: t('error') })
+        })
       loading.value = false
     }
 
-    async function updateSelectorRows () {
+    async function updateSelectorRows() {
       loading.value = true
       await Axios.post(`${api.value}/v1/filemanager/list`, {
         path: selectorObjPath.value,
@@ -998,7 +1023,7 @@ export default defineComponent({
       loading.value = false
     }
 
-    async function uploadFailed (response) {
+    async function uploadFailed(response) {
       if (response.xhr.status === 401) {
         $q.notify({ type: 'negative', message: t('login_again') })
         await $router.replace('/settings')
@@ -1034,7 +1059,7 @@ export default defineComponent({
       onSelectorRowClick,
       openFileSelector,
       rename,
-      resetSlide ({ reset }) {
+      resetSlide({ reset }) {
         reset()
       },
       rootPath,
@@ -1055,9 +1080,6 @@ export default defineComponent({
     }
   }
 })
-
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

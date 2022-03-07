@@ -33,12 +33,12 @@ def dnsmasq():
     try:
         subprocess.Popen(args)
     except Exception:
-        logger.exception('Failed to start dnsmasq.')
+        logger.exception("Failed to start dnsmasq.")
         # Allow pass to facilitate software updates
 
 
 def handle_exit(*args):
-    logger.info('Finshed the exit process.')
+    logger.info("Finshed the exit process.")
 
 
 def handle_sigterm(*args):
@@ -63,22 +63,23 @@ def launch_wifi(self):
         try:
             device_update(force_mode=False)
         except Exception:
-            logger.exception('Software update failed.')
+            logger.exception("Software update failed.")
 
 
 def startup():
     # Check hostname in container is same as device
     try:
         # Check container and device hostname match
-        if container_hostname() != \
-                device_hostname(supervisor_retries=20):
-            logger.warning("Api-v1 - Container hostname and device hostname "
-                           "do not match. A short delay here allows time for  "
-                           "Supervisor to restart the container if necessary.")
+        if container_hostname() != device_hostname(supervisor_retries=20):
+            logger.warning(
+                "Api-v1 - Container hostname and device hostname "
+                "do not match. A short delay here allows time for  "
+                "Supervisor to restart the container if necessary."
+            )
             time.sleep(30)
 
     except Exception:
-        logger.exception('Failed to compare hostnames.')
+        logger.exception("Failed to compare hostnames.")
         # Starting anyway to allow debugging
 
     # Start dnsmasq permanently
@@ -86,7 +87,7 @@ def startup():
 
     # Start the launch_wifi process as a thread to avoid delays
     # to booting device
-    wifi_thread = threading.Thread(target=launch_wifi,
-                                   args=(1,),
-                                   name='wifi_thread')
+    wifi_thread = threading.Thread(
+        target=launch_wifi, args=(1,), name="wifi_thread"
+    )
     wifi_thread.start()
