@@ -19,7 +19,7 @@
     "home": "Inicio",
     "files_settings_description": "Gestione archivos en su Block. Solo los usuarios que hayan iniciado sesión pueden eliminarlos.",
     "files_description": "Examinar los archivos.",
-    "error": "Se ha producido un error:",
+    "error": "Se produjo un problema:",
     "enable_components_in": "Puede activar componentes en el Panel de control.",
     "disconnect_wifi": "¿Confirma que quiere desconectarse de la red wifi?",
     "disconnect": "Desconectar",
