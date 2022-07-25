@@ -1,7 +1,11 @@
 <template>
   <div class="m-3">
     <div class="text-center">
-      <q-img src="../assets/lb-logo.svg" style="max-width: 175px" />
+      <q-img
+        src="../assets/lb-logo.svg"
+        initial-ratio
+        style="max-width: 175px"
+      />
     </div>
     <div class="text-h4 text-gray-600 text-center mt-2">
       {{ $t('welcome_lb') }}
