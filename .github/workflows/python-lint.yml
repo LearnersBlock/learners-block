@@ -40,4 +40,4 @@ jobs:
         with:
           options: "--config backend/apps/controller/pyproject.toml --check --verbose --diff"
           src: "."
-          version: "22.1.0"
+          version: "22.3.0"

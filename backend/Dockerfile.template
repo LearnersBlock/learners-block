@@ -10,6 +10,7 @@ RUN apk add --no-cache \
   dbus-libs \
   musl-dev \
   gcc \
+  git \
   glib-dev \
   libffi-dev \
   g++
@@ -58,4 +59,4 @@ COPY apps/controller .
 CMD ["sh", "start.sh"]
 
 HEALTHCHECK --start-period=60s --timeout=30s \
-   CMD curl --silent --fail http://127.0.0.1:9090 || exit 1
+  CMD curl --silent --fail http://127.0.0.1:9090 || exit 1
